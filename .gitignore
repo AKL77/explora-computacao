@@ -1,0 +1,26 @@
+node_modules/
+.pnpm-store/
+dist/
+coverage/
+playwright-report/
+test-results/
+.private-references/
+
+# Variáveis locais e credenciais
+.env
+.env.*
+!.env.example
+*.local
+*.log
+
+# Caches e arquivos gerados por ferramentas
+*.tsbuildinfo
+.eslintcache
+
+# Sistema operacional e editores
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json

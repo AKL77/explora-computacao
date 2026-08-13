@@ -1,0 +1,217 @@
+.page {
+  width: min(100%, 90rem);
+  margin-inline: auto;
+  padding: clamp(1rem, 3vw, 2.5rem);
+  color: var(--text-primary, #14212b);
+}
+
+.header {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.75rem;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.eyebrow {
+  margin: 0 0 0.35rem !important;
+  color: var(--brand-cyan, #087f9d) !important;
+  font-size: 0.78rem;
+  font-weight: 850;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.header h1 {
+  margin: 0;
+  color: var(--brand-navy, #082f49);
+  font-size: clamp(1.8rem, 4vw, 2.65rem);
+}
+
+.header p {
+  max-width: 64ch;
+  margin: 0.65rem 0 0;
+  color: var(--text-muted, #52616b);
+  line-height: 1.55;
+}
+
+.primaryButton,
+.primaryLink,
+.cardLink {
+  display: inline-flex;
+  min-height: 2.75rem;
+  padding: 0.7rem 1rem;
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  text-decoration: none;
+  background: var(--brand-blue, #075985);
+  border: 0;
+  border-radius: 0.65rem;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+.primaryButton:focus-visible,
+.primaryLink:focus-visible,
+.cardLink:focus-visible,
+.newFolderCard:focus-visible {
+  outline: 3px solid var(--brand-yellow, #facc15);
+  outline-offset: 3px;
+}
+
+.folderGrid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+}
+
+.folderCard {
+  display: grid;
+  min-height: 15rem;
+  gap: 1rem;
+  padding: 1.35rem;
+  background: #fff;
+  border: 1px solid rgb(8 47 73 / 14%);
+  border-radius: 1rem;
+  box-shadow: 0 8px 24px rgb(8 47 73 / 7%);
+  grid-template-rows: auto 1fr auto;
+}
+
+.favoriteCard {
+  background: linear-gradient(145deg, #fff9d7, #fff);
+  border-color: #e0bd2d;
+}
+
+.folderIcon {
+  display: grid;
+  width: 3.25rem;
+  height: 3.25rem;
+  color: var(--brand-blue, #075985);
+  font-size: 1.75rem;
+  background: var(--surface-soft, #eaf4f7);
+  border-radius: 0.85rem;
+  place-items: center;
+}
+
+.favoriteCard .folderIcon {
+  color: #842c45;
+  background: #fff1b4;
+}
+
+.systemBadge {
+  display: inline-flex;
+  margin-bottom: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  color: #624600;
+  font-size: 0.75rem;
+  font-weight: 800;
+  background: #ffe86f;
+  border-radius: 999px;
+}
+
+.folderCard h2 {
+  overflow-wrap: anywhere;
+  margin: 0;
+  color: var(--brand-navy, #082f49);
+  font-size: 1.25rem;
+}
+
+.folderCard p {
+  margin: 0.4rem 0 0;
+  color: var(--text-muted, #52616b);
+}
+
+.cardLink {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.newFolderCard {
+  display: grid;
+  min-height: 15rem;
+  gap: 0.6rem;
+  padding: 1.35rem;
+  color: var(--brand-blue, #075985);
+  font: inherit;
+  text-align: center;
+  background: transparent;
+  border: 2px dashed #8fb6c8;
+  border-radius: 1rem;
+  cursor: pointer;
+  place-items: center;
+  align-content: center;
+}
+
+.newFolderCard:hover {
+  background: var(--surface-soft, #eaf4f7);
+}
+
+.newFolderCard > span {
+  font-size: 2.4rem;
+  line-height: 1;
+}
+
+.newFolderCard small {
+  max-width: 28ch;
+  color: var(--text-muted, #52616b);
+  line-height: 1.4;
+}
+
+.backRow {
+  width: min(100%, 90rem);
+  margin: 0 auto -0.75rem;
+  padding: 1.25rem clamp(1rem, 3vw, 2.5rem) 0;
+}
+
+.backRow a {
+  color: var(--brand-blue, #075985);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.backRow a:hover {
+  text-decoration: underline;
+}
+
+.notFound {
+  display: grid;
+  width: min(calc(100% - 2rem), 42rem);
+  min-height: 22rem;
+  margin: 3rem auto;
+  padding: 2rem;
+  color: var(--text-primary, #14212b);
+  text-align: center;
+  background: #fff;
+  border: 1px dashed #8fb6c8;
+  border-radius: 1rem;
+  place-items: center;
+  align-content: center;
+}
+
+.notFound > span {
+  color: var(--brand-cyan, #0891b2);
+  font-size: 3rem;
+}
+
+.notFound h1 {
+  margin: 0.5rem 0 0;
+  color: var(--brand-navy, #082f49);
+}
+
+.notFound p {
+  margin: 0.65rem 0 1.25rem;
+  color: var(--text-muted, #52616b);
+}
+
+@media (max-width: 47.99rem) {
+  .header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .primaryButton {
+    width: 100%;
+  }
+}

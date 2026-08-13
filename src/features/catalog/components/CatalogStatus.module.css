@@ -1,0 +1,40 @@
+.panel {
+  display: grid;
+  max-width: 680px;
+  min-height: 280px;
+  margin: clamp(1rem, 4vw, 4rem) auto;
+  padding: clamp(1.5rem, 5vw, 3rem);
+  text-align: center;
+  background: var(--surface-card);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  place-content: center;
+}
+
+.icon {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 0.75rem;
+  color: var(--brand-navy);
+  background: var(--brand-yellow-soft);
+  border-radius: 50%;
+  font-size: 1.5rem;
+  font-weight: 850;
+  place-items: center;
+}
+
+.panel h1 {
+  margin: 0;
+  color: var(--brand-navy);
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 4vw, 2.25rem);
+}
+
+.panel p {
+  max-width: 50ch;
+  margin: 0.75rem auto 0;
+  color: var(--text-muted);
+  line-height: 1.65;
+}

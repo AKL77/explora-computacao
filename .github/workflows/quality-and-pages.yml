@@ -1,0 +1,86 @@
+name: Qualidade e GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verificar:
+    name: Verificar e compilar
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      VITE_BASE_PATH: /${{ github.event.repository.name }}/
+      PLAYWRIGHT_BASE_PATH: /${{ github.event.repository.name }}/
+      PLAYWRIGHT_USE_PREVIEW: "true"
+
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v6
+
+      - name: Configurar pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - name: Instalar dependências
+        run: pnpm install --frozen-lockfile
+
+      - name: Verificar tipos
+        run: pnpm typecheck
+
+      - name: Verificar padrões de código
+        run: pnpm lint
+
+      - name: Executar testes unitários
+        run: pnpm test
+
+      - name: Compilar para produção
+        run: pnpm build
+
+      - name: Instalar navegador dos testes
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Executar testes de interface
+        run: pnpm test:e2e
+
+      - name: Configurar GitHub Pages
+        if: github.event_name != 'pull_request'
+        uses: actions/configure-pages@v6
+
+      - name: Empacotar site
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+
+  publicar:
+    name: Publicar
+    if: github.event_name != 'pull_request'
+    needs: verificar
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Publicar no GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

@@ -1,0 +1,87 @@
+.dialog {
+  width: calc(100% - 2rem);
+  max-height: min(88vh, 760px);
+  margin: auto;
+  padding: 0;
+  overflow: auto;
+  color: var(--text-primary, #14212b);
+  background: transparent;
+  border: 0;
+  border-radius: 1.25rem;
+  box-shadow: 0 24px 64px rgb(8 47 73 / 28%);
+}
+
+.dialog::backdrop {
+  background: rgb(8 47 73 / 64%);
+  backdrop-filter: blur(2px);
+}
+
+.small {
+  max-width: 30rem;
+}
+
+.medium {
+  max-width: 42rem;
+}
+
+.panel {
+  padding: clamp(1.25rem, 4vw, 2rem);
+  background: var(--surface-card, #fff);
+}
+
+.header {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  margin: 0;
+  color: var(--brand-navy, #082f49);
+  font-size: clamp(1.35rem, 4vw, 1.75rem);
+  line-height: 1.2;
+}
+
+.description {
+  max-width: 58ch;
+  margin: 0.5rem 0 0;
+  color: var(--text-muted, #52616b);
+  line-height: 1.55;
+}
+
+.closeButton {
+  display: inline-grid;
+  flex: 0 0 auto;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  color: var(--brand-navy, #082f49);
+  font-size: 1.75rem;
+  line-height: 1;
+  background: var(--surface-soft, #eaf4f7);
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  place-items: center;
+}
+
+.closeButton:hover {
+  background: #d7ebf1;
+}
+
+.closeButton:focus-visible {
+  outline: 3px solid var(--brand-yellow, #facc15);
+  outline-offset: 3px;
+}
+
+@media (max-width: 36rem) {
+  .dialog {
+    width: 100%;
+    max-width: none;
+    max-height: 100%;
+    margin: auto 0 0;
+    border-radius: 1.25rem 1.25rem 0 0;
+  }
+}
