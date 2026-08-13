@@ -28,7 +28,7 @@ não indica vínculo institucional ou endosso da UFSM.
 
 | Arquivo | Fonte | Crédito informado | Uso nesta versão |
 |---|---|---|---|
-| `public/images/cards/cyberbullying-jogo.png` | [ALT+INOVARE](https://www.altinovare.com/pages/cyberbullying/index.php) | CC BY-NC-ND 3.0 BR | Captura sem alteração, fornecida pelo autor do TCC para identificação não comercial do recurso |
+| `public/images/cards/cyberbullying-jogo.png` | [ALT+INOVARE](https://www.altinovare.com.br/pages/cyberbullying/) | CC BY-NC-ND 3.0 BR | Captura sem alteração, fornecida pelo autor do TCC para identificação não comercial do recurso |
 
 O recurso e seus elementos permanecem pertencentes aos respectivos titulares.
 A plataforma apenas referencia o material externo e abre a fonte original. A

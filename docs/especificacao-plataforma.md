@@ -10,7 +10,7 @@
 
 Esta especificação consolida:
 
-1. o arquivo [`registro_mestre_tcc.md`](../registro_mestre_tcc.md), versão 0.7;
+1. o arquivo [`registro-mestre-tcc.md`](registro-mestre-tcc.md), versão 0.7;
 2. a descrição funcional fornecida em 9 de agosto de 2026;
 3. as referências visuais privadas fornecidas durante a concepção.
 
@@ -233,7 +233,7 @@ Inspirado na organização horizontal da primeira referência visual privada, ad
 
 **Texto breve sugerido:**
 
-> O Informática Explorer reúne recursos curados para o ensino de Computação e ajuda docentes a encontrá-los, compreendê-los e organizá-los a partir da BNCC Computação e da realidade de cada turma.
+> O Informática Explorer organiza recursos e facilita a criação de planos de aula contextualizados a partir da BNCC Computação e da realidade de cada turma.
 
 **Ação:** botão **Conheça o projeto**, que rola para a próxima seção. Não haverá busca pública no hero nesta fase.
 
@@ -243,11 +243,11 @@ Faixa clara, com texto central de leitura curta.
 
 **Título sugerido:**
 
-> Encontrar um link é só o começo
+> Direcionamento e praticidade
 
 **Texto-base editável:**
 
-> Recursos para o ensino de Computação estão espalhados por diferentes sites e descritos de formas pouco consistentes. Nem sempre é fácil saber para qual ano, habilidade ou contexto um material é adequado. O Informática Explorer propõe uma camada de curadoria que aproxima recurso, currículo e condições reais de aplicação, apoiando a decisão do docente sem substituí-la.
+> Recursos para o ensino de Computação estão espalhados por diferentes sites e descritos de formas pouco consistentes. Existem plataformas que buscam agrupar esses conteúdos, contudo nem sempre é fácil saber para qual contexto um material é adequado e como utilizá-lo em sala de aula. O Informática Explorer propõe uma forma de buscar recursos e criar planos de aula de forma contextualizada, apoiando a decisão do docente sem substituí-la.
 
 ### 7.4 Seção do Acervo
 
@@ -264,24 +264,12 @@ Inspirada no ritmo em duas colunas da segunda referência visual privada.
 
 **Conteúdo mínimo:**
 
-- centralização de referências externas e materiais autorizados;
-- organização por habilidade, eixo e ano recomendado;
-- informações pedagógicas e operacionais que apoiem a escolha;
-- favoritos e pastas para transformar descoberta em planejamento.
+- referências externas e materiais autorizados centralizados;
+- organização e filtragem por habilidade, competência, eixo e ano;
+- direcionamento para abordagem de aula de forma contextualizada;
+- pastas de organização para manutenção de materiais e planos para o futuro.
 
-### 7.5 Seção dos três pilares
-
-Faixa amarela inspirada na composição em três colunas da terceira referência visual privada.
-
-| Pilar | Microtexto sugerido |
-|---|---|
-| Exposição | Descubra recursos relevantes para ensinar Computação. |
-| Organização | Entenda o vínculo curricular e as condições de uso. |
-| Filtragem | Encontre o que combina com o ano e a habilidade desejados. |
-
-Os ícones serão SVGs simples e coerentes; as três colunas viram uma lista vertical em mobile.
-
-### 7.6 Seção “Planos contextualizados”
+### 7.5 Seção “Planos contextualizados”
 
 Bloco 50/50 com imagem e painel verde-azulado, retomando a alternância das referências visuais privadas.
 
@@ -296,7 +284,7 @@ Bloco 50/50 com imagem e painel verde-azulado, retomando a alternância das refe
 
 > A proposta é usar os recursos curados e seus metadados como contexto para apoiar a criação de planos de aula mais rastreáveis e aplicáveis. Habilidade, metodologia, tempo, materiais e infraestrutura deverão permanecer conectados às fontes do acervo, sempre com revisão e decisão final do docente.
 
-### 7.7 Rodapé
+### 7.6 Rodapé
 
 - Fundo `brand.navy` e texto branco.
 - Nome do projeto e descrição curta.
@@ -724,7 +712,7 @@ Meta: **WCAG 2.2 nível AA**.
 
 ## 22. Referências
 
-- [Registro mestre da proposta](../registro_mestre_tcc.md).
+- [Registro mestre da proposta](registro-mestre-tcc.md).
 - [Computação na Educação Básica — Complemento à BNCC](https://basenacionalcomum.mec.gov.br/images/historico/anexo_parecer_cneceb_n_2_2022_bncc_computacao.pdf).
 - [Jogo Cyberbullying — ALT+INOVARE](https://www.altinovare.com.br/pages/cyberbullying/).
 - [Fotografia do campus da UFSM — Wikimedia Commons, CC0](https://commons.wikimedia.org/wiki/File:UFSM.2014.034.017.Campus-Santa-Maria-Filippe-Richardt.jpg).

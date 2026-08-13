@@ -126,30 +126,31 @@ Os links do Acervo levam a sites externos, que possuem políticas próprias.
 
 ```text
 .
-├── .github/                 # CI, deploy, Dependabot e templates
-├── docs/                    # produto, arquitetura, decisões e créditos
-├── e2e/                     # testes Playwright
+├── .github/workflows/       # verificação e deploy automático
+├── config/                  # configurações das ferramentas
+├── docs/                    # produto, TCC, arquitetura e créditos
 ├── public/                  # imagens e identidade distribuídas
 ├── src/                     # aplicação React organizada por features
-├── CONTRIBUTING.md          # fluxo e convenções de contribuição
-├── SECURITY.md              # canal e escopo de segurança
-└── registro_mestre_tcc.md   # registro acadêmico principal
+├── tests/e2e/               # fluxos completos no Playwright
+├── README.md                # visão geral e instruções
+└── package.json             # scripts e dependências
 ```
 
 A visão das camadas e as decisões técnicas estão em
 [`docs/arquitetura.md`](docs/arquitetura.md).
 
+> A pasta `.github` contém somente o workflow exigido pelo GitHub para validar
+> e publicar a plataforma automaticamente no Pages.
+
 ## Documentação
 
 - [Estado atual do protótipo](docs/estado-atual.md)
 - [Especificação funcional e de interface](docs/especificacao-plataforma.md)
-- [Plano e decisões de implementação](docs/plano-implementacao.md)
+- [Histórico do plano de implementação](docs/historico/plano-implementacao.md)
 - [Arquitetura do frontend](docs/arquitetura.md)
 - [Deploy no GitHub Pages](docs/deploy-github-pages.md)
 - [Créditos e licenças de ativos](docs/creditos-e-licencas.md)
-- [Registro mestre do TCC](registro_mestre_tcc.md)
-- [Como contribuir](CONTRIBUTING.md)
-- [Política de segurança](SECURITY.md)
+- [Registro mestre do TCC](docs/registro-mestre-tcc.md)
 
 ## Deploy
 

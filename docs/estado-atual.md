@@ -5,7 +5,7 @@
 **Fonte de verdade do estado implementado:** este documento e os testes automatizados
 
 Este registro separa o que já funciona da visão futura descrita no TCC. A
-especificação detalha o produto; o plano registra decisões; este arquivo resume
+especificação detalha o produto; o histórico do plano registra decisões; este arquivo resume
 exatamente a entrega executável disponível na branch `main`.
 
 ## Implementado

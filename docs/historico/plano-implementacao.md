@@ -3,7 +3,7 @@
 **Status:** protótipo implementado; manutenção incremental
 **Versão:** 0.2
 **Data:** 12 de agosto de 2026
-**Especificação associada:** [`especificacao-plataforma.md`](./especificacao-plataforma.md)
+**Especificação associada:** [`especificacao-plataforma.md`](../especificacao-plataforma.md)
 
 ## 1. Resultado esperado
 
@@ -63,9 +63,9 @@ O protótipo funciona localmente e no GitHub Pages e está preparado para recebe
 
 ```text
 .
-  .github/                 # CI/CD, Dependabot e templates
-  docs/                    # produto, arquitetura, deploy e créditos
-  e2e/                     # testes Playwright
+  .github/workflows/       # validação e deploy automático
+  config/                  # configurações das ferramentas
+  docs/                    # produto, TCC, arquitetura e créditos
   public/                  # ativos distribuídos
   src/
     app/                   # composição de rotas
@@ -78,6 +78,7 @@ O protótipo funciona localmente e no GitHub Pages e está preparado para recebe
     store/                 # sessão e biblioteca pessoal
     styles/                # tokens e globais
     test/                  # configuração comum
+  tests/e2e/               # testes Playwright
 ```
 
 ### 4.1 Limites entre camadas
@@ -204,7 +205,6 @@ Tarefas:
 - [x] Implementar hero com overlay e recorte responsivo.
 - [x] Implementar problema/objetivos.
 - [x] Implementar seção narrativa do acervo.
-- [x] Implementar os três pilares.
 - [x] Implementar seção de planos contextualizados sem executar geração por IA.
 - [x] Implementar rodapé com crédito da fotografia.
 - [x] Adicionar metadados de página, título e descrição.

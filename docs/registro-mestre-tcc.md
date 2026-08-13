@@ -3,7 +3,7 @@
 **Tema provisório:** Plataforma web de curadoria de recursos para o ensino de Computação, alinhada à BNCC, com geração contextualizada de planos de aula
 **Versão:** 0.7
 **Data de atualização:** 12 de agosto de 2026
-**Função deste arquivo:** fonte de verdade do projeto. Toda decisão nova deve atualizar este registro.
+**Função deste arquivo:** registrar a visão e as decisões acadêmicas do TCC. A especificação reúne os requisitos aceitos; o estado atual e os testes descrevem o que está implementado.
 
 > **Hipótese central do projeto.** O diferencial mais defensável não é apenas reunir links nem apenas gerar planos com IA. É criar uma camada de orquestração pedagógica que conecte uma habilidade curricular a recursos curados, condições reais de uso, metodologia e evidências de aprendizagem, mantendo rastreabilidade entre o plano gerado e os materiais que o fundamentaram.
 
@@ -80,9 +80,9 @@ Há três modelos diferentes:
 
 O **modelo híbrido** é o candidato atual: hospedar materiais próprios ou autorizados quando necessário e referenciar recursos externos de qualidade. Ele permite variedade de conteúdos, mas exige regras claras para direitos autorais, checagem de links e indicação da origem. A confirmação final dependerá das decisões técnicas e da orientação.
 
-## 7. Modelo inicial para os conteúdos
+## 5. Modelo inicial para os conteúdos
 
-### 7.1 Metadados de identificação
+### 5.1 Metadados de identificação
 
 - Título.
 - URL ou arquivo.
@@ -91,7 +91,7 @@ O **modelo híbrido** é o candidato atual: hospedar materiais próprios ou auto
 - Descrição objetiva e resumo elaborado pela curadoria.
 - Idioma.
 
-### 7.2 Metadados curriculares e pedagógicos
+### 5.2 Metadados curriculares e pedagógicos
 
 - Ano ou anos recomendados.
 - Eixo da BNCC Computação.
@@ -105,7 +105,7 @@ O **modelo híbrido** é o candidato atual: hospedar materiais próprios ou auto
 - Forma de participação: individual, dupla, grupo ou turma inteira.
 - Duração estimada e possibilidade de divisão em etapas.
 
-### 7.3 Metadados operacionais e de inclusão
+### 5.3 Metadados operacionais e de inclusão
 
 - Dispositivo necessário.
 - Necessidade de cadastro ou instalação.
@@ -116,7 +116,7 @@ O **modelo híbrido** é o candidato atual: hospedar materiais próprios ou auto
 - Barreiras potenciais e alternativas acessíveis.
 - Dados pessoais coletados e indicação de idade mínima, quando aplicável.
 
-### 7.4 Proveniência, direitos e curadoria
+### 5.4 Proveniência, direitos e curadoria
 
 - Licença de uso ou situação autoral.
 - Permissão para copiar, adaptar, incorporar ou apenas criar link.
@@ -126,7 +126,7 @@ O **modelo híbrido** é o candidato atual: hospedar materiais próprios ou auto
 - Critérios de qualidade atendidos.
 - Observações, limitações e riscos.
 
-## 8. Estratégia de TAGs
+## 6. Estratégia de TAGs
 
 Não se recomenda manter todas as informações em um único conjunto livre de TAGs. Isso produz sinônimos, grafias divergentes e filtros inconsistentes. O melhor desenho combina:
 
@@ -138,13 +138,13 @@ Cada TAG deve ter nome preferido, definição, categoria, sinônimos, responsáv
 
 **Regra importante para a IA:** a geração não deve se basear em TAGs isoladas. Deve receber metadados estruturados, notas de curadoria, limitações e referências do recurso. TAGs ajudam a recuperar candidatos; não substituem a avaliação pedagógica.
 
-## 9. Estrutura recomendada de um bom plano de aula
+## 7. Estrutura recomendada de um bom plano de aula
 
-### 9.1 Elementos essenciais
+### 7.1 Elementos essenciais
 
 - Definirei futuramente
 
-### 9.2 Requisitos de qualidade do plano gerado
+### 7.2 Requisitos de qualidade do plano gerado
 
 - Não inventar funcionalidades dos recursos.
 - Não citar habilidade incompatível com o ano ou com o objetivo.
@@ -156,7 +156,7 @@ Cada TAG deve ter nome preferido, definição, categoria, sinônimos, responsáv
 - Permitir edição e decisão final do docente.
 - Mostrar quais informações vieram do repositório e quais são sugestões da IA.
 
-## 10. Plano de aula e plano de estudo: distinção inicial
+## 8. Plano de aula e plano de estudo: distinção inicial
 
 | Dimensão | Plano de aula | Plano de estudo |
 |---|---|---|
@@ -172,84 +172,84 @@ Cada TAG deve ter nome preferido, definição, categoria, sinônimos, responsáv
 
 **Recomendação de escopo:** não implementar o plano de estudo no primeiro MVP. Primeiro valide a qualidade do vínculo entre recurso e plano de aula. Depois, trate o plano de estudo como um segundo produto, com pesquisa própria com estudantes e requisitos de proteção de menores.
 
-## 11. Arquitetura futura de geração por IA — em aberto
+## 9. Arquitetura futura de geração por IA — em aberto
 
 **Decisão atual:** a arquitetura de IA não será definida, nem implementada, nesta etapa. RAG, modelo próprio, serviço de terceiros e abordagens híbridas permanecem alternativas de investigação futura, a serem discutidas com a orientadora e avaliadas segundo qualidade pedagógica, rastreabilidade, privacidade, custo, disponibilidade, manutenção e viabilidade acadêmica.
 
-### 11.2 Conteúdo externo e direitos autorais
+### 9.1 Conteúdo externo e direitos autorais
 
 “Alimentar a IA” não deve significar copiar indiscriminadamente páginas, vídeos ou materiais protegidos. Para o protótipo, recomenda-se usar metadados, trechos permitidos, transcrições autorizadas, recursos abertos e resumos produzidos pela curadoria. O sistema deve guardar a licença e a origem de cada item.
 
-## 13. Potenciais problemas e respostas propostas
+## 10. Potenciais problemas e respostas propostas
 
-### 13.1 Escopo excessivo
+### 10.1 Escopo excessivo
 
 **Risco:** repositório, sistema de busca, curadoria, IA, dois públicos e avaliação podem equivaler a vários projetos.
 **Resposta:** concentrar o TCC no catálogo curado e na geração de planos de aula; tratar plano de estudo como trabalho futuro.
 
-### 13.2 Problema ainda não validado com docentes
+### 10.2 Problema ainda não validado com docentes
 
 **Risco:** afirmar que os planos atuais são descontextualizados sem evidência pode enfraquecer o trabalho.
 **Resposta:** realizar entrevistas exploratórias ou questionário breve com docentes e complementar com literatura.
 
-### 13.3 Ambiguidade curricular
+### 10.3 Ambiguidade curricular
 
 **Risco:** associar recursos apenas a “competências” amplas ou misturar a BNCC geral com seu complemento de Computação.
 **Resposta:** usar códigos e textos oficiais, registrar a versão normativa e modelar habilidades, objetos e eixos separadamente.
 
-### 13.4 TAGs inconsistentes
+### 10.4 TAGs inconsistentes
 
 **Risco:** uma taxonomia totalmente livre compromete filtros, métricas e geração.
 **Resposta:** adotar facetas controladas, sinônimos e governança de vocabulário.
 
-### 13.5 Curadoria subjetiva ou inviável
+### 10.5 Curadoria subjetiva ou inviável
 
 **Risco:** muitos recursos, critérios implícitos e avaliações não reproduzíveis.
 **Resposta:** criar uma rubrica simples, registrar revisor e data, testar concordância em uma pequena amostra e limitar o corpus.
 
-### 13.6 Links quebrados e mudança de conteúdo
+### 10.6 Links quebrados e mudança de conteúdo
 
 **Risco:** recursos externos desaparecem ou mudam depois da curadoria.
 **Resposta:** registrar última verificação, executar checagem periódica, permitir denúncia e manter estado do item.
 
-### 13.7 Direitos autorais
+### 10.7 Direitos autorais
 
 **Risco:** copiar, incorporar ou processar materiais sem permissão.
 **Resposta:** priorizar recursos abertos, registrar licença e diferenciar link, incorporação e hospedagem.
 
-### 13.8 Alucinações e falsa autoridade da IA
+### 10.8 Alucinações e falsa autoridade da IA
 
 **Risco:** a geração inventa funcionalidades, referências ou adequações pedagógicas.
 **Resposta:** RAG, saída estruturada, validação, proveniência visível, resposta de insuficiência e revisão obrigatória do docente.
 
-### 13.9 Planos formalmente completos, mas impraticáveis
+### 10.9 Planos formalmente completos, mas impraticáveis
 
 **Risco:** o texto inclui todos os campos, porém ignora tempo, número de dispositivos, internet ou tamanho da turma.
 **Resposta:** tratar restrições operacionais como entrada obrigatória e avaliá-las na rubrica.
 
-### 13.10 Acessibilidade e inclusão tardias
+### 10.10 Acessibilidade e inclusão tardias
 
 **Risco:** recursos inadequados para parte dos estudantes e redesign no fim do projeto.
 **Resposta:** incluir acessibilidade no modelo de dados, na curadoria, nos filtros e no plano desde o início.
 
-### 13.11 Privacidade e proteção de menores
+### 10.11 Privacidade e proteção de menores
 
 **Risco:** cadastro de estudantes ou envio de dados pessoais a serviços de IA.
 **Resposta:** evitar contas estudantis no MVP, minimizar dados, não usar nomes ou perfis individuais e analisar LGPD e termos dos fornecedores.
 
-### 13.12 Dependência do fornecedor de IA
+### 10.12 Dependência do fornecedor de IA
 
 **Risco:** custo, limite, indisponibilidade ou mudança de modelo.
 **Resposta:** encapsular a chamada ao modelo, versionar prompts e modelo, limitar tamanho de contexto e manter um modo demonstrativo reproduzível.
 
-### 13.13 Falta de critério de sucesso
+### 10.13 Falta de critério de sucesso
 
 **Risco:** demonstrar que a aplicação funciona tecnicamente, mas não que melhora o planejamento.
 **Resposta:** comparar planos com e sem recuperação do repositório usando rubrica e avaliação por docentes.
 
-## 14. Proposta de avaliação acadêmica
+## 11. Proposta de avaliação acadêmica
 
-### 14.1 Comparação principal
+### 11.1 Comparação principal
 
 Produzir planos para os mesmos cenários em duas condições:
 
@@ -258,7 +258,7 @@ Produzir planos para os mesmos cenários em duas condições:
 
 Os avaliadores não devem saber qual condição produziu cada plano, quando isso for viável.
 
-### 14.2 Rubrica candidata
+### 11.2 Rubrica candidata
 
 Avaliar cada critério em escala definida, por exemplo de 0 a 4:
 
@@ -273,7 +273,7 @@ Avaliar cada critério em escala definida, por exemplo de 0 a 4:
 - Rastreabilidade das fontes.
 - Quantidade de correções necessárias antes do uso.
 
-### 14.3 Métricas complementares
+### 11.3 Métricas complementares
 
 - Tempo para localizar recursos e concluir um plano.
 - Percentual de planos considerados utilizáveis com pequenas alterações.
@@ -283,7 +283,7 @@ Avaliar cada critério em escala definida, por exemplo de 0 a 4:
 
 **Ponto ético:** se houver participação de professores ou estudantes em pesquisa, verificar antecipadamente as exigências da instituição, termos de consentimento e eventual submissão ao comitê de ética. Não iniciar coleta antes dessa definição.
 
-## 16. Registro de pontos em aberto
+## 12. Registro de pontos em aberto
 
 | ID | Questão a decidir | Prioridade | Critério para decisão |
 |---|---|---|---|
@@ -305,9 +305,9 @@ Avaliar cada critério em escala definida, por exemplo de 0 a 4:
 | A-016 | Qual será o nome da plataforma? | P2 | Identidade; não bloqueia pesquisa |
 | A-017 | O plano de estudo entra no protótipo? | P2 | Recomendação atual: não |
 
-## 17. Ideias de funcionalidades
+## 13. Ideias de funcionalidades
 
-### 17.1 Alto valor para o MVP
+### 13.1 Alto valor para o MVP
 
 - Filtros combináveis com contagem de resultados.
 - Indicação “por que este recurso combina com sua busca”.
@@ -319,7 +319,7 @@ Avaliar cada critério em escala definida, por exemplo de 0 a 4:
 - Exportação com referências e ficha dos recursos.
 - Histórico dos parâmetros, recursos e versão do modelo usados na geração.
 
-### 17.2 Para versões posteriores
+### 13.2 Para versões posteriores
 
 - Coleções compartilhadas entre professores.
 - Avaliações e comentários moderados.
@@ -328,7 +328,7 @@ Avaliar cada critério em escala definida, por exemplo de 0 a 4:
 - Plano de estudo com metas, acompanhamento e autoavaliação.
 - Integração com AVA ou calendário.
 
-## 18. Cinco plataformas agregadoras para estudo comparativo
+## 14. Cinco plataformas agregadoras para estudo comparativo
 
 1. **MEC RED — Plataforma Integrada de Recursos Educacionais Digitais**
    Link: [Acessar a MEC RED](https://mecred.mec.gov.br/)
@@ -350,7 +350,7 @@ Avaliar cada critério em escala definida, por exemplo de 0 a 4:
    Link: [Acessar o Smithsonian Learning Lab](https://learninglab.si.edu/)
    Por que estudar: permite descobrir recursos digitais, organizá-los em coleções e transformá-los em experiências educacionais com notas, questões e TAGs. Observar a transição entre recurso isolado, coleção e atividade/planejamento.
 
-### 18.1 Roteiro de análise das plataformas
+### 14.1 Roteiro de análise das plataformas
 
 Para cada plataforma, registrar:
 
@@ -367,37 +367,7 @@ Para cada plataforma, registrar:
 - Acessibilidade.
 - Pontos fortes, fricções e ideias que não devem ser copiadas.
 
-## 19. Melhor forma de desenvolver este trabalho comigo
-
-### 19.1 Regra de colaboração
-
-Use este registro como fonte de verdade. Ao trazer novas informações, indique se são **decisão**, **hipótese**, **dúvida**, **fonte**, **feedback de usuário** ou **resultado de teste**. Eu atualizarei a seção correspondente e o histórico.
-
-Um pedido útil pode ser tão simples quanto: “Atualize o registro: decidimos limitar a avaliação ao 6º e 7º ano; motivo: prazo de curadoria.”
-
-### 19.2 Entregas incrementais sugeridas
-
-1. Delimitação do problema, pergunta, hipótese e objetivos.
-2. Protocolo de busca e revisão de literatura.
-3. Entrevista ou questionário exploratório com docentes.
-4. Taxonomia da BNCC Computação e rubrica de curadoria.
-5. Modelo de dados e contratos de API.
-6. Fluxos de usuário e wireframes.
-7. Backlog priorizado e critérios de aceite.
-8. Protótipo do catálogo e filtros.
-9. Protótipo de recuperação e geração estruturada.
-10. Instrumento de avaliação, experimento e análise.
-11. Redação dos capítulos e revisão de coerência e referências.
-
-### 19.4 Uso responsável de IA na autoria acadêmica
-
-- Confirmar as regras da instituição e do orientador sobre uso de IA.
-- Manter registro do que foi produzido, revisado e decidido pelo autor.
-- Não incluir referências não verificadas.
-- Revisar conceitos, citações, dados e código antes de entregar.
-- Usar a IA como apoio a análise, estrutura, prototipação e revisão; a responsabilidade acadêmica permanece do estudante.
-
-## 22. Fontes normativas e páginas consultadas
+## 15. Fontes normativas e páginas consultadas
 
 - Conselho Nacional de Educação. [**Resolução CNE/CEB nº 1, de 4 de outubro de 2022: Normas sobre Computação na Educação Básica — Complemento à BNCC.**](https://portal.mec.gov.br/docman/outubro-2022-pdf/241671-rceb001-22/file)
 - Ministério da Educação. [**BNCC Computação — complemento à BNCC.**](https://www.gov.br/mec/pt-br/escolas-conectadas/BNCCComputaoCompletodiagramado.pdf)
@@ -409,7 +379,7 @@ Um pedido útil pode ser tão simples quanto: “Atualize o registro: decidimos 
 - Smithsonian Learning Lab. [**About.**](https://learninglab.si.edu/about)
 - Universidade Federal de Santa Maria. [**Guia de Identidade Visual da UFSM.**](https://www.ufsm.br/app/uploads/2022/01/manual_id_ufsm_2019_012.pdf)
 
-## 23. Decisões e feedback incorporados ao protótipo — 12 de agosto de 2026
+## 16. Decisões e feedback incorporados ao protótipo — 12 de agosto de 2026
 
 - **Decisão de interface:** a área de organização passa a se chamar **Meus Materiais**; **Favoritos** permanece como coleção automática e as demais coleções são criadas pelo docente.
 - **Decisão de entrada:** ao selecionar **Entrar**, o protótipo cria uma sessão local e abre diretamente o Acervo. O modal e a autenticação Google ficam adiados para uma etapa futura.
@@ -423,7 +393,7 @@ Um pedido útil pode ser tão simples quanto: “Atualize o registro: decidimos 
 - **Fonte informada pelo autor do projeto:** licença indicada para o recurso: **CC BY-NC-ND 3.0 BR**. A licença e a autorização de uso da imagem deverão ser confirmadas na fonte original antes da publicação do TCC.
 - **Feedback de interface:** a landing enfatiza recursos organizados e planos contextualizados, sem rotular explicitamente essas áreas como “funcionalidade futura”.
 
-## 24. Decisões de repositório e publicação — 12 de agosto de 2026
+## 17. Decisões de repositório e publicação — 12 de agosto de 2026
 
 - **Decisão de hospedagem do protótipo:** o frontend estático será versionado no GitHub e publicado pelo GitHub Pages a partir da branch `main`.
 - **Decisão de integração contínua:** todo push para `main` executa checagem de tipos, lint, testes unitários, build e testes E2E antes de publicar; pull requests executam as verificações sem deploy.
@@ -431,4 +401,6 @@ Um pedido útil pode ser tão simples quanto: “Atualize o registro: decidimos 
 - **Decisão de ativos:** apenas imagens necessárias ao protótipo e com crédito explícito entram em `public/`. Referências visuais de processo sem licença de redistribuição comprovada permanecem localmente em `.private-references/` e são ignoradas pelo Git.
 - **Decisão de licenciamento:** até que o autor escolha uma licença aberta, código e documentação permanecem com direitos reservados. Ativos de terceiros mantêm suas licenças e são listados em `docs/creditos-e-licencas.md`.
 - **Decisão de documentação:** `README.md` serve como porta de entrada; `docs/estado-atual.md` registra o que está realmente implementado; a especificação e este registro continuam preservando visão de produto e decisões acadêmicas.
+- **Decisão de organização:** a raiz pública mantém apenas entradas essenciais; configurações ficam em `config/`, testes de interface em `tests/e2e/`, registros acadêmicos em `docs/` e o histórico do plano em `docs/historico/`.
+- **Decisão sobre `.github`:** somente o workflow de qualidade e GitHub Pages permanece nessa pasta, pois ele é necessário para validar e publicar automaticamente o site.
 - **Decisão de persistência:** a publicação no Pages não altera o modelo de dados desta etapa; sessão, favoritos e pastas continuam somente no `localStorage`, sem sincronização remota.

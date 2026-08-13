@@ -20,9 +20,9 @@ flowchart LR
 
 ```text
 .
-├── .github/                 # automação, templates e Dependabot
-├── docs/                    # especificação, decisões e documentação técnica
-├── e2e/                     # fluxos reais no Playwright
+├── .github/workflows/       # validação e deploy automático
+├── config/                  # Vite, Vitest, Playwright e ESLint
+├── docs/                    # TCC, especificação e documentação técnica
 ├── public/                  # ativos servidos sem transformação pelo Vite
 ├── src/
 │   ├── app/                 # composição de rotas
@@ -35,7 +35,7 @@ flowchart LR
 │   ├── store/               # sessão e biblioteca pessoal
 │   ├── styles/              # tokens e estilos globais
 │   └── test/                # configuração comum de testes
-└── registro_mestre_tcc.md   # registro acadêmico do projeto
+└── tests/e2e/               # fluxos reais no Playwright
 ```
 
 Cada feature expõe sua API pública em `index.ts`. Componentes internos e
