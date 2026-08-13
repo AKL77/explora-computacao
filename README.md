@@ -27,32 +27,6 @@ novos conteúdos e um backend em etapas posteriores.
 > Consulte a [demonstração publicada](https://akl77.github.io/informatica-explorer/)
 > e o [estado exato da versão atual](docs/estado-atual.md).
 
-## Funcionalidades
-
-- landing page pública com contexto e objetivos do projeto;
-- entrada demonstrativa direta no Acervo;
-- busca e filtros por turma e habilidade;
-- cards compactos com dados curriculares essenciais;
-- detalhe do recurso organizado em três abas;
-- favoritos pelo botão de coração;
-- criação e manutenção de pastas em **Meus Materiais**;
-- busca e filtros recolhíveis dentro de Favoritos e pastas;
-- página **Sobre** com explicações e FAQ;
-- persistência local e interface responsiva e acessível.
-
-**Meu perfil**, **Minhas Turmas**, **Meus Planos de Aula** e **Criar Plano de
-Aula** são exibidos como itens inativos nesta versão.
-
-## Fora do escopo atual
-
-- backend, API e banco de dados;
-- login Google ou qualquer autenticação real;
-- geração de conteúdo por inteligência artificial;
-- inclusão de recursos por usuários;
-- contas ou dados de estudantes;
-- sincronização entre dispositivos;
-- analytics e cookies de rastreamento.
-
 ## Tecnologias
 
 - React 19, TypeScript e Vite;
@@ -75,8 +49,7 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-Abra [http://127.0.0.1:4173](http://127.0.0.1:4173). O botão **Entrar** cria
-somente uma sessão local de demonstração e leva diretamente ao Acervo.
+Abra [http://127.0.0.1:4173](http://127.0.0.1:4173).
 
 ### Comandos disponíveis
 
@@ -167,6 +140,3 @@ Desenvolvido por **Augusto Lunardi** como protótipo acadêmico. Código e
 documentação permanecem com direitos reservados; consulte [`LICENSE`](LICENSE).
 Ativos de terceiros mantêm seus próprios termos e são detalhados em
 [`docs/creditos-e-licencas.md`](docs/creditos-e-licencas.md).
-
-Informática Explorer é independente e não possui afiliação ou endosso da
-Microsoft, UFSM, MEC, CNE, ALT+INOVARE ou dos responsáveis pela BNCC.
