@@ -1,0 +1,801 @@
+.page {
+  width: min(100%, 90rem);
+  margin-inline: auto;
+  padding: clamp(1rem, 3vw, 2.5rem);
+  color: var(--text-primary);
+}
+
+.header {
+  max-width: 52rem;
+  margin-bottom: 1.5rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.35rem;
+  color: var(--brand-cyan);
+  font-size: 0.78rem;
+  font-weight: 850;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.header h1 {
+  margin: 0;
+  color: var(--brand-navy);
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 720;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+}
+
+.header > p:last-child {
+  max-width: 68ch;
+  margin: 0.7rem 0 0;
+  color: var(--text-muted);
+  line-height: 1.65;
+}
+
+.builderGrid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: minmax(18rem, 0.72fr) minmax(0, 1.28fr);
+  align-items: start;
+}
+
+.formCard,
+.preview {
+  background: var(--surface-card);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.formCard {
+  display: grid;
+  gap: 1.15rem;
+  padding: clamp(1.15rem, 3vw, 1.6rem);
+}
+
+.formIntro h2,
+.preview h2,
+.sectionCard h3,
+.sessionCard h3 {
+  color: var(--brand-navy);
+}
+
+.formIntro h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.formIntro p {
+  margin: 0.35rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.field,
+.fieldGroup {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.field > label,
+.fieldGroup > legend {
+  color: var(--brand-navy);
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.fieldGroup {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+.required {
+  color: var(--state-error);
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  min-height: 2.85rem;
+  padding: 0.68rem 0.75rem;
+  color: var(--text-primary);
+  background: #fff;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+}
+
+.field textarea {
+  min-height: 7.5rem;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.field input:hover,
+.field select:hover,
+.field textarea:hover {
+  border-color: var(--brand-cyan);
+}
+
+.field input:disabled,
+.field select:disabled,
+.field textarea:disabled {
+  color: var(--text-muted);
+  background: #f1f5f7;
+  cursor: not-allowed;
+}
+
+.helper,
+.availability,
+.errorMessage {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.helper {
+  color: var(--text-muted);
+}
+
+.availability {
+  padding: 0.65rem 0.75rem;
+  color: #624600;
+  background: #fff8d6;
+  border: 1px solid #ead26b;
+  border-radius: var(--radius-sm);
+}
+
+.errorMessage {
+  padding: 0.7rem 0.8rem;
+  color: var(--state-error);
+  background: #fff1f0;
+  border: 1px solid #f4b7b2;
+  border-radius: var(--radius-sm);
+}
+
+.durationOptions {
+  display: grid;
+  gap: 0.55rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.durationOption {
+  position: relative;
+  display: grid;
+  min-height: 4.45rem;
+  padding: 0.65rem 0.45rem;
+  text-align: center;
+  background: #fff;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  place-items: center;
+  align-content: center;
+}
+
+.durationOption:hover {
+  background: var(--surface-soft);
+  border-color: var(--brand-cyan);
+}
+
+.durationOption:has(input:checked) {
+  background: #e5f5f8;
+  border-color: var(--brand-cyan);
+  box-shadow: inset 0 0 0 1px var(--brand-cyan);
+}
+
+.durationOption:has(input:focus-visible) {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.durationOption input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.durationOption strong {
+  color: var(--brand-navy);
+  font-size: 0.92rem;
+}
+
+.durationOption small {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+
+.curriculumCard {
+  display: grid;
+  gap: 0.6rem;
+  padding: 0.85rem;
+  margin: 0;
+  background: var(--surface-soft);
+  border-radius: var(--radius-sm);
+}
+
+.curriculumCard div {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.curriculumCard dt {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-weight: 850;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
+.curriculumCard dd {
+  margin: 0;
+  font-size: 0.87rem;
+  line-height: 1.45;
+}
+
+.checkboxRow {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.7rem;
+  align-items: start;
+}
+
+.checkboxRow input {
+  width: 1.15rem;
+  height: 1.15rem;
+  margin-top: 0.22rem;
+  accent-color: var(--brand-blue);
+}
+
+.checkboxRow strong {
+  display: block;
+  color: var(--brand-navy);
+  font-size: 0.9rem;
+}
+
+.checkboxRow small {
+  display: block;
+  margin-top: 0.15rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.submitButton {
+  display: inline-flex;
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.75rem 1rem;
+  color: #fff;
+  font: inherit;
+  font-weight: 850;
+  background: var(--brand-blue);
+  border: 0;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+.submitButton:hover:not(:disabled) {
+  background: var(--brand-blue-hover);
+}
+
+.submitButton:disabled {
+  color: #71808a;
+  background: #dce5e9;
+  cursor: not-allowed;
+}
+
+.preview {
+  min-height: 38rem;
+}
+
+.previewBlocks {
+  overflow: hidden;
+  background: #eef8fb;
+  border-color: #8fcadb;
+  border-radius: 0.35rem;
+}
+
+.emptyPreview {
+  display: grid;
+  min-height: 38rem;
+  padding: clamp(2rem, 7vw, 5rem);
+  text-align: center;
+  place-items: center;
+  align-content: center;
+}
+
+.emptyIcon {
+  display: grid;
+  width: 4.5rem;
+  height: 4.5rem;
+  margin-bottom: 1rem;
+  color: var(--brand-blue);
+  background: var(--surface-soft);
+  border-radius: 1.25rem;
+  place-items: center;
+}
+
+.emptyPreview h2 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.emptyPreview p {
+  max-width: 46ch;
+  margin: 0.55rem 0 0;
+  color: var(--text-muted);
+}
+
+.previewContent {
+  padding: clamp(1.15rem, 3vw, 2rem);
+}
+
+.previewHeader {
+  display: flex;
+  gap: 1rem;
+  padding-bottom: 1.15rem;
+  border-bottom: 1px solid var(--border-soft);
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.previewHeader h2 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(1.55rem, 3vw, 2.15rem);
+  line-height: 1.15;
+}
+
+.previewHeader p {
+  margin: 0.35rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.viewToggle {
+  display: inline-flex;
+  flex: 0 0 auto;
+  padding: 0.2rem;
+  background: var(--surface-soft);
+  border-radius: var(--radius-sm);
+}
+
+.viewToggle button {
+  min-height: 2.4rem;
+  padding: 0.45rem 0.7rem;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 800;
+  background: transparent;
+  border: 0;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.viewToggle button[aria-pressed="true"] {
+  color: var(--brand-navy);
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+}
+
+.planActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1rem;
+  justify-content: flex-end;
+}
+
+.planActions button {
+  display: inline-flex;
+  min-height: 2.65rem;
+  padding: 0.55rem 0.85rem;
+  color: #fff;
+  font: inherit;
+  font-size: 0.83rem;
+  font-weight: 800;
+  background: var(--brand-blue);
+  border: 1px solid var(--brand-blue);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.planActions button + button {
+  color: var(--brand-navy);
+  background: #fff;
+}
+
+.planActions button:hover:not(:disabled) {
+  background: var(--brand-blue-hover);
+  color: #fff;
+}
+
+.planActions button:disabled {
+  color: #71808a;
+  background: #dce5e9;
+  border-color: #dce5e9;
+  cursor: not-allowed;
+}
+
+.actionStatus {
+  min-height: 1.4rem;
+  margin: 0.45rem 0 0;
+  color: #176344;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-align: right;
+}
+
+.planView {
+  margin-top: 1.25rem;
+}
+
+.blockPlan {
+  position: relative;
+  overflow: hidden;
+  color: #102e40;
+  background: #fafdfe;
+  border: 1px solid #70bfd5;
+  box-shadow: 0 14px 32px rgb(18 88 112 / 12%);
+  container-name: lesson-plan-blocks;
+  container-type: inline-size;
+}
+
+.blockPlanHeading {
+  position: relative;
+  display: flex;
+  min-height: 12.25rem;
+  padding: 6.4rem clamp(1.25rem, 4vw, 2.7rem) 1.65rem;
+  background:
+    linear-gradient(163deg, transparent 0 54%, #fafdfe 54.4%),
+    linear-gradient(128deg, #087bab 0 30%, #19bae4 30% 56%, #6ad6ec 56% 76%, #159bc9 76%);
+  align-items: flex-end;
+}
+
+.blockPlanHeading > div {
+  position: relative;
+  z-index: 2;
+  max-width: 44rem;
+}
+
+.blockPlanHeading p {
+  margin: 0 0 0.3rem;
+  color: #0b7598;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.blockPlanHeading h3 {
+  margin: 0;
+  color: #102e40;
+  font-family: var(--font-serif);
+  font-size: clamp(1.55rem, 3.2vw, 2.45rem);
+  line-height: 1.08;
+}
+
+.blockPlanHeading div > span {
+  display: block;
+  margin-top: 0.5rem;
+  color: #365f72;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.geometricShapeOne,
+.geometricShapeTwo,
+.geometricShapeThree {
+  position: absolute;
+  top: 0;
+  display: block;
+  height: 7.25rem;
+}
+
+.geometricShapeOne {
+  left: 8%;
+  width: 36%;
+  background: rgb(255 255 255 / 22%);
+  clip-path: polygon(0 0, 100% 0, 68% 100%, 29% 57%);
+}
+
+.geometricShapeTwo {
+  right: 13%;
+  width: 38%;
+  background: rgb(4 76 129 / 20%);
+  clip-path: polygon(30% 0, 100% 0, 62% 100%, 0 52%);
+}
+
+.geometricShapeThree {
+  right: -4%;
+  width: 28%;
+  background: rgb(255 255 255 / 18%);
+  clip-path: polygon(48% 0, 100% 0, 100% 100%, 0 63%);
+}
+
+.blockGrid {
+  display: grid;
+  gap: 0.85rem;
+  padding: 0 clamp(1rem, 4vw, 2.3rem) 1.6rem;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.planBlock {
+  min-width: 0;
+  padding: 1.05rem 1.15rem 1.2rem;
+  background: #c8edf5;
+  border: 1px solid #9ed8e7;
+  border-left: 7px solid #158fb8;
+  border-radius: 0;
+  box-shadow: 3px 4px 0 rgb(12 105 141 / 8%);
+}
+
+.planBlock > h3,
+.detailedSection > h3 {
+  margin: 0 0 0.7rem;
+  color: var(--brand-navy);
+  font-size: 1rem;
+}
+
+.planBlock > h3 {
+  padding-bottom: 0.42rem;
+  border-bottom: 2px solid rgb(16 79 105 / 24%);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.planBlock p,
+.detailedSection p {
+  margin: 0;
+  line-height: 1.65;
+}
+
+.bnccBlock {
+  background: #b9e5f0;
+  grid-column: 1 / -1;
+}
+
+.objectiveBlock {
+  background: #d6f1f6;
+  grid-column: 1 / -1;
+}
+
+.materialsBlock {
+  background: #d5eff4;
+  grid-column: span 5;
+}
+
+.methodologyBlock {
+  background: #bde7f0;
+  grid-column: span 7;
+}
+
+.evaluationBlock {
+  background: #c9edf4;
+  grid-column: 1 / -1;
+}
+
+@container lesson-plan-blocks (max-width: 34rem) {
+  .blockGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .bnccBlock,
+  .objectiveBlock,
+  .materialsBlock,
+  .methodologyBlock,
+  .evaluationBlock {
+    grid-column: auto;
+  }
+}
+
+.blockPlanFooter {
+  position: relative;
+  height: 4.5rem;
+  overflow: hidden;
+  background: linear-gradient(145deg, #087cae 0 31%, #1abce5 31% 62%, #72d9ec 62%);
+}
+
+.blockPlanFooter span {
+  position: absolute;
+  inset-block: 0;
+  display: block;
+}
+
+.blockPlanFooter span:nth-child(1) {
+  left: 15%;
+  width: 42%;
+  background: rgb(255 255 255 / 20%);
+  clip-path: polygon(0 100%, 32% 0, 100% 100%);
+}
+
+.blockPlanFooter span:nth-child(2) {
+  right: 12%;
+  width: 38%;
+  background: rgb(5 70 126 / 18%);
+  clip-path: polygon(0 0, 72% 23%, 100% 100%, 28% 100%);
+}
+
+.blockPlanFooter span:nth-child(3) {
+  right: -6%;
+  width: 27%;
+  background: rgb(255 255 255 / 17%);
+  clip-path: polygon(52% 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.bnccReference {
+  margin: 0;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.materialList {
+  padding-left: 1.2rem;
+  margin: 0;
+}
+
+.materialList li {
+  padding: 0.12rem 0;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.materialList a {
+  color: var(--brand-blue);
+  font-weight: 750;
+  text-underline-offset: 0.16em;
+}
+
+.detailedView {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.detailedSection {
+  padding-bottom: 1.4rem;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.detailedSection:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.lessonNarratives {
+  display: grid;
+  gap: 1.4rem;
+}
+
+.lessonNarrative {
+  padding-left: 1rem;
+  border-left: 4px solid var(--brand-cyan);
+}
+
+.lessonNarrative header {
+  margin-bottom: 1rem;
+}
+
+.lessonNarrative h4 {
+  margin: 0;
+  color: var(--brand-navy);
+  font-size: 1.05rem;
+}
+
+.lessonNarrative header p {
+  margin-top: 0.25rem;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+.lessonNarrative section + section {
+  margin-top: 1rem;
+}
+
+.lessonNarrative h5 {
+  margin: 0 0 0.35rem;
+  color: var(--brand-navy);
+  font-size: 0.9rem;
+}
+
+.warnings {
+  padding: 0.85rem 1rem;
+  margin: 1rem 0 0;
+  color: #624600;
+  font-size: 0.84rem;
+  background: #fff8d6;
+  border: 1px solid #ead26b;
+  border-radius: var(--radius-sm);
+}
+
+.notFoundCard {
+  max-width: 42rem;
+  padding: clamp(1.5rem, 5vw, 2.5rem);
+  background: var(--surface-card);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.notFoundCard h1 {
+  margin-bottom: 0.55rem;
+  color: var(--brand-navy);
+  font-family: var(--font-serif);
+}
+
+.notFoundCard a {
+  display: inline-block;
+  margin-top: 0.75rem;
+  color: var(--brand-blue);
+  font-weight: 800;
+  text-underline-offset: 0.18em;
+}
+
+@media (max-width: 67.99rem) {
+  .builderGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .preview,
+  .emptyPreview {
+    min-height: 24rem;
+  }
+}
+
+@media (max-width: 39.99rem) {
+  .durationOptions {
+    grid-template-columns: 1fr;
+  }
+
+  .durationOption {
+    min-height: 3.75rem;
+  }
+
+  .previewHeader {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .viewToggle {
+    width: 100%;
+  }
+
+  .viewToggle button {
+    flex: 1 1 50%;
+  }
+
+  .blockGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .bnccBlock,
+  .objectiveBlock,
+  .materialsBlock,
+  .methodologyBlock,
+  .evaluationBlock {
+    grid-column: auto;
+  }
+
+  .blockPlanHeading {
+    min-height: 10.5rem;
+    padding-top: 5.45rem;
+  }
+
+  .planActions button {
+    flex: 1 1 10rem;
+    justify-content: center;
+  }
+}

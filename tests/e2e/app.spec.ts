@@ -19,6 +19,47 @@ async function enterDemo(page: import("@playwright/test").Page) {
   await expect(page.getByRole("heading", { name: "Acervo", level: 1 })).toBeVisible();
 }
 
+async function expectOpenFilterAboveCardActions(
+  page: import("@playwright/test").Page,
+) {
+  const hitTest = await page.evaluate(() => {
+    const fieldset = document.querySelector<HTMLFieldSetElement>(
+      "details[open] fieldset",
+    );
+    const cardAction = document.querySelector<HTMLButtonElement>(
+      "article button[aria-label^='Favoritar ']",
+    );
+
+    if (!fieldset || !cardAction) {
+      return { overlaps: false, filterOwnsHit: false };
+    }
+
+    const filterRect = fieldset.getBoundingClientRect();
+    const actionRect = cardAction.getBoundingClientRect();
+    const left = Math.max(filterRect.left, actionRect.left);
+    const right = Math.min(filterRect.right, actionRect.right);
+    const top = Math.max(filterRect.top, actionRect.top);
+    const bottom = Math.min(filterRect.bottom, actionRect.bottom);
+
+    if (left >= right || top >= bottom) {
+      return { overlaps: false, filterOwnsHit: false };
+    }
+
+    const topElement = document.elementFromPoint(
+      left + (right - left) / 2,
+      top + (bottom - top) / 2,
+    );
+
+    return {
+      overlaps: true,
+      filterOwnsHit: Boolean(topElement && fieldset.contains(topElement)),
+    };
+  });
+
+  expect(hitTest.overlaps).toBe(true);
+  expect(hitTest.filterOwnsHit).toBe(true);
+}
+
 test.beforeEach(async ({ page }) => {
   await resetDemo(page);
 });
@@ -37,7 +78,7 @@ test("apresenta a proposta e entra no Acervo", async ({ page }) => {
   await expect(page.getByRole("main", { name: "Acervo" })).toBeFocused();
 });
 
-test("mantém as opções ainda não implementadas inativas", async ({ page }, testInfo) => {
+test("mantém somente perfil e turmas inativos", async ({ page }, testInfo) => {
   await enterDemo(page);
   const catalogUrl = page.url();
 
@@ -45,7 +86,7 @@ test("mantém as opções ainda não implementadas inativas", async ({ page }, t
     await page.getByRole("button", { name: "Abrir menu" }).click();
   }
 
-  for (const label of ["Criar Plano de Aula", "Minhas Turmas"]) {
+  for (const label of ["Meu perfil", "Minhas Turmas"]) {
     const item = page.getByRole("button", { name: label, exact: true });
     await expect(item).toBeVisible();
     await expect(item).toBeDisabled();
@@ -53,11 +94,147 @@ test("mantém as opções ainda não implementadas inativas", async ({ page }, t
     await expect(page.getByRole("link", { name: label, exact: true })).toHaveCount(0);
     await expect(page).toHaveURL(catalogUrl);
   }
+
+  await expect(
+    page.getByRole("link", { name: "Meus Planos de Aula", exact: true }),
+  ).toHaveAttribute("href", /\/app\/planos$/);
+});
+
+test("cria, salva, pesquisa, edita e baixa um plano", async ({
+  page,
+}, testInfo) => {
+  await enterDemo(page);
+
+  if (testInfo.project.name === "mobile") {
+    await page.getByRole("button", { name: "Abrir menu" }).click();
+  }
+
+  await page.getByRole("link", { name: "Criar Plano de Aula", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Criar Plano de Aula", level: 1 }),
+  ).toBeVisible();
+
+  await page.getByRole("textbox", { name: "Tema" }).fill(
+    "Algoritmos com Lightbot",
+  );
+  await page.getByRole("combobox", { name: "Ano escolar" }).selectOption("4");
+  await page.getByRole("combobox", { name: "Habilidade" }).selectOption("EF04CO03");
+  await expect(page.getByRole("option", { name: "Lightbot" })).toHaveCount(1);
+  await expect(page.getByRole("option", { name: "Blockly Games" })).toHaveCount(1);
+  await page
+    .getByRole("combobox", { name: "Material do Acervo" })
+    .selectOption("lightbot-web");
+  await expect(page.getByText(/Este material não possui objetivo sugerido/)).toBeVisible();
+  await page
+    .getByRole("textbox", { name: "Objetivo" })
+    .fill("Criar e testar algoritmos com sequências e repetições.");
+  await page.getByRole("radio", { name: /3 aulas/ }).check();
+  await page.getByRole("checkbox", { name: /Incluir avaliação/ }).check();
+  await page.getByRole("button", { name: "Montar plano" }).click();
+
+  await expect(
+    page.getByRole("heading", {
+      name: "Algoritmos com Lightbot",
+      level: 2,
+    }),
+  ).toBeFocused();
+  await expect(
+    page.getByText("4º ano · 3 aulas · 150 minutos", { exact: true }).first(),
+  ).toBeVisible();
+  await expect(page.getByRole("button", { name: "Em Blocos" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  const blockPlan = page.getByLabel("Visualização em blocos do plano");
+  for (const heading of ["Materiais", "BNCC", "Objetivo", "Metodologia", "Avaliação"]) {
+    await expect(blockPlan.getByRole("heading", { name: heading, exact: true })).toBeVisible();
+  }
+  await expect(blockPlan.getByText(/EF04CO03/)).toBeVisible();
+  await expect(blockPlan.getByText("Habilidade", { exact: true })).toHaveCount(0);
+  await expect(blockPlan.getByText("Eixo", { exact: true })).toHaveCount(0);
+  await expect(blockPlan.getByText("Competência", { exact: true })).toHaveCount(0);
+  await expect(page.getByText(/Lorem ipsum dolor sit amet/).first()).toBeVisible();
+  await expect(page.getByText("Objeto de conhecimento", { exact: true })).toHaveCount(0);
+  await expect(
+    page.getByText("35 min de atividade + 10 min de avaliação + 5 min de margem"),
+  ).toHaveCount(0);
+  await expect(blockPlan.getByRole("link", { name: /Lightbot/ })).toHaveAttribute(
+    "href",
+    "https://www.lightbot.lu/#/welcome",
+  );
+  await expect(page.getByRole("button", { name: /Trocar/ })).toHaveCount(0);
+
+  const blockPlanResults = await new AxeBuilder({ page }).analyze();
+  expect(blockPlanResults.violations).toEqual([]);
+
+  await page.getByRole("button", { name: "Descritivo" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Desenvolvimento das aulas" }),
+  ).toBeVisible();
+  for (const lesson of [1, 2, 3]) {
+    await expect(page.getByRole("heading", { name: `Aula ${lesson}` })).toBeVisible();
+  }
+  const composedPlanResults = await new AxeBuilder({ page }).analyze();
+  expect(composedPlanResults.violations).toEqual([]);
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= document.documentElement.clientWidth,
+    ),
+  ).toBe(true);
+
+  await page.getByRole("button", { name: "Em Blocos" }).click();
+  await page.getByRole("button", { name: "Salvar plano" }).click();
+  await expect(page).toHaveURL(/\/app\/planos\/[^/]+\/editar$/);
+  await expect(
+    page.getByRole("heading", { name: "Editar Plano de Aula", level: 1 }),
+  ).toBeVisible();
+
+  await page.goto(routeUrl("/app/planos"));
+  await page.reload();
+  await page
+    .getByRole("searchbox", { name: "Pesquisar planos pelo nome" })
+    .fill("algoritmos");
+  await expect(
+    page.getByRole("heading", { name: "Algoritmos com Lightbot", level: 2 }),
+  ).toBeVisible();
+
+  const downloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Baixar PDF de Algoritmos com Lightbot" }).click();
+  const download = await downloadPromise;
+  expect(download.suggestedFilename()).toBe("plano-de-aula-algoritmos-com-lightbot.pdf");
+
+  await page.getByRole("link", { name: "Editar plano" }).click();
+  await page.getByRole("textbox", { name: "Tema" }).fill("Algoritmos revisados");
+  await expect(page.getByRole("button", { name: "Atualizar plano" })).toBeEnabled();
+  await page.getByRole("button", { name: "Atualizar plano" }).click();
+  await page.getByRole("button", { name: "Salvar alterações" }).click();
+  await expect(page.getByRole("status")).toContainText("Alterações salvas");
+
+  if (testInfo.project.name === "mobile") {
+    await page.getByRole("button", { name: "Abrir menu" }).click();
+  }
+  await page.getByRole("link", { name: "Criar Plano de Aula", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Criar Plano de Aula", level: 1 }),
+  ).toBeVisible();
+  await expect(page.getByRole("textbox", { name: "Tema" })).toHaveValue("");
+  await expect(page.getByRole("heading", { name: "Seu plano aparecerá aqui" })).toBeVisible();
+
+  if (testInfo.project.name === "mobile") {
+    await page.getByRole("button", { name: "Abrir menu" }).click();
+  }
+  await page.getByRole("link", { name: "Meus Planos de Aula", exact: true }).click();
+  await page
+    .getByRole("searchbox", { name: "Pesquisar planos pelo nome" })
+    .fill("revisados");
+  await expect(
+    page.getByRole("heading", { name: "Algoritmos revisados", level: 2 }),
+  ).toBeVisible();
 });
 
 test("busca, filtra, favorita e organiza o recurso em uma pasta persistente", async ({
   page,
-}) => {
+}, testInfo) => {
   await enterDemo(page);
 
   const search = page.getByRole("searchbox", {
@@ -67,16 +244,58 @@ test("busca, filtra, favorita e organiza o recurso em uma pasta persistente", as
   await expect(page).toHaveURL(/q=cyber/);
   await expect(page.getByRole("heading", { name: "Cyberbullying — Jogo Educativo" })).toBeVisible();
 
-  await page.locator("summary").filter({ hasText: "Turma" }).click();
+  const card = page.getByRole("article").filter({
+    has: page.getByRole("heading", {
+      name: "Cyberbullying — Jogo Educativo",
+      exact: true,
+    }),
+  });
+  await expect(card.getByText("Turma", { exact: true })).toBeVisible();
+  await expect(card.getByText("Eixo", { exact: true })).toBeVisible();
+  await expect(card.getByText("Habilidades", { exact: true })).toHaveCount(0);
+  await expect(card.getByText(/EF07CO09/)).toHaveCount(0);
+
+  const gradeSummary = page.locator("summary").filter({ hasText: "Turma" });
+  const skillSummary = page.locator("summary").filter({ hasText: "Habilidade" });
+  const gradeMenu = page.locator("details").filter({ has: gradeSummary });
+  const skillMenu = page.locator("details").filter({ has: skillSummary });
+
+  await gradeSummary.click();
+  await expect(gradeMenu).toHaveAttribute("open", "");
+  if (testInfo.project.name !== "mobile") {
+    await expectOpenFilterAboveCardActions(page);
+  }
+  await skillSummary.click();
+  await expect(gradeMenu).not.toHaveAttribute("open", "");
+  await expect(skillMenu).toHaveAttribute("open", "");
+  if (testInfo.project.name !== "mobile") {
+    await expectOpenFilterAboveCardActions(page);
+  }
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= document.documentElement.clientWidth,
+    ),
+  ).toBe(true);
+
+  await gradeSummary.click();
+  await expect(skillMenu).not.toHaveAttribute("open", "");
   await page.getByRole("checkbox", { name: "7º ano" }).click();
   await expect(page).toHaveURL(/turmas=7/);
+  await gradeSummary.click();
+  await expect(gradeMenu).not.toHaveAttribute("open", "");
 
   await page.getByRole("button", { name: "Favoritar Cyberbullying — Jogo Educativo" }).click();
   await expect(
     page.getByRole("button", { name: "Desfavoritar Cyberbullying — Jogo Educativo" }),
   ).toHaveAttribute("aria-pressed", "true");
 
-  await page.getByRole("button", { name: /Organizar Cyberbullying.*em uma pasta/ }).click();
+  await page
+    .getByRole("button", {
+      name: "Organizar Cyberbullying — Jogo Educativo em uma pasta",
+      exact: true,
+    })
+    .click();
+  await expect(page.locator("dialog")).toHaveCount(1);
   await page.getByRole("textbox", { name: "Nome da pasta" }).fill(
     "Turma sétimo ano — Escola Lívia Menna Barreto",
   );
@@ -113,8 +332,21 @@ test("mantém o detalhe responsivo e a navegação móvel operável por teclado"
     page.getByRole("heading", { name: "Cyberbullying — Jogo Educativo", level: 1 }),
   ).toBeVisible();
   await expect(page.getByText("Fornecedor: ALT+INOVARE")).toBeVisible();
+  await expect(page.getByText("Habilidade", { exact: true })).toBeVisible();
+  await expect(page.getByText("Cyberbullying", { exact: true })).toBeVisible();
+  await expect(page.getByText("Competências", { exact: true })).toBeVisible();
+  await expect(page.getByText("EF07CO09", { exact: true })).toBeVisible();
+  await expect(
+    page.getByText("Reconhecer e debater sobre cyberbullying.", { exact: true }),
+  ).toHaveCount(0);
   await page.getByRole("tab", { name: "Fonte" }).click();
   await expect(page.getByText("CC BY-NC-ND 3.0 BR")).toBeVisible();
+  await expect(
+    page.getByText("Alinhamento com a BNCC Computação", { exact: true }),
+  ).toHaveCount(0);
+  await expect(
+    page.getByText("Critério do alinhamento curricular", { exact: true }),
+  ).toHaveCount(0);
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= document.documentElement.clientWidth,
@@ -130,6 +362,98 @@ test("mantém o detalhe responsivo e a navegação móvel operável por teclado"
   }
 });
 
+test("apresenta Lightbot e Blockly Games com os metadados verificados", async ({
+  page,
+}) => {
+  await enterDemo(page);
+  await expect(page.getByText("31 recursos", { exact: true })).toBeVisible();
+
+  const search = page.getByRole("searchbox", {
+    name: "Buscar no conteúdo desta página",
+  });
+  await search.fill("Lightbot");
+  await page.getByRole("link", { name: "Ver detalhes de Lightbot" }).click();
+  await expect(page.getByRole("heading", { name: "Lightbot", level: 1 })).toBeVisible();
+  await expect(page.getByText("4º e 5º anos", { exact: true })).toBeVisible();
+  await expect(
+    page.getByText("Sequências e repetições em algoritmos", { exact: true }),
+  ).toBeVisible();
+  await expect(page.getByText("EF04CO03, EF05CO04", { exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Acessar recurso" })).toHaveAttribute(
+    "href",
+    "https://www.lightbot.lu/#/welcome",
+  );
+  await page.getByRole("tab", { name: "Fonte" }).click();
+  await expect(page.getByText("Não informada", { exact: true })).toBeVisible();
+
+  await page.goto(routeUrl("/app/acervo?q=blockly"));
+  await page.getByRole("link", { name: "Ver detalhes de Blockly Games" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Blockly Games", level: 1 }),
+  ).toBeVisible();
+  await expect(page.getByText("Programação em blocos", { exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Acessar recurso" })).toHaveAttribute(
+    "href",
+    "https://blockly.games/?lang=pt-br",
+  );
+  await page.getByRole("tab", { name: "Fonte" }).click();
+  await expect(
+    page.getByText("Apache-2.0 (código-fonte)", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", {
+      name: "Informações para educadores",
+      exact: true,
+    }),
+  ).toHaveAttribute("href", "https://blockly.games/about?lang=pt-br");
+});
+
+test("apresenta a coleção de Rozelma e o Interland com os dados verificados", async ({
+  page,
+}) => {
+  await enterDemo(page);
+
+  const search = page.getByRole("searchbox", {
+    name: "Buscar no conteúdo desta página",
+  });
+  await search.fill("Lua & Bit-Bit");
+  await page
+    .getByRole("link", {
+      name: "Ver detalhes de Lua & Bit-Bit — Programando com Variáveis",
+    })
+    .click();
+  await expect(
+    page.getByRole("heading", {
+      name: "Lua & Bit-Bit — Programando com Variáveis",
+      level: 1,
+    }),
+  ).toBeVisible();
+  await expect(page.getByText("6º ano", { exact: true })).toBeVisible();
+  await expect(page.getByText("Generalização e variáveis", { exact: true })).toBeVisible();
+  await expect(page.getByText("EF06CO06", { exact: true })).toBeVisible();
+  await page.getByRole("tab", { name: "Fonte" }).click();
+  await expect(page.getByText("CC BY-NC 4.0", { exact: true })).toBeVisible();
+
+  await page.goto(routeUrl("/app/acervo?q=interland"));
+  await page.getByRole("link", { name: "Ver detalhes de Interland" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Interland", level: 1 }),
+  ).toBeVisible();
+  await expect(page.getByText("4º, 5º e 6º anos", { exact: true })).toBeVisible();
+  await expect(
+    page.getByText("Segurança e cidadania digital", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("EF04CO07, EF04CO08, EF05CO08, EF06CO09", { exact: true }),
+  ).toBeVisible();
+  await expect(page.getByRole("link", { name: "Acessar recurso" })).toHaveAttribute(
+    "href",
+    "https://beinternetawesome.withgoogle.com/pt-br_br/interland",
+  );
+  await page.getByRole("tab", { name: "Fonte" }).click();
+  await expect(page.getByText("Não informada", { exact: true })).toBeVisible();
+});
+
 test("não apresenta violações automáticas graves de acessibilidade", async ({ page }) => {
   const landingResults = await new AxeBuilder({ page }).analyze();
   expect(landingResults.violations).toEqual([]);
@@ -137,4 +461,11 @@ test("não apresenta violações automáticas graves de acessibilidade", async (
   await enterDemo(page);
   const catalogResults = await new AxeBuilder({ page }).analyze();
   expect(catalogResults.violations).toEqual([]);
+
+  await page.goto(routeUrl("/app/plano-de-aula"));
+  await expect(
+    page.getByRole("heading", { name: "Criar Plano de Aula", level: 1 }),
+  ).toBeVisible();
+  const lessonPlanResults = await new AxeBuilder({ page }).analyze();
+  expect(lessonPlanResults.violations).toEqual([]);
 });

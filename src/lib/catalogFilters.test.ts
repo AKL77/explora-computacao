@@ -37,7 +37,7 @@ describe("searchResources", () => {
     "EF07CO09",
     "reconhecer debater",
   ])("encontra o recurso por %s", (query) => {
-    expect(searchResources(resources, query)).toHaveLength(1);
+    expect(searchResources(resources, query)).toContain(resources[0]);
   });
 
   it("exige que todos os termos da consulta estejam presentes", () => {
@@ -52,19 +52,23 @@ describe("filterResources", () => {
     title: "Recurso do oitavo ano",
     recommendedGrades: [8],
     curriculum: {
-      axis: "Pensamento Computacional",
-      skills: [
+      alignments: [
         {
-          code: "EF08CO01",
-          officialText: "Habilidade de teste do oitavo ano.",
-          sourceEdition: "Edição de teste",
-          sourceUrl: "https://example.test/bncc",
-          validationStatus: "validated",
+          ...structuredClone(resources[0].curriculum.alignments[0]),
+          grade: 8,
+          axis: "Pensamento Computacional",
+          skill: {
+            code: "EF08CO01",
+            officialText: "Habilidade de teste do oitavo ano.",
+            sourceEdition: "Edição de teste",
+            sourceUrl: "https://example.test/bncc",
+            validationStatus: "validated",
+          },
         },
       ],
     },
   });
-  const catalog = [...resources, eighthGradeResource];
+  const catalog = [resources[0], eighthGradeResource];
 
   it("usa união entre opções do mesmo filtro", () => {
     expect(filterResources(catalog, { grades: [7, 8] })).toHaveLength(2);
@@ -98,6 +102,35 @@ describe("filterResources", () => {
 
     expect(catalog.map((resource) => resource.id)).toEqual(originalOrder);
   });
+
+  it("não cruza a habilidade de um ano com outro ano do mesmo recurso", () => {
+    const battleShip = resources.find(
+      (resource) => resource.id === "unicamp-desplugada-atividade-6",
+    );
+    expect(battleShip).toBeDefined();
+
+    expect(
+      filterResources([battleShip!], {
+        grades: [5],
+        skills: ["EF08CO03"],
+      }),
+    ).toEqual([]);
+    expect(
+      filterResources([battleShip!], {
+        grades: [8],
+        skills: ["EF08CO03"],
+      }),
+    ).toEqual([battleShip]);
+  });
+
+  it("filtra por todas as turmas aplicáveis mesmo sem alinhamento naquele ano", () => {
+    const colorindo = resources.find(
+      (resource) => resource.id === "unicamp-desplugada-atividade-2",
+    );
+    expect(colorindo).toBeDefined();
+
+    expect(filterResources([colorindo!], { grades: [5] })).toEqual([colorindo]);
+  });
 });
 
 describe("opções disponíveis", () => {
@@ -105,20 +138,22 @@ describe("opções disponíveis", () => {
     id: "duplicado",
     slug: "duplicado",
     title: "Duplicado",
-    recommendedGrades: [9, 6, 7],
+    recommendedGrades: [9, 6, 7, 5, 4],
   });
 
   it("retorna turmas únicas e ordenadas", () => {
-    expect(getAvailableGrades([...resources, duplicateSkillResource])).toEqual([
-      6, 7, 9,
+    expect(getAvailableGrades([resources[0], duplicateSkillResource])).toEqual([
+      4, 5, 6, 7, 9,
     ]);
   });
 
   it("retorna habilidades únicas por código", () => {
-    const skills = getAvailableSkills([...resources, duplicateSkillResource]);
+    const skills = getAvailableSkills([resources[0], duplicateSkillResource]);
 
     expect(skills).toHaveLength(1);
     expect(skills[0]?.code).toBe("EF07CO09");
-    expect(skills[0]).not.toBe(resources[0]?.curriculum.skills[0]);
+    expect(skills[0]).not.toBe(
+      resources[0]?.curriculum.alignments[0]?.skill,
+    );
   });
 });

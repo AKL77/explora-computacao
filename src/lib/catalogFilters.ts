@@ -16,6 +16,8 @@ const RESOURCE_TYPE_SEARCH_TERMS: Record<ResourceType, string> = {
   tool: "ferramenta",
 };
 
+const searchIndexCache = new WeakMap<Resource, string>();
+
 export function normalizeSearchText(value: string): string {
   return value
     .normalize("NFD")
@@ -26,24 +28,38 @@ export function normalizeSearchText(value: string): string {
 }
 
 function buildSearchIndex(resource: Resource): string {
+  const cachedIndex = searchIndexCache.get(resource);
+  if (cachedIndex) {
+    return cachedIndex;
+  }
+
+  const alignments = resource.curriculum.alignments;
   const searchableValues = [
     resource.title,
+    resource.topic,
     resource.summary,
     resource.provider,
     resource.type,
     RESOURCE_TYPE_SEARCH_TERMS[resource.type],
-    resource.curriculum.axis,
-    resource.curriculum.knowledgeObject,
     ...resource.tags,
-    ...resource.curriculum.skills.flatMap((skill) => [
-      skill.code,
-      skill.officialText,
+    ...alignments.flatMap((alignment) => [
+      alignment.axis,
+      alignment.knowledgeObject,
+      alignment.skill.code,
+      alignment.skill.officialText,
+      ...alignment.competencies.flatMap((competency) => [
+        `Competência ${competency.number}`,
+        competency.officialText,
+      ]),
     ]),
   ];
 
-  return normalizeSearchText(
+  const searchIndex = normalizeSearchText(
     searchableValues.filter((value): value is string => Boolean(value)).join(" "),
   );
+
+  searchIndexCache.set(resource, searchIndex);
+  return searchIndex;
 }
 
 export function matchesResourceSearch(
@@ -86,11 +102,25 @@ export function filterResources(
       resource.recommendedGrades.some((grade) => selectedGrades.has(grade));
     const matchesSkill =
       selectedSkills.size === 0 ||
-      resource.curriculum.skills.some((skill) =>
-        selectedSkills.has(skill.code.trim().toLocaleUpperCase("pt-BR")),
+      resource.curriculum.alignments.some((alignment) =>
+        selectedSkills.has(
+          alignment.skill.code.trim().toLocaleUpperCase("pt-BR"),
+        ),
+      );
+    const matchesGradeAndSkillPair =
+      selectedGrades.size === 0 ||
+      selectedSkills.size === 0 ||
+      resource.curriculum.alignments.some(
+        (alignment) =>
+          selectedGrades.has(alignment.grade) &&
+          selectedSkills.has(
+            alignment.skill.code.trim().toLocaleUpperCase("pt-BR"),
+          ),
       );
 
-    return matchesQuery && matchesGrade && matchesSkill;
+    return (
+      matchesQuery && matchesGrade && matchesSkill && matchesGradeAndSkillPair
+    );
   });
 }
 
@@ -106,7 +136,7 @@ export function getAvailableSkills(
   const skillsByCode = new Map<string, SkillReference>();
 
   for (const resource of catalog) {
-    for (const skill of resource.curriculum.skills) {
+    for (const { skill } of resource.curriculum.alignments) {
       const normalizedCode = skill.code.trim().toLocaleUpperCase("pt-BR");
 
       if (!skillsByCode.has(normalizedCode)) {

@@ -17,7 +17,7 @@ const questions = [
   {
     question: "Para quem a plataforma foi criada?",
     answer:
-      "O público principal são docentes que trabalham conteúdos de Computação, especialmente nos anos finais do Ensino Fundamental. As informações apresentadas devem apoiar a análise do professor, que continua responsável por adaptar cada proposta à sua turma.",
+      "O público principal são docentes que trabalham conteúdos de Computação do 4º ao 9º ano do Ensino Fundamental. As informações apresentadas devem apoiar a análise do professor, que continua responsável por adaptar cada proposta à sua turma.",
   },
   {
     question: "Como encontro um material adequado?",
@@ -33,6 +33,11 @@ const questions = [
     question: "Para que servem os Meus Materiais?",
     answer:
       "Essa área permite separar recursos em coleções próprias — por exemplo, por turma, escola, tema ou sequência de aulas. Assim, materiais úteis podem ser reencontrados sem refazer toda a busca no Acervo.",
+  },
+  {
+    question: "Como crio um plano de aula?",
+    answer:
+      "Em Criar Plano de Aula, informe o tema, o ano escolar, a quantidade de aulas e a habilidade. Depois, escolha um material alinhado do Acervo e revise o objetivo. A proposta pode ser lida nas visualizações Em Blocos ou Descritivo, salva em Meus Planos de Aula e baixada como PDF. Nesta versão, não há IA nem geração de alternativas.",
   },
   {
     question: "Posso incluir novos recursos no Acervo?",

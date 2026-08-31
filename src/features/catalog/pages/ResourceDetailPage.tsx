@@ -6,12 +6,20 @@ import {
 } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 
-import type { ParticipationMode, Resource } from "@/domain/resource";
+import type {
+  ParticipationMode,
+  PedagogicalFunction,
+} from "@/domain/resource";
+import {
+  getResourceAxes,
+  getResourceSkills,
+} from "@/domain/resourceCurriculum";
 import { AddToFolderButton } from "@/features/folders/components/AddToFolderDialog";
 
 import { CatalogStatus } from "../components/CatalogStatus";
 import { FavoriteButton } from "../components/FavoriteButton";
 import {
+  formatRecommendedGrades,
   RESOURCE_PLACEHOLDER,
   typeLabels,
 } from "../components/resourcePresentation";
@@ -25,6 +33,15 @@ const participationLabels: Record<ParticipationMode, string> = {
   "whole-class": "com a turma inteira",
 };
 
+const pedagogicalFunctionLabels: Record<PedagogicalFunction, string> = {
+  introduction: "Introdução",
+  exposition: "Exposição",
+  exploration: "Exploração",
+  practice: "Prática",
+  consolidation: "Consolidação",
+  assessment: "Avaliação",
+};
+
 const detailTabs = [
   { id: "description", label: "Descrição" },
   { id: "additional", label: "Informações adicionais" },
@@ -32,10 +49,6 @@ const detailTabs = [
 ] as const;
 
 type DetailTabId = (typeof detailTabs)[number]["id"];
-
-function formatGrades(resource: Resource): string {
-  return resource.recommendedGrades.map((grade) => `${grade}º ano`).join(", ");
-}
 
 function yesNo(value: boolean | undefined): string {
   if (value === undefined) {
@@ -46,7 +59,11 @@ function yesNo(value: boolean | undefined): string {
 }
 
 function optionalList(values: readonly string[] | undefined): string {
-  return values && values.length > 0 ? values.join(", ") : "Não informado";
+  if (values === undefined) {
+    return "Não informado";
+  }
+
+  return values.length > 0 ? values.join(", ") : "Nenhum";
 }
 
 function formatParticipation(values: readonly ParticipationMode[] | undefined): string {
@@ -153,7 +170,8 @@ export function ResourceDetailPage() {
     );
   }
 
-  const primarySkill = resource.curriculum.skills[0];
+  const axes = getResourceAxes(resource);
+  const skills = getResourceSkills(resource);
   const externalUrl = resource.canonicalUrl ?? resource.sourceUrl;
 
   return (
@@ -167,8 +185,13 @@ export function ResourceDetailPage() {
       <header className={styles.hero}>
         <div className={styles.imageWrap}>
           <img
-            src={resource.image?.src ?? RESOURCE_PLACEHOLDER}
+            src={
+              resource.image?.thumbnailSrc ??
+              resource.image?.src ??
+              RESOURCE_PLACEHOLDER
+            }
             alt={resource.image?.alt ?? ""}
+            decoding="async"
           />
         </div>
 
@@ -179,11 +202,14 @@ export function ResourceDetailPage() {
           <h1>{resource.title}</h1>
           <p className={styles.provider}>Fornecedor: {resource.provider}</p>
           <dl className={styles.heroMetadata}>
-            <DetailItem term="Turma">{formatGrades(resource)}</DetailItem>
-            <DetailItem term="Eixo">{resource.curriculum.axis}</DetailItem>
-            <DetailItem term="Habilidade e competência">
-              {primarySkill
-                ? `${primarySkill.code} — ${primarySkill.officialText}`
+            <DetailItem term="Turma">
+              {formatRecommendedGrades(resource.recommendedGrades)}
+            </DetailItem>
+            <DetailItem term="Eixo">{axes.join(", ")}</DetailItem>
+            <DetailItem term="Habilidade">{resource.topic}</DetailItem>
+            <DetailItem term="Competências">
+              {skills.length > 0
+                ? skills.map((skill) => skill.code).join(", ")
                 : "Não informado"}
             </DetailItem>
           </dl>
@@ -248,6 +274,9 @@ export function ResourceDetailPage() {
           tabIndex={0}
           hidden={activeTab !== "additional"}
         >
+          <p className={styles.additionalDescription}>
+            {resource.additionalInformation}
+          </p>
           <dl className={styles.detailGrid}>
             <DetailItem term="Objetivo de aprendizagem">
               {resource.pedagogy.learningObjective ?? "Não informado"}
@@ -257,6 +286,14 @@ export function ResourceDetailPage() {
             </DetailItem>
             <DetailItem term="Participação">
               {formatParticipation(resource.pedagogy.participation)}
+            </DetailItem>
+            <DetailItem term="Materiais">
+              {optionalList(resource.pedagogy.materials)}
+            </DetailItem>
+            <DetailItem term="Função pedagógica">
+              {resource.pedagogy.pedagogicalFunction
+                ? pedagogicalFunctionLabels[resource.pedagogy.pedagogicalFunction]
+                : "Não informado"}
             </DetailItem>
             <DetailItem term="Necessita de internet">
               {yesNo(resource.requirements.internet)}
@@ -279,9 +316,38 @@ export function ResourceDetailPage() {
           hidden={activeTab !== "source"}
         >
           <dl className={styles.detailGrid}>
-            <DetailItem term="Fonte">{resource.provenance.source}</DetailItem>
+            <DetailItem term="Fonte">
+              <a
+                href={resource.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.inlineLink}
+              >
+                {resource.provenance.source}
+              </a>
+            </DetailItem>
             <DetailItem term="Licença">
               {resource.provenance.license ?? "Não informada"}
+            </DetailItem>
+            <DetailItem term="Materiais complementares">
+              {resource.supplementaryLinks?.length ? (
+                <ul className={styles.metadataList}>
+                  {resource.supplementaryLinks.map((link) => (
+                    <li key={link.url}>
+                      <a
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.inlineLink}
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                "Não informado"
+              )}
             </DetailItem>
           </dl>
         </div>

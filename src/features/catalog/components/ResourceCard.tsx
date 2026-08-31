@@ -1,15 +1,15 @@
 import { Link, useLocation } from "react-router-dom";
 
 import type { Resource } from "@/domain/resource";
+import { getResourceAxes } from "@/domain/resourceCurriculum";
 import { AddToFolderButton } from "@/features/folders/components/AddToFolderDialog";
 
 import { FavoriteButton } from "./FavoriteButton";
-import { RESOURCE_PLACEHOLDER } from "./resourcePresentation";
+import {
+  formatRecommendedGrades,
+  RESOURCE_PLACEHOLDER,
+} from "./resourcePresentation";
 import styles from "./ResourceCard.module.css";
-
-function formatGrades(grades: Resource["recommendedGrades"]): string {
-  return grades.map((grade) => `${grade}º ano`).join(", ");
-}
 
 interface ResourceCardProps {
   resource: Resource;
@@ -23,7 +23,7 @@ export function ResourceCard({
   removeLabel = "Remover desta pasta",
 }: ResourceCardProps) {
   const location = useLocation();
-  const primarySkill = resource.curriculum.skills[0];
+  const axes = getResourceAxes(resource);
 
   return (
     <article className={styles.card}>
@@ -35,30 +35,29 @@ export function ResourceCard({
       >
         <div className={styles.imageWrap}>
           <img
-            src={resource.image?.src ?? RESOURCE_PLACEHOLDER}
+            src={
+              resource.image?.thumbnailSrc ??
+              resource.image?.src ??
+              RESOURCE_PLACEHOLDER
+            }
             alt={resource.image?.alt ?? ""}
             className={styles.image}
             loading="lazy"
+            decoding="async"
           />
         </div>
         <div className={styles.body}>
-          <h2 className={styles.title}>{resource.title}</h2>
+          <h2 className={styles.title} title={resource.title}>
+            {resource.title}
+          </h2>
           <dl className={styles.metadata}>
             <div>
               <dt>Turma</dt>
-              <dd>{formatGrades(resource.recommendedGrades)}</dd>
+              <dd>{formatRecommendedGrades(resource.recommendedGrades)}</dd>
             </div>
             <div>
               <dt>Eixo</dt>
-              <dd>{resource.curriculum.axis}</dd>
-            </div>
-            <div>
-              <dt>Habilidade</dt>
-              <dd>
-                {primarySkill
-                  ? primarySkill.officialText
-                  : "Em validação"}
-              </dd>
+              <dd>{axes.join(", ")}</dd>
             </div>
           </dl>
         </div>

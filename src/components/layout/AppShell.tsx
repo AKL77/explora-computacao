@@ -6,13 +6,13 @@ import {
 } from "react";
 import {
   CircleHelp,
+  ClipboardPenLine,
   FolderHeart,
   GraduationCap,
   LibraryBig,
   LogOut,
   Menu,
   NotebookTabs,
-  Sparkles,
   UserRound,
   X,
 } from "lucide-react";
@@ -26,8 +26,18 @@ const navigationItems = [
   { to: "/app/acervo", label: "Acervo", icon: LibraryBig, future: false },
   { to: "/app/pastas", label: "Meus Materiais", icon: FolderHeart, future: false },
   { to: "", label: "Minhas Turmas", icon: GraduationCap, disabled: true },
-  { to: "", label: "Meus Planos de Aula", icon: NotebookTabs, disabled: true },
-  { to: "", label: "Criar Plano de Aula", icon: Sparkles, disabled: true },
+  {
+    to: "/app/planos",
+    label: "Meus Planos de Aula",
+    icon: NotebookTabs,
+    future: false,
+  },
+  {
+    to: "/app/plano-de-aula",
+    label: "Criar Plano de Aula",
+    icon: ClipboardPenLine,
+    future: false,
+  },
   { to: "/app/sobre", label: "Sobre", icon: CircleHelp, future: false },
 ] as const;
 
@@ -37,6 +47,8 @@ function getPageTitle(pathname: string) {
   if (pathname.startsWith("/app/acervo/")) return "Detalhe do recurso";
   if (pathname === "/app/acervo") return "Acervo";
   if (pathname === "/app/perfil") return "Meu perfil";
+  if (pathname.startsWith("/app/planos/")) return "Editar Plano de Aula";
+  if (pathname === "/app/planos") return "Meus Planos de Aula";
   if (pathname === "/app/plano-de-aula") return "Criar Plano de Aula";
   if (pathname === "/app/sobre") return "Sobre";
   return "Informática Explorer";

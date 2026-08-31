@@ -18,12 +18,7 @@ describe("AppShell", () => {
       </MemoryRouter>,
     );
 
-    for (const label of [
-      "Meu perfil",
-      "Minhas Turmas",
-      "Meus Planos de Aula",
-      "Criar Plano de Aula",
-    ]) {
+    for (const label of ["Meu perfil", "Minhas Turmas"]) {
       const item = screen.getByRole("button", { name: label });
       expect(item).toBeDisabled();
       expect(item).toHaveAttribute("aria-disabled", "true");
@@ -33,6 +28,14 @@ describe("AppShell", () => {
     expect(screen.getByRole("link", { name: "Acervo" })).toHaveAttribute(
       "href",
       "/app/acervo",
+    );
+    expect(screen.getByRole("link", { name: "Criar Plano de Aula" })).toHaveAttribute(
+      "href",
+      "/app/plano-de-aula",
+    );
+    expect(screen.getByRole("link", { name: "Meus Planos de Aula" })).toHaveAttribute(
+      "href",
+      "/app/planos",
     );
   });
 });

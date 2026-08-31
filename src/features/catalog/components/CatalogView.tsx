@@ -1,7 +1,11 @@
 import { useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 
-import type { Grade, SkillReference } from "@/domain/curriculum";
+import {
+  SUPPORTED_GRADES,
+  type Grade,
+  type SkillReference,
+} from "@/domain/curriculum";
 import type { Resource } from "@/domain/resource";
 import {
   filterResources,
@@ -15,7 +19,8 @@ import styles from "./CatalogView.module.css";
 const SEARCH_PARAM = "q";
 const GRADES_PARAM = "turmas";
 const SKILLS_PARAM = "habilidades";
-const validGrades: readonly Grade[] = [6, 7, 8, 9];
+const validGrades: readonly Grade[] = SUPPORTED_GRADES;
+type OpenFilter = "grades" | "skills";
 
 function parseList(value: string | null): string[] {
   if (!value) {
@@ -57,6 +62,7 @@ export function CatalogView({
 }: CatalogViewProps) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [announcement, setAnnouncement] = useState("");
+  const [openFilter, setOpenFilter] = useState<OpenFilter | null>(null);
   const [areControlsVisible, setAreControlsVisible] = useState(
     !controlsInitiallyCollapsed,
   );
@@ -110,6 +116,12 @@ export function CatalogView({
       selectedSkills.includes(skill.code)
         ? selectedSkills.filter((code) => code !== skill.code)
         : [...selectedSkills, skill.code],
+    );
+  };
+
+  const handleFilterToggle = (filter: OpenFilter, isOpen: boolean) => {
+    setOpenFilter((currentFilter) =>
+      isOpen ? filter : currentFilter === filter ? null : currentFilter,
     );
   };
 
@@ -176,7 +188,13 @@ export function CatalogView({
         </div>
 
         <div className={styles.filterRow} aria-label="Filtros do catálogo">
-          <details className={styles.filterMenu}>
+          <details
+            className={styles.filterMenu}
+            open={openFilter === "grades"}
+            onToggle={(event) =>
+              handleFilterToggle("grades", event.currentTarget.open)
+            }
+          >
             <summary>
               Turma
               {selectedGrades.length > 0 ? (
@@ -202,7 +220,13 @@ export function CatalogView({
             </fieldset>
           </details>
 
-          <details className={styles.filterMenu}>
+          <details
+            className={styles.filterMenu}
+            open={openFilter === "skills"}
+            onToggle={(event) =>
+              handleFilterToggle("skills", event.currentTarget.open)
+            }
+          >
             <summary>
               Habilidade
               {selectedSkills.length > 0 ? (

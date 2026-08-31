@@ -52,77 +52,83 @@ export function AddToFolderButton({
         {compact ? <EllipsisVertical aria-hidden="true" size={22} /> : "Adicionar à pasta"}
       </button>
 
-      <AccessibleDialog
-        open={open}
-        title="Adicionar à pasta"
-        description={`Escolha onde organizar “${resource.title}”. Adicionar a uma pasta não altera os Favoritos.`}
-        onClose={() => setOpen(false)}
-      >
-        <form onSubmit={handleSubmit}>
-          <fieldset className={styles.folderList}>
-            <legend>Pastas disponíveis</legend>
-            {folders.length > 0 ? (
-              folders.map((folder) => (
-                <label key={folder.id}>
-                  <input
-                    type="checkbox"
-                    checked={selectedFolderIds.includes(folder.id)}
-                    onChange={(event) => {
-                      setSelectedFolderIds((current) =>
-                        event.target.checked
-                          ? [...new Set([...current, folder.id])]
-                          : current.filter((folderId) => folderId !== folder.id),
-                      );
-                    }}
-                  />
-                  <span>
-                    <strong>{folder.name}</strong>
-                    <small>
-                      {folder.resourceIds.length}{" "}
-                      {folder.resourceIds.length === 1 ? "recurso" : "recursos"}
-                    </small>
-                  </span>
-                </label>
-              ))
-            ) : (
-              <p className={styles.emptyMessage}>
-                Você ainda não criou uma pasta. Crie a primeira abaixo.
-              </p>
-            )}
-          </fieldset>
+      {open ? (
+        <AccessibleDialog
+          open
+          title="Adicionar à pasta"
+          description={`Escolha onde organizar “${resource.title}”. Adicionar a uma pasta não altera os Favoritos.`}
+          onClose={() => setOpen(false)}
+        >
+          <form onSubmit={handleSubmit}>
+            <fieldset className={styles.folderList}>
+              <legend>Pastas disponíveis</legend>
+              {folders.length > 0 ? (
+                folders.map((folder) => (
+                  <label key={folder.id}>
+                    <input
+                      type="checkbox"
+                      checked={selectedFolderIds.includes(folder.id)}
+                      onChange={(event) => {
+                        setSelectedFolderIds((current) =>
+                          event.target.checked
+                            ? [...new Set([...current, folder.id])]
+                            : current.filter((folderId) => folderId !== folder.id),
+                        );
+                      }}
+                    />
+                    <span>
+                      <strong>{folder.name}</strong>
+                      <small>
+                        {folder.resourceIds.length}{" "}
+                        {folder.resourceIds.length === 1 ? "recurso" : "recursos"}
+                      </small>
+                    </span>
+                  </label>
+                ))
+              ) : (
+                <p className={styles.emptyMessage}>
+                  Você ainda não criou uma pasta. Crie a primeira abaixo.
+                </p>
+              )}
+            </fieldset>
 
-          <div className={styles.dialogActions}>
-            <button
-              type="button"
-              className={styles.ghostButton}
-              onClick={() => setOpen(false)}
-            >
-              Cancelar
-            </button>
-            <button type="submit" className={styles.primaryButton}>
-              Salvar organização
-            </button>
+            <div className={styles.dialogActions}>
+              <button
+                type="button"
+                className={styles.ghostButton}
+                onClick={() => setOpen(false)}
+              >
+                Cancelar
+              </button>
+              <button type="submit" className={styles.primaryButton}>
+                Salvar organização
+              </button>
+            </div>
+          </form>
+
+          <div className={styles.createSection}>
+            <h3>Criar nova pasta</h3>
+            <CreateFolderForm
+              initialResourceId={resource.id}
+              submitLabel="Criar e adicionar"
+              onCreated={(folder) => {
+                setSelectedFolderIds((current) => [
+                  ...new Set([...current, folder.id]),
+                ]);
+                setAnnouncement(
+                  `A pasta ${folder.name} foi criada e o recurso foi adicionado.`,
+                );
+              }}
+            />
           </div>
-        </form>
+        </AccessibleDialog>
+      ) : null}
 
-        <div className={styles.createSection}>
-          <h3>Criar nova pasta</h3>
-          <CreateFolderForm
-            initialResourceId={resource.id}
-            submitLabel="Criar e adicionar"
-            onCreated={(folder) => {
-              setSelectedFolderIds((current) => [...new Set([...current, folder.id])]);
-              setAnnouncement(
-                `A pasta ${folder.name} foi criada e o recurso foi adicionado.`,
-              );
-            }}
-          />
-        </div>
-      </AccessibleDialog>
-
-      <span className={styles.visuallyHidden} aria-live="polite">
-        {announcement}
-      </span>
+      {announcement ? (
+        <span className={styles.visuallyHidden} aria-live="polite">
+          {announcement}
+        </span>
+      ) : null}
     </>
   );
 }

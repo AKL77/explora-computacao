@@ -5,9 +5,8 @@
 
   **Explore. Planeje. Ensine.**
 
-  Protótipo web para organizar recursos e facilitar a criação de planos de
-  aula contextualizados a partir da BNCC Computação e da realidade de cada
-  turma.
+  Protótipo web para organizar recursos e apoiar a criação estruturada de
+  planos de aula a partir da BNCC Computação e de conteúdos curados.
 
   [![Qualidade e GitHub Pages](https://github.com/AKL77/informatica-explorer/actions/workflows/quality-and-pages.yml/badge.svg)](https://github.com/AKL77/informatica-explorer/actions/workflows/quality-and-pages.yml)
   [![GitHub Pages](https://img.shields.io/badge/demo-GitHub%20Pages-0969da?logo=github)](https://akl77.github.io/informatica-explorer/)
@@ -19,14 +18,81 @@
 O Informática Explorer é parte de um Trabalho de Conclusão de Curso. A proposta
 busca aproximar recursos externos, currículo e condições reais de aplicação em
 sala de aula, oferecendo direcionamento sem substituir a decisão do docente.
+O recorte curricular atual abrange do 4º ao 9º ano do Ensino Fundamental.
 
-Esta entrega é um frontend demonstrativo. O catálogo começa com um único
-recurso — **Cyberbullying — Jogo Educativo** — e foi estruturado para receber
-novos conteúdos e um backend em etapas posteriores.
+Esta entrega é um frontend demonstrativo. O catálogo contém **31 recursos**:
+**Cyberbullying — Jogo Educativo**, **Lightbot**, **Blockly Games**, **Interland**,
+quatro materiais didáticos de Rozelma França e as 23 atividades da coleção
+**Computação Desplugada — Unicamp**. Educação Infantil não faz parte do recorte
+atual.
 
 > Consulte a [demonstração publicada](https://akl77.github.io/informatica-explorer/)
 > e o [estado exato da versão atual](docs/estado-atual.md).
 
+## Funcionalidades
+
+- landing page pública com contexto e objetivos do projeto;
+- entrada demonstrativa direta no Acervo;
+- busca e filtros por turma e habilidade;
+- cards compactos com título, turma e eixo; habilidade e códigos curriculares ficam no detalhe;
+- detalhe do recurso organizado em três abas, com materiais, fonte e licença;
+- alinhamentos explícitos por ano, eixo, habilidade e competências relacionadas;
+- miniaturas otimizadas e diálogos carregados sob demanda para manter o Acervo leve;
+- favoritos pelo botão de coração;
+- criação e manutenção de pastas em **Meus Materiais**;
+- busca e filtros recolhíveis dentro de Favoritos e pastas;
+- página **Sobre** com explicações e FAQ;
+- criação estruturada de uma proposta para uma, duas ou três aulas de 50 minutos;
+- seleção explícita de materiais do Acervo alinhados ao ano e à habilidade;
+- visualizações **Em Blocos** e **Descritivo** do mesmo plano;
+- salvamento, pesquisa, edição e download de planos em PDF;
+- persistência local da sessão, favoritos, pastas e planos, com interface responsiva e acessível.
+
+**Meu perfil** e **Minhas Turmas** são exibidos como itens inativos nesta versão.
+
+## Criação de planos
+
+O fluxo de **Criar Plano de Aula** possui uma tela própria para compor, sem IA,
+uma única proposta de uma, duas ou três aulas de 50 minutos. O docente informa
+tema, ano escolar e habilidade, seleciona um material alinhado do Acervo, define
+o objetivo, escolhe entre os tipos de metodologia — expositiva dialogada,
+ativa/prática ou combinada — e pode incluir avaliação.
+
+O Acervo continua sendo uma área de navegação independente. No criador, ano e
+habilidade filtram todos os materiais com alinhamento curricular e link seguro;
+metadados pedagógicos ausentes não ocultam os novos recursos. Quando o material
+possui um objetivo de aprendizagem cadastrado, ele aparece como sugestão editável
+com sua origem identificada; caso contrário, o objetivo começa vazio.
+
+Metodologia e avaliação usam temporariamente textos distintos de lorem ipsum
+enquanto seus modelos pedagógicos são discutidos. O mesmo registro alimenta a
+visualização **Em Blocos**, com composição gráfica de documento pedagógico, e a
+visualização **Descritivo**, organizada por aula. Um material selecionado pode
+sustentar uma, duas ou três aulas; a avaliação opcional ocupa dez minutos da
+última aula.
+
+Planos podem ser salvos no navegador, pesquisados pelo tema, reabertos para
+edição e baixados como PDF A4. O PDF é gerado localmente e não envia dados a um
+servidor.
+
+Metadados ausentes aparecem como não informados. Proposta de aplicação e
+sugestão de avaliação permanecem internas quando existem. O processo usado
+para converter a indicação ampla da Unicamp em anos e correspondências da BNCC
+está em
+[`docs/processo-curadoria-unicamp.md`](docs/processo-curadoria-unicamp.md); o
+processo aplicado à coleção de Rozelma está em
+[`docs/processo-curadoria-rozelma.md`](docs/processo-curadoria-rozelma.md); o
+estado implementado permanece em [`docs/estado-atual.md`](docs/estado-atual.md).
+
+## Fora do escopo atual
+
+- backend, API e banco de dados;
+- login Google ou qualquer autenticação real;
+- inteligência artificial no recorte atual de planos; uma investigação futura exige especificação própria;
+- inclusão de recursos por usuários;
+- contas ou dados de estudantes;
+- sincronização entre dispositivos ou compartilhamento remoto dos planos;
+- analytics e cookies de rastreamento.
 ## Tecnologias
 
 - React 19, TypeScript e Vite;
@@ -49,7 +115,8 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-Abra [http://127.0.0.1:4173](http://127.0.0.1:4173).
+Abra [http://127.0.0.1:4173](http://127.0.0.1:4173). O botão **Entrar** cria
+somente uma sessão local de demonstração e leva diretamente ao Acervo.
 
 ### Comandos disponíveis
 
@@ -79,6 +146,9 @@ pnpm exec playwright install chromium
 | `/app/acervo/:slug` | detalhe de um recurso |
 | `/app/pastas` | Favoritos e pastas pessoais |
 | `/app/pastas/:folderId` | conteúdo de uma pasta |
+| `/app/planos` | planos salvos, busca, edição e download |
+| `/app/planos/:planId/editar` | edição de um plano salvo |
+| `/app/plano-de-aula` | criação e visualização de uma proposta de plano |
 | `/app/sobre` | propósito, organização de materiais e FAQ |
 
 No GitHub Pages, essas rotas aparecem após `#`, por exemplo
@@ -123,6 +193,8 @@ A visão das camadas e as decisões técnicas estão em
 - [Arquitetura do frontend](docs/arquitetura.md)
 - [Deploy no GitHub Pages](docs/deploy-github-pages.md)
 - [Créditos e licenças de ativos](docs/creditos-e-licencas.md)
+- [Curadoria da coleção Computação Desplugada — Unicamp](docs/processo-curadoria-unicamp.md)
+- [Curadoria dos materiais didáticos de Rozelma França](docs/processo-curadoria-rozelma.md)
 - [Registro mestre do TCC](docs/registro-mestre-tcc.md)
 
 ## Deploy
@@ -140,3 +212,7 @@ Desenvolvido por **Augusto Lunardi** como protótipo acadêmico. Código e
 documentação permanecem com direitos reservados; consulte [`LICENSE`](LICENSE).
 Ativos de terceiros mantêm seus próprios termos e são detalhados em
 [`docs/creditos-e-licencas.md`](docs/creditos-e-licencas.md).
+
+Informática Explorer é independente e não possui afiliação ou endosso da
+Microsoft, UFSM, MEC, CNE, ALT+INOVARE, Google, Rozelma França ou dos
+responsáveis pela BNCC.

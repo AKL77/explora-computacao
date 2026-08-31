@@ -150,7 +150,7 @@ export function LandingPage() {
             <h1 id="titulo-principal">Explore. Planeje. Ensine.</h1>
             <p className={styles.heroDescription}>
               O Informática Explorer organiza recursos e facilita a criação de planos de aula
-              contextualizados a partir da BNCC Computação e da realidade de cada turma.
+              fundamentados na BNCC Computação e em conteúdos curados do Acervo.
             </p>
             <a
               className={styles.heroCta}
@@ -253,25 +253,28 @@ export function LandingPage() {
               <div className={styles.futureCore}>
                 <BookOpenCheck size={38} strokeWidth={1.7} />
                 <strong>Plano de aula</strong>
-                <span>com fontes rastreáveis</span>
+                <span>com base curada</span>
               </div>
               <span className={`${styles.contextNode} ${styles.contextNodeTop}`}>
                 Habilidade
               </span>
-              <span className={`${styles.contextNode} ${styles.contextNodeRight}`}>Recursos</span>
+              <span className={`${styles.contextNode} ${styles.contextNodeRight}`}>Conteúdo</span>
               <span className={`${styles.contextNode} ${styles.contextNodeBottom}`}>
-                Infraestrutura
+                Metodologia
               </span>
-              <span className={`${styles.contextNode} ${styles.contextNodeLeft}`}>Turma</span>
+              <span className={`${styles.contextNode} ${styles.contextNodeLeft}`}>
+                Ano escolar
+              </span>
             </div>
 
             <div className={styles.futureCopy}>
-              <h2 id="titulo-planos">Planos ancorados nos recursos disponíveis</h2>
+              <h2 id="titulo-planos">Planos fundamentados no Acervo</h2>
               <p>
-                A proposta é usar os recursos curados e seus metadados como contexto para apoiar a
-                criação de planos de aula mais rastreáveis e aplicáveis. Habilidade, metodologia,
-                tempo, materiais e infraestrutura deverão permanecer conectados às fontes do
-                acervo, sempre com revisão e decisão final do docente.
+                O criador relaciona ano escolar, habilidade e um material curado escolhido para
+                montar uma, duas ou três aulas de 50 minutos. O plano organiza materiais,
+                referência da BNCC, objetivo, metodologia e avaliação, e pode ser consultado nas
+                visualizações Em Blocos ou Descritivo, salvo e baixado como PDF, sempre com
+                revisão e decisão final do docente.
               </p>
             </div>
           </div>

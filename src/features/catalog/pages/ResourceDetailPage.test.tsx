@@ -7,9 +7,9 @@ import { ResourceDetailPage } from "./ResourceDetailPage";
 
 afterEach(cleanup);
 
-function renderResourceDetail() {
+function renderResourceDetail(slug = "altinovare-cyberbullying") {
   render(
-    <MemoryRouter initialEntries={["/app/acervo/altinovare-cyberbullying"]}>
+    <MemoryRouter initialEntries={[`/app/acervo/${slug}`]}>
       <Routes>
         <Route path="/app/acervo/:slug" element={<ResourceDetailPage />} />
       </Routes>
@@ -45,6 +45,10 @@ describe("ResourceDetailPage", () => {
     expect(additionalPanel).toHaveTextContent("Objetivo de aprendizagem");
     expect(additionalPanel).toHaveTextContent("50 min");
     expect(additionalPanel).toHaveTextContent("Individual ou em grupos");
+    expect(additionalPanel).toHaveTextContent("Função pedagógica");
+    expect(additionalPanel).toHaveTextContent("Prática");
+    expect(additionalPanel).not.toHaveTextContent("Proposta de aplicação");
+    expect(additionalPanel).not.toHaveTextContent("Sugestão de avaliação");
     expect(additionalPanel).toHaveTextContent("Computador ou notebook");
 
     await user.keyboard("{ArrowRight}");
@@ -57,7 +61,7 @@ describe("ResourceDetailPage", () => {
     expect(within(sourcePanel).getByText("CC BY-NC-ND 3.0 BR")).toBeVisible();
   });
 
-  it("remove indicadores e seções de curadoria da apresentação", async () => {
+  it("apresenta uma habilidade temática e somente os códigos BNCC", async () => {
     renderResourceDetail();
 
     await screen.findByRole("heading", {
@@ -70,9 +74,58 @@ describe("ResourceDetailPage", () => {
     expect(
       screen.queryByRole("heading", { name: "Alinhamento pedagógico" }),
     ).not.toBeInTheDocument();
-    expect(screen.getByText("Habilidade e competência")).toBeVisible();
+    expect(screen.getByText("Habilidade")).toBeVisible();
+    expect(screen.getByText("Cyberbullying", { exact: true })).toBeVisible();
+    expect(screen.getByText("Competências")).toBeVisible();
+    expect(screen.getByText("EF07CO09", { exact: true })).toBeVisible();
     expect(
-      screen.getByText("EF07CO09 — Reconhecer e debater sobre cyberbullying."),
+      screen.queryByText("Reconhecer e debater sobre cyberbullying."),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText(/Competência 7/)).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("Critério do alinhamento curricular"),
+    ).not.toBeInTheDocument();
+  });
+
+  it("expõe fonte, materiais e limites de um alinhamento curatorial", async () => {
+    const user = userEvent.setup();
+    renderResourceDetail("unicamp-desplugada-conversas-com-computadores");
+
+    expect(
+      await screen.findByRole("heading", {
+        name: "Conversas com Computadores — O Teste de Turing",
+        level: 1,
+      }),
     ).toBeVisible();
+    expect(screen.getByText("O Teste de Turing", { exact: true })).toBeVisible();
+    expect(screen.getByText("EF05CO10", { exact: true })).toBeVisible();
+
+    await user.click(screen.getByRole("tab", { name: "Informações adicionais" }));
+    expect(screen.getByRole("tabpanel")).toHaveTextContent(
+      "O alinhamento do 5º ano é condicional",
+    );
+    expect(screen.getByRole("tabpanel")).toHaveTextContent(
+      "Folha de perguntas do Teste de Turing",
+    );
+
+    await user.click(screen.getByRole("tab", { name: "Fonte" }));
+    const sourcePanel = screen.getByRole("tabpanel");
+    expect(sourcePanel).not.toHaveTextContent("Alinhamento com a BNCC Computação");
+    expect(sourcePanel).not.toHaveTextContent(
+      "Correspondência curatorial pendente de validação",
+    );
+    expect(sourcePanel).not.toHaveTextContent("correspondência parcial");
+    expect(sourcePanel).not.toHaveTextContent(
+      "Critério do alinhamento curricular",
+    );
+    expect(
+      within(sourcePanel).getByRole("link", {
+        name: "Perguntas do Teste de Turing (PDF)",
+      }),
+    ).toHaveAttribute(
+      "href",
+      "https://desplugada.ime.unicamp.br/atividade21/perguntas.pdf",
+    );
+    expect(within(sourcePanel).queryByText(/ZIP/i)).not.toBeInTheDocument();
   });
 });

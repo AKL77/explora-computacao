@@ -5,6 +5,10 @@ import { AboutPage } from "@/features/about";
 import { CatalogPage, ResourceDetailPage } from "@/features/catalog";
 import { FolderDetailPage, FoldersPage } from "@/features/folders";
 import { LandingPage } from "@/features/landing";
+import {
+  LessonPlanPage,
+  SavedLessonPlansPage,
+} from "@/features/lesson-plans";
 import { useSessionStore } from "@/store/useSessionStore";
 
 function PublicHome() {
@@ -31,6 +35,9 @@ export function App() {
         <Route path="acervo/:slug" element={<ResourceDetailPage />} />
         <Route path="pastas" element={<FoldersPage />} />
         <Route path="pastas/:folderId" element={<FolderDetailPage />} />
+        <Route path="planos" element={<SavedLessonPlansPage />} />
+        <Route path="planos/:planId/editar" element={<LessonPlanPage />} />
+        <Route path="plano-de-aula" element={<LessonPlanPage />} />
         <Route path="sobre" element={<AboutPage />} />
       </Route>
       <Route path="*" element={<NotFoundPage />} />

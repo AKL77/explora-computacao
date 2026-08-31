@@ -48,9 +48,11 @@ export function FavoriteButton({
         />
         {compact ? null : <span>{label}</span>}
       </button>
-      <span className={styles.visuallyHidden} aria-live="polite">
-        {announcement}
-      </span>
+      {announcement ? (
+        <span className={styles.visuallyHidden} aria-live="polite">
+          {announcement}
+        </span>
+      ) : null}
     </>
   );
 }

@@ -21,7 +21,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --config config/vite.config.ts",
-    "build": "pnpm typecheck && vite build --config config/vite.config.ts",
+    "build": "tsc --project tsconfig.json --noEmit --pretty false && vite build --config config/vite.config.ts",
     "preview": "vite preview --config config/vite.config.ts",
     "typecheck": "tsc --project tsconfig.json --noEmit --pretty false",
     "lint": "eslint --config config/eslint.config.js .",

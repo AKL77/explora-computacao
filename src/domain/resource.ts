@@ -1,7 +1,6 @@
 import type {
-  BnccAxis,
+  CurriculumAlignment,
   Grade,
-  SkillReference,
   ValidationStatus,
 } from "@/domain/curriculum";
 
@@ -19,6 +18,14 @@ export type ParticipationMode =
   | "group"
   | "whole-class";
 
+export type PedagogicalFunction =
+  | "introduction"
+  | "exposition"
+  | "exploration"
+  | "practice"
+  | "consolidation"
+  | "assessment";
+
 export type PricingModel = "free" | "freemium" | "paid" | "unknown";
 
 export type ResourceAvailabilityStatus =
@@ -35,21 +42,24 @@ export interface Resource {
   provider: string;
   type: ResourceType;
   language: string;
+  topic: string;
   summary: string;
+  additionalInformation: string;
   curatorNotes?: string;
   recommendedGrades: Grade[];
   curriculum: {
-    axis: BnccAxis;
-    knowledgeObject?: string;
-    skills: SkillReference[];
-    relatedCompetencies?: string[];
+    alignments: CurriculumAlignment[];
   };
   pedagogy: {
     learningObjective?: string;
     estimatedDuration?: string;
     participation?: ParticipationMode[];
+    pedagogicalFunction?: PedagogicalFunction;
+    applicationProposal?: string;
+    assessmentSuggestion?: string;
     methodologies?: string[];
     prerequisites?: string[];
+    materials?: string[];
   };
   requirements: {
     internet?: boolean;
@@ -72,9 +82,14 @@ export interface Resource {
   };
   image?: {
     src: string;
+    thumbnailSrc?: string;
     alt: string;
     focalPoint?: string;
     license?: string;
   };
+  supplementaryLinks?: Array<{
+    label: string;
+    url: string;
+  }>;
   tags: string[];
 }

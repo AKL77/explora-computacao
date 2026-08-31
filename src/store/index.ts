@@ -11,3 +11,9 @@ export {
   type UserFolder,
 } from "./useLibraryStore";
 export { SESSION_STORAGE_KEY, useSessionStore } from "./useSessionStore";
+export {
+  LESSON_PLANS_SCHEMA_VERSION,
+  LESSON_PLANS_STORAGE_KEY,
+  useLessonPlansStore,
+  type LessonPlansStore,
+} from "./useLessonPlansStore";
