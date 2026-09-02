@@ -611,3 +611,57 @@ seções 18, 19, 21, 24 e 25.
   como PDF A4 gerado localmente. O PDF não é armazenado no `localStorage`.
 - **Limite preservado:** não há backend, sincronização remota, IA generativa ou
   propostas alternativas. A persistência é específica da origem do navegador.
+
+## 27. Mudança de foco para trilhas de ensino — 1º de setembro de 2026
+
+As decisões desta seção substituem, no que houver conflito, a centralidade do
+CRUD de planos de aula descrita nas seções anteriores. A implementação antiga
+foi preservada para comparação e continuidade dos dados, mas deixou de ser o
+principal ponto de entrada do menu.
+
+- **Decisão de foco:** os materiais e o contato inicial com eles passam a ser o
+  centro do fluxo. O item **Criar Plano de Aula** é substituído no menu por
+  **Criar Trilha de Ensino**.
+- **Decisão de descoberta (revisada):** o professor pode começar por uma barra
+  de busca e refinar o resultado por tags clicáveis de ano escolar, material
+  plugado ou desplugado e abordagem ativa ou expositiva. A escolha evita menus
+  suspensos como primeiro contato com a busca, conforme a orientação recebida.
+- **Decisão de prévia (revisada):** cada resultado é um cartão compacto com
+  objetivo breve, uma síntese priorizada do que os estudantes farão e como, e
+  os materiais usados em forma concisa. Ao clicar no cartão, o docente abre a
+  página detalhada no Acervo.
+- **Decisão de composição (revisada):** o docente pode selecionar ou remover
+  materiais diretamente no resultado para uma nova trilha em criação e
+  acompanhá-los em um resumo leve. Ao salvar, informa nome e objetivo
+  obrigatórios e escolhe a cor de fundo e o ícone que representam a trilha.
+  Depois disso, pode adicionar materiais a uma trilha existente, reordenar as
+  etapas por arrastar e soltar em **Minhas Trilhas** e selecionar a duração de
+  uma, duas ou três aulas de 50 minutos para cada material. A interface não
+  sugere nem valida uma ordem pedagógica.
+- **Decisão de recorte piloto:** a validação inicial usa **Vinte Palpites —
+  Teoria da Informação**, **Blockly Games** e **Sertão.bit — Livro-jogo de
+  Pensamento Computacional**, todos apresentados para o 5º ano e vinculados
+  curatorialmente a `EF05CO04`.
+- **Base documental do piloto:** os objetivos e as descrições de ação foram
+  sintetizados curatorialmente a partir da [atividade oficial Vinte
+  Palpites](https://desplugada.ime.unicamp.br/atividade5/index.html), das
+  [informações oficiais do Blockly Games para
+  educadores](https://blockly.games/about?lang=pt-br) e da [página oficial do
+  Sertão.bit](https://www.falecomrozelma.com/sertaobit). Essas fontes sustentam
+  o funcionamento e os materiais, mas não declaram o alinhamento `EF05CO04`, que
+  permanece uma correspondência curatorial pendente de validação.
+- **Decisão de persistência (revisada):** trilhas com nome, objetivo, cor de
+  fundo e ícone personalizados são persistidas no armazenamento local do
+  navegador, no mesmo escopo dos planos salvos deste protótipo. **Minhas
+  Trilhas** é a área de consulta e edição: nome, objetivo, cor e ícone podem
+  ser alterados, enquanto reordenação, duração e remoção são mantidas em
+  rascunho até **Salvar alterações**. Um material marcado para remoção pode ser
+  desfeito antes dessa confirmação. O caminho visual termina em um marco
+  conectado que reúne o nome, o objetivo personalizado, o ícone escolhido e os
+  códigos curriculares extraídos dos alinhamentos já cadastrados, sob o rótulo
+  de apresentação **Competências da BNCC relacionados**. Compartilhamento,
+  exportação e sincronização permanecem fora deste recorte.
+- **Decisão sobre planos:** as rotas e os planos salvos anteriores permanecem
+  funcionais, mas **Meus Planos de Aula** fica visível e inativo na navegação
+  para não competir com o fluxo principal de trilhas. Uma futura relação entre
+  material da trilha e plano de aula não é presumida nesta etapa.

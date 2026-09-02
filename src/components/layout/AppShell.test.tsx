@@ -18,7 +18,7 @@ describe("AppShell", () => {
       </MemoryRouter>,
     );
 
-    for (const label of ["Meu perfil", "Minhas Turmas"]) {
+    for (const label of ["Meu perfil", "Minhas Turmas", "Meus Planos de Aula"]) {
       const item = screen.getByRole("button", { name: label });
       expect(item).toBeDisabled();
       expect(item).toHaveAttribute("aria-disabled", "true");
@@ -29,13 +29,15 @@ describe("AppShell", () => {
       "href",
       "/app/acervo",
     );
-    expect(screen.getByRole("link", { name: "Criar Plano de Aula" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "Criar Trilha de Ensino" })).toHaveAttribute(
       "href",
-      "/app/plano-de-aula",
+      "/app/trilha-de-ensino",
     );
-    expect(screen.getByRole("link", { name: "Meus Planos de Aula" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "Minhas Trilhas" })).toHaveAttribute(
       "href",
-      "/app/planos",
+      "/app/minhas-trilhas",
     );
+    expect(screen.queryByRole("link", { name: "Criar Plano de Aula" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Meus Planos de Aula" })).not.toBeInTheDocument();
   });
 });

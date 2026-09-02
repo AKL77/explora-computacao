@@ -78,7 +78,7 @@ test("apresenta a proposta e entra no Acervo", async ({ page }) => {
   await expect(page.getByRole("main", { name: "Acervo" })).toBeFocused();
 });
 
-test("mantém somente perfil e turmas inativos", async ({ page }, testInfo) => {
+test("mantém perfil, turmas e planos inativos na navegação", async ({ page }, testInfo) => {
   await enterDemo(page);
   const catalogUrl = page.url();
 
@@ -86,7 +86,7 @@ test("mantém somente perfil e turmas inativos", async ({ page }, testInfo) => {
     await page.getByRole("button", { name: "Abrir menu" }).click();
   }
 
-  for (const label of ["Meu perfil", "Minhas Turmas"]) {
+  for (const label of ["Meu perfil", "Minhas Turmas", "Meus Planos de Aula"]) {
     const item = page.getByRole("button", { name: label, exact: true });
     await expect(item).toBeVisible();
     await expect(item).toBeDisabled();
@@ -96,11 +96,17 @@ test("mantém somente perfil e turmas inativos", async ({ page }, testInfo) => {
   }
 
   await expect(
-    page.getByRole("link", { name: "Meus Planos de Aula", exact: true }),
-  ).toHaveAttribute("href", /\/app\/planos$/);
+    page.getByRole("link", { name: "Criar Trilha de Ensino", exact: true }),
+  ).toHaveAttribute("href", /\/app\/trilha-de-ensino$/);
+  await expect(
+    page.getByRole("link", { name: "Minhas Trilhas", exact: true }),
+  ).toHaveAttribute("href", /\/app\/minhas-trilhas$/);
+  await expect(
+    page.getByRole("link", { name: "Criar Plano de Aula", exact: true }),
+  ).toHaveCount(0);
 });
 
-test("cria, salva, pesquisa, edita e baixa um plano", async ({
+test("busca materiais com tags e seleciona uma trilha", async ({
   page,
 }, testInfo) => {
   await enterDemo(page);
@@ -108,8 +114,83 @@ test("cria, salva, pesquisa, edita e baixa um plano", async ({
   if (testInfo.project.name === "mobile") {
     await page.getByRole("button", { name: "Abrir menu" }).click();
   }
+  await page.getByRole("link", { name: "Criar Trilha de Ensino", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Criar Trilha de Ensino", level: 1 }),
+  ).toBeVisible();
 
-  await page.getByRole("link", { name: "Criar Plano de Aula", exact: true }).click();
+  await expect(page.getByText("3 materiais", { exact: true }).first()).toBeVisible();
+
+  await page.getByRole("button", { name: "Material plugado" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Blockly Games", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", {
+      name: "Sertão.bit — Livro-jogo de Pensamento Computacional",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", {
+      name: "Vinte Palpites — Teoria da Informação",
+      exact: true,
+    }),
+  ).toHaveCount(0);
+  await page.getByRole("button", { name: "Limpar filtros" }).click();
+
+  const blocklyCard = page.getByRole("article").filter({
+    has: page.getByRole("heading", { name: "Blockly Games", exact: true }),
+  });
+  await expect(
+    blocklyCard.getByRole("link", { name: "Abrir Blockly Games no Acervo" }),
+  ).toHaveAttribute("href", /\/app\/acervo\/blockly-games$/);
+  await blocklyCard
+    .getByRole("button", { name: "Adicionar Blockly Games a uma nova trilha" })
+    .click();
+
+  const vinteCard = page.getByRole("article").filter({
+    has: page.getByRole("heading", {
+      name: "Vinte Palpites — Teoria da Informação",
+      exact: true,
+    }),
+  });
+  await vinteCard
+    .getByRole("button", {
+      name: "Adicionar Vinte Palpites — Teoria da Informação a uma nova trilha",
+    })
+    .click();
+
+  const trail = page.getByRole("region", { name: "Nova trilha em criação" });
+  await expect(trail.getByText("2 materiais selecionados.")).toBeVisible();
+  await expect(trail.getByText("Blockly Games")).toBeVisible();
+  await expect(trail.getByText("Vinte Palpites — Teoria da Informação")).toBeVisible();
+  await expect(trail.getByRole("button", { name: "Salvar trilha" })).toBeEnabled();
+  await expect(page.getByRole("button", { name: /mover .* para cima/i })).toHaveCount(0);
+
+  await trail.getByRole("button", { name: "Salvar trilha" }).click();
+  const saveDialog = page.getByRole("dialog", { name: "Salvar trilha" });
+  await saveDialog.getByRole("textbox", { name: "Nome da trilha" }).fill("Algoritmos no 5º ano");
+  await saveDialog
+    .getByRole("textbox", { name: "Objetivo da trilha" })
+    .fill("Explorar algoritmos com desafios e jogos.");
+  await saveDialog.getByRole("button", { name: "Salvar trilha" }).click();
+  await expect(page.getByRole("heading", { name: "Minhas Trilhas", level: 1 })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Algoritmos no 5º ano/i })).toBeVisible();
+
+  const accessibilityResults = await new AxeBuilder({ page }).analyze();
+  expect(accessibilityResults.violations).toEqual([]);
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= document.documentElement.clientWidth,
+    ),
+  ).toBe(true);
+});
+
+test("cria, salva, pesquisa, edita e baixa um plano", async ({ page }) => {
+  await enterDemo(page);
+
+  await page.goto(routeUrl("/app/plano-de-aula"));
   await expect(
     page.getByRole("heading", { name: "Criar Plano de Aula", level: 1 }),
   ).toBeVisible();
@@ -210,20 +291,14 @@ test("cria, salva, pesquisa, edita e baixa um plano", async ({
   await page.getByRole("button", { name: "Salvar alterações" }).click();
   await expect(page.getByRole("status")).toContainText("Alterações salvas");
 
-  if (testInfo.project.name === "mobile") {
-    await page.getByRole("button", { name: "Abrir menu" }).click();
-  }
-  await page.getByRole("link", { name: "Criar Plano de Aula", exact: true }).click();
+  await page.goto(routeUrl("/app/plano-de-aula"));
   await expect(
     page.getByRole("heading", { name: "Criar Plano de Aula", level: 1 }),
   ).toBeVisible();
   await expect(page.getByRole("textbox", { name: "Tema" })).toHaveValue("");
   await expect(page.getByRole("heading", { name: "Seu plano aparecerá aqui" })).toBeVisible();
 
-  if (testInfo.project.name === "mobile") {
-    await page.getByRole("button", { name: "Abrir menu" }).click();
-  }
-  await page.getByRole("link", { name: "Meus Planos de Aula", exact: true }).click();
+  await page.goto(routeUrl("/app/planos"));
   await page
     .getByRole("searchbox", { name: "Pesquisar planos pelo nome" })
     .fill("revisados");

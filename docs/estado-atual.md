@@ -1,6 +1,6 @@
 # Estado atual do protótipo
 
-**Referência:** 30 de agosto de 2026
+**Referência:** 1º de setembro de 2026
 **Versão do protótipo:** 0.1.0
 **Fonte de verdade do estado implementado:** este documento e os testes automatizados
 
@@ -17,6 +17,18 @@ detalha os requisitos e o registro mestre preserva as decisões acadêmicas.
   complementares curados;
 - favoritos e pastas de **Meus Materiais**, persistidos no navegador;
 - página **Sobre** com propósito, organização e FAQ;
+- página **Criar Trilha de Ensino** com busca livre e tags clicáveis de ano,
+  formato e abordagem;
+- piloto da trilha com três recursos distintos do 5º ano alinhados
+  curatorialmente a `EF05CO04`: **Vinte Palpites**, **Blockly Games** e
+  **Sertão.bit**;
+- cartões compactos de recurso com objetivo breve, ações dos estudantes e
+  materiais, ligados à página correspondente no Acervo;
+- trilhas salvas localmente com nome, objetivo, cor de fundo e ícone
+  personalizados, sem sugestão pedagógica automática;
+- área **Minhas Trilhas** com sequência visual conectada, reordenação por
+  arrastar e soltar, ficha enxuta por material, duração de uma, duas ou três
+  aulas, tempo total calculado e confirmação explícita das alterações;
 - criador determinístico de planos, sem IA, para uma, duas ou três aulas de 50
   minutos;
 - seleção explícita de um material do Acervo depois do ano e da habilidade;
@@ -44,10 +56,12 @@ detalha os requisitos e o registro mestre preserva as decisões acadêmicas.
 
 ## Visível, mas inativo
 
-Os itens abaixo continuam desabilitados e não possuem rota própria:
+Os itens abaixo continuam visíveis, mas desabilitados na navegação:
 
 - Meu perfil;
 - Minhas Turmas.
+- Meus Planos de Aula (a rota legada permanece preservada para continuidade dos
+  dados locais).
 
 ## Criador de planos
 
@@ -70,12 +84,46 @@ A visualização **Em Blocos** e a **Descritivo** derivam do mesmo registro. A
 primeira prioriza leitura rápida em um documento gráfico; a segunda explicita
 as aulas em sequência. Alternar o formato não modifica o plano salvo.
 
+## Criador de trilhas
+
+**Criar Trilha de Ensino** é o fluxo principal exposto no menu. O docente pode
+iniciar por uma busca de assunto, conceito ou código de habilidade e refiná-la
+com tags clicáveis de ano escolar, formato e abordagem. A pesquisa usa aliases
+curatoriais explícitos: por
+exemplo, `EF05CO04` encontra os três recursos piloto, enquanto **laço de
+repetição** encontra somente o Blockly Games.
+
+Os cards oferecem uma prévia compacta com objetivo breve, descrição do que os
+estudantes farão e como farão, além dos materiais usados; eles também abrem a
+página detalhada do material no Acervo. Os textos dessa camada são curatoriais e
+se mantêm separados do cadastro-base do Acervo. O recurso pode ser selecionado
+diretamente para uma nova trilha em criação e removido do resumo leve. Para
+salvar, o docente informa nome e objetivo obrigatórios e pode escolher a cor de
+fundo e o ícone da trilha. Depois de salvar, a opção de adicionar a uma trilha
+existente fica disponível. A interface não sugere nem valida uma ordem
+pedagógica, mas permite que o docente a reorganize por arrastar e soltar em
+**Minhas Trilhas**.
+
+As trilhas salvas permanecem no armazenamento local deste navegador. Em
+**Minhas Trilhas**, abrir uma sequência revela um caminho visual conectado de
+etapas; clicar em uma etapa abre uma ficha de planejamento enxuta com duração
+editável de uma, duas ou três aulas de 50 minutos. Nome, objetivo, cor e ícone
+da trilha continuam editáveis. Reordenação, duração, edição dos dados e remoção
+são feitas em rascunho: a remoção pode ser desfeita e só é persistida ao usar
+**Salvar alterações**. Quando todas as etapas têm duração, a interface mostra o
+tempo total. O marco final conectado apresenta nome, objetivo personalizado,
+ícone escolhido e os códigos curriculares sob o rótulo de apresentação
+**Competências da BNCC relacionados**.
+O criador de planos anterior e seus planos salvos foram preservados, mas
+**Criar Plano de Aula** e **Meus Planos de Aula** não aparecem como ações
+operacionais no menu principal.
+
 ## Persistência, busca e edição
 
-Sessão, favoritos, pastas e planos usam chaves independentes e versionadas no
-`localStorage`. Um plano salvo é um snapshot: alterações posteriores no Acervo
-não mudam silenciosamente o documento já guardado. A edição atualiza o mesmo ID
-e preserva a data de criação.
+Sessão, favoritos, pastas, planos e trilhas usam chaves independentes e
+versionadas no `localStorage`. Um plano salvo é um snapshot: alterações
+posteriores no Acervo não mudam silenciosamente o documento já guardado. A
+edição atualiza o mesmo ID e preserva a data de criação.
 
 **Meus Planos de Aula** usa o tema como nome do plano, ordena os registros pela
 atualização mais recente e permite busca sem diferenciar acentos ou maiúsculas.
@@ -97,6 +145,8 @@ ficam depois de `#`.
 |---|---|
 | `/app/acervo` | Acervo |
 | `/app/pastas` | Favoritos e pastas |
+| `/app/trilha-de-ensino` | busca por tags e seleção de uma trilha piloto |
+| `/app/minhas-trilhas` | lista e edição visual de trilhas salvas |
 | `/app/plano-de-aula` | criação de plano |
 | `/app/planos` | planos salvos e busca |
 | `/app/planos/:planId/editar` | edição de plano salvo |
@@ -107,6 +157,7 @@ ficam depois de `#`.
 - autenticação Google ou gestão de contas;
 - inteligência artificial no recorte atual de planos;
 - inclusão de materiais por usuários;
+- compartilhamento ou sugestão automática da ordem das trilhas;
 - contas ou dados de estudantes;
 - sincronização, colaboração ou compartilhamento remoto;
 - analytics, cookies de rastreamento e service worker.
@@ -126,3 +177,5 @@ ficam depois de `#`.
   principal.
 - Alinhamentos curatoriais e a identidade visual ainda precisam de validação
   acadêmica antes da versão final do TCC.
+- A criação de trilhas usa apenas três recursos para validação do fluxo; os
+  demais materiais do Acervo ainda não participam dessa busca.

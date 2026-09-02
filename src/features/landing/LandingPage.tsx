@@ -80,10 +80,10 @@ export function LandingPage() {
             <a href="#projeto" onClick={handleSectionLink("projeto")}>O projeto</a>
             <a href="#acervo" onClick={handleSectionLink("acervo")}>Acervo</a>
             <a
-              href="#planos-contextualizados"
-              onClick={handleSectionLink("planos-contextualizados")}
+              href="#trilhas-de-ensino"
+              onClick={handleSectionLink("trilhas-de-ensino")}
             >
-              Planos contextualizados
+              Trilhas de ensino
             </a>
           </nav>
 
@@ -123,10 +123,10 @@ export function LandingPage() {
                 Acervo
               </a>
               <a
-                href="#planos-contextualizados"
-                onClick={handleSectionLink("planos-contextualizados", true)}
+                href="#trilhas-de-ensino"
+                onClick={handleSectionLink("trilhas-de-ensino", true)}
               >
-                Planos contextualizados
+                Trilhas de ensino
               </a>
             </nav>
           ) : null}
@@ -149,8 +149,8 @@ export function LandingPage() {
           <div className={`${styles.container} ${styles.heroContent}`}>
             <h1 id="titulo-principal">Explore. Planeje. Ensine.</h1>
             <p className={styles.heroDescription}>
-              O Informática Explorer organiza recursos e facilita a criação de planos de aula
-              fundamentados na BNCC Computação e em conteúdos curados do Acervo.
+              O Informática Explorer organiza recursos e apoia a criação de trilhas de ensino
+              fundamentadas na BNCC Computação e em materiais curados do Acervo.
             </p>
             <a
               className={styles.heroCta}
@@ -176,7 +176,7 @@ export function LandingPage() {
               descritos de formas pouco consistentes. Existem plataformas que buscam agrupar esses
               conteúdos, contudo nem sempre é fácil saber para qual contexto um material é adequado
               e como utilizá-lo em sala de aula. O Informática Explorer propõe uma forma de buscar
-              recursos e criar planos de aula de forma contextualizada, apoiando a decisão do
+              recursos e combiná-los em trilhas de ensino contextualizadas, apoiando a decisão do
               docente sem substituí-la.
             </p>
           </div>
@@ -235,7 +235,7 @@ export function LandingPage() {
                 </li>
                 <li>
                   <CheckCircle2 aria-hidden="true" />
-                  Pastas de organização para manutenção de materiais e planos para o futuro.
+                  Pastas de organização para manutenção de materiais e trilhas futuras.
                 </li>
               </ul>
             </div>
@@ -244,23 +244,23 @@ export function LandingPage() {
 
         <section
           className={styles.futureSection}
-          id="planos-contextualizados"
-          aria-labelledby="titulo-planos"
+          id="trilhas-de-ensino"
+          aria-labelledby="titulo-trilhas"
         >
           <div className={`${styles.container} ${styles.futureLayout}`}>
             <div className={styles.futureVisual} aria-hidden="true">
               <div className={styles.orbit} />
               <div className={styles.futureCore}>
                 <BookOpenCheck size={38} strokeWidth={1.7} />
-                <strong>Plano de aula</strong>
+                <strong>Trilha de ensino</strong>
                 <span>com base curada</span>
               </div>
               <span className={`${styles.contextNode} ${styles.contextNodeTop}`}>
-                Habilidade
+                Objetivo
               </span>
-              <span className={`${styles.contextNode} ${styles.contextNodeRight}`}>Conteúdo</span>
+              <span className={`${styles.contextNode} ${styles.contextNodeRight}`}>Materiais</span>
               <span className={`${styles.contextNode} ${styles.contextNodeBottom}`}>
-                Metodologia
+                Ações
               </span>
               <span className={`${styles.contextNode} ${styles.contextNodeLeft}`}>
                 Ano escolar
@@ -268,13 +268,12 @@ export function LandingPage() {
             </div>
 
             <div className={styles.futureCopy}>
-              <h2 id="titulo-planos">Planos fundamentados no Acervo</h2>
+              <h2 id="titulo-trilhas">Trilhas construídas a partir do Acervo</h2>
               <p>
-                O criador relaciona ano escolar, habilidade e um material curado escolhido para
-                montar uma, duas ou três aulas de 50 minutos. O plano organiza materiais,
-                referência da BNCC, objetivo, metodologia e avaliação, e pode ser consultado nas
-                visualizações Em Blocos ou Descritivo, salvo e baixado como PDF, sempre com
-                revisão e decisão final do docente.
+                O docente informa o ano e o que deseja ensinar, conhece o objetivo de cada
+                recurso, o que os estudantes efetivamente farão e os materiais necessários.
+                Depois, seleciona os recursos que contribuam para o objetivo e acompanha a
+                trilha em criação, preservando sua decisão pedagógica.
               </p>
             </div>
           </div>

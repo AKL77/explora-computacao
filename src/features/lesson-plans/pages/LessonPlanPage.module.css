@@ -654,6 +654,139 @@
   overflow-wrap: anywhere;
 }
 
+/* A visualização de uma etapa dentro de uma trilha preserva os mesmos
+   blocos do plano de aula, mas se adapta à janela ampla sem competir com
+   o cabeçalho do diálogo. */
+.compactBlockPlan {
+  color: var(--text-primary);
+  background: var(--surface-page);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+.compactBlockPlan .blockPlanHeading {
+  min-height: 9.5rem;
+  padding: 3.25rem clamp(1rem, 3vw, 1.6rem) 1.6rem;
+  background:
+    radial-gradient(circle at 90% 16%, rgb(34 211 238 / 22%), transparent 22rem),
+    linear-gradient(135deg, var(--brand-navy-deep), var(--brand-navy) 64%, var(--brand-blue));
+  border-bottom: 4px solid var(--brand-yellow);
+}
+
+.compactBlockPlan .geometricShapeOne,
+.compactBlockPlan .geometricShapeTwo,
+.compactBlockPlan .geometricShapeThree {
+  display: none;
+}
+
+.compactBlockPlan .blockPlanHeading h3 {
+  color: var(--text-on-dark);
+  font-size: clamp(1.4rem, 2.4vw, 2rem);
+}
+
+.compactBlockPlan .blockPlanHeading div > span {
+  margin-top: 0.72rem;
+  padding-bottom: 0.15rem;
+  color: rgb(248 250 252 / 82%);
+}
+
+.compactBlockPlan .blockGrid {
+  align-items: stretch;
+  gap: 0.55rem;
+  padding: 1.05rem clamp(0.75rem, 2vw, 1.3rem) 1.1rem;
+}
+
+.compactBlockPlan .bnccBlock,
+.compactBlockPlan .objectiveBlock {
+  grid-column: 1 / -1;
+}
+
+.compactBlockPlan .planBlock {
+  display: flex;
+  flex-direction: column;
+  padding: 0.92rem 1rem 1rem;
+  color: var(--text-primary);
+  background: var(--surface-card);
+  border: 1px solid var(--border-soft);
+  border-left: 5px solid var(--brand-cyan);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+}
+
+.compactBlockPlan .planBlock > h3 {
+  padding-bottom: 0.3rem;
+  margin-bottom: 0.42rem;
+  color: var(--brand-navy);
+  border-bottom: 1px solid var(--border-soft);
+  letter-spacing: 0.09em;
+}
+
+.compactBlockPlan .planBlock p {
+  color: var(--text-primary);
+  font-size: 0.91rem;
+  line-height: 1.45;
+}
+
+.compactBlockPlan .bnccBlock {
+  background: #f2f8fb;
+  border-left-color: var(--brand-blue);
+}
+
+.compactBlockPlan .objectiveBlock {
+  background: #f4fbfc;
+  border-left-color: var(--brand-cyan);
+}
+
+.compactBlockPlan .materialsBlock {
+  background: #fffdf1;
+  border-left-color: var(--brand-yellow);
+}
+
+.compactBlockPlan .methodologyBlock {
+  background: #f3f9fb;
+  border-left-color: var(--brand-cyan);
+}
+
+.compactBlockPlan .evaluationBlock {
+  background: #f2f8fb;
+  border-left-color: var(--brand-blue);
+}
+
+.compactBlockPlan .materialList {
+  gap: 0.25rem;
+  font-size: 0.89rem;
+  line-height: 1.35;
+}
+
+.compactBlockPlan .durationOption {
+  min-height: 4.1rem;
+  padding: 0.5rem;
+  border-radius: var(--radius-sm);
+}
+
+.compactBlockPlan .durationOption:has(input:checked) {
+  background: var(--surface-soft);
+  border-color: var(--brand-blue);
+  box-shadow: inset 0 0 0 1px var(--brand-blue);
+}
+
+.compactBlockPlan .blockPlanFooter {
+  height: 2.4rem;
+  background: linear-gradient(90deg, var(--brand-navy), var(--brand-blue), var(--brand-cyan));
+}
+
+.compactBlockPlan .blockPlanFooter span {
+  display: none;
+}
+
+@container lesson-plan-blocks (max-width: 40rem) {
+  .compactBlockPlan .bnccBlock,
+  .compactBlockPlan .objectiveBlock {
+    grid-column: auto;
+  }
+}
+
 .materialList a {
   color: var(--brand-blue);
   font-weight: 750;

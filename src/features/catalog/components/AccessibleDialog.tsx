@@ -14,7 +14,8 @@ interface AccessibleDialogProps {
   description?: string;
   children: ReactNode;
   onClose: () => void;
-  size?: "small" | "medium";
+  size?: "small" | "medium" | "large";
+  hideHeader?: boolean;
 }
 
 export function AccessibleDialog({
@@ -24,6 +25,7 @@ export function AccessibleDialog({
   children,
   onClose,
   size = "medium",
+  hideHeader = false,
 }: AccessibleDialogProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const openerRef = useRef<HTMLElement | null>(null);
@@ -52,7 +54,11 @@ export function AccessibleDialog({
     }
 
     if (!open && dialog.open) {
-      dialog.close();
+      if (typeof dialog.close === "function") {
+        dialog.close();
+      } else {
+        dialog.removeAttribute("open");
+      }
       openerRef.current?.focus();
     }
   }, [open]);
@@ -84,26 +90,42 @@ export function AccessibleDialog({
       onClick={handleBackdropClick}
     >
       <div className={styles.panel}>
-        <header className={styles.header}>
-          <div>
-            <h2 id={titleId} className={styles.title}>
+        {hideHeader ? (
+          <div className={styles.headerlessClose}>
+            <h2 id={titleId} className="sr-only">
               {title}
             </h2>
-            {description ? (
-              <p id={descriptionId} className={styles.description}>
-                {description}
-              </p>
-            ) : null}
+            <button
+              type="button"
+              className={styles.closeButton}
+              aria-label="Fechar diálogo"
+              onClick={onClose}
+            >
+              <span aria-hidden="true">×</span>
+            </button>
           </div>
-          <button
-            type="button"
-            className={styles.closeButton}
-            aria-label="Fechar diálogo"
-            onClick={onClose}
-          >
-            <span aria-hidden="true">×</span>
-          </button>
-        </header>
+        ) : (
+          <header className={styles.header}>
+            <div>
+              <h2 id={titleId} className={styles.title}>
+                {title}
+              </h2>
+              {description ? (
+                <p id={descriptionId} className={styles.description}>
+                  {description}
+                </p>
+              ) : null}
+            </div>
+            <button
+              type="button"
+              className={styles.closeButton}
+              aria-label="Fechar diálogo"
+              onClick={onClose}
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+          </header>
+        )}
         {children}
       </div>
     </dialog>

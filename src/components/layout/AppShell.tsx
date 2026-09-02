@@ -6,13 +6,14 @@ import {
 } from "react";
 import {
   CircleHelp,
-  ClipboardPenLine,
   FolderHeart,
   GraduationCap,
   LibraryBig,
   LogOut,
   Menu,
   NotebookTabs,
+  Route,
+  Waypoints,
   UserRound,
   X,
 } from "lucide-react";
@@ -27,15 +28,21 @@ const navigationItems = [
   { to: "/app/pastas", label: "Meus Materiais", icon: FolderHeart, future: false },
   { to: "", label: "Minhas Turmas", icon: GraduationCap, disabled: true },
   {
-    to: "/app/planos",
+    to: "",
     label: "Meus Planos de Aula",
     icon: NotebookTabs,
+    disabled: true,
+  },
+  {
+    to: "/app/trilha-de-ensino",
+    label: "Criar Trilha de Ensino",
+    icon: Route,
     future: false,
   },
   {
-    to: "/app/plano-de-aula",
-    label: "Criar Plano de Aula",
-    icon: ClipboardPenLine,
+    to: "/app/minhas-trilhas",
+    label: "Minhas Trilhas",
+    icon: Waypoints,
     future: false,
   },
   { to: "/app/sobre", label: "Sobre", icon: CircleHelp, future: false },
@@ -50,6 +57,8 @@ function getPageTitle(pathname: string) {
   if (pathname.startsWith("/app/planos/")) return "Editar Plano de Aula";
   if (pathname === "/app/planos") return "Meus Planos de Aula";
   if (pathname === "/app/plano-de-aula") return "Criar Plano de Aula";
+  if (pathname === "/app/trilha-de-ensino") return "Criar Trilha de Ensino";
+  if (pathname === "/app/minhas-trilhas") return "Minhas Trilhas";
   if (pathname === "/app/sobre") return "Sobre";
   return "Informática Explorer";
 }

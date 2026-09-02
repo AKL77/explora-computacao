@@ -5,8 +5,8 @@
 
   **Explore. Planeje. Ensine.**
 
-  Protótipo web para organizar recursos e apoiar a criação estruturada de
-  planos de aula a partir da BNCC Computação e de conteúdos curados.
+  Protótipo web para organizar recursos e apoiar a criação de trilhas de ensino
+  a partir da BNCC Computação e de materiais curados.
 
   [![Qualidade e GitHub Pages](https://github.com/AKL77/informatica-explorer/actions/workflows/quality-and-pages.yml/badge.svg)](https://github.com/AKL77/informatica-explorer/actions/workflows/quality-and-pages.yml)
   [![GitHub Pages](https://img.shields.io/badge/demo-GitHub%20Pages-0969da?logo=github)](https://akl77.github.io/informatica-explorer/)
@@ -42,13 +42,48 @@ atual.
 - criação e manutenção de pastas em **Meus Materiais**;
 - busca e filtros recolhíveis dentro de Favoritos e pastas;
 - página **Sobre** com explicações e FAQ;
+- criação de uma trilha de ensino a partir de busca livre e tags clicáveis;
+- cartões de descoberta com objetivo breve, ações dos estudantes e materiais,
+  ligados ao Acervo;
+- salvamento local de trilhas com nome, objetivo, cor de fundo e ícone
+  personalizados;
+- área **Minhas Trilhas**, com sequência visual conectada, reordenação por
+  arrastar e soltar, duração por material, tempo total calculado e confirmação
+  explícita das alterações;
 - criação estruturada de uma proposta para uma, duas ou três aulas de 50 minutos;
 - seleção explícita de materiais do Acervo alinhados ao ano e à habilidade;
 - visualizações **Em Blocos** e **Descritivo** do mesmo plano;
 - salvamento, pesquisa, edição e download de planos em PDF;
 - persistência local da sessão, favoritos, pastas e planos, com interface responsiva e acessível.
 
-**Meu perfil** e **Minhas Turmas** são exibidos como itens inativos nesta versão.
+**Meu perfil**, **Minhas Turmas** e **Meus Planos de Aula** são exibidos como
+itens inativos nesta versão. As rotas legadas de planos permanecem preservadas
+para continuidade dos dados locais.
+
+## Criação de trilhas
+
+O fluxo principal do menu é **Criar Trilha de Ensino**. O docente pode começar
+por uma busca livre de área, assunto ou habilidade e refinar o resultado por
+tags clicáveis de ano escolar, material plugado ou desplugado e abordagem ativa
+ou expositiva. Sem filtros, os materiais do piloto aparecem imediatamente.
+
+O piloto usa três recursos do 5º ano vinculados curatorialmente a `EF05CO04`:
+**Vinte Palpites — Teoria da Informação**, **Blockly Games** e **Sertão.bit —
+Livro-jogo de Pensamento Computacional**. Cada cartão funciona como uma prévia
+compacta: apresenta objetivo breve, o que será feito e como, além dos materiais
+usados; ao clicar nele, abre a página correspondente no Acervo. O docente pode
+adicionar o material a uma nova trilha em criação ou, quando houver uma
+sequência salva, a uma trilha existente. Para salvar, é obrigatório informar o
+nome e o objetivo da trilha; o docente também escolhe a cor de fundo e o ícone
+que a representam. Em **Minhas Trilhas**, nome, objetivo, cor e ícone continuam
+editáveis. A sequência pode ser reordenada por arrastar e soltar, e cada
+material abre uma ficha enxuta para selecionar 1, 2 ou 3 aulas de 50 minutos.
+Reordenação, duração, edição dos dados da trilha e remoção são alterações de
+rascunho: um material marcado para remoção pode ser desfeito e nada é
+persistido até usar **Salvar alterações**. Quando todas as durações forem
+definidas, o tempo total aparece no topo. O marco final conectado à sequência
+apresenta o nome, o objetivo personalizado, o ícone escolhido e os códigos
+curriculares sob o rótulo de apresentação **Competências da BNCC relacionados**.
 
 ## Criação de planos
 
@@ -148,6 +183,8 @@ pnpm exec playwright install chromium
 | `/app/pastas/:folderId` | conteúdo de uma pasta |
 | `/app/planos` | planos salvos, busca, edição e download |
 | `/app/planos/:planId/editar` | edição de um plano salvo |
+| `/app/trilha-de-ensino` | busca por tags e seleção de uma trilha piloto |
+| `/app/minhas-trilhas` | consulta e edição das trilhas salvas |
 | `/app/plano-de-aula` | criação e visualização de uma proposta de plano |
 | `/app/sobre` | propósito, organização de materiais e FAQ |
 

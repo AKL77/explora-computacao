@@ -35,9 +35,9 @@ const questions = [
       "Essa área permite separar recursos em coleções próprias — por exemplo, por turma, escola, tema ou sequência de aulas. Assim, materiais úteis podem ser reencontrados sem refazer toda a busca no Acervo.",
   },
   {
-    question: "Como crio um plano de aula?",
+    question: "Como crio uma trilha de ensino?",
     answer:
-      "Em Criar Plano de Aula, informe o tema, o ano escolar, a quantidade de aulas e a habilidade. Depois, escolha um material alinhado do Acervo e revise o objetivo. A proposta pode ser lida nas visualizações Em Blocos ou Descritivo, salva em Meus Planos de Aula e baixada como PDF. Nesta versão, não há IA nem geração de alternativas.",
+      "Em Criar Trilha de Ensino, pesquise uma área, assunto ou habilidade e refine os resultados com tags. Cada cartão mostra um objetivo breve, o que os estudantes farão e os materiais usados; ao abri-lo, você vai à página completa do recurso no Acervo. Adicione os materiais a uma nova trilha e informe um nome para salvá-la. Em Minhas Trilhas, é possível reorganizar as etapas e definir de uma a três aulas para cada material.",
   },
   {
     question: "Posso incluir novos recursos no Acervo?",

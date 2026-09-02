@@ -9,6 +9,7 @@ import {
   LessonPlanPage,
   SavedLessonPlansPage,
 } from "@/features/lesson-plans";
+import { SavedTeachingPathsPage, TeachingPathPage } from "@/features/teaching-paths";
 import { useSessionStore } from "@/store/useSessionStore";
 
 function PublicHome() {
@@ -38,6 +39,8 @@ export function App() {
         <Route path="planos" element={<SavedLessonPlansPage />} />
         <Route path="planos/:planId/editar" element={<LessonPlanPage />} />
         <Route path="plano-de-aula" element={<LessonPlanPage />} />
+        <Route path="trilha-de-ensino" element={<TeachingPathPage />} />
+        <Route path="minhas-trilhas" element={<SavedTeachingPathsPage />} />
         <Route path="sobre" element={<AboutPage />} />
       </Route>
       <Route path="*" element={<NotFoundPage />} />
