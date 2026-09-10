@@ -12,7 +12,7 @@ export function Brand({ compact = false, inverted = false, to = "/" }: BrandProp
   const destinationLabel =
     to === "/"
       ? "Informática Explorer — página inicial"
-      : "Informática Explorer — abrir Acervo";
+      : "Informática Explorer — buscar materiais";
 
   return (
     <Link

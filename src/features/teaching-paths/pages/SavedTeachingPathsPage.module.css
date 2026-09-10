@@ -908,3 +908,429 @@
     justify-items: center;
   }
 }
+
+/* Percurso visual das trilhas pessoais: a mesma linguagem das Trilhas Prontas,
+   preservando os controles de edição, duração e reordenação. */
+.page {
+  width: min(100%, 82rem);
+  padding: 0 0 4rem;
+}
+
+.pathHeader {
+  position: relative;
+  display: grid;
+  grid-template-areas:
+    "back back"
+    "title actions";
+  grid-template-columns: minmax(0, 1fr) auto;
+  width: 100%;
+  padding: clamp(1.25rem, 3vw, 2.35rem);
+  margin: 0 0 1.5rem;
+  overflow: hidden;
+  color: white;
+  background:
+    radial-gradient(circle at 88% 8%, rgb(34 211 238 / 0.28), transparent 20rem),
+    linear-gradient(130deg, var(--brand-navy-deep), var(--trail-accent-deep));
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+.pathHeader .eyebrow,
+.pathHeader h1,
+.pathHeader .pathObjective,
+.pathHeader .durationPrompt {
+  color: white;
+}
+
+.pathHeader .eyebrow {
+  color: #a5f3fc;
+}
+
+.pathHeader h1 {
+  max-width: 52rem;
+  margin: 0.5rem 0 0;
+  font-size: clamp(2rem, 4vw, 3.15rem);
+}
+
+.pathTitleArea {
+  max-width: 58rem;
+}
+
+.pathTitleArea > .pathObjective {
+  max-width: 56rem;
+  margin: 0.65rem 0 0;
+  color: rgb(248 250 252 / 0.88);
+  line-height: 1.65;
+}
+
+.pathMetadata {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.pathMetadata span {
+  display: inline-flex;
+  min-height: 1.85rem;
+  padding: 0.28rem 0.6rem;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 999px;
+  color: #cffafe;
+  background: rgb(255 255 255 / 0.11);
+  font-size: 0.74rem;
+  font-weight: 760;
+}
+
+.pathHeader .totalTime,
+.pathHeader .durationPrompt,
+.pathHeader .unsavedNotice {
+  display: none;
+}
+
+.backButton,
+.editPathButton,
+.discardButton {
+  color: rgb(248 250 252 / 0.94);
+  background: rgb(255 255 255 / 0.1);
+  border-color: rgb(255 255 255 / 0.24);
+}
+
+.backButton:hover,
+.editPathButton:hover,
+.discardButton:hover {
+  background: rgb(255 255 255 / 0.18);
+}
+
+.discardButton {
+  color: #fee2e2;
+}
+
+.saveChangesButton {
+  color: var(--brand-navy-deep);
+  background: var(--brand-yellow);
+  border-color: var(--brand-yellow);
+}
+
+.saveChangesButton:hover:not(:disabled) {
+  background: var(--brand-yellow-soft);
+}
+
+.sequenceHeader {
+  width: min(100% - 2rem, 76rem);
+  padding: 0 0 1.25rem;
+  margin: 0 auto;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+
+.sequenceHeader .eyebrow {
+  margin-bottom: 0.32rem;
+}
+
+.sequenceHeader strong {
+  color: var(--brand-navy);
+  font-size: 1.3rem;
+}
+
+.totalDuration {
+  color: var(--brand-blue);
+  background: var(--surface-soft);
+}
+
+.learningPath {
+  width: min(100% - 2rem, 76rem);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: stretch;
+  justify-items: stretch;
+  gap: 0;
+  margin-top: 0;
+}
+
+.pathStep {
+  position: relative;
+  display: grid;
+  grid-column: 1;
+  grid-template-columns: 2.55rem minmax(0, 1fr);
+  column-gap: 0.9rem;
+  width: 100%;
+}
+
+.stepNumber {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-column: 1;
+  width: 2.55rem;
+  height: 2.55rem;
+  margin-top: 0.25rem;
+  place-items: center;
+  border: 4px solid white;
+  border-radius: 999px;
+  color: white;
+  background: var(--trail-accent);
+  box-shadow: 0 0 0 1px var(--trail-accent);
+  font-size: 0.84rem;
+  font-weight: 900;
+}
+
+.stepCard {
+  grid-column: 2;
+  grid-template-columns: minmax(12rem, 0.32fr) minmax(0, 1fr) auto;
+  overflow: hidden;
+  border-color: var(--border-soft);
+  border-radius: var(--radius-md);
+}
+
+.stepButton {
+  display: grid;
+  grid-column: 1 / 3;
+  grid-template-columns: minmax(12rem, 0.32fr) minmax(0, 1fr);
+  min-height: 13rem;
+  padding: 0;
+}
+
+.stepNode {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--surface-soft);
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.stepNode::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(transparent 42%, rgb(3 25 38 / 0.75));
+  content: "";
+}
+
+.stageLabel {
+  position: absolute;
+  z-index: 1;
+  right: 0.85rem;
+  bottom: 0.7rem;
+  left: 0.85rem;
+  color: white;
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.dragHandle {
+  position: absolute;
+  z-index: 1;
+  top: 0.65rem;
+  right: 0.65rem;
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border-radius: 0.5rem;
+  color: white;
+  background: rgb(3 25 38 / 0.56);
+  cursor: grab;
+}
+
+.stepText {
+  display: flex;
+  gap: 0.52rem;
+  padding: clamp(1rem, 3vw, 1.45rem);
+}
+
+.stepText > span {
+  color: var(--brand-cyan);
+  font-size: 0.7rem;
+}
+
+.stepText strong {
+  font-size: 1.15rem;
+}
+
+.stepText small {
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.stepText em {
+  width: auto;
+  padding: 0.1rem 0 0.1rem 0.7rem;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.5;
+  background: transparent;
+  border-left: 3px solid var(--brand-yellow);
+  border-radius: 0;
+}
+
+.stepText em strong {
+  color: var(--brand-navy);
+  font-size: inherit;
+}
+
+.pendingRemoval .stepText em:last-child {
+  width: fit-content;
+  padding: 0.24rem 0.42rem;
+  color: #953e35;
+  background: #ffebe8;
+  border: 0;
+  border-radius: 999px;
+  font-weight: 780;
+}
+
+.stepActions {
+  min-width: 10.6rem;
+  padding: 1rem;
+  border-left: 1px solid var(--border-soft);
+}
+
+.durationSet {
+  color: var(--brand-blue);
+  background: var(--surface-soft);
+}
+
+.pathConnector {
+  grid-column: 1;
+  grid-template-columns: 1fr;
+  width: 2.55rem;
+  height: 3.3rem;
+}
+
+.connectorRoute {
+  width: 2.55rem;
+}
+
+.connectorRoute::before {
+  top: 0;
+  bottom: 0.4rem;
+  width: 2px;
+  background: linear-gradient(var(--trail-accent), var(--brand-yellow));
+}
+
+.connectorRoute::after {
+  bottom: -0.05rem;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-width: 2px;
+}
+
+.finalStep {
+  grid-column: 1;
+  grid-template-columns: 1fr;
+  width: calc(100% - 3.45rem);
+  margin-left: 3.45rem;
+  color: white;
+  background:
+    radial-gradient(circle at 92% 8%, rgb(34 211 238 / 0.24), transparent 16rem),
+    linear-gradient(130deg, var(--brand-navy-deep), var(--brand-blue));
+  border: 0;
+}
+
+.finalIcon {
+  display: none;
+}
+
+.finalStep > div {
+  padding: clamp(1.25rem, 3vw, 1.8rem);
+}
+
+.finalStep h2,
+.finalObjective,
+.curriculumSummary strong,
+.curriculumSummary span {
+  color: white;
+}
+
+.curriculumSummary strong {
+  color: #a5f3fc;
+}
+
+@media (max-width: 56rem) {
+  .pathHeader {
+    grid-template-areas:
+      "back"
+      "title"
+      "actions";
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pathHeaderActions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 44rem) {
+  .page {
+    width: 100%;
+    padding-top: 0;
+  }
+
+  .sequenceHeader,
+  .learningPath {
+    width: min(100% - 1.25rem, 76rem);
+  }
+
+  .stepCard {
+    grid-template-columns: minmax(9rem, 0.35fr) minmax(0, 1fr);
+  }
+
+  .stepButton {
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(9rem, 0.35fr) minmax(0, 1fr);
+  }
+
+  .stepActions {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--border-soft);
+    border-left: 0;
+  }
+}
+
+@media (max-width: 32rem) {
+  .pathHeaderActions > * {
+    flex: 1 1 100%;
+  }
+
+  .pathStep {
+    grid-template-columns: 1fr;
+  }
+
+  .stepNumber,
+  .pathConnector {
+    display: none;
+  }
+
+  .stepCard,
+  .finalStep {
+    grid-column: 1;
+  }
+
+  .finalStep {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .stepCard,
+  .stepButton {
+    grid-template-columns: 1fr;
+  }
+
+  .stepButton {
+    min-height: 0;
+  }
+
+  .stepNode {
+    min-height: 12rem;
+  }
+}

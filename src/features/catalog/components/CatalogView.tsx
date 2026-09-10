@@ -56,7 +56,7 @@ export function CatalogView({
   resources,
   controlsInitiallyCollapsed = false,
   emptyTitle = "Ainda não há recursos aqui",
-  emptyMessage = "Volte ao Acervo para descobrir conteúdos e organizá-los.",
+  emptyMessage = "Volte para Buscar Materiais e descubra novos conteúdos.",
   onRemoveResource,
   removeLabel,
 }: CatalogViewProps) {
@@ -299,8 +299,8 @@ export function CatalogView({
           </span>
           <h2>{emptyTitle}</h2>
           <p>{emptyMessage}</p>
-          <Link to="/app/acervo" className={styles.primaryLink}>
-            Explorar o Acervo
+          <Link to="/app/trilha-de-ensino" className={styles.primaryLink}>
+            Buscar Materiais
           </Link>
         </div>
       ) : filteredResources.length === 0 ? (

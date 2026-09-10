@@ -1,4 +1,5 @@
 import type { Grade } from "@/domain/curriculum";
+import type { Resource } from "@/domain/resource";
 
 export type ActivityMode = "plugged" | "unplugged" | "mixed";
 export type TeachingApproach = "active" | "combined" | "expository";
@@ -108,3 +109,68 @@ export const pilotTeachingResources: readonly PilotTeachingResource[] = [
     ],
   },
 ];
+
+function inferActivityMode(resource: Resource): ActivityMode {
+  const needsDigitalAccess =
+    resource.requirements.internet === true || (resource.requirements.devices?.length ?? 0) > 0;
+  const usesClassroomMaterials = (resource.pedagogy.materials?.length ?? 0) > 0;
+
+  if (!needsDigitalAccess) return "unplugged";
+  return usesClassroomMaterials ? "mixed" : "plugged";
+}
+
+function inferTeachingApproach(resource: Resource): TeachingApproach {
+  if (resource.pedagogy.pedagogicalFunction === "exposition") return "expository";
+  if (
+    resource.type === "activity" ||
+    resource.type === "game" ||
+    resource.type === "simulator" ||
+    resource.type === "tool"
+  ) {
+    return "active";
+  }
+  return "combined";
+}
+
+function inferMaterials(resource: Resource): readonly string[] {
+  const materials = resource.pedagogy.materials ?? [];
+  const devices = resource.requirements.devices ?? [];
+  const internet = resource.requirements.internet === true ? ["Acesso à internet"] : [];
+  const inferred = Array.from(new Set([...materials, ...devices, ...internet]));
+
+  return inferred.length > 0 ? inferred : ["Consulte as orientações do material"];
+}
+
+/**
+ * Preserva a curadoria detalhada do piloto e completa os demais itens do catálogo
+ * com informações já existentes no próprio cadastro do recurso.
+ */
+export function getTeachingResourceMetadata(resource: Resource): PilotTeachingResource {
+  const curated = pilotTeachingResources.find((item) => item.resourceId === resource.id);
+  if (curated) return curated;
+
+  return {
+    resourceId: resource.id,
+    grades: resource.recommendedGrades,
+    objective:
+      resource.pedagogy.learningObjective ??
+      resource.curriculum.alignments[0]?.mapping.rationale ??
+      `Explorar ${resource.topic.toLocaleLowerCase("pt-BR")}.`,
+    studentActivity: resource.pedagogy.applicationProposal ?? resource.summary,
+    materials: inferMaterials(resource),
+    activityMode: inferActivityMode(resource),
+    teachingApproach: inferTeachingApproach(resource),
+    searchAliases: [
+      resource.provider,
+      resource.summary,
+      resource.additionalInformation,
+      ...resource.tags,
+      ...resource.curriculum.alignments.flatMap((alignment) => [
+        alignment.axis,
+        alignment.knowledgeObject ?? "",
+        alignment.skill.code,
+        alignment.skill.officialText,
+      ]),
+    ],
+  };
+}

@@ -331,7 +331,7 @@ function LessonPlanEditor({ planId }: { planId?: string }) {
     setSaveStatus("");
 
     if (!grade || !selectedSkill || !selectedCandidate) {
-      setCompositionError("Selecione o ano, a habilidade e um material do Acervo.");
+      setCompositionError("Selecione o ano, a habilidade e um material disponível.");
       return;
     }
 
@@ -435,10 +435,10 @@ function LessonPlanEditor({ planId }: { planId?: string }) {
                 <option key={item} value={item}>{item}º ano</option>
               ))}
             </select>
-            {status === "loading" ? <p className={styles.helper}>Carregando o Acervo…</p> : null}
+            {status === "loading" ? <p className={styles.helper}>Carregando os materiais…</p> : null}
             {status === "error" ? (
               <p className={styles.errorMessage} role="alert">
-                Não foi possível consultar os conteúdos do Acervo.
+                Não foi possível consultar os materiais disponíveis.
               </p>
             ) : null}
           </div>
@@ -502,7 +502,7 @@ function LessonPlanEditor({ planId }: { planId?: string }) {
                 role="status"
                 aria-live="polite"
               >
-                O Acervo ainda não possui material alinhado ao {grade}º ano.
+                Ainda não há material alinhado ao {grade}º ano.
               </p>
             ) : null}
           </div>
@@ -526,7 +526,7 @@ function LessonPlanEditor({ planId }: { planId?: string }) {
 
           <div className={styles.field}>
             <label htmlFor="lesson-resource">
-              Material do Acervo <span className={styles.required} aria-hidden="true">*</span>
+              Material disponível <span className={styles.required} aria-hidden="true">*</span>
             </label>
             <select
               id="lesson-resource"

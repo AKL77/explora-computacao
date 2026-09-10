@@ -28,7 +28,7 @@ import {
   teachingPathIconLabels,
 } from "../components/teachingPathAppearanceOptions";
 import {
-  pilotTeachingResources,
+  getTeachingResourceMetadata,
   type ActivityMode,
   type PilotTeachingResource,
   type TeachingApproach,
@@ -82,13 +82,11 @@ function matchesSearch({ resource, teaching }: TeachingResourceView, query: stri
   return searchableContent.includes(normalizedQuery);
 }
 
-function getPilotResources(resources: Resource[]): TeachingResourceView[] {
-  const resourcesById = new Map(resources.map((resource) => [resource.id, resource]));
-
-  return pilotTeachingResources.flatMap((teaching) => {
-    const resource = resourcesById.get(teaching.resourceId);
-    return resource ? [{ resource, teaching }] : [];
-  });
+function getTeachingResources(resources: Resource[]): TeachingResourceView[] {
+  return resources.map((resource) => ({
+    resource,
+    teaching: getTeachingResourceMetadata(resource),
+  }));
 }
 
 function toggleFilter<T extends string | number>(values: readonly T[], value: T) {
@@ -119,15 +117,15 @@ export function TeachingPathPage() {
   const [existingPathId, setExistingPathId] = useState("");
   const [announcement, setAnnouncement] = useState("");
 
-  const pilotResources = useMemo(() => getPilotResources(resources), [resources]);
-  const pilotById = useMemo(
-    () => new Map(pilotResources.map((item) => [item.resource.id, item])),
-    [pilotResources],
+  const teachingResources = useMemo(() => getTeachingResources(resources), [resources]);
+  const teachingById = useMemo(
+    () => new Map(teachingResources.map((item) => [item.resource.id, item])),
+    [teachingResources],
   );
 
   const filteredResources = useMemo(
     () =>
-      pilotResources.filter((item) => {
+      teachingResources.filter((item) => {
         const matchesGrade =
           selectedGrades.length === 0 ||
           item.teaching.grades.some((grade) => selectedGrades.includes(grade));
@@ -147,11 +145,11 @@ export function TeachingPathPage() {
           matchesSearch(item, query)
         );
       }),
-    [pilotResources, query, selectedActivityModes, selectedApproaches, selectedGrades],
+    [teachingResources, query, selectedActivityModes, selectedApproaches, selectedGrades],
   );
 
   const trail = trailIds.flatMap((id) => {
-    const item = pilotById.get(id);
+    const item = teachingById.get(id);
     return item ? [item] : [];
   });
   const hasActiveFilters =
@@ -207,7 +205,7 @@ export function TeachingPathPage() {
 
   const addToExistingPath = () => {
     if (!resourceToAddToExisting || !existingPathId) return;
-    const resource = pilotById.get(resourceToAddToExisting)?.resource;
+    const resource = teachingById.get(resourceToAddToExisting)?.resource;
     const path = savedPaths.find((item) => item.id === existingPathId);
     if (!resource || !path || !addResourceToPath(path.id, resource.id)) return;
 
@@ -239,9 +237,9 @@ export function TeachingPathPage() {
     <div className={styles.page}>
       <header className={styles.pageHeader}>
         <p className={styles.eyebrow}>Planejamento por materiais</p>
-        <h1>Criar Trilha de Ensino</h1>
+        <h1>Buscar Materiais</h1>
         <p>
-          Pesquise, explore os materiais no Acervo e selecione os que contribuem
+          Pesquise e selecione os materiais que contribuem
           para o seu objetivo de ensino.
         </p>
       </header>
@@ -400,7 +398,7 @@ export function TeachingPathPage() {
       <section className={styles.results} aria-labelledby="results-title">
         <div className={styles.resultsHeader}>
           <div>
-            <p>Acervo</p>
+            <p>Materiais disponíveis</p>
             <h2 id="results-title">Materiais encontrados</h2>
           </div>
           <span aria-live="polite">
@@ -411,7 +409,7 @@ export function TeachingPathPage() {
         {filteredResources.length === 0 ? (
           <div className={styles.emptyResults} role="status">
             <Search size={28} aria-hidden="true" />
-            <strong>Nenhum material encontrado neste piloto</strong>
+            <strong>Nenhum material encontrado</strong>
             <p>Tente outro termo ou retire alguma tag de filtro.</p>
           </div>
         ) : (
@@ -427,8 +425,9 @@ export function TeachingPathPage() {
                 <article className={styles.resourceCard} key={resource.id}>
                   <Link
                     className={styles.resourcePreview}
-                    to={`/app/acervo/${resource.slug}`}
-                    aria-label={`Abrir ${resource.title} no Acervo`}
+                    to={`/app/materiais/${resource.slug}`}
+                    state={{ from: "/app/trilha-de-ensino" }}
+                    aria-label={`Abrir detalhes de ${resource.title}`}
                   >
                     <div className={styles.resourceImage}>
                       <img

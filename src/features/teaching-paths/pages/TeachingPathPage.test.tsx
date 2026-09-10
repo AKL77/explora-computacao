@@ -15,6 +15,7 @@ afterEach(() => {
 const vinteTitle = "Vinte Palpites — Teoria da Informação";
 const blocklyTitle = "Blockly Games";
 const sertaoTitle = "Sertão.bit — Livro-jogo de Pensamento Computacional";
+const binaryNumbersTitle = "Contando os Pontos — Números Binários";
 
 async function renderPage() {
   const user = userEvent.setup();
@@ -36,13 +37,16 @@ function getResourceCard(title: string) {
 }
 
 describe("TeachingPathPage", () => {
-  it("mostra o piloto inicialmente e pesquisa por aliases curatoriais específicos", async () => {
+  it("mostra todo o catálogo e pesquisa pelos dados dos materiais", async () => {
     const user = await renderPage();
 
     for (const title of [vinteTitle, blocklyTitle, sertaoTitle]) {
       expect(screen.getByRole("heading", { name: title, level: 3 })).toBeInTheDocument();
     }
-    expect(screen.getByText("3 materiais", { exact: true })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: binaryNumbersTitle, level: 3 }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("31 materiais", { exact: true })).toBeInTheDocument();
 
     const search = screen.getByRole("searchbox", {
       name: "Pesquisar área, assunto ou habilidade",
@@ -54,8 +58,11 @@ describe("TeachingPathPage", () => {
     expect(screen.queryByRole("heading", { name: sertaoTitle, level: 3 })).not.toBeInTheDocument();
 
     await user.clear(search);
-    await user.type(search, "busca binária");
-    expect(screen.getByText("Nenhum material encontrado neste piloto")).toBeInTheDocument();
+    await user.type(search, "cyberbullying");
+    expect(
+      screen.getByRole("heading", { name: "Cyberbullying — Jogo Educativo", level: 3 }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: blocklyTitle, level: 3 })).not.toBeInTheDocument();
   });
 
   it("filtra com tags clicáveis, inclusive materiais de formato misto", async () => {
@@ -85,16 +92,16 @@ describe("TeachingPathPage", () => {
     expect(screen.getByRole("heading", { name: sertaoTitle, level: 3 })).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Limpar filtros" }));
-    expect(screen.getByText("3 materiais", { exact: true })).toBeInTheDocument();
+    expect(screen.getByText("31 materiais", { exact: true })).toBeInTheDocument();
   });
 
-  it("leva o cartão ao Acervo e permite selecionar e remover materiais sem reordenação", async () => {
+  it("leva o cartão ao detalhe e permite selecionar e remover materiais sem reordenação", async () => {
     const user = await renderPage();
     const blocklyCard = getResourceCard(blocklyTitle);
 
     expect(
-      blocklyCard.getByRole("link", { name: `Abrir ${blocklyTitle} no Acervo` }),
-    ).toHaveAttribute("href", "/app/acervo/blockly-games");
+      blocklyCard.getByRole("link", { name: `Abrir detalhes de ${blocklyTitle}` }),
+    ).toHaveAttribute("href", "/app/materiais/blockly-games");
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 
     await user.click(
@@ -136,8 +143,8 @@ describe("TeachingPathPage", () => {
     const user = await renderPage();
 
     await user.click(
-      getResourceCard(blocklyTitle).getByRole("button", {
-        name: `Adicionar ${blocklyTitle} a uma nova trilha`,
+      getResourceCard(binaryNumbersTitle).getByRole("button", {
+        name: `Adicionar ${binaryNumbersTitle} a uma nova trilha`,
       }),
     );
     await user.click(screen.getByRole("button", { name: "Salvar trilha" }));
@@ -156,7 +163,7 @@ describe("TeachingPathPage", () => {
       objective: "Compreender como construir algoritmos com blocos.",
       backgroundColor: "turquoise",
       icon: "book-open-check",
-      resourceIds: ["google-blockly-games"],
+      resourceIds: ["unicamp-desplugada-atividade-1"],
     });
   });
 });

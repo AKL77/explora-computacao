@@ -1,8 +1,8 @@
 import {
   ArrowRight,
   BookOpenCheck,
-  FolderHeart,
-  Heart,
+  Search,
+  Waypoints,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -22,25 +22,25 @@ const questions = [
   {
     question: "Como encontro um material adequado?",
     answer:
-      "Acesse o Acervo para pesquisar pelo nome ou tema do recurso. Quando precisar reduzir os resultados, aplique os filtros disponíveis. Abra um card para consultar informações pedagógicas e operacionais antes de utilizar o material.",
+      "Acesse Buscar Materiais para pesquisar por nome, tema ou habilidade. Use os filtros para reduzir os resultados e abra um cartão para consultar as informações pedagógicas e operacionais.",
   },
   {
-    question: "Como funcionam os favoritos?",
+    question: "O que são as Trilhas Prontas?",
     answer:
-      "Clique no coração de um recurso para marcá-lo como favorito. O coração preenchido indica que ele foi salvo. Todos os itens marcados ficam reunidos automaticamente em Favoritos, dentro de Meus Materiais.",
+      "São percursos previamente organizados por conteúdo, ano escolar e objetivo de aprendizagem. Elas apresentam uma sequência pedagógica sugerida e permanecem separadas das trilhas criadas pelo docente.",
   },
   {
-    question: "Para que servem os Meus Materiais?",
+    question: "Onde ficam as trilhas que eu crio?",
     answer:
-      "Essa área permite separar recursos em coleções próprias — por exemplo, por turma, escola, tema ou sequência de aulas. Assim, materiais úteis podem ser reencontrados sem refazer toda a busca no Acervo.",
+      "As sequências criadas em Buscar Materiais ficam em Minhas Trilhas. Nessa área é possível reorganizar etapas e ajustar a duração de cada material.",
   },
   {
     question: "Como crio uma trilha de ensino?",
     answer:
-      "Em Criar Trilha de Ensino, pesquise uma área, assunto ou habilidade e refine os resultados com tags. Cada cartão mostra um objetivo breve, o que os estudantes farão e os materiais usados; ao abri-lo, você vai à página completa do recurso no Acervo. Adicione os materiais a uma nova trilha e informe um nome para salvá-la. Em Minhas Trilhas, é possível reorganizar as etapas e definir de uma a três aulas para cada material.",
+      "Em Buscar Materiais, pesquise uma área, assunto ou habilidade e refine os resultados com tags. Cada cartão mostra um objetivo breve, o que os estudantes farão e os materiais usados. Adicione os materiais a uma nova trilha e informe um nome para salvá-la.",
   },
   {
-    question: "Posso incluir novos recursos no Acervo?",
+    question: "Posso incluir novos materiais na plataforma?",
     answer:
       "Não. Os usuários podem consultar, favoritar e organizar os materiais disponíveis.",
   },
@@ -57,8 +57,8 @@ export function AboutPage() {
             Uma plataforma para aproximar recursos educacionais, currículo e realidade escolar,
             facilitando o ensino de Computação sem retirar do docente a decisão pedagógica.
           </p>
-          <Link className={styles.primaryLink} to="/app/acervo">
-            Explorar o Acervo
+          <Link className={styles.primaryLink} to="/app/trilha-de-ensino">
+            Buscar Materiais
             <ArrowRight aria-hidden="true" size={19} />
           </Link>
         </div>
@@ -68,10 +68,10 @@ export function AboutPage() {
             <BookOpenCheck />
           </span>
           <span className={styles.illustrationHeart}>
-            <Heart />
+            <Search />
           </span>
           <span className={styles.illustrationFolder}>
-            <FolderHeart />
+            <Waypoints />
           </span>
           <span className={styles.illustrationPath} />
         </div>
@@ -100,19 +100,18 @@ export function AboutPage() {
 
       <section className={styles.organize} aria-labelledby="organize-title">
         <div className={styles.organizeIcon} aria-hidden="true">
-          <FolderHeart size={42} />
+          <Waypoints size={42} />
         </div>
         <div className={styles.organizeContent}>
-          <p className={styles.sectionLabel}>Favoritos e coleções</p>
-          <h2 id="organize-title">Guarde o que faz sentido para o seu contexto</h2>
+          <p className={styles.sectionLabel}>Duas formas de planejar</p>
+          <h2 id="organize-title">Explore uma proposta pronta ou construa a sua</h2>
           <p>
-            Use o coração para reunir rapidamente os recursos que chamaram sua atenção. Em Meus
-            Materiais, crie coleções para organizar esses itens por turma, escola, tema ou
-            planejamento futuro. Favoritar não altera o Acervo: apenas cria um atalho pessoal para
-            você reencontrar o material.
+            Trilhas Prontas reúne percursos organizados por conteúdo. Em Buscar Materiais, você
+            escolhe os recursos e monta uma sequência própria, que permanece disponível em Minhas
+            Trilhas para continuar o planejamento.
           </p>
-          <Link className={styles.secondaryLink} to="/app/pastas">
-            Acessar Meus Materiais
+          <Link className={styles.secondaryLink} to="/app/trilhas-prontas">
+            Explorar Trilhas Prontas
             <ArrowRight aria-hidden="true" size={18} />
           </Link>
         </div>

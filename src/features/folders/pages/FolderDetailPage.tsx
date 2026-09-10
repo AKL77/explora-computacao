@@ -76,8 +76,8 @@ export function FolderDetailPage() {
         emptyTitle={isFavorites ? "Nenhum favorito ainda" : "Esta pasta está vazia"}
         emptyMessage={
           isFavorites
-            ? "Use o coração nos cards do Acervo para guardar recursos aqui."
-            : "Abra o Acervo e use Adicionar à pasta para começar sua coleção."
+            ? "Use o coração nos cartões de materiais para guardar recursos aqui."
+            : "Abra Buscar Materiais e adicione recursos para começar sua coleção."
         }
         removeLabel={isFavorites ? "Remover dos Favoritos" : "Remover desta pasta"}
         onRemoveResource={(resourceId) => {

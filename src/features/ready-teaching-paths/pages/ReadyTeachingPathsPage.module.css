@@ -1,0 +1,569 @@
+.page {
+  width: min(100%, 82rem);
+  margin-inline: auto;
+  color: var(--text-primary);
+}
+
+.pageHeader {
+  max-width: 54rem;
+  margin-bottom: 1.25rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.35rem;
+  color: var(--brand-cyan);
+  font-size: 0.74rem;
+  font-weight: 850;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.pageHeader h1 {
+  margin: 0;
+  color: var(--brand-navy);
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.08;
+}
+
+.pageHeader > p:last-child {
+  margin: 0.65rem 0 0;
+  color: var(--text-muted);
+  line-height: 1.65;
+}
+
+.discovery {
+  display: grid;
+  grid-template-columns: minmax(15rem, 0.7fr) minmax(20rem, 1fr);
+  gap: 1.5rem;
+  align-items: center;
+  padding: clamp(1.15rem, 3vw, 1.6rem);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-sm);
+}
+
+.discovery h2,
+.sectionHeading h2 {
+  margin: 0;
+  color: var(--brand-navy);
+  font-size: 1.25rem;
+}
+
+.categoryFilters {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.categoryFilters button {
+  min-height: 2.45rem;
+  padding: 0.45rem 0.78rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  color: var(--brand-navy);
+  background: white;
+  font-size: 0.78rem;
+  font-weight: 760;
+  cursor: pointer;
+}
+
+.categoryFilters button:hover,
+.categoryFilters button[aria-pressed="true"] {
+  border-color: var(--brand-cyan);
+  background: var(--brand-yellow-soft);
+}
+
+.collectionSection {
+  margin-top: 1.5rem;
+}
+
+.sectionHeading {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-end;
+  margin-bottom: 0.8rem;
+}
+
+.sectionHeading > span {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.trailGrid {
+  display: grid;
+  gap: 0.85rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.emptyState {
+  display: grid;
+  min-height: 8rem;
+  padding: 1.5rem;
+  place-items: center;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  background: var(--surface-card);
+  text-align: center;
+}
+
+.emptyState p {
+  margin: 0;
+}
+
+.trailCard {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 18rem;
+  flex-direction: column;
+  padding: 1.25rem;
+  overflow: hidden;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  color: inherit;
+  background:
+    radial-gradient(circle at 105% -5%, rgb(34 211 238 / 0.17), transparent 11rem),
+    white;
+  box-shadow: var(--shadow-sm);
+  text-decoration: none;
+  transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+}
+
+.trailCard:hover {
+  border-color: var(--brand-cyan);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.trailCard:focus-within {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+.trailCard[data-selected="true"] {
+  border-color: var(--brand-cyan);
+  box-shadow: 0 0 0 2px rgb(8 145 178 / 14%), var(--shadow-md);
+}
+
+.cardOverlay {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  padding: 0;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+
+.cardOverlay:focus-visible {
+  outline: none;
+}
+
+.trailCard:first-child {
+  background:
+    radial-gradient(circle at 100% 0, rgb(250 204 21 / 0.26), transparent 12rem),
+    linear-gradient(150deg, #fff, #f5fbfc);
+}
+
+.trailIcon {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  border-radius: 0.8rem;
+  color: white;
+  background: linear-gradient(145deg, var(--brand-cyan), var(--brand-blue));
+}
+
+.trailCardBody {
+  display: grid;
+  gap: 0.35rem;
+  margin-top: 0.9rem;
+}
+
+.category {
+  color: var(--brand-cyan);
+  font-size: 0.68rem;
+  font-weight: 850;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.trailCard h3 {
+  margin: 0;
+  color: var(--brand-navy);
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  line-height: 1.2;
+}
+
+.trailCardBody > p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.81rem;
+  line-height: 1.55;
+}
+
+.cardMetadata {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-top: 0.4rem;
+}
+
+.cardMetadata span {
+  display: inline-flex;
+  gap: 0.25rem;
+  align-items: center;
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  color: var(--brand-blue);
+  background: var(--surface-soft);
+  font-size: 0.68rem;
+  font-weight: 720;
+}
+
+.cardAction {
+  display: inline-flex;
+  width: max-content;
+  gap: 0.35rem;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 1rem;
+  font-size: 0.78rem;
+  font-weight: 820;
+}
+
+.cardAction {
+  color: var(--brand-blue);
+  text-decoration: none;
+}
+
+.trailCard:hover .cardAction {
+  text-decoration: underline;
+}
+
+.readyPath {
+  overflow: hidden;
+  margin-top: 2rem;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-lg);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-md);
+  scroll-margin-top: 6.5rem;
+}
+
+.pathHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  align-items: flex-end;
+  padding: clamp(1.4rem, 4vw, 2.5rem);
+  color: white;
+  background:
+    radial-gradient(circle at 88% 10%, rgb(34 211 238 / 0.28), transparent 18rem),
+    linear-gradient(130deg, var(--brand-navy-deep), var(--brand-blue));
+}
+
+.copyButton {
+  display: inline-flex;
+  min-height: 3rem;
+  flex: 0 0 auto;
+  padding: 0.65rem 1rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  border: 1px solid var(--brand-yellow);
+  border-radius: 0.8rem;
+  color: var(--brand-navy-deep);
+  background: var(--brand-yellow);
+  font: inherit;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.copyButton:hover {
+  background: var(--brand-yellow-soft);
+  transform: translateY(-1px);
+}
+
+.pathTitleBlock {
+  max-width: 60rem;
+}
+
+.featuredLabel {
+  display: inline-flex;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid rgb(250 204 21 / 0.55);
+  border-radius: 999px;
+  color: var(--brand-yellow-soft);
+  background: rgb(250 204 21 / 0.1);
+  font-size: 0.7rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pathHeader h2 {
+  max-width: 46rem;
+  margin: 0.75rem 0 0.55rem;
+  font-family: var(--font-serif);
+  font-size: clamp(1.65rem, 3vw, 2.45rem);
+  line-height: 1.13;
+}
+
+.pathTitleBlock > p {
+  max-width: 54rem;
+  margin: 0;
+  color: rgb(248 250 252 / 0.82);
+  line-height: 1.65;
+}
+
+.metadata {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.metadata span {
+  display: inline-flex;
+  min-height: 1.8rem;
+  padding: 0.28rem 0.6rem;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 999px;
+  color: #cffafe;
+  background: rgb(255 255 255 / 0.1);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.pathBody {
+  padding: clamp(1.4rem, 4vw, 2.5rem);
+  background:
+    linear-gradient(rgb(255 255 255 / 0.92), rgb(255 255 255 / 0.92)),
+    radial-gradient(circle, var(--border-soft) 1px, transparent 1px);
+  background-size: auto, 22px 22px;
+}
+
+.stepsHeading {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-end;
+  margin-bottom: 1.3rem;
+}
+
+.stepsHeading h3 {
+  margin: 0;
+  color: var(--brand-navy);
+  font-size: 1.3rem;
+}
+
+.stepsHeading > span {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 750;
+}
+
+.timeline {
+  display: grid;
+  gap: 1rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.timeline > li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: 0.9rem;
+}
+
+.timeline > li:not(:last-child)::after {
+  position: absolute;
+  z-index: 0;
+  top: 2.4rem;
+  bottom: -1.15rem;
+  left: 1.2rem;
+  width: 2px;
+  background: linear-gradient(var(--brand-cyan), var(--brand-yellow));
+  content: "";
+}
+
+.stepNumber {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border: 4px solid white;
+  border-radius: 999px;
+  color: white;
+  background: var(--brand-cyan);
+  box-shadow: 0 0 0 1px var(--brand-cyan);
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.stageCard {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(12rem, 0.32fr) minmax(0, 1fr);
+  overflow: hidden;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  background: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.imageWrap {
+  position: relative;
+  min-height: 13rem;
+  overflow: hidden;
+  background: var(--surface-soft);
+}
+
+.imageWrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.imageWrap::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(transparent 45%, rgb(3 25 38 / 0.72));
+  content: "";
+}
+
+.imageWrap > span {
+  position: absolute;
+  z-index: 1;
+  right: 0.8rem;
+  bottom: 0.75rem;
+  left: 0.8rem;
+  color: white;
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.stageContent {
+  padding: clamp(1rem, 3vw, 1.5rem);
+}
+
+.resourceType {
+  color: var(--brand-cyan);
+  font-size: 0.7rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.stageContent h4 {
+  margin: 0.15rem 0 0.4rem;
+  color: var(--brand-navy);
+  font-size: 1.15rem;
+}
+
+.stageContent > p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.stageContent .resourceName {
+  margin: 0.9rem 0 0.45rem;
+  color: var(--brand-navy);
+  font-size: 0.84rem;
+  font-weight: 760;
+}
+
+.stageContent .stageObjective {
+  padding-left: 0.7rem;
+  border-left: 3px solid var(--brand-yellow);
+  font-size: 0.78rem;
+}
+
+.stageObjective strong {
+  color: var(--brand-navy);
+}
+
+.stageContent a {
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: center;
+  margin-top: 0.9rem;
+  color: var(--brand-blue);
+  font-size: 0.82rem;
+  font-weight: 820;
+  text-decoration: none;
+}
+
+.stageContent a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 920px) {
+  .trailGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .discovery {
+    grid-template-columns: 1fr;
+  }
+
+  .categoryFilters {
+    justify-content: flex-start;
+  }
+
+  .stageCard {
+    grid-template-columns: 1fr;
+  }
+
+  .pathHeader {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .copyButton {
+    align-self: flex-start;
+  }
+
+  .imageWrap {
+    min-height: 11rem;
+    max-height: 15rem;
+  }
+}
+
+@media (max-width: 540px) {
+  .trailGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .timeline > li {
+    grid-template-columns: 1fr;
+  }
+
+  .timeline > li:not(:last-child)::after {
+    display: none;
+  }
+
+  .stepNumber {
+    margin-bottom: -0.25rem;
+  }
+}

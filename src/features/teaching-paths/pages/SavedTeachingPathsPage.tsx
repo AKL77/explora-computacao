@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 
 import { AccessibleDialog } from "@/features/catalog/components/AccessibleDialog";
 import { CatalogStatus } from "@/features/catalog/components/CatalogStatus";
-import { RESOURCE_PLACEHOLDER } from "@/features/catalog/components/resourcePresentation";
+import { RESOURCE_PLACEHOLDER, typeLabels } from "@/features/catalog/components/resourcePresentation";
 import { useCatalogResources } from "@/features/catalog/hooks/useCatalog";
 import {
   TEACHING_PATH_BACKGROUND_COLORS,
@@ -33,7 +33,7 @@ import {
   teachingPathColorLabels,
   teachingPathIconLabels,
 } from "../components/teachingPathAppearanceOptions";
-import { pilotTeachingResources, type PilotTeachingResource } from "../data/pilotTeachingResources";
+import { getTeachingResourceMetadata, type PilotTeachingResource } from "../data/pilotTeachingResources";
 import styles from "./SavedTeachingPathsPage.module.css";
 
 const lessonCounts: readonly LessonCount[] = [1, 2, 3];
@@ -92,14 +92,11 @@ function getPathResources(
   resources: ReturnType<typeof useCatalogResources>["resources"],
 ): PathResourceView[] {
   const resourcesById = new Map(resources.map((resource) => [resource.id, resource]));
-  const teachingByResourceId = new Map(
-    pilotTeachingResources.map((teaching) => [teaching.resourceId, teaching]),
-  );
-
   return resourceIds.flatMap((resourceId) => {
     const resource = resourcesById.get(resourceId);
-    const teaching = teachingByResourceId.get(resourceId);
-    return resource && teaching ? [{ resourceId, resource, teaching }] : [];
+    return resource
+      ? [{ resourceId, resource, teaching: getTeachingResourceMetadata(resource) }]
+      : [];
   });
 }
 
@@ -356,7 +353,7 @@ export function SavedTeachingPathsPage() {
           <div className={styles.emptyState}>
             <ListChecks aria-hidden="true" size={40} strokeWidth={1.6} />
             <h2>Nenhuma trilha salva</h2>
-            <p>Selecione materiais em Criar Trilha de Ensino e salve uma sequência com objetivo próprio.</p>
+            <p>Selecione materiais em Buscar Materiais e salve uma sequência com objetivo próprio.</p>
             <Link to="/app/trilha-de-ensino">Criar minha primeira trilha</Link>
           </div>
         ) : (
@@ -425,6 +422,18 @@ export function SavedTeachingPathsPage() {
         <div className={styles.pathTitleArea}>
           <p className={styles.eyebrow}>Trilha de ensino</p>
           <h1 id="path-title">{draft.name}</h1>
+          <p className={styles.pathObjective}>{draft.objective}</p>
+          <div className={styles.pathMetadata} aria-label="Informações da trilha">
+            <span>{currentResourceIds.length} {currentResourceIds.length === 1 ? "material" : "materiais"}</span>
+            {allLessonCountsDefined ? (
+              <span>
+                <Clock3 aria-hidden="true" size={15} />
+                {totalLessonCount} {totalLessonCount === 1 ? "aula sugerida" : "aulas sugeridas"}
+              </span>
+            ) : (
+              <span>Definir duração das etapas</span>
+            )}
+          </div>
           {allLessonCountsDefined ? (
             <p className={styles.totalTime}>
               <Clock3 aria-hidden="true" size={18} />
@@ -457,7 +466,8 @@ export function SavedTeachingPathsPage() {
 
       <div className={styles.sequenceHeader}>
         <div>
-          <strong>Sequência de aprendizagem</strong>
+          <p className={styles.eyebrow}>Percurso de aprendizagem</p>
+          <strong>Da seleção à aplicação em sala de aula</strong>
           <p>Arraste uma etapa pelo marcador para reorganizar a trilha.</p>
         </div>
         {allLessonCountsDefined ? (
@@ -492,10 +502,8 @@ export function SavedTeachingPathsPage() {
                 setDropTargetId(null);
               }}
             >
+              <span className={styles.stepNumber} aria-hidden="true">{index + 1}</span>
               <article className={styles.stepCard}>
-                <span className={styles.dragHandle} aria-hidden="true">
-                  <GripVertical size={21} />
-                </span>
                 <button
                   className={styles.stepButton}
                   type="button"
@@ -507,11 +515,18 @@ export function SavedTeachingPathsPage() {
                       src={item.resource.image?.thumbnailSrc ?? item.resource.image?.src ?? RESOURCE_PLACEHOLDER}
                       alt=""
                     />
+                    <span className={styles.stageLabel}>Etapa {index + 1}</span>
+                    <span className={styles.dragHandle}>
+                      <GripVertical size={18} />
+                    </span>
                   </span>
                   <span className={styles.stepText}>
-                    <span>Etapa {index + 1}</span>
+                    <span>{typeLabels[item.resource.type]}</span>
                     <strong>{item.resource.title}</strong>
-                    <small>{item.teaching.objective}</small>
+                    <small>{item.teaching.studentActivity}</small>
+                    <em>
+                      <strong>Objetivo da etapa:</strong> {item.teaching.objective}
+                    </em>
                     {isPendingRemoval ? <em>Será removido ao salvar as alterações.</em> : null}
                   </span>
                 </button>
@@ -657,8 +672,12 @@ export function SavedTeachingPathsPage() {
               <span />
               <span />
             </footer>
-            <Link className={styles.catalogLink} to={`/app/acervo/${preview.resource.slug}`}>
-              Ver material completo no Acervo
+            <Link
+              className={styles.catalogLink}
+              to={`/app/materiais/${preview.resource.slug}`}
+              state={{ from: "/app/minhas-trilhas" }}
+            >
+              Ver material completo
             </Link>
           </article>
         ) : null}

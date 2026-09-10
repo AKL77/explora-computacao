@@ -12,7 +12,7 @@ function renderLanding() {
     <MemoryRouter initialEntries={["/"]}>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/app/acervo" element={<h1>Acervo carregado</h1>} />
+        <Route path="/app/trilha-de-ensino" element={<h1>Buscar Materiais carregado</h1>} />
       </Routes>
     </MemoryRouter>,
   );
@@ -30,17 +30,17 @@ describe("LandingPage", () => {
   it.each([
     ["cabeçalho", 0],
     ["rodapé", 1],
-  ])("entra diretamente no Acervo pelo link do %s", async (_location, linkIndex) => {
+  ])("entra diretamente em Buscar Materiais pelo link do %s", async (_location, linkIndex) => {
     const user = userEvent.setup();
     renderLanding();
 
     const signInLinks = screen.getAllByRole("link", { name: "Entrar" });
     expect(signInLinks).toHaveLength(2);
-    expect(signInLinks[linkIndex]).toHaveAttribute("href", "/app/acervo");
+    expect(signInLinks[linkIndex]).toHaveAttribute("href", "/app/trilha-de-ensino");
 
     await user.click(signInLinks[linkIndex]);
 
-    expect(screen.getByRole("heading", { name: "Acervo carregado" })).toBeVisible();
+    expect(screen.getByRole("heading", { name: "Buscar Materiais carregado" })).toBeVisible();
     expect(useSessionStore.getState().isAuthenticated).toBe(true);
   });
 
@@ -51,6 +51,6 @@ describe("LandingPage", () => {
     await user.click(screen.getAllByRole("link", { name: "O projeto" })[0]);
 
     expect(screen.getByRole("heading", { name: "Direcionamento e praticidade" })).toBeVisible();
-    expect(screen.queryByRole("heading", { name: "Acervo carregado" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Buscar Materiais carregado" })).not.toBeInTheDocument();
   });
 });

@@ -53,7 +53,7 @@ async function fillLightbotPlan(
     "EF04CO03",
   );
 
-  const resource = screen.getByRole("combobox", { name: "Material do Acervo" });
+  const resource = screen.getByRole("combobox", { name: "Material disponível" });
   expect(within(resource).getByRole("option", { name: "Lightbot" })).toBeVisible();
   expect(
     within(resource).getByRole("option", { name: "Blockly Games" }),
@@ -122,7 +122,7 @@ describe("LessonPlanPage", () => {
       "EF07CO09",
     );
 
-    const resource = screen.getByRole("combobox", { name: "Material do Acervo" });
+    const resource = screen.getByRole("combobox", { name: "Material disponível" });
     expect(
       within(resource).getByRole("option", { name: "Cyberbullying — Jogo Educativo" }),
     ).toBeVisible();

@@ -82,13 +82,13 @@ function formatParticipation(values: readonly ParticipationMode[] | undefined): 
 
 function getBackPath(locationState: unknown): string {
   if (!locationState || typeof locationState !== "object") {
-    return "/app/acervo";
+    return "/app/trilha-de-ensino";
   }
 
   const from = (locationState as { from?: unknown }).from;
   return typeof from === "string" && from.startsWith("/app/")
     ? from
-    : "/app/acervo";
+    : "/app/trilha-de-ensino";
 }
 
 interface DetailItemProps {
@@ -162,9 +162,9 @@ export function ResourceDetailPage() {
       <section className={styles.notFound} aria-labelledby="resource-not-found-title">
         <span aria-hidden="true">◇</span>
         <h1 id="resource-not-found-title">Recurso não encontrado</h1>
-        <p>O endereço pode estar incorreto ou o recurso não faz mais parte do Acervo.</p>
-        <Link to="/app/acervo" className={styles.primaryLink}>
-          Voltar ao Acervo
+        <p>O endereço pode estar incorreto ou o material não está mais disponível.</p>
+        <Link to="/app/trilha-de-ensino" className={styles.primaryLink}>
+          Voltar para Buscar Materiais
         </Link>
       </section>
     );

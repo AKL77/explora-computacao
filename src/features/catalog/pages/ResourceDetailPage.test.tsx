@@ -9,9 +9,9 @@ afterEach(cleanup);
 
 function renderResourceDetail(slug = "altinovare-cyberbullying") {
   render(
-    <MemoryRouter initialEntries={[`/app/acervo/${slug}`]}>
+    <MemoryRouter initialEntries={[`/app/materiais/${slug}`]}>
       <Routes>
-        <Route path="/app/acervo/:slug" element={<ResourceDetailPage />} />
+        <Route path="/app/materiais/:slug" element={<ResourceDetailPage />} />
       </Routes>
     </MemoryRouter>,
   );
@@ -28,6 +28,10 @@ describe("ResourceDetailPage", () => {
         level: 1,
       }),
     ).toBeVisible();
+    expect(screen.getByRole("link", { name: "Voltar" })).toHaveAttribute(
+      "href",
+      "/app/trilha-de-ensino",
+    );
 
     const descriptionTab = screen.getByRole("tab", { name: "Descrição" });
     expect(descriptionTab).toHaveAttribute("aria-selected", "true");

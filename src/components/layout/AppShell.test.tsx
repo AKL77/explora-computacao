@@ -7,7 +7,7 @@ import { AppShell } from "./AppShell";
 afterEach(cleanup);
 
 describe("AppShell", () => {
-  it("apresenta as funcionalidades futuras como itens inativos", () => {
+  it("apresenta somente as cinco opções atuais da navegação", () => {
     render(
       <MemoryRouter initialEntries={["/app/acervo"]}>
         <Routes>
@@ -18,26 +18,30 @@ describe("AppShell", () => {
       </MemoryRouter>,
     );
 
-    for (const label of ["Meu perfil", "Minhas Turmas", "Meus Planos de Aula"]) {
-      const item = screen.getByRole("button", { name: label });
-      expect(item).toBeDisabled();
-      expect(item).toHaveAttribute("aria-disabled", "true");
-      expect(screen.queryByRole("link", { name: label })).not.toBeInTheDocument();
-    }
-
-    expect(screen.getByRole("link", { name: "Acervo" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "Meu perfil" })).toHaveAttribute(
       "href",
-      "/app/acervo",
+      "/app/perfil",
     );
-    expect(screen.getByRole("link", { name: "Criar Trilha de Ensino" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "Buscar Materiais" })).toHaveAttribute(
       "href",
       "/app/trilha-de-ensino",
+    );
+    expect(screen.getByRole("link", { name: "Trilhas Prontas" })).toHaveAttribute(
+      "href",
+      "/app/trilhas-prontas",
     );
     expect(screen.getByRole("link", { name: "Minhas Trilhas" })).toHaveAttribute(
       "href",
       "/app/minhas-trilhas",
     );
-    expect(screen.queryByRole("link", { name: "Criar Plano de Aula" })).not.toBeInTheDocument();
-    expect(screen.queryByRole("link", { name: "Meus Planos de Aula" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Sobre" })).toHaveAttribute(
+      "href",
+      "/app/sobre",
+    );
+
+    for (const label of ["Acervo", "Meus Materiais", "Minhas Turmas", "Meus Planos de Aula"]) {
+      expect(screen.queryByRole("link", { name: label })).not.toBeInTheDocument();
+      expect(screen.queryByRole("button", { name: label })).not.toBeInTheDocument();
+    }
   });
 });

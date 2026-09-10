@@ -20,9 +20,9 @@ describe("AboutPage", () => {
     expect(screen.queryByText("Como utilizar")).not.toBeInTheDocument();
     expect(screen.queryByText("Encontre recursos")).not.toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: "Guarde o que faz sentido para o seu contexto" }),
+      screen.getByRole("heading", { name: "Explore uma proposta pronta ou construa a sua" }),
     ).toBeInTheDocument();
-    expect(screen.getByText("Como funcionam os favoritos?")).toBeInTheDocument();
+    expect(screen.getByText("O que são as Trilhas Prontas?")).toBeInTheDocument();
     expect(screen.getByText("Como crio uma trilha de ensino?")).toBeInTheDocument();
     expect(screen.queryByText("Meus favoritos e materiais ficam salvos?")).not.toBeInTheDocument();
     expect(screen.queryByText("Os recursos pertencem ao Informática Explorer?")).not.toBeInTheDocument();
@@ -30,20 +30,20 @@ describe("AboutPage", () => {
     expect(screen.getAllByRole("group")).toHaveLength(7);
   });
 
-  it("oferece atalhos para o Acervo e Meus Materiais", () => {
+  it("oferece atalhos para Buscar Materiais e Trilhas Prontas", () => {
     render(
       <MemoryRouter>
         <AboutPage />
       </MemoryRouter>,
     );
 
-    expect(screen.getByRole("link", { name: /explorar o acervo/i })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /buscar materiais/i })).toHaveAttribute(
       "href",
-      "/app/acervo",
+      "/app/trilha-de-ensino",
     );
-    expect(screen.getByRole("link", { name: /acessar meus materiais/i })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /explorar trilhas prontas/i })).toHaveAttribute(
       "href",
-      "/app/pastas",
+      "/app/trilhas-prontas",
     );
   });
 });

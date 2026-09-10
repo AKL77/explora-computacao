@@ -28,7 +28,7 @@ export function ResourceCard({
   return (
     <article className={styles.card}>
       <Link
-        to={`/app/acervo/${resource.slug}`}
+        to={`/app/materiais/${resource.slug}`}
         state={{ from: `${location.pathname}${location.search}` }}
         className={styles.cardLink}
         aria-label={`Ver detalhes de ${resource.title}`}

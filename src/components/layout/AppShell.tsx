@@ -5,13 +5,10 @@ import {
   type KeyboardEvent,
 } from "react";
 import {
+  BookOpenCheck,
   CircleHelp,
-  FolderHeart,
-  GraduationCap,
-  LibraryBig,
   LogOut,
   Menu,
-  NotebookTabs,
   Route,
   Waypoints,
   UserRound,
@@ -23,41 +20,34 @@ import { useSessionStore } from "@/store/useSessionStore";
 import styles from "./AppShell.module.css";
 
 const navigationItems = [
-  { to: "", label: "Meu perfil", icon: UserRound, disabled: true },
-  { to: "/app/acervo", label: "Acervo", icon: LibraryBig, future: false },
-  { to: "/app/pastas", label: "Meus Materiais", icon: FolderHeart, future: false },
-  { to: "", label: "Minhas Turmas", icon: GraduationCap, disabled: true },
-  {
-    to: "",
-    label: "Meus Planos de Aula",
-    icon: NotebookTabs,
-    disabled: true,
-  },
+  { to: "/app/perfil", label: "Meu perfil", icon: UserRound },
   {
     to: "/app/trilha-de-ensino",
-    label: "Criar Trilha de Ensino",
+    label: "Buscar Materiais",
     icon: Route,
-    future: false,
   },
+  { to: "/app/trilhas-prontas", label: "Trilhas Prontas", icon: BookOpenCheck },
   {
     to: "/app/minhas-trilhas",
     label: "Minhas Trilhas",
     icon: Waypoints,
-    future: false,
   },
-  { to: "/app/sobre", label: "Sobre", icon: CircleHelp, future: false },
+  { to: "/app/sobre", label: "Sobre", icon: CircleHelp },
 ] as const;
 
 function getPageTitle(pathname: string) {
   if (pathname.startsWith("/app/pastas/")) return "Conteúdo da pasta";
   if (pathname === "/app/pastas") return "Meus Materiais";
-  if (pathname.startsWith("/app/acervo/")) return "Detalhe do recurso";
-  if (pathname === "/app/acervo") return "Acervo";
+  if (pathname.startsWith("/app/materiais/") || pathname.startsWith("/app/acervo/")) {
+    return "Detalhe do material";
+  }
+  if (pathname === "/app/acervo") return "Buscar Materiais";
   if (pathname === "/app/perfil") return "Meu perfil";
   if (pathname.startsWith("/app/planos/")) return "Editar Plano de Aula";
   if (pathname === "/app/planos") return "Meus Planos de Aula";
   if (pathname === "/app/plano-de-aula") return "Criar Plano de Aula";
-  if (pathname === "/app/trilha-de-ensino") return "Criar Trilha de Ensino";
+  if (pathname === "/app/trilha-de-ensino") return "Buscar Materiais";
+  if (pathname === "/app/trilhas-prontas") return "Trilhas Prontas";
   if (pathname === "/app/minhas-trilhas") return "Minhas Trilhas";
   if (pathname === "/app/sobre") return "Sobre";
   return "Informática Explorer";
@@ -136,7 +126,7 @@ export function AppShell() {
       <a className="skip-link" href="#main-content">Pular para o conteúdo</a>
 
       <header className={styles.mobileHeader}>
-        <Brand compact />
+        <Brand compact to="/app/trilha-de-ensino" />
         <span className={styles.mobileTitle}>{getPageTitle(location.pathname)}</span>
         <button
           ref={menuButtonRef}
@@ -167,37 +157,21 @@ export function AppShell() {
         onKeyDown={handleMenuKeyDown}
       >
         <div className={styles.brandArea}>
-          <Brand inverted to="/app/acervo" />
+          <Brand inverted to="/app/trilha-de-ensino" />
         </div>
 
         <nav className={styles.nav} aria-label="Navegação principal">
-          {navigationItems.map(({ to, label, icon: Icon, ...item }) =>
-            "disabled" in item && item.disabled ? (
-              <button
-                key={label}
-                className={`${styles.navLink} ${styles.disabledNavItem}`}
-                type="button"
-                disabled
-                aria-disabled="true"
-              >
-                <Icon aria-hidden="true" size={21} />
-                <span>{label}</span>
-              </button>
-            ) : (
-              <NavLink
-                key={to}
-                className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ""}`}
-                to={to}
-                onClick={() => closeMenu()}
-              >
-                <Icon aria-hidden="true" size={21} />
-                <span>{label}</span>
-                {"future" in item && item.future ? (
-                  <span className={styles.futureBadge}>Em breve</span>
-                ) : null}
-              </NavLink>
-            ),
-          )}
+          {navigationItems.map(({ to, label, icon: Icon }) => (
+            <NavLink
+              key={to}
+              className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ""}`}
+              to={to}
+              onClick={() => closeMenu()}
+            >
+              <Icon aria-hidden="true" size={21} />
+              <span>{label}</span>
+            </NavLink>
+          ))}
         </nav>
 
         <div className={styles.sidebarFooter}>

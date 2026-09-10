@@ -78,7 +78,7 @@ export function LandingPage() {
 
           <nav className={styles.siteNav} aria-label="Navegação principal">
             <a href="#projeto" onClick={handleSectionLink("projeto")}>O projeto</a>
-            <a href="#acervo" onClick={handleSectionLink("acervo")}>Acervo</a>
+            <a href="#acervo" onClick={handleSectionLink("acervo")}>Materiais</a>
             <a
               href="#trilhas-de-ensino"
               onClick={handleSectionLink("trilhas-de-ensino")}
@@ -87,7 +87,7 @@ export function LandingPage() {
             </a>
           </nav>
 
-          <Link className={styles.signInLink} to="/app/acervo" onClick={signIn}>
+          <Link className={styles.signInLink} to="/app/trilha-de-ensino" onClick={signIn}>
             Entrar
           </Link>
 
@@ -120,7 +120,7 @@ export function LandingPage() {
                 href="#acervo"
                 onClick={handleSectionLink("acervo", true)}
               >
-                Acervo
+                Materiais
               </a>
               <a
                 href="#trilhas-de-ensino"
@@ -150,7 +150,7 @@ export function LandingPage() {
             <h1 id="titulo-principal">Explore. Planeje. Ensine.</h1>
             <p className={styles.heroDescription}>
               O Informática Explorer organiza recursos e apoia a criação de trilhas de ensino
-              fundamentadas na BNCC Computação e em materiais curados do Acervo.
+              fundamentadas na BNCC Computação e em materiais selecionados.
             </p>
             <a
               className={styles.heroCta}
@@ -192,7 +192,7 @@ export function LandingPage() {
                 <span />
                 <span />
                 <span />
-                <div>Acervo</div>
+                <div>Materiais</div>
               </div>
               <div className={styles.mockupBody} aria-hidden="true">
                 <div className={styles.mockupSearch}>
@@ -268,7 +268,7 @@ export function LandingPage() {
             </div>
 
             <div className={styles.futureCopy}>
-              <h2 id="titulo-trilhas">Trilhas construídas a partir do Acervo</h2>
+              <h2 id="titulo-trilhas">Trilhas construídas a partir de materiais selecionados</h2>
               <p>
                 O docente informa o ano e o que deseja ensinar, conhece o objetivo de cada
                 recurso, o que os estudantes efetivamente farão e os materiais necessários.
@@ -297,8 +297,8 @@ export function LandingPage() {
 
           <nav className={styles.footerNav} aria-label="Navegação do rodapé">
             <a href="#projeto" onClick={handleSectionLink("projeto")}>O projeto</a>
-            <a href="#acervo" onClick={handleSectionLink("acervo")}>Acervo</a>
-            <Link to="/app/acervo" onClick={signIn}>Entrar</Link>
+            <a href="#acervo" onClick={handleSectionLink("acervo")}>Materiais</a>
+            <Link to="/app/trilha-de-ensino" onClick={signIn}>Entrar</Link>
           </nav>
 
           <div className={styles.footerMeta}>

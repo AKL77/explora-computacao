@@ -39,7 +39,7 @@ describe("SavedTeachingPathsPage", () => {
     await user.click(await screen.findByRole("button", { name: /Programação com blocos/i }));
 
     expect(screen.getByRole("heading", { name: "Programação com blocos", level: 1 })).toBeInTheDocument();
-    expect(screen.getByText("Construir uma base de programação em blocos.")).toBeInTheDocument();
+    expect(screen.getAllByText("Construir uma base de programação em blocos.")).not.toHaveLength(0);
     expect(screen.queryByText("Resultado da trilha")).not.toBeInTheDocument();
     expect(screen.getByText("Competências da BNCC relacionados")).toBeInTheDocument();
     expect(screen.getByText(/EF05CO04/)).toBeInTheDocument();
@@ -127,6 +127,27 @@ describe("SavedTeachingPathsPage", () => {
     ]);
   });
 
+  it("mantém nas trilhas os materiais recuperados do catálogo completo", async () => {
+    useTeachingPathsStore
+      .getState()
+      .createPath("Números binários", ["unicamp-desplugada-atividade-1"], {
+        objective: "Explorar a representação binária.",
+      });
+    const user = renderPage();
+
+    await user.click(await screen.findByRole("button", { name: /Números binários/i }));
+
+    const openMaterial = screen.getByRole("button", {
+      name: "Abrir planejamento de Contando os Pontos — Números Binários",
+    });
+    expect(openMaterial).toBeInTheDocument();
+    await user.click(openMaterial);
+    expect(
+      within(screen.getByRole("dialog", { name: "Contando os Pontos — Números Binários" }))
+        .getByText(/Cinco cartões de demonstração/),
+    ).toBeInTheDocument();
+  });
+
   it("edita objetivo, cor e ícone no rascunho antes de salvar", async () => {
     const saved = useTeachingPathsStore
       .getState()
@@ -145,7 +166,7 @@ describe("SavedTeachingPathsPage", () => {
     await user.click(within(dialog).getByRole("button", { name: "Usar ícone Alvo" }));
     await user.click(within(dialog).getByRole("button", { name: "Aplicar ao rascunho" }));
 
-    expect(screen.getByText("Objetivo revisado pela professora.")).toBeInTheDocument();
+    expect(screen.getAllByText("Objetivo revisado pela professora.")).not.toHaveLength(0);
     expect(useTeachingPathsStore.getState().getPath(saved?.id ?? "")?.backgroundColor).toBe("turquoise");
     await user.click(screen.getByRole("button", { name: "Salvar alterações" }));
     expect(useTeachingPathsStore.getState().getPath(saved?.id ?? "")).toMatchObject({
