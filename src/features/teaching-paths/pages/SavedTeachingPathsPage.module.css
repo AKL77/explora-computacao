@@ -21,6 +21,22 @@
   --trail-highlight: #f5f8ff;
 }
 
+.themeGreen {
+  --trail-accent: #047857;
+  --trail-accent-deep: #065f46;
+  --trail-soft: #dff7ec;
+  --trail-line: #79c9a6;
+  --trail-highlight: #f2fcf7;
+}
+
+.themeIndigo {
+  --trail-accent: #4338ca;
+  --trail-accent-deep: #3730a3;
+  --trail-soft: #e8e9ff;
+  --trail-line: #a5a7ee;
+  --trail-highlight: #f7f7ff;
+}
+
 .themeViolet {
   --trail-accent: #7c3aed;
   --trail-accent-deep: #6d28d9;
@@ -38,8 +54,8 @@
 }
 
 .themeCoral {
-  --trail-accent: #dc5b4e;
-  --trail-accent-deep: #b94036;
+  --trail-accent: #c24134;
+  --trail-accent-deep: #9f2f26;
   --trail-soft: #ffe9e5;
   --trail-line: #f3aaa1;
   --trail-highlight: #fff8f7;
@@ -234,15 +250,16 @@
 .pathCardContent > span:not(.cardLabel) {
   display: -webkit-box;
   overflow: hidden;
-  color: var(--text-muted);
+  color: #294453;
   font-size: 0.87rem;
+  font-weight: 620;
   line-height: 1.45;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
 
 .pathCardContent small {
-  color: var(--text-muted);
+  color: #405866;
   font-size: 0.74rem;
   line-height: 1.4;
 }
@@ -641,7 +658,20 @@
 }
 
 .catalogLink {
+  min-height: 2.75rem;
+  padding: 0.62rem 0.9rem;
   margin: 1rem;
+  color: var(--brand-navy) !important;
+  background: var(--brand-yellow-soft);
+  border: 1px solid #d7aa00;
+  box-shadow: 0 2px 8px rgb(8 47 73 / 10%);
+  transition: background 150ms ease, border-color 150ms ease, transform 150ms ease;
+}
+
+.catalogLink:hover {
+  background: #ffe477;
+  border-color: #b98c00;
+  transform: translateY(-1px);
 }
 
 .settingsForm {
@@ -723,6 +753,14 @@
 
 .colorBlue {
   --option-color: #2563eb;
+}
+
+.colorGreen {
+  --option-color: #047857;
+}
+
+.colorIndigo {
+  --option-color: #4338ca;
 }
 
 .colorViolet {
@@ -1044,7 +1082,7 @@
   grid-template-columns: minmax(0, 1fr);
   align-items: stretch;
   justify-items: stretch;
-  gap: 0;
+  gap: 1rem;
   margin-top: 0;
 }
 
@@ -1055,6 +1093,17 @@
   grid-template-columns: 2.55rem minmax(0, 1fr);
   column-gap: 0.9rem;
   width: 100%;
+}
+
+.connectedStep::after {
+  position: absolute;
+  z-index: 0;
+  top: 2.8rem;
+  bottom: -1.25rem;
+  left: 1.225rem;
+  width: 2px;
+  background: linear-gradient(var(--trail-accent), var(--brand-yellow));
+  content: "";
 }
 
 .stepNumber {
@@ -1306,9 +1355,16 @@
     grid-template-columns: 1fr;
   }
 
-  .stepNumber,
   .pathConnector {
     display: none;
+  }
+
+  .connectedStep::after {
+    display: none;
+  }
+
+  .stepNumber {
+    margin-bottom: -0.25rem;
   }
 
   .stepCard,

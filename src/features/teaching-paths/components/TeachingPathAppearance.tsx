@@ -1,6 +1,8 @@
 import {
   BookOpenCheck,
   Flag,
+  Lightbulb,
+  Puzzle,
   Route,
   Sparkles,
   Target,
@@ -15,6 +17,8 @@ const iconComponents = {
   target: Target,
   sparkles: Sparkles,
   flag: Flag,
+  lightbulb: Lightbulb,
+  puzzle: Puzzle,
 } as const;
 
 interface TeachingPathIconGlyphProps extends Omit<LucideProps, "ref"> {

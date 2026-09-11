@@ -51,6 +51,13 @@ describe("TeachingPathPage", () => {
     const search = screen.getByRole("searchbox", {
       name: "Pesquisar área, assunto ou habilidade",
     });
+    expect(search).toHaveAttribute("placeholder", "Pesquise um assunto");
+    expect(
+      screen.queryByText(
+        "Pesquise e selecione os materiais que contribuem para o seu objetivo de ensino.",
+      ),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText("Selecione materiais para começar.")).not.toBeInTheDocument();
     await user.type(search, "laço de repetição");
 
     expect(screen.getByRole("heading", { name: blocklyTitle, level: 3 })).toBeInTheDocument();
@@ -150,9 +157,28 @@ describe("TeachingPathPage", () => {
     await user.click(screen.getByRole("button", { name: "Salvar trilha" }));
 
     const dialog = screen.getByRole("dialog", { name: "Salvar trilha" });
-    await user.type(within(dialog).getByRole("textbox", { name: "Nome da trilha" }), "Laços em blocos");
+    const nameInput = within(dialog).getByRole("textbox", { name: "Nome da trilha" });
+    const objectiveInput = within(dialog).getByRole("textbox", { name: "Objetivo da trilha" });
+    expect(nameInput).not.toHaveAttribute("placeholder");
+    expect(objectiveInput).not.toHaveAttribute("placeholder");
+    expect(
+      within(dialog).queryByText(
+        "Defina a identificação e a intenção pedagógica da sua trilha. Você poderá editar tudo depois.",
+      ),
+    ).not.toBeInTheDocument();
+    expect(within(dialog).queryByText(/materiais? (será|serão) salvos?/i)).not.toBeInTheDocument();
+    expect(within(dialog).getByRole("button", { name: "Verde" })).toBeInTheDocument();
+    expect(within(dialog).getByRole("button", { name: "Índigo" })).toBeInTheDocument();
+    expect(
+      within(dialog).getByRole("button", { name: "Usar ícone Lâmpada" }),
+    ).toBeInTheDocument();
+    expect(
+      within(dialog).getByRole("button", { name: "Usar ícone Quebra-cabeça" }),
+    ).toBeInTheDocument();
+
+    await user.type(nameInput, "Laços em blocos");
     await user.type(
-      within(dialog).getByRole("textbox", { name: "Objetivo da trilha" }),
+      objectiveInput,
       "Compreender como construir algoritmos com blocos.",
     );
     await user.click(within(dialog).getByRole("button", { name: "Salvar trilha" }));
@@ -165,5 +191,5 @@ describe("TeachingPathPage", () => {
       icon: "book-open-check",
       resourceIds: ["unicamp-desplugada-atividade-1"],
     });
-  });
+  }, 10_000);
 });

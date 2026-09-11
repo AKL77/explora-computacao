@@ -7,10 +7,8 @@ import {
 } from "react";
 import {
   ArrowDown,
-  BookOpenCheck,
   CheckCircle2,
   Menu,
-  Search,
   X,
 } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -22,6 +20,8 @@ import styles from "./LandingPage.module.css";
 
 const HERO_IMAGE_URL = publicAsset("images/hero-ufsm-campus-santa-maria.jpg");
 const RESOURCE_PLACEHOLDER_URL = publicAsset("branding/resource-placeholder.svg");
+const SEARCH_MATERIALS_PREVIEW_URL = publicAsset("images/interface/buscar-materiais.png");
+const READY_TRAILS_PREVIEW_URL = publicAsset("images/interface/trilhas-prontas.png");
 
 function handleImageError(event: SyntheticEvent<HTMLImageElement>) {
   const image = event.currentTarget;
@@ -185,33 +185,20 @@ export function LandingPage() {
         <section className={styles.catalogSection} id="acervo" aria-labelledby="titulo-acervo">
           <div className={`${styles.container} ${styles.splitLayout}`}>
             <figure className={styles.catalogMockup}>
-              <figcaption className={styles.visuallyHidden}>
-                Ilustração de um recurso organizado no acervo por turma e habilidade.
-              </figcaption>
-              <div className={styles.mockupToolbar} aria-hidden="true">
+              <div className={styles.previewToolbar} aria-hidden="true">
                 <span />
                 <span />
                 <span />
-                <div>Materiais</div>
+                <strong>Buscar Materiais</strong>
               </div>
-              <div className={styles.mockupBody} aria-hidden="true">
-                <div className={styles.mockupSearch}>
-                  <Search size={18} />
-                  <span>Buscar recursos</span>
-                </div>
-                <div className={styles.mockupFilters}>
-                  <span>Turma: 7º ano</span>
-                  <span>Habilidade: EF07CO09</span>
-                </div>
-                <article className={styles.mockupCard}>
-                  <img src={RESOURCE_PLACEHOLDER_URL} alt="" width="640" height="360" />
-                  <div>
-                    <span className={styles.mockupType}>Jogo educativo</span>
-                    <strong>Cyberbullying</strong>
-                    <small>Cultura Digital · 7º ano</small>
-                  </div>
-                </article>
-              </div>
+              <img
+                className={styles.interfaceScreenshot}
+                src={SEARCH_MATERIALS_PREVIEW_URL}
+                alt="Prévia da tela Buscar Materiais, com busca, filtros e materiais disponíveis."
+                width="1440"
+                height="960"
+                onError={handleImageError}
+              />
             </figure>
 
             <div className={styles.catalogCopy}>
@@ -248,24 +235,22 @@ export function LandingPage() {
           aria-labelledby="titulo-trilhas"
         >
           <div className={`${styles.container} ${styles.futureLayout}`}>
-            <div className={styles.futureVisual} aria-hidden="true">
-              <div className={styles.orbit} />
-              <div className={styles.futureCore}>
-                <BookOpenCheck size={38} strokeWidth={1.7} />
-                <strong>Trilha de ensino</strong>
-                <span>com base curada</span>
+            <figure className={styles.futureVisual}>
+              <div className={styles.previewToolbar} aria-hidden="true">
+                <span />
+                <span />
+                <span />
+                <strong>Trilhas Prontas</strong>
               </div>
-              <span className={`${styles.contextNode} ${styles.contextNodeTop}`}>
-                Objetivo
-              </span>
-              <span className={`${styles.contextNode} ${styles.contextNodeRight}`}>Materiais</span>
-              <span className={`${styles.contextNode} ${styles.contextNodeBottom}`}>
-                Ações
-              </span>
-              <span className={`${styles.contextNode} ${styles.contextNodeLeft}`}>
-                Ano escolar
-              </span>
-            </div>
+              <img
+                className={styles.interfaceScreenshot}
+                src={READY_TRAILS_PREVIEW_URL}
+                alt="Prévia da tela Trilhas Prontas, com o percurso Algoritmos: decisões, blocos e desafios."
+                width="1440"
+                height="960"
+                onError={handleImageError}
+              />
+            </figure>
 
             <div className={styles.futureCopy}>
               <h2 id="titulo-trilhas">Trilhas construídas a partir de materiais selecionados</h2>

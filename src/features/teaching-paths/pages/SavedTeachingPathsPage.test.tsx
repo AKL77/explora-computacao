@@ -41,8 +41,8 @@ describe("SavedTeachingPathsPage", () => {
     expect(screen.getByRole("heading", { name: "Programação com blocos", level: 1 })).toBeInTheDocument();
     expect(screen.getAllByText("Construir uma base de programação em blocos.")).not.toHaveLength(0);
     expect(screen.queryByText("Resultado da trilha")).not.toBeInTheDocument();
-    expect(screen.getByText("Competências da BNCC relacionados")).toBeInTheDocument();
-    expect(screen.getByText(/EF05CO04/)).toBeInTheDocument();
+    expect(screen.queryByText("Competências da BNCC relacionados")).not.toBeInTheDocument();
+    expect(screen.queryByText(/EF05CO04/)).not.toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Abrir planejamento de Blockly Games" }));
     const dialog = screen.getByRole("dialog", { name: "Blockly Games" });
@@ -162,8 +162,8 @@ describe("SavedTeachingPathsPage", () => {
     const objective = within(dialog).getByRole("textbox", { name: "Objetivo da trilha" });
     await user.clear(objective);
     await user.type(objective, "Objetivo revisado pela professora.");
-    await user.click(within(dialog).getByRole("button", { name: "Azul" }));
-    await user.click(within(dialog).getByRole("button", { name: "Usar ícone Alvo" }));
+    await user.click(within(dialog).getByRole("button", { name: "Verde" }));
+    await user.click(within(dialog).getByRole("button", { name: "Usar ícone Quebra-cabeça" }));
     await user.click(within(dialog).getByRole("button", { name: "Aplicar ao rascunho" }));
 
     expect(screen.getAllByText("Objetivo revisado pela professora.")).not.toHaveLength(0);
@@ -171,8 +171,8 @@ describe("SavedTeachingPathsPage", () => {
     await user.click(screen.getByRole("button", { name: "Salvar alterações" }));
     expect(useTeachingPathsStore.getState().getPath(saved?.id ?? "")).toMatchObject({
       objective: "Objetivo revisado pela professora.",
-      backgroundColor: "blue",
-      icon: "target",
+      backgroundColor: "green",
+      icon: "puzzle",
     });
   });
 });

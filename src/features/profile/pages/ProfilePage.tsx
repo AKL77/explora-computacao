@@ -12,7 +12,6 @@ export function ProfilePage() {
       <header className={styles.header}>
         <p className={styles.eyebrow}>Sua área</p>
         <h1>Meu perfil</h1>
-        <p>Consulte sua sessão e acesse rapidamente as principais áreas de trabalho.</p>
       </header>
 
       <section className={styles.profileCard} aria-labelledby="profile-name">

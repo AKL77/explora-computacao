@@ -207,9 +207,20 @@
 
 .saveButton {
   margin-left: auto;
+  color: #fff;
+  background: var(--brand-blue);
+  border: 1px solid var(--brand-blue);
+  cursor: pointer;
+}
+
+.saveButton:hover:not(:disabled) {
+  background: var(--brand-blue-hover);
+}
+
+.saveButton:disabled {
   color: #667780;
   background: #dce5e9;
-  border: 1px solid #dce5e9;
+  border-color: #dce5e9;
   cursor: not-allowed;
 }
 
@@ -575,6 +586,14 @@
 
 .colorBlue {
   --option-color: #2563eb;
+}
+
+.colorGreen {
+  --option-color: #047857;
+}
+
+.colorIndigo {
+  --option-color: #4338ca;
 }
 
 .colorViolet {

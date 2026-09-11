@@ -209,10 +209,6 @@ export function ReadyTeachingPathsPage() {
       <header className={styles.pageHeader}>
         <p className={styles.eyebrow}>Sequências selecionadas</p>
         <h1>Trilhas Prontas</h1>
-        <p>
-          Explore percursos organizados por conteúdo, com objetivos claros e materiais em uma
-          ordem pedagógica sugerida.
-        </p>
       </header>
 
       <section className={styles.discovery} aria-labelledby="discovery-title">

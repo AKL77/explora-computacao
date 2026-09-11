@@ -169,6 +169,10 @@ test("busca materiais com tags e seleciona uma trilha", async ({
   await expect(trail.getByText("Blockly Games")).toBeVisible();
   await expect(trail.getByText("Vinte Palpites — Teoria da Informação")).toBeVisible();
   await expect(trail.getByRole("button", { name: "Salvar trilha" })).toBeEnabled();
+  await expect(trail.getByRole("button", { name: "Salvar trilha" })).toHaveCSS(
+    "cursor",
+    "pointer",
+  );
   await expect(page.getByRole("button", { name: /mover .* para cima/i })).toHaveCount(0);
 
   await trail.getByRole("button", { name: "Salvar trilha" }).click();

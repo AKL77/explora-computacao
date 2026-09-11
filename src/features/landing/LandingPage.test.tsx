@@ -53,4 +53,19 @@ describe("LandingPage", () => {
     expect(screen.getByRole("heading", { name: "Direcionamento e praticidade" })).toBeVisible();
     expect(screen.queryByRole("heading", { name: "Buscar Materiais carregado" })).not.toBeInTheDocument();
   });
+
+  it("apresenta prévias reais de Buscar Materiais e Trilhas Prontas", () => {
+    renderLanding();
+
+    expect(
+      screen.getByRole("img", {
+        name: "Prévia da tela Buscar Materiais, com busca, filtros e materiais disponíveis.",
+      }),
+    ).toHaveAttribute("src", "/images/interface/buscar-materiais.png");
+    expect(
+      screen.getByRole("img", {
+        name: "Prévia da tela Trilhas Prontas, com o percurso Algoritmos: decisões, blocos e desafios.",
+      }),
+    ).toHaveAttribute("src", "/images/interface/trilhas-prontas.png");
+  });
 });

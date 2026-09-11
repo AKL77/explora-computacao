@@ -3,6 +3,8 @@ import type { LessonCount } from "@/domain/lessonPlan";
 export const TEACHING_PATH_BACKGROUND_COLORS = [
   "turquoise",
   "blue",
+  "green",
+  "indigo",
   "violet",
   "amber",
   "coral",
@@ -16,6 +18,8 @@ export const TEACHING_PATH_ICONS = [
   "target",
   "sparkles",
   "flag",
+  "lightbulb",
+  "puzzle",
 ] as const;
 
 export type TeachingPathIcon = (typeof TEACHING_PATH_ICONS)[number];

@@ -1,6 +1,7 @@
 import { type DragEvent, useMemo, useState } from "react";
 import {
   ArrowLeft,
+  ArrowRight,
   Clock3,
   GripVertical,
   ListChecks,
@@ -41,6 +42,8 @@ const lessonCounts: readonly LessonCount[] = [1, 2, 3];
 const themeClassNames: Record<TeachingPathBackgroundColor, string> = {
   turquoise: "themeTurquoise",
   blue: "themeBlue",
+  green: "themeGreen",
+  indigo: "themeIndigo",
   violet: "themeViolet",
   amber: "themeAmber",
   coral: "themeCoral",
@@ -49,6 +52,8 @@ const themeClassNames: Record<TeachingPathBackgroundColor, string> = {
 const colorOptionClassNames: Record<TeachingPathBackgroundColor, string> = {
   turquoise: "colorTurquoise",
   blue: "colorBlue",
+  green: "colorGreen",
+  indigo: "colorIndigo",
   violet: "colorViolet",
   amber: "colorAmber",
   coral: "colorCoral",
@@ -189,7 +194,6 @@ export function SavedTeachingPathsPage() {
     [draft, resources],
   );
   const currentResourceIds = draft ? activeResourceIds(draft) : [];
-  const activePathResources = pathResources.filter((item) => currentResourceIds.includes(item.resourceId));
   const preview = pathResources.find((item) => item.resourceId === previewResourceId) ?? null;
   const allLessonCountsDefined =
     draft !== null &&
@@ -204,13 +208,6 @@ export function SavedTeachingPathsPage() {
     ? currentResourceIds.filter((resourceId) => draft.lessonCountsByResourceId[resourceId] === undefined)
         .length
     : 0;
-  const curriculumCodes = Array.from(
-    new Set(
-      activePathResources.flatMap((item) =>
-        getRelevantAlignments(item).map((alignment) => alignment.skill.code),
-      ),
-    ),
-  );
   const hasUnsavedChanges = selectedPath !== null && draft !== null && isDraftDirty(selectedPath, draft);
 
   const updateDraft = (updater: (current: TeachingPathDraft) => TeachingPathDraft) => {
@@ -486,7 +483,7 @@ export function SavedTeachingPathsPage() {
           const isDropTarget = dropTargetId === item.resourceId && !isDragging;
           return (
             <li
-              className={`${styles.pathStep} ${isPendingRemoval ? styles.pendingRemoval : ""} ${isDragging ? styles.dragging : ""} ${isDropTarget ? styles.dropTarget : ""}`}
+              className={`${styles.pathStep} ${index < pathResources.length - 1 ? styles.connectedStep : ""} ${isPendingRemoval ? styles.pendingRemoval : ""} ${isDragging ? styles.dragging : ""} ${isDropTarget ? styles.dropTarget : ""}`}
               key={item.resourceId}
               draggable={!isPendingRemoval}
               onDragStart={(event) => handleDragStart(event, item.resourceId)}
@@ -557,28 +554,10 @@ export function SavedTeachingPathsPage() {
                   )}
                 </div>
               </article>
-              <div className={styles.pathConnector} aria-hidden="true">
-                <span className={styles.connectorRoute} />
-              </div>
             </li>
           );
         })}
 
-        <li className={styles.finalStep}>
-          <span className={styles.finalIcon} aria-hidden="true">
-            <TeachingPathIconGlyph icon={draft.icon} size={38} strokeWidth={2.1} />
-          </span>
-          <div>
-            <h2>{draft.name}</h2>
-            <p className={styles.finalObjective}>{draft.objective}</p>
-            {curriculumCodes.length > 0 ? (
-              <div className={styles.curriculumSummary}>
-                <strong>Competências da BNCC relacionados</strong>
-                <span>{curriculumCodes.join(" · ")}</span>
-              </div>
-            ) : null}
-          </div>
-        </li>
       </ol>
 
       <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">{announcement}</p>
@@ -677,7 +656,7 @@ export function SavedTeachingPathsPage() {
               to={`/app/materiais/${preview.resource.slug}`}
               state={{ from: "/app/minhas-trilhas" }}
             >
-              Ver material completo
+              Ver material completo <ArrowRight aria-hidden="true" size={17} />
             </Link>
           </article>
         ) : null}

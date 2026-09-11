@@ -58,6 +58,8 @@ const teachingApproachLabels: Record<TeachingApproach, string> = {
 const colorOptionClassNames: Record<TeachingPathBackgroundColor, string> = {
   turquoise: "colorTurquoise",
   blue: "colorBlue",
+  green: "colorGreen",
+  indigo: "colorIndigo",
   violet: "colorViolet",
   amber: "colorAmber",
   coral: "colorCoral",
@@ -238,10 +240,6 @@ export function TeachingPathPage() {
       <header className={styles.pageHeader}>
         <p className={styles.eyebrow}>Planejamento por materiais</p>
         <h1>Buscar Materiais</h1>
-        <p>
-          Pesquise e selecione os materiais que contribuem
-          para o seu objetivo de ensino.
-        </p>
       </header>
 
       <section className={styles.searchSurface} aria-labelledby="discovery-title">
@@ -263,7 +261,7 @@ export function TeachingPathPage() {
           <input
             id="teaching-path-query"
             type="search"
-            placeholder="Pesquise um assunto, como laço de repetição"
+            placeholder="Pesquise um assunto"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
           />
@@ -355,11 +353,9 @@ export function TeachingPathPage() {
           </span>
           <div>
             <h2 id="trail-title">Nova trilha em criação</h2>
-            <p>
-              {trail.length === 0
-                ? "Selecione materiais para começar."
-                : `${trail.length} ${trail.length === 1 ? "material selecionado" : "materiais selecionados"}.`}
-            </p>
+            {trail.length > 0 ? (
+              <p>{trail.length} {trail.length === 1 ? "material selecionado" : "materiais selecionados"}.</p>
+            ) : null}
           </div>
           <button
             className={styles.saveButton}
@@ -389,10 +385,6 @@ export function TeachingPathPage() {
             ))}
           </ul>
         ) : null}
-        <p className={styles.trailNote}>
-          Ao salvar, você poderá definir a duração de cada material e reorganizar a sequência em
-          Minhas Trilhas.
-        </p>
       </section>
 
       <section className={styles.results} aria-labelledby="results-title">
@@ -510,7 +502,6 @@ export function TeachingPathPage() {
       <AccessibleDialog
         open={isSaveDialogOpen}
         title="Salvar trilha"
-        description="Defina a identificação e a intenção pedagógica da sua trilha. Você poderá editar tudo depois."
         onClose={() => setIsSaveDialogOpen(false)}
         size="small"
       >
@@ -526,7 +517,6 @@ export function TeachingPathPage() {
             id="teaching-path-name"
             value={pathName}
             onChange={(event) => setPathName(event.target.value)}
-            placeholder="Ex.: Algoritmos com jogos e desafios"
             autoFocus
           />
           <label htmlFor="teaching-path-objective">Objetivo da trilha</label>
@@ -534,7 +524,6 @@ export function TeachingPathPage() {
             id="teaching-path-objective"
             value={pathObjective}
             onChange={(event) => setPathObjective(event.target.value)}
-            placeholder="Ex.: Desenvolver a compreensão de algoritmos com jogos e desafios."
             maxLength={500}
             required
           />
@@ -573,7 +562,6 @@ export function TeachingPathPage() {
               ))}
             </div>
           </fieldset>
-          <p>{trail.length} {trail.length === 1 ? "material será salvo." : "materiais serão salvos."}</p>
           <div className={styles.dialogActions}>
             <button type="button" onClick={() => setIsSaveDialogOpen(false)}>Cancelar</button>
             <button type="submit" disabled={pathName.trim().length === 0 || pathObjective.trim().length === 0}>Salvar trilha</button>

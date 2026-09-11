@@ -20,6 +20,9 @@ describe("ProfilePage", () => {
     );
 
     expect(screen.getByRole("heading", { name: "Meu perfil", level: 1 })).toBeVisible();
+    expect(
+      screen.queryByText("Consulte sua sessão e acesse rapidamente as principais áreas de trabalho."),
+    ).not.toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Usuário demo", level: 2 })).toBeVisible();
     expect(screen.getByText("0")).toBeVisible();
     expect(screen.getByRole("link", { name: /Buscar Materiais/ })).toHaveAttribute(

@@ -121,7 +121,6 @@ export function AboutPage() {
         <div className={styles.sectionHeading}>
           <p className={styles.sectionLabel}>Dúvidas frequentes</p>
           <h2 id="faq-title">Perguntas e respostas</h2>
-          <p>Orientações rápidas para aproveitar os recursos disponíveis nesta versão.</p>
         </div>
 
         <div className={styles.questionList}>
