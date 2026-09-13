@@ -4,6 +4,8 @@ import {
   Check,
   Clock3,
   CopyPlus,
+  Network,
+  ShieldCheck,
 } from "lucide-react";
 import { useEffect, useMemo, useState, type ComponentType } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -11,8 +13,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { CatalogStatus } from "@/features/catalog/components/CatalogStatus";
 import { RESOURCE_PLACEHOLDER, typeLabels } from "@/features/catalog/components/resourcePresentation";
 import { useCatalogResources } from "@/features/catalog/hooks/useCatalog";
-import { pilotTeachingResources } from "@/features/teaching-paths/data/pilotTeachingResources";
 import type { Resource } from "@/domain/resource";
+import type {
+  TeachingPathBackgroundColor,
+  TeachingPathIcon,
+} from "@/domain/savedTeachingPath";
 import { useTeachingPathsStore } from "@/store/useTeachingPathsStore";
 import styles from "./ReadyTeachingPathsPage.module.css";
 
@@ -28,6 +33,22 @@ interface TrailPreview {
   icon: ComponentType<{ size?: number; "aria-hidden"?: "true" }>;
 }
 
+interface ReadyPathStage {
+  resourceId: string;
+  label: string;
+  title: string;
+  description: string;
+  objective: string;
+}
+
+interface ReadyPath extends TrailPreview {
+  objective: string;
+  journeyTitle: string;
+  backgroundColor: TeachingPathBackgroundColor;
+  savedIcon: TeachingPathIcon;
+  stages: readonly ReadyPathStage[];
+}
+
 const categories: readonly TrailCategory[] = [
   "Todas",
   "Pensamento Computacional",
@@ -35,7 +56,7 @@ const categories: readonly TrailCategory[] = [
   "Cultura Digital",
 ];
 
-const trailPreviews: readonly TrailPreview[] = [
+const readyPaths: readonly ReadyPath[] = [
   {
     id: "algoritmos-decisoes-blocos-desafios",
     name: "Algoritmos: decisões, blocos e desafios",
@@ -44,60 +65,133 @@ const trailPreviews: readonly TrailPreview[] = [
     grades: "5º ano",
     lessons: 3,
     icon: Braces,
+    objective:
+      "Compreender como algoritmos organizam decisões e sequências, avançando de uma experiência desplugada para a programação em blocos e um desafio integrado.",
+    journeyTitle: "Da decisão à construção de algoritmos",
+    backgroundColor: "amber",
+    savedIcon: "sparkles",
+    stages: [
+      {
+        resourceId: "unicamp-desplugada-atividade-5",
+        label: "Descobrir",
+        title: "Decisões com perguntas de sim ou não",
+        description:
+          "A turma experimenta uma estratégia desplugada e percebe como cada decisão reduz as possibilidades.",
+        objective: "Usar perguntas de “sim” ou “não” para compreender bits e decisões.",
+      },
+      {
+        resourceId: "google-blockly-games",
+        label: "Experimentar",
+        title: "Algoritmos visuais com blocos",
+        description:
+          "Os estudantes resolvem desafios progressivos e aplicam sequências, laços e condicionais.",
+        objective: "Construir algoritmos visuais com blocos, laços e condicionais.",
+      },
+      {
+        resourceId: "rozelma-sertao-bit",
+        label: "Aplicar",
+        title: "Desafios em uma narrativa brasileira",
+        description:
+          "A aprendizagem é consolidada em problemas de decomposição, padrões e construção de algoritmos.",
+        objective: "Resolver desafios para exercitar algoritmos e decomposição.",
+      },
+    ],
+  },
+  {
+    id: "mensagens-sem-erro-paridade-protocolos",
+    name: "Mensagens sem erro: paridade e protocolos",
+    summary: "Uma investigação sobre como redes detectam falhas e reconstroem mensagens.",
+    category: "Mundo Digital",
+    grades: "6º ano",
+    lessons: 2,
+    icon: Network,
+    objective:
+      "Compreender como informações são verificadas, organizadas e recuperadas quando ocorrem erros durante uma transmissão.",
+    journeyTitle: "Do erro localizado à mensagem reconstruída",
+    backgroundColor: "indigo",
+    savedIcon: "puzzle",
+    stages: [
+      {
+        resourceId: "unicamp-desplugada-atividade-4",
+        label: "Detectar",
+        title: "Encontrando um erro com paridade",
+        description:
+          "Ao virar uma carta em uma matriz, a turma usa padrões pares e ímpares para localizar a alteração.",
+        objective:
+          "Identificar como bits de paridade permitem localizar alterações em uma mensagem.",
+      },
+      {
+        resourceId: "unicamp-desplugada-atividade-13",
+        label: "Reconstruir",
+        title: "Criando regras para uma mensagem chegar inteira",
+        description:
+          "Com partes que podem atrasar, sumir ou chegar fora de ordem, a turma cria um protocolo para reconstruir a mensagem.",
+        objective:
+          "Criar regras para ordenar, confirmar e reenviar partes de uma mensagem.",
+      },
+    ],
+  },
+  {
+    id: "privacidade-armadilhas-online",
+    name: "Privacidade e armadilhas online",
+    summary: "Histórias e decisões práticas para proteger dados e reconhecer golpes na internet.",
+    category: "Cultura Digital",
+    grades: "4º e 5º anos",
+    lessons: 2,
+    icon: ShieldCheck,
+    objective:
+      "Analisar o que pode ser compartilhado na internet e reconhecer sinais de mensagens, links e situações enganosas.",
+    journeyTitle: "Das escolhas pessoais à identificação de armadilhas",
+    backgroundColor: "green",
+    savedIcon: "flag",
+    stages: [
+      {
+        resourceId: "rozelma-aventuras-digitais",
+        label: "Analisar",
+        title: "O que deve permanecer privado?",
+        description:
+          "A turma discute situações das histórias e identifica dados pessoais, riscos de exposição e escolhas responsáveis de compartilhamento.",
+        objective:
+          "Distinguir informações pessoais e avaliar riscos antes de compartilhar conteúdo.",
+      },
+      {
+        resourceId: "google-interland",
+        label: "Praticar",
+        title: "Reconhecendo golpes e decisões arriscadas",
+        description:
+          "Em desafios do Interland, os estudantes testam decisões sobre phishing, informações enganosas e compartilhamento.",
+        objective:
+          "Reconhecer sinais de phishing, informações enganosas e escolhas inseguras em ambientes digitais.",
+      },
+    ],
   },
 ] as const;
-
-const readyPath = {
-  name: "Algoritmos: decisões, blocos e desafios",
-  objective:
-    "Compreender como algoritmos organizam decisões e sequências, avançando de uma experiência desplugada para a programação em blocos e um desafio integrado.",
-  resourceIds: [
-    "unicamp-desplugada-atividade-5",
-    "google-blockly-games",
-    "rozelma-sertao-bit",
-  ],
-  stages: [
-    {
-      label: "Descobrir",
-      title: "Decisões com perguntas de sim ou não",
-      description:
-        "A turma experimenta uma estratégia desplugada e percebe como cada decisão reduz as possibilidades.",
-    },
-    {
-      label: "Experimentar",
-      title: "Algoritmos visuais com blocos",
-      description:
-        "Os estudantes resolvem desafios progressivos e aplicam sequências, laços e condicionais.",
-    },
-    {
-      label: "Aplicar",
-      title: "Desafios em uma narrativa brasileira",
-      description:
-        "A aprendizagem é consolidada em problemas de decomposição, padrões e construção de algoritmos.",
-    },
-  ],
-} as const;
 
 interface ReadyStage {
   resource: Resource;
   label: string;
   title: string;
   description: string;
+  objective: string;
 }
 
-function getReadyStages(resources: Resource[]): ReadyStage[] {
+function getReadyStages(resources: Resource[], readyPath: ReadyPath): ReadyStage[] {
   const resourcesById = new Map(resources.map((resource) => [resource.id, resource]));
-  return readyPath.resourceIds.flatMap((resourceId, index) => {
-    const resource = resourcesById.get(resourceId);
-    const stage = readyPath.stages[index];
+  return readyPath.stages.flatMap((stage) => {
+    const resource = resourcesById.get(stage.resourceId);
     return resource && stage ? [{ resource, ...stage }] : [];
   });
 }
 
-function hasSameResources(resourceIds: readonly string[]) {
+function getReadyPathResourceIds(readyPath: ReadyPath) {
+  return readyPath.stages.map((stage) => stage.resourceId);
+}
+
+function hasSameResources(readyPath: ReadyPath, resourceIds: readonly string[]) {
+  const readyResourceIds = getReadyPathResourceIds(readyPath);
   return (
-    resourceIds.length === readyPath.resourceIds.length &&
-    readyPath.resourceIds.every((resourceId, index) => resourceIds[index] === resourceId)
+    resourceIds.length === readyResourceIds.length &&
+    readyResourceIds.every((resourceId, index) => resourceIds[index] === resourceId)
   );
 }
 
@@ -114,6 +208,7 @@ function TrailCard({
   return (
     <article
       className={styles.trailCard}
+      data-category={trail.category}
       data-selected={selected || undefined}
     >
       <span className={styles.trailIcon} aria-hidden="true"><Icon size={23} /></span>
@@ -134,7 +229,7 @@ function TrailCard({
         type="button"
         aria-label={`Ver trilha ${trail.name}`}
         aria-expanded={selected}
-        aria-controls="trilha-algoritmos"
+        aria-controls="trilha-pronta-detalhe"
         onClick={() => onSelect(trail.id)}
       />
     </article>
@@ -150,39 +245,52 @@ export function ReadyTeachingPathsPage() {
   const [selectedCategory, setSelectedCategory] = useState<TrailCategory>("Todas");
   const [selectedTrailId, setSelectedTrailId] = useState<string | null>(null);
   const [announcement, setAnnouncement] = useState("");
-  const stages = useMemo(() => getReadyStages(resources), [resources]);
-  const filteredTrails = trailPreviews.filter(
+  const selectedReadyPath = readyPaths.find((trail) => trail.id === selectedTrailId) ?? null;
+  const stages = useMemo(
+    () => (selectedReadyPath ? getReadyStages(resources, selectedReadyPath) : []),
+    [resources, selectedReadyPath],
+  );
+  const filteredTrails = readyPaths.filter(
     (trail) => selectedCategory === "Todas" || trail.category === selectedCategory,
   );
-  const importedPath = paths.find(
-    (path) => path.name === readyPath.name && hasSameResources(path.resourceIds),
+  const importedPath = selectedReadyPath
+    ? paths.find(
+        (path) =>
+          path.name === selectedReadyPath.name && hasSameResources(selectedReadyPath, path.resourceIds),
+      )
+    : undefined;
+  const hasUnavailableMaterial = readyPaths.some(
+    (readyPath) => getReadyStages(resources, readyPath).length !== readyPath.stages.length,
   );
 
   useEffect(() => {
     if (!selectedTrailId) return;
-    const detail = document.getElementById("trilha-algoritmos");
+    const detail = document.getElementById("trilha-pronta-detalhe");
     if (detail && typeof detail.scrollIntoView === "function") {
       detail.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }, [selectedTrailId]);
 
   const copyReadyPath = () => {
+    if (!selectedReadyPath) return;
+
     if (importedPath) {
       navigate("/app/minhas-trilhas");
       return;
     }
 
-    const path = createPath(readyPath.name, readyPath.resourceIds, {
-      objective: readyPath.objective,
-      backgroundColor: "amber",
-      icon: "sparkles",
+    const resourceIds = getReadyPathResourceIds(selectedReadyPath);
+    const path = createPath(selectedReadyPath.name, resourceIds, {
+      objective: selectedReadyPath.objective,
+      backgroundColor: selectedReadyPath.backgroundColor,
+      icon: selectedReadyPath.savedIcon,
     });
     if (!path) return;
 
-    readyPath.resourceIds.forEach((resourceId) => {
+    resourceIds.forEach((resourceId) => {
       setResourceLessonCount(path.id, resourceId, 1);
     });
-    setAnnouncement(`A trilha “${readyPath.name}” foi adicionada a Minhas Trilhas.`);
+    setAnnouncement(`A trilha “${selectedReadyPath.name}” foi adicionada a Minhas Trilhas.`);
   };
 
   if (status === "loading") {
@@ -195,7 +303,7 @@ export function ReadyTeachingPathsPage() {
     );
   }
 
-  if (status === "error" || stages.length !== readyPath.resourceIds.length) {
+  if (status === "error" || hasUnavailableMaterial) {
     return (
       <CatalogStatus
         title="Não foi possível carregar as trilhas"
@@ -256,40 +364,50 @@ export function ReadyTeachingPathsPage() {
         )}
       </section>
 
-      {selectedTrailId === "algoritmos-decisoes-blocos-desafios" ? (
-        <article className={styles.readyPath} id="trilha-algoritmos" aria-labelledby="ready-path-title">
-        <header className={styles.pathHeader}>
-          <div className={styles.pathTitleBlock}>
-            <span className={styles.featuredLabel}>Disponível agora</span>
-            <h2 id="ready-path-title">Algoritmos: decisões, blocos e desafios</h2>
-            <p>{readyPath.objective}</p>
-            <div className={styles.metadata} aria-label="Informações da trilha">
-              <span>5º ano</span>
-              <span>Pensamento Computacional</span>
-              <span><Clock3 size={15} aria-hidden="true" /> 3 aulas sugeridas</span>
+      {selectedReadyPath ? (
+        <article
+          className={styles.readyPath}
+          id="trilha-pronta-detalhe"
+          aria-labelledby="ready-path-title"
+          data-category={selectedReadyPath.category}
+        >
+          <header className={styles.pathHeader}>
+            <div className={styles.pathTitleBlock}>
+              <span className={styles.featuredLabel}>Disponível agora</span>
+              <h2 id="ready-path-title">{selectedReadyPath.name}</h2>
+              <p>{selectedReadyPath.objective}</p>
+              <div className={styles.metadata} aria-label="Informações da trilha">
+                <span>{selectedReadyPath.grades}</span>
+                <span>{selectedReadyPath.category}</span>
+                <span>
+                  <Clock3 size={15} aria-hidden="true" /> {selectedReadyPath.lessons}{" "}
+                  {selectedReadyPath.lessons === 1 ? "aula sugerida" : "aulas sugeridas"}
+                </span>
+              </div>
             </div>
-          </div>
-          <button className={styles.copyButton} type="button" onClick={copyReadyPath}>
-            {importedPath ? <Check size={19} aria-hidden="true" /> : <CopyPlus size={19} aria-hidden="true" />}
-            {importedPath ? "Ver em Minhas Trilhas" : "Adicionar às Minhas Trilhas"}
-          </button>
-        </header>
+            <button className={styles.copyButton} type="button" onClick={copyReadyPath}>
+              {importedPath ? (
+                <Check size={19} aria-hidden="true" />
+              ) : (
+                <CopyPlus size={19} aria-hidden="true" />
+              )}
+              {importedPath ? "Ver em Minhas Trilhas" : "Adicionar às Minhas Trilhas"}
+            </button>
+          </header>
 
-        <section className={styles.pathBody} aria-labelledby="path-steps-title">
-          <div className={styles.stepsHeading}>
-            <div>
-              <p className={styles.eyebrow}>Percurso de aprendizagem</p>
-              <h3 id="path-steps-title">Da decisão à construção de algoritmos</h3>
+          <section className={styles.pathBody} aria-labelledby="path-steps-title">
+            <div className={styles.stepsHeading}>
+              <div>
+                <p className={styles.eyebrow}>Percurso de aprendizagem</p>
+                <h3 id="path-steps-title">{selectedReadyPath.journeyTitle}</h3>
+              </div>
+              <span>
+                {stages.length} {stages.length === 1 ? "etapa" : "etapas"}
+              </span>
             </div>
-            <span>{stages.length} etapas</span>
-          </div>
 
-          <ol className={styles.timeline} aria-label="Etapas da trilha pronta">
-            {stages.map((stage, index) => {
-              const teaching = pilotTeachingResources.find(
-                (item) => item.resourceId === stage.resource.id,
-              );
-              return (
+            <ol className={styles.timeline} aria-label="Etapas da trilha pronta">
+              {stages.map((stage, index) => (
                 <li key={stage.resource.id}>
                   <span className={styles.stepNumber} aria-hidden="true">{index + 1}</span>
                   <div className={styles.stageCard}>
@@ -305,11 +423,9 @@ export function ReadyTeachingPathsPage() {
                       <h4>{stage.title}</h4>
                       <p>{stage.description}</p>
                       <p className={styles.resourceName}>{stage.resource.title}</p>
-                      {teaching ? (
-                        <p className={styles.stageObjective}>
-                          <strong>Objetivo da etapa:</strong> {teaching.objective}
-                        </p>
-                      ) : null}
+                      <p className={styles.stageObjective}>
+                        <strong>Objetivo da etapa:</strong> {stage.objective}
+                      </p>
                       <Link
                         to={`/app/materiais/${stage.resource.slug}`}
                         state={{ from: "/app/trilhas-prontas" }}
@@ -319,10 +435,9 @@ export function ReadyTeachingPathsPage() {
                     </div>
                   </div>
                 </li>
-              );
-            })}
-          </ol>
-        </section>
+              ))}
+            </ol>
+          </section>
         </article>
       ) : null}
       <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">

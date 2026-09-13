@@ -47,6 +47,7 @@ describe("TeachingPathPage", () => {
       screen.getByRole("heading", { name: binaryNumbersTitle, level: 3 }),
     ).toBeInTheDocument();
     expect(screen.getByText("31 materiais", { exact: true })).toBeInTheDocument();
+    expect(screen.queryByText("Árvores Geradoras Mínimas", { exact: true })).not.toBeInTheDocument();
 
     const search = screen.getByRole("searchbox", {
       name: "Pesquisar área, assunto ou habilidade",

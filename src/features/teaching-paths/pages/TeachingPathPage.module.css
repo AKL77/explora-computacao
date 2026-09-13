@@ -379,12 +379,6 @@
   line-height: 1.3;
 }
 
-.topic {
-  margin: 0.2rem 0 0.7rem;
-  color: var(--text-muted);
-  font-size: 0.8rem;
-}
-
 .objective,
 .previewDetail {
   display: grid;

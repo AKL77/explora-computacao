@@ -117,6 +117,12 @@
 }
 
 .trailCard {
+  --ready-card-accent: #087e9c;
+  --ready-card-deep: #075985;
+  --ready-card-glow: rgb(250 204 21 / 0.26);
+  --ready-card-tint: #f5fbfc;
+  --ready-card-ring: rgb(8 145 178 / 0.14);
+
   position: relative;
   display: flex;
   min-width: 0;
@@ -128,15 +134,15 @@
   border-radius: var(--radius-md);
   color: inherit;
   background:
-    radial-gradient(circle at 105% -5%, rgb(34 211 238 / 0.17), transparent 11rem),
-    white;
+    radial-gradient(circle at 105% -5%, var(--ready-card-glow), transparent 11rem),
+    linear-gradient(150deg, #fff, var(--ready-card-tint));
   box-shadow: var(--shadow-sm);
   text-decoration: none;
   transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
 }
 
 .trailCard:hover {
-  border-color: var(--brand-cyan);
+  border-color: var(--ready-card-accent);
   box-shadow: var(--shadow-md);
   transform: translateY(-2px);
 }
@@ -147,8 +153,8 @@
 }
 
 .trailCard[data-selected="true"] {
-  border-color: var(--brand-cyan);
-  box-shadow: 0 0 0 2px rgb(8 145 178 / 14%), var(--shadow-md);
+  border-color: var(--ready-card-accent);
+  box-shadow: 0 0 0 2px var(--ready-card-ring), var(--shadow-md);
 }
 
 .cardOverlay {
@@ -166,10 +172,20 @@
   outline: none;
 }
 
-.trailCard:first-child {
-  background:
-    radial-gradient(circle at 100% 0, rgb(250 204 21 / 0.26), transparent 12rem),
-    linear-gradient(150deg, #fff, #f5fbfc);
+.trailCard[data-category="Mundo Digital"] {
+  --ready-card-accent: #4f46e5;
+  --ready-card-deep: #3730a3;
+  --ready-card-glow: rgb(99 102 241 / 0.18);
+  --ready-card-tint: #f7f7ff;
+  --ready-card-ring: rgb(79 70 229 / 0.14);
+}
+
+.trailCard[data-category="Cultura Digital"] {
+  --ready-card-accent: #059669;
+  --ready-card-deep: #047857;
+  --ready-card-glow: rgb(16 185 129 / 0.18);
+  --ready-card-tint: #f2fcf7;
+  --ready-card-ring: rgb(5 150 105 / 0.14);
 }
 
 .trailIcon {
@@ -179,7 +195,7 @@
   place-items: center;
   border-radius: 0.8rem;
   color: white;
-  background: linear-gradient(145deg, var(--brand-cyan), var(--brand-blue));
+  background: linear-gradient(145deg, var(--ready-card-accent), var(--ready-card-deep));
 }
 
 .trailCardBody {
@@ -189,7 +205,7 @@
 }
 
 .category {
-  color: var(--brand-cyan);
+  color: var(--ready-card-deep);
   font-size: 0.68rem;
   font-weight: 850;
   letter-spacing: 0.07em;
@@ -224,7 +240,7 @@
   align-items: center;
   padding: 0.2rem 0.45rem;
   border-radius: 999px;
-  color: var(--brand-blue);
+  color: var(--ready-card-deep);
   background: var(--surface-soft);
   font-size: 0.68rem;
   font-weight: 720;
@@ -242,7 +258,7 @@
 }
 
 .cardAction {
-  color: var(--brand-blue);
+  color: var(--ready-card-deep);
   text-decoration: none;
 }
 
@@ -251,6 +267,13 @@
 }
 
 .readyPath {
+  --ready-accent: #0891b2;
+  --ready-accent-deep: #075985;
+  --ready-header-deep: var(--brand-navy-deep);
+  --ready-header-end: var(--brand-blue);
+  --ready-header-glow: rgb(34 211 238 / 0.28);
+  --ready-soft-text: #cffafe;
+
   overflow: hidden;
   margin-top: 2rem;
   border: 1px solid var(--border-soft);
@@ -258,6 +281,24 @@
   background: var(--surface-card);
   box-shadow: var(--shadow-md);
   scroll-margin-top: 6.5rem;
+}
+
+.readyPath[data-category="Mundo Digital"] {
+  --ready-accent: #6366f1;
+  --ready-accent-deep: #4338ca;
+  --ready-header-deep: #25205f;
+  --ready-header-end: #4338ca;
+  --ready-header-glow: rgb(165 180 252 / 0.28);
+  --ready-soft-text: #e0e7ff;
+}
+
+.readyPath[data-category="Cultura Digital"] {
+  --ready-accent: #059669;
+  --ready-accent-deep: #047857;
+  --ready-header-deep: #063f36;
+  --ready-header-end: #047857;
+  --ready-header-glow: rgb(110 231 183 / 0.24);
+  --ready-soft-text: #d1fae5;
 }
 
 .pathHeader {
@@ -268,8 +309,8 @@
   padding: clamp(1.4rem, 4vw, 2.5rem);
   color: white;
   background:
-    radial-gradient(circle at 88% 10%, rgb(34 211 238 / 0.28), transparent 18rem),
-    linear-gradient(130deg, var(--brand-navy-deep), var(--brand-blue));
+    radial-gradient(circle at 88% 10%, var(--ready-header-glow), transparent 18rem),
+    linear-gradient(130deg, var(--ready-header-deep), var(--ready-header-end));
 }
 
 .copyButton {
@@ -340,7 +381,7 @@
   align-items: center;
   gap: 0.35rem;
   border-radius: 999px;
-  color: #cffafe;
+  color: var(--ready-soft-text);
   background: rgb(255 255 255 / 0.1);
   font-size: 0.72rem;
   font-weight: 700;
@@ -396,7 +437,7 @@
   bottom: -1.15rem;
   left: 1.2rem;
   width: 2px;
-  background: linear-gradient(var(--brand-cyan), var(--brand-yellow));
+  background: linear-gradient(var(--ready-accent), var(--brand-yellow));
   content: "";
 }
 
@@ -410,8 +451,8 @@
   border: 4px solid white;
   border-radius: 999px;
   color: white;
-  background: var(--brand-cyan);
-  box-shadow: 0 0 0 1px var(--brand-cyan);
+  background: var(--ready-accent);
+  box-shadow: 0 0 0 1px var(--ready-accent);
   font-size: 0.82rem;
   font-weight: 900;
 }
@@ -464,7 +505,7 @@
 }
 
 .resourceType {
-  color: var(--brand-cyan);
+  color: var(--ready-accent-deep);
   font-size: 0.7rem;
   font-weight: 850;
   letter-spacing: 0.08em;
@@ -506,7 +547,7 @@
   gap: 0.35rem;
   align-items: center;
   margin-top: 0.9rem;
-  color: var(--brand-blue);
+  color: var(--ready-accent-deep);
   font-size: 0.82rem;
   font-weight: 820;
   text-decoration: none;

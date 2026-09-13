@@ -86,7 +86,10 @@ test("abre o perfil e adiciona uma Trilha Pronta às trilhas pessoais", async ({
   await expect(page.getByRole("list", { name: "Etapas da trilha pronta" }).locator("li")).toHaveCount(3);
 
   await page.getByRole("button", { name: "Mundo Digital" }).click();
-  await expect(page.getByText("Nenhuma trilha disponível neste eixo por enquanto.")).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: /Ver trilha Mensagens sem erro: paridade e protocolos/ }),
+  ).toBeVisible();
+  await expect(page.getByText("Nenhuma trilha disponível neste eixo por enquanto.")).toHaveCount(0);
   await expect(page.getByText("Material do acervo")).toHaveCount(0);
 
   await page.getByRole("button", { name: "Todas" }).click();

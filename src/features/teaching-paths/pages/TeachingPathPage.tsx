@@ -429,13 +429,12 @@ export function TeachingPathPage() {
                     </div>
                     <div className={styles.resourceContent}>
                       <div className={styles.resourceIntro}>
-                      <div className={styles.badges}>
-                        <span>{typeLabels[resource.type]}</span>
-                        <span>{activityModeLabels[teaching.activityMode]}</span>
-                        <span>{teachingApproachLabels[teaching.teachingApproach]}</span>
-                      </div>
-                      <h3>{resource.title}</h3>
-                      <p className={styles.topic}>{resource.topic}</p>
+                        <div className={styles.badges}>
+                          <span>{typeLabels[resource.type]}</span>
+                          <span>{activityModeLabels[teaching.activityMode]}</span>
+                          <span>{teachingApproachLabels[teaching.teachingApproach]}</span>
+                        </div>
+                        <h3>{resource.title}</h3>
                         <p className={styles.objective}>
                           <strong>Objetivo</strong>
                           {teaching.objective}
