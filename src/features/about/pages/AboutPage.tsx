@@ -42,7 +42,7 @@ const questions = [
   {
     question: "Posso incluir novos materiais na plataforma?",
     answer:
-      "Não. Os usuários podem consultar, favoritar e organizar os materiais disponíveis.",
+      "Não nesta versão. Os materiais disponíveis são selecionados previamente, e o docente pode consultá-los e usá-los para montar suas trilhas.",
   },
 ] as const;
 

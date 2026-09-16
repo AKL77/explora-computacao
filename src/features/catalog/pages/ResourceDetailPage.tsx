@@ -14,10 +14,8 @@ import {
   getResourceAxes,
   getResourceSkills,
 } from "@/domain/resourceCurriculum";
-import { AddToFolderButton } from "@/features/folders/components/AddToFolderDialog";
 
 import { CatalogStatus } from "../components/CatalogStatus";
-import { FavoriteButton } from "../components/FavoriteButton";
 import {
   formatRecommendedGrades,
   RESOURCE_PLACEHOLDER,
@@ -226,8 +224,6 @@ export function ResourceDetailPage() {
             >
               Acessar recurso <span aria-hidden="true">↗</span>
             </a>
-            <FavoriteButton resourceId={resource.id} resourceTitle={resource.title} />
-            <AddToFolderButton resource={resource} />
           </div>
         </div>
       </header>

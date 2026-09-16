@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-import type { LessonCount } from "@/domain/lessonPlan";
 import {
   DEFAULT_TEACHING_PATH_BACKGROUND_COLOR,
   DEFAULT_TEACHING_PATH_ICON,
@@ -15,6 +14,7 @@ import {
   type TeachingPathIcon,
   type LocalTeachingPathsState,
   type SavedTeachingPath,
+  type TeachingPathLessonCount,
 } from "@/domain/savedTeachingPath";
 
 export const TEACHING_PATHS_STORAGE_KEY = "informatica-explorer:teaching-paths:v1";
@@ -32,7 +32,7 @@ export interface TeachingPathUpdate {
   readonly backgroundColor: TeachingPathBackgroundColor;
   readonly icon: TeachingPathIcon;
   readonly resourceIds: readonly string[];
-  readonly lessonCountsByResourceId: Readonly<Record<string, LessonCount | undefined>>;
+  readonly lessonCountsByResourceId: Readonly<Record<string, TeachingPathLessonCount | undefined>>;
 }
 
 export interface TeachingPathsStore extends LocalTeachingPathsState {
@@ -48,7 +48,7 @@ export interface TeachingPathsStore extends LocalTeachingPathsState {
   setResourceLessonCount: (
     pathId: string,
     resourceId: string,
-    lessonCount: LessonCount,
+    lessonCount: TeachingPathLessonCount,
   ) => boolean;
   getPath: (pathId: string) => SavedTeachingPath | undefined;
   clearPaths: () => void;
@@ -90,18 +90,18 @@ function hasUniqueNonEmptyResourceIds(resourceIds: readonly string[]): boolean {
   );
 }
 
-function isLessonCount(value: unknown): value is LessonCount | undefined {
+function isLessonCount(value: unknown): value is TeachingPathLessonCount | undefined {
   return value === undefined || value === 1 || value === 2 || value === 3;
 }
 
 function normalizeLessonCounts(
   resourceIds: readonly string[],
   lessonCountsByResourceId: unknown,
-): Record<string, LessonCount> | null {
+): Record<string, TeachingPathLessonCount> | null {
   if (!lessonCountsByResourceId || typeof lessonCountsByResourceId !== "object") return null;
 
   const counts = lessonCountsByResourceId as Record<string, unknown>;
-  const normalized: Record<string, LessonCount> = {};
+  const normalized: Record<string, TeachingPathLessonCount> = {};
 
   for (const resourceId of resourceIds) {
     if (!Object.hasOwn(counts, resourceId)) continue;

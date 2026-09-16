@@ -9,10 +9,10 @@ afterEach(cleanup);
 describe("AppShell", () => {
   it("apresenta somente as cinco opções atuais da navegação", () => {
     render(
-      <MemoryRouter initialEntries={["/app/acervo"]}>
+      <MemoryRouter initialEntries={["/app/trilha-de-ensino"]}>
         <Routes>
           <Route path="/app" element={<AppShell />}>
-            <Route path="acervo" element={<h1>Acervo</h1>} />
+            <Route path="trilha-de-ensino" element={<h1>Buscar Materiais</h1>} />
           </Route>
         </Routes>
       </MemoryRouter>,

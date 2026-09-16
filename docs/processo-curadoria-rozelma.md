@@ -108,10 +108,9 @@ licença de reutilização do jogo ou das imagens. Gratuidade de acesso não foi
 tratada como autorização de republicação, portanto o cadastro usa o placeholder.
 O currículo oficial é mantido como link complementar para o docente.
 
-## Efeito no criador de planos
+## Efeito no produto atual
 
-Nenhum dos cinco novos recursos foi tornado elegível automaticamente. Lua &
-Bit-Bit, Sertão.bit, Aventuras Digitais e Interland não informam duração; o
-material de cyberbullying informa apenas “3 aulas”. O Acervo continua exibindo
-e filtrando esses materiais, mas o planejador não converte essas ausências em
-tempos, etapas ou avaliações inventadas.
+Os cinco recursos aparecem em **Buscar Materiais** com os metadados que puderam
+ser confirmados nas fontes. A ausência de duração não impede a consulta nem o
+uso em trilhas: em **Minhas Trilhas**, o docente define explicitamente a duração
+de cada etapa. O sistema não inventa tempos ou informações ausentes.

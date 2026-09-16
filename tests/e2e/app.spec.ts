@@ -197,131 +197,21 @@ test("busca materiais com tags e seleciona uma trilha", async ({
   ).toBe(true);
 });
 
-test("cria, salva, pesquisa, edita e baixa um plano", async ({ page }) => {
+test("redireciona os endereços antigos para os fluxos atuais", async ({ page }) => {
   await enterDemo(page);
 
-  await page.goto(routeUrl("/app/plano-de-aula"));
-  await expect(
-    page.getByRole("heading", { name: "Criar Plano de Aula", level: 1 }),
-  ).toBeVisible();
-
-  await page.getByRole("textbox", { name: "Tema" }).fill(
-    "Algoritmos com Lightbot",
-  );
-  await page.getByRole("combobox", { name: "Ano escolar" }).selectOption("4");
-  await page.getByRole("combobox", { name: "Habilidade" }).selectOption("EF04CO03");
-  await expect(page.getByRole("option", { name: "Lightbot" })).toHaveCount(1);
-  await expect(page.getByRole("option", { name: "Blockly Games" })).toHaveCount(1);
-  await page
-    .getByRole("combobox", { name: "Material disponível" })
-    .selectOption("lightbot-web");
-  await expect(page.getByText(/Este material não possui objetivo sugerido/)).toBeVisible();
-  await page
-    .getByRole("textbox", { name: "Objetivo" })
-    .fill("Criar e testar algoritmos com sequências e repetições.");
-  await page.getByRole("radio", { name: /3 aulas/ }).check();
-  await page.getByRole("checkbox", { name: /Incluir avaliação/ }).check();
-  await page.getByRole("button", { name: "Montar plano" }).click();
-
-  await expect(
-    page.getByRole("heading", {
-      name: "Algoritmos com Lightbot",
-      level: 2,
-    }),
-  ).toBeFocused();
-  await expect(
-    page.getByText("4º ano · 3 aulas · 150 minutos", { exact: true }).first(),
-  ).toBeVisible();
-  await expect(page.getByRole("button", { name: "Em Blocos" })).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
-  const blockPlan = page.getByLabel("Visualização em blocos do plano");
-  for (const heading of ["Materiais", "BNCC", "Objetivo", "Metodologia", "Avaliação"]) {
-    await expect(blockPlan.getByRole("heading", { name: heading, exact: true })).toBeVisible();
-  }
-  await expect(blockPlan.getByText(/EF04CO03/)).toBeVisible();
-  await expect(blockPlan.getByText("Habilidade", { exact: true })).toHaveCount(0);
-  await expect(blockPlan.getByText("Eixo", { exact: true })).toHaveCount(0);
-  await expect(blockPlan.getByText("Competência", { exact: true })).toHaveCount(0);
-  await expect(page.getByText(/Lorem ipsum dolor sit amet/).first()).toBeVisible();
-  await expect(page.getByText("Objeto de conhecimento", { exact: true })).toHaveCount(0);
-  await expect(
-    page.getByText("35 min de atividade + 10 min de avaliação + 5 min de margem"),
-  ).toHaveCount(0);
-  await expect(blockPlan.getByRole("link", { name: /Lightbot/ })).toHaveAttribute(
-    "href",
-    "https://www.lightbot.lu/#/welcome",
-  );
-  await expect(page.getByRole("button", { name: /Trocar/ })).toHaveCount(0);
-
-  const blockPlanResults = await new AxeBuilder({ page }).analyze();
-  expect(blockPlanResults.violations).toEqual([]);
-
-  await page.getByRole("button", { name: "Descritivo" }).click();
-  await expect(
-    page.getByRole("heading", { name: "Desenvolvimento das aulas" }),
-  ).toBeVisible();
-  for (const lesson of [1, 2, 3]) {
-    await expect(page.getByRole("heading", { name: `Aula ${lesson}` })).toBeVisible();
-  }
-  const composedPlanResults = await new AxeBuilder({ page }).analyze();
-  expect(composedPlanResults.violations).toEqual([]);
-  expect(
-    await page.evaluate(
-      () => document.documentElement.scrollWidth <= document.documentElement.clientWidth,
-    ),
-  ).toBe(true);
-
-  await page.getByRole("button", { name: "Em Blocos" }).click();
-  await page.getByRole("button", { name: "Salvar plano" }).click();
-  await expect(page).toHaveURL(/\/app\/planos\/[^/]+\/editar$/);
-  await expect(
-    page.getByRole("heading", { name: "Editar Plano de Aula", level: 1 }),
-  ).toBeVisible();
-
-  await page.goto(routeUrl("/app/planos"));
-  await page.reload();
-  await page
-    .getByRole("searchbox", { name: "Pesquisar planos pelo nome" })
-    .fill("algoritmos");
-  await expect(
-    page.getByRole("heading", { name: "Algoritmos com Lightbot", level: 2 }),
-  ).toBeVisible();
-
-  const downloadPromise = page.waitForEvent("download");
-  await page.getByRole("button", { name: "Baixar PDF de Algoritmos com Lightbot" }).click();
-  const download = await downloadPromise;
-  expect(download.suggestedFilename()).toBe("plano-de-aula-algoritmos-com-lightbot.pdf");
-
-  await page.getByRole("link", { name: "Editar plano" }).click();
-  await page.getByRole("textbox", { name: "Tema" }).fill("Algoritmos revisados");
-  await expect(page.getByRole("button", { name: "Atualizar plano" })).toBeEnabled();
-  await page.getByRole("button", { name: "Atualizar plano" }).click();
-  await page.getByRole("button", { name: "Salvar alterações" }).click();
-  await expect(page.getByRole("status")).toContainText("Alterações salvas");
-
-  await page.goto(routeUrl("/app/plano-de-aula"));
-  await expect(
-    page.getByRole("heading", { name: "Criar Plano de Aula", level: 1 }),
-  ).toBeVisible();
-  await expect(page.getByRole("textbox", { name: "Tema" })).toHaveValue("");
-  await expect(page.getByRole("heading", { name: "Seu plano aparecerá aqui" })).toBeVisible();
-
-  await page.goto(routeUrl("/app/planos"));
-  await page
-    .getByRole("searchbox", { name: "Pesquisar planos pelo nome" })
-    .fill("revisados");
-  await expect(
-    page.getByRole("heading", { name: "Algoritmos revisados", level: 2 }),
-  ).toBeVisible();
-});
-
-test("redireciona o endereço antigo do Acervo para Buscar Materiais", async ({ page }) => {
-  await enterDemo(page);
   await page.goto(routeUrl("/app/acervo"));
   await expect(page).toHaveURL(/\/app\/trilha-de-ensino$/);
   await expect(page.getByRole("heading", { name: "Buscar Materiais", level: 1 })).toBeVisible();
+
+  await page.goto(routeUrl("/app/pastas/favoritos"));
+  await expect(page).toHaveURL(/\/app\/trilha-de-ensino$/);
+
+  await page.goto(routeUrl("/app/plano-de-aula"));
+  await expect(page).toHaveURL(/\/app\/trilha-de-ensino$/);
+
+  await page.goto(routeUrl("/app/planos"));
+  await expect(page).toHaveURL(/\/app\/minhas-trilhas$/);
 });
 
 test("mantém o detalhe responsivo e a navegação móvel operável por teclado", async ({
@@ -446,10 +336,8 @@ test("não apresenta violações automáticas graves de acessibilidade", async (
   const catalogResults = await new AxeBuilder({ page }).analyze();
   expect(catalogResults.violations).toEqual([]);
 
-  await page.goto(routeUrl("/app/plano-de-aula"));
-  await expect(
-    page.getByRole("heading", { name: "Criar Plano de Aula", level: 1 }),
-  ).toBeVisible();
-  const lessonPlanResults = await new AxeBuilder({ page }).analyze();
-  expect(lessonPlanResults.violations).toEqual([]);
+  await page.goto(routeUrl("/app/trilhas-prontas"));
+  await expect(page.getByRole("heading", { name: "Trilhas Prontas", level: 1 })).toBeVisible();
+  const readyTrailsResults = await new AxeBuilder({ page }).analyze();
+  expect(readyTrailsResults.violations).toEqual([]);
 });

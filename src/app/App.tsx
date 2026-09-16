@@ -3,12 +3,7 @@ import { NotFoundPage } from "@/components/NotFoundPage";
 import { AppShell } from "@/components/layout/AppShell";
 import { AboutPage } from "@/features/about";
 import { ResourceDetailPage } from "@/features/catalog";
-import { FolderDetailPage, FoldersPage } from "@/features/folders";
 import { LandingPage } from "@/features/landing";
-import {
-  LessonPlanPage,
-  SavedLessonPlansPage,
-} from "@/features/lesson-plans";
 import { SavedTeachingPathsPage, TeachingPathPage } from "@/features/teaching-paths";
 import { ProfilePage } from "@/features/profile";
 import { ReadyTeachingPathsPage } from "@/features/ready-teaching-paths";
@@ -35,14 +30,12 @@ export function App() {
       <Route path="/app" element={<ProtectedApp />}>
         <Route index element={<Navigate replace to="trilha-de-ensino" />} />
         <Route path="acervo" element={<Navigate replace to="/app/trilha-de-ensino" />} />
-        <Route path="acervo/:slug" element={<ResourceDetailPage />} />
+        <Route path="acervo/:slug" element={<Navigate replace to="/app/trilha-de-ensino" />} />
         <Route path="materiais/:slug" element={<ResourceDetailPage />} />
         <Route path="perfil" element={<ProfilePage />} />
-        <Route path="pastas" element={<FoldersPage />} />
-        <Route path="pastas/:folderId" element={<FolderDetailPage />} />
-        <Route path="planos" element={<SavedLessonPlansPage />} />
-        <Route path="planos/:planId/editar" element={<LessonPlanPage />} />
-        <Route path="plano-de-aula" element={<LessonPlanPage />} />
+        <Route path="pastas/*" element={<Navigate replace to="/app/trilha-de-ensino" />} />
+        <Route path="planos/*" element={<Navigate replace to="/app/minhas-trilhas" />} />
+        <Route path="plano-de-aula" element={<Navigate replace to="/app/trilha-de-ensino" />} />
         <Route path="trilha-de-ensino" element={<TeachingPathPage />} />
         <Route path="trilhas-prontas" element={<ReadyTeachingPathsPage />} />
         <Route path="trilhas-pronta" element={<Navigate replace to="/app/trilhas-prontas" />} />

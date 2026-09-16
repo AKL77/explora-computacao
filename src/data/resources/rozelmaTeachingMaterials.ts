@@ -102,7 +102,7 @@ const sertaoBitResource: Resource = {
   summary:
     "Livro-jogo ambientado no sertão pernambucano que combina uma narrativa infantil com 11 desafios de pensamento computacional, incluindo atividades desplugadas, projetos em Scratch e interações com Makey Makey ou FRANZMakey.",
   additionalInformation:
-    "A obra trabalha abstração, decomposição, reconhecimento de padrões e algoritmos em uma sequência narrativa inspirada na história de Lampião Júnior e Maria Bonitinha. A pesquisa de doutorado que originou o material realizou um quase-experimento com estudantes do 5º ano; por isso, o acervo recomenda esse ano, mas o alinhamento à BNCC Computação de 2022 é curatorial e permanece pendente de validação. A fonte não informa duração. O livro está sob CC BY-NC 4.0; as ilustrações são creditadas a Paulo Ricardo B. Silva.",
+    "A obra trabalha abstração, decomposição, reconhecimento de padrões e algoritmos em uma sequência narrativa inspirada na história de Lampião Júnior e Maria Bonitinha. A pesquisa de doutorado que originou o material realizou um quase-experimento com estudantes do 5º ano; por isso, a curadoria recomenda esse ano, mas o alinhamento à BNCC Computação de 2022 permanece pendente de validação. A fonte não informa duração. O livro está sob CC BY-NC 4.0; as ilustrações são creditadas a Paulo Ricardo B. Silva.",
   recommendedGrades: [5],
   curriculum: {
     alignments: [
@@ -310,7 +310,7 @@ const rozelmaCyberbullyingResource: Resource = {
   summary:
     "Conjunto de quatro casos ilustrados sobre perfil falso, capacitismo, gordofobia, xenofobia e preconceito religioso, acompanhado de uma sequência didática para reconhecer, debater e enfrentar o cyberbullying.",
   additionalInformation:
-    "A sequência é destinada ao 7º ano e organizada em três aulas: introdução e diferenciação entre bullying e cyberbullying; debate crítico dos casos; e criação de uma narrativa digital ou animação no Scratch. A fonte declara os eixos Cultura Digital e Pensamento Computacional e as habilidades EF07CO09 e EF07CO03. O PDF não informa licença de reutilização; por isso, o acervo usa a imagem padrão.",
+    "A sequência é destinada ao 7º ano e organizada em três aulas: introdução e diferenciação entre bullying e cyberbullying; debate crítico dos casos; e criação de uma narrativa digital ou animação no Scratch. A fonte declara os eixos Cultura Digital e Pensamento Computacional e as habilidades EF07CO09 e EF07CO03. O PDF não informa licença de reutilização; por isso, a plataforma usa a imagem padrão.",
   recommendedGrades: [7],
   curriculum: {
     alignments: [

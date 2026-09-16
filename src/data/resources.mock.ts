@@ -20,7 +20,7 @@ const cyberbullyingResource: Resource = {
   summary:
     "Uma simulação gamificada e interativa para apoiar as escolas no desenvolvimento da empatia, responsabilidade digital e no combate à violência virtual. O recurso apresenta dilemas cotidianos da vida digital aos alunos, promovendo a tomada de decisões éticas em conformidade com o ECA Digital e a BNCC de Computação. Esse jogo é apropriado após explicar e apresentar para os alunos o tema de cyberbullying.",
   additionalInformation:
-    "Recurso externo para aplicação após uma introdução ao tema. A proposta de uso registrada no acervo prevê interação individual ou em grupos e uma conversa final sobre as escolhas realizadas no jogo.",
+    "Recurso externo para aplicação após uma introdução ao tema. A proposta de uso registrada no catálogo prevê interação individual ou em grupos e uma conversa final sobre as escolhas realizadas no jogo.",
   recommendedGrades: [7],
   curriculum: {
     alignments: [

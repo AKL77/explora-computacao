@@ -665,3 +665,21 @@ principal ponto de entrada do menu.
   funcionais, mas **Meus Planos de Aula** fica visível e inativo na navegação
   para não competir com o fluxo principal de trilhas. Uma futura relação entre
   material da trilha e plano de aula não é presumida nesta etapa.
+
+## 28. Consolidação do escopo atual — 14 de setembro de 2026
+
+As decisões desta seção substituem a preservação técnica das funcionalidades
+anteriores descrita ao final da seção 27.
+
+- **Decisão de escopo:** Favoritos, pastas pessoais, turmas e planos de aula não
+  fazem parte da versão atual do produto.
+- **Decisão de implementação:** componentes, páginas, domínio, armazenamento e
+  testes exclusivos de Favoritos, Pastas e Planos de Aula são removidos, em vez
+  de permanecerem acessíveis por rotas não exibidas no menu.
+- **Decisão de compatibilidade:** endereços antigos redirecionam para **Buscar
+  Materiais** ou **Minhas Trilhas**, sem apresentar telas legadas.
+- **Decisão de terminologia:** a interface usa **Buscar Materiais**; “Acervo”
+  permanece apenas em registros históricos e não como área ativa do produto.
+- **Decisão de persistência:** somente a sessão demonstrativa e as trilhas são
+  lidas e atualizadas pela aplicação. Dados locais de versões anteriores são
+  ignorados.

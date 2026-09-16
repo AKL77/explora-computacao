@@ -29,7 +29,11 @@ describe("AboutPage", () => {
     ).not.toBeInTheDocument();
     expect(screen.queryByText("Meus favoritos e materiais ficam salvos?")).not.toBeInTheDocument();
     expect(screen.queryByText("Os recursos pertencem ao Informática Explorer?")).not.toBeInTheDocument();
-    expect(screen.getByText("Não. Os usuários podem consultar, favoritar e organizar os materiais disponíveis.")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Não nesta versão. Os materiais disponíveis são selecionados previamente, e o docente pode consultá-los e usá-los para montar suas trilhas.",
+      ),
+    ).toBeInTheDocument();
     expect(screen.getAllByRole("group")).toHaveLength(7);
   });
 

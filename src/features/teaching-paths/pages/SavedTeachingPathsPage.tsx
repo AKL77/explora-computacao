@@ -20,12 +20,12 @@ import { useCatalogResources } from "@/features/catalog/hooks/useCatalog";
 import {
   TEACHING_PATH_BACKGROUND_COLORS,
   TEACHING_PATH_ICONS,
+  TEACHING_PATH_LESSON_DURATION_MINUTES,
   type SavedTeachingPath,
   type TeachingPathBackgroundColor,
   type TeachingPathIcon,
+  type TeachingPathLessonCount,
 } from "@/domain/savedTeachingPath";
-import lessonPlanStyles from "@/features/lesson-plans/pages/LessonPlanPage.module.css";
-import { LESSON_DURATION_MINUTES, type LessonCount } from "@/domain/lessonPlan";
 import { useTeachingPathsStore } from "@/store/useTeachingPathsStore";
 import {
   TeachingPathIconGlyph,
@@ -37,7 +37,7 @@ import {
 import { getTeachingResourceMetadata, type PilotTeachingResource } from "../data/pilotTeachingResources";
 import styles from "./SavedTeachingPathsPage.module.css";
 
-const lessonCounts: readonly LessonCount[] = [1, 2, 3];
+const lessonCounts: readonly TeachingPathLessonCount[] = [1, 2, 3];
 
 const themeClassNames: Record<TeachingPathBackgroundColor, string> = {
   turquoise: "themeTurquoise",
@@ -72,7 +72,7 @@ interface TeachingPathDraft {
   icon: TeachingPathIcon;
   resourceIds: string[];
   removedResourceIds: string[];
-  lessonCountsByResourceId: Record<string, LessonCount | undefined>;
+  lessonCountsByResourceId: Record<string, TeachingPathLessonCount | undefined>;
 }
 
 interface PathSettingsDraft {
@@ -82,10 +82,10 @@ interface PathSettingsDraft {
   icon: TeachingPathIcon;
 }
 
-function lessonCountLabel(count: LessonCount) {
+function lessonCountLabel(count: TeachingPathLessonCount) {
   return count === 1
     ? "1 aula · 50 min"
-    : `${count} aulas · ${count * LESSON_DURATION_MINUTES} min`;
+    : `${count} aulas · ${count * TEACHING_PATH_LESSON_DURATION_MINUTES} min`;
 }
 
 function updatedAtLabel(value: string) {
@@ -144,8 +144,8 @@ function hasSameResourceOrder(first: readonly string[], second: readonly string[
 
 function hasSameLessonCounts(
   resourceIds: readonly string[],
-  first: Readonly<Record<string, LessonCount | undefined>>,
-  second: Readonly<Record<string, LessonCount | undefined>>,
+  first: Readonly<Record<string, TeachingPathLessonCount | undefined>>,
+  second: Readonly<Record<string, TeachingPathLessonCount | undefined>>,
 ) {
   return resourceIds.every((resourceId) => first[resourceId] === second[resourceId]);
 }
@@ -164,14 +164,14 @@ function isDraftDirty(path: SavedTeachingPath, draft: TeachingPathDraft) {
 
 function getLessonCountsForResources(
   resourceIds: readonly string[],
-  lessonCounts: Readonly<Record<string, LessonCount | undefined>>,
+  lessonCounts: Readonly<Record<string, TeachingPathLessonCount | undefined>>,
 ) {
   return Object.fromEntries(
     resourceIds.flatMap((resourceId) => {
       const lessonCount = lessonCounts[resourceId];
       return lessonCount === undefined ? [] : [[resourceId, lessonCount]];
     }),
-  ) as Record<string, LessonCount>;
+  ) as Record<string, TeachingPathLessonCount>;
 }
 
 export function SavedTeachingPathsPage() {
@@ -434,7 +434,7 @@ export function SavedTeachingPathsPage() {
           {allLessonCountsDefined ? (
             <p className={styles.totalTime}>
               <Clock3 aria-hidden="true" size={18} />
-              Tempo total: {totalLessonCount} {totalLessonCount === 1 ? "aula" : "aulas"} · {totalLessonCount * LESSON_DURATION_MINUTES} minutos
+              Tempo total: {totalLessonCount} {totalLessonCount === 1 ? "aula" : "aulas"} · {totalLessonCount * TEACHING_PATH_LESSON_DURATION_MINUTES} minutos
             </p>
           ) : (
             <p className={styles.durationPrompt}>
@@ -470,7 +470,7 @@ export function SavedTeachingPathsPage() {
         {allLessonCountsDefined ? (
           <span className={styles.totalDuration}>
             <Clock3 aria-hidden="true" size={17} />
-            {totalLessonCount * LESSON_DURATION_MINUTES} min no total
+            {totalLessonCount * TEACHING_PATH_LESSON_DURATION_MINUTES} min no total
           </span>
         ) : null}
       </div>
@@ -571,13 +571,13 @@ export function SavedTeachingPathsPage() {
       >
         {preview ? (
           <article
-            className={`${lessonPlanStyles.blockPlan} ${lessonPlanStyles.compactBlockPlan}`}
+            className={`${styles.blockPlan} ${styles.compactBlockPlan}`}
             aria-label="Planejamento em blocos da etapa"
           >
-            <header className={lessonPlanStyles.blockPlanHeading}>
-              <span className={lessonPlanStyles.geometricShapeOne} aria-hidden="true" />
-              <span className={lessonPlanStyles.geometricShapeTwo} aria-hidden="true" />
-              <span className={lessonPlanStyles.geometricShapeThree} aria-hidden="true" />
+            <header className={styles.blockPlanHeading}>
+              <span className={styles.geometricShapeOne} aria-hidden="true" />
+              <span className={styles.geometricShapeTwo} aria-hidden="true" />
+              <span className={styles.geometricShapeThree} aria-hidden="true" />
               <div>
                 <h3>{preview.resource.title}</h3>
                 <span>
@@ -587,10 +587,10 @@ export function SavedTeachingPathsPage() {
                 </span>
               </div>
             </header>
-            <div className={lessonPlanStyles.blockGrid}>
-              <section className={`${lessonPlanStyles.planBlock} ${lessonPlanStyles.bnccBlock}`}>
+            <div className={styles.blockGrid}>
+              <section className={`${styles.planBlock} ${styles.bnccBlock}`}>
                 <h3>Competências da BNCC</h3>
-                <p className={lessonPlanStyles.bnccReference}>
+                <p className={styles.bnccReference}>
                   {getRelevantAlignments(preview).map((alignment, index) => (
                     <span key={`${alignment.grade}-${alignment.skill.code}`}>
                       {index > 0 ? <br /> : null}
@@ -599,29 +599,29 @@ export function SavedTeachingPathsPage() {
                   ))}
                 </p>
               </section>
-              <section className={`${lessonPlanStyles.planBlock} ${lessonPlanStyles.objectiveBlock}`}>
+              <section className={`${styles.planBlock} ${styles.objectiveBlock}`}>
                 <h3>Objetivo</h3>
                 <p>{preview.teaching.objective}</p>
               </section>
-              <section className={`${lessonPlanStyles.planBlock} ${lessonPlanStyles.materialsBlock}`}>
+              <section className={`${styles.planBlock} ${styles.materialsBlock}`}>
                 <h3>Materiais</h3>
-                <ul className={lessonPlanStyles.materialList}>
+                <ul className={styles.materialList}>
                   {preview.teaching.materials.map((material) => <li key={material}>{material}</li>)}
                 </ul>
               </section>
-              <section className={`${lessonPlanStyles.planBlock} ${lessonPlanStyles.methodologyBlock}`}>
+              <section className={`${styles.planBlock} ${styles.methodologyBlock}`}>
                 <h3>Metodologia</h3>
                 <p>{preview.teaching.studentActivity}</p>
               </section>
-              <section className={`${lessonPlanStyles.planBlock} ${lessonPlanStyles.evaluationBlock}`}>
+              <section className={`${styles.planBlock} ${styles.evaluationBlock}`}>
                 <h3>Duração</h3>
                 <fieldset className={styles.durationField}>
                   <legend className="sr-only">Duração da etapa</legend>
-                  <div className={lessonPlanStyles.durationOptions}>
+                  <div className={styles.durationOptions}>
                     {lessonCounts.map((count) => {
                       const checked = draft.lessonCountsByResourceId[preview.resourceId] === count;
                       return (
-                        <label className={lessonPlanStyles.durationOption} key={count}>
+                        <label className={styles.durationOption} key={count}>
                           <input
                             type="radio"
                             name={`path-duration-${preview.resourceId}`}
@@ -638,7 +638,7 @@ export function SavedTeachingPathsPage() {
                             }}
                           />
                           <strong>{count} {count === 1 ? "aula" : "aulas"}</strong>
-                          <small>{count * LESSON_DURATION_MINUTES} min</small>
+                          <small>{count * TEACHING_PATH_LESSON_DURATION_MINUTES} min</small>
                         </label>
                       );
                     })}
@@ -646,7 +646,7 @@ export function SavedTeachingPathsPage() {
                 </fieldset>
               </section>
             </div>
-            <footer className={lessonPlanStyles.blockPlanFooter} aria-hidden="true">
+            <footer className={styles.blockPlanFooter} aria-hidden="true">
               <span />
               <span />
               <span />

@@ -78,7 +78,7 @@ export function LandingPage() {
 
           <nav className={styles.siteNav} aria-label="Navegação principal">
             <a href="#projeto" onClick={handleSectionLink("projeto")}>O projeto</a>
-            <a href="#acervo" onClick={handleSectionLink("acervo")}>Materiais</a>
+            <a href="#materiais" onClick={handleSectionLink("materiais")}>Materiais</a>
             <a
               href="#trilhas-de-ensino"
               onClick={handleSectionLink("trilhas-de-ensino")}
@@ -117,8 +117,8 @@ export function LandingPage() {
                 O projeto
               </a>
               <a
-                href="#acervo"
-                onClick={handleSectionLink("acervo", true)}
+                href="#materiais"
+                onClick={handleSectionLink("materiais", true)}
               >
                 Materiais
               </a>
@@ -182,7 +182,7 @@ export function LandingPage() {
           </div>
         </section>
 
-        <section className={styles.catalogSection} id="acervo" aria-labelledby="titulo-acervo">
+        <section className={styles.catalogSection} id="materiais" aria-labelledby="titulo-materiais">
           <div className={`${styles.container} ${styles.splitLayout}`}>
             <figure className={styles.catalogMockup}>
               <div className={styles.previewToolbar} aria-hidden="true">
@@ -202,7 +202,7 @@ export function LandingPage() {
             </figure>
 
             <div className={styles.catalogCopy}>
-              <h2 id="titulo-acervo">Recursos em um só lugar, com contexto para usar</h2>
+              <h2 id="titulo-materiais">Recursos em um só lugar, com contexto para usar</h2>
               <p>
                 Mais do que reunir referências, a plataforma organiza informações que ajudam o
                 docente a avaliar quando e como cada recurso pode contribuir com a aula.
@@ -222,7 +222,7 @@ export function LandingPage() {
                 </li>
                 <li>
                   <CheckCircle2 aria-hidden="true" />
-                  Pastas de organização para manutenção de materiais e trilhas futuras.
+                  Trilhas prontas e sequências personalizadas construídas com os materiais.
                 </li>
               </ul>
             </div>
@@ -282,7 +282,7 @@ export function LandingPage() {
 
           <nav className={styles.footerNav} aria-label="Navegação do rodapé">
             <a href="#projeto" onClick={handleSectionLink("projeto")}>O projeto</a>
-            <a href="#acervo" onClick={handleSectionLink("acervo")}>Materiais</a>
+            <a href="#materiais" onClick={handleSectionLink("materiais")}>Materiais</a>
             <Link to="/app/trilha-de-ensino" onClick={signIn}>Entrar</Link>
           </nav>
 

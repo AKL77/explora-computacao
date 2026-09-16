@@ -17,7 +17,7 @@ export interface PilotTeachingResource {
 
 /**
  * Metadados curatoriais usados somente no piloto da trilha. Os recursos-base
- * continuam vindo do acervo; esta camada descreve como eles entram no novo
+ * continuam vindo do catálogo; esta camada descreve como eles entram no novo
  * fluxo sem duplicar o cadastro completo de cada material.
  */
 export const pilotTeachingResources: readonly PilotTeachingResource[] = [

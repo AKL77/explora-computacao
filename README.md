@@ -5,8 +5,8 @@
 
   **Explore. Planeje. Ensine.**
 
-  Protótipo web para organizar recursos e apoiar a criação de trilhas de ensino
-  a partir da BNCC Computação e de materiais curados.
+  Protótipo web para descobrir materiais e montar trilhas de ensino alinhadas à
+  BNCC Computação.
 
   [![Qualidade e GitHub Pages](https://github.com/AKL77/informatica-explorer/actions/workflows/quality-and-pages.yml/badge.svg)](https://github.com/AKL77/informatica-explorer/actions/workflows/quality-and-pages.yml)
   [![GitHub Pages](https://img.shields.io/badge/demo-GitHub%20Pages-0969da?logo=github)](https://akl77.github.io/informatica-explorer/)
@@ -15,119 +15,51 @@
 
 ## Sobre o projeto
 
-O Informática Explorer é parte de um Trabalho de Conclusão de Curso. A proposta
-busca aproximar recursos externos, currículo e condições reais de aplicação em
+O Informática Explorer é parte de um Trabalho de Conclusão de Curso. A
+plataforma aproxima materiais externos, currículo e condições reais de uso em
 sala de aula, oferecendo direcionamento sem substituir a decisão do docente.
-O recorte curricular atual abrange do 4º ao 9º ano do Ensino Fundamental.
+O recorte atual abrange do 4º ao 9º ano do Ensino Fundamental.
 
-Esta entrega é um frontend demonstrativo. O catálogo contém **31 recursos**:
-**Cyberbullying — Jogo Educativo**, **Lightbot**, **Blockly Games**, **Interland**,
-quatro materiais didáticos de Rozelma França e as 23 atividades da coleção
-**Computação Desplugada — Unicamp**. Educação Infantil não faz parte do recorte
-atual.
+Esta entrega é um frontend demonstrativo com **31 materiais**: o jogo educativo
+de cyberbullying da ALT+INOVARE, Lightbot, Blockly Games, Interland, quatro
+materiais didáticos de Rozelma França e as 23 atividades da coleção Computação
+Desplugada — Unicamp.
 
 > Consulte a [demonstração publicada](https://akl77.github.io/informatica-explorer/)
-> e o [estado exato da versão atual](docs/estado-atual.md).
+> e o [estado atual do protótipo](docs/estado-atual.md).
 
 ## Funcionalidades
 
-- landing page pública com contexto e objetivos do projeto;
-- entrada demonstrativa direta no Acervo;
-- busca e filtros por turma e habilidade;
-- cards compactos com título, turma e eixo; habilidade e códigos curriculares ficam no detalhe;
-- detalhe do recurso organizado em três abas, com materiais, fonte e licença;
-- alinhamentos explícitos por ano, eixo, habilidade e competências relacionadas;
-- miniaturas otimizadas e diálogos carregados sob demanda para manter o Acervo leve;
-- favoritos pelo botão de coração;
-- criação e manutenção de pastas em **Meus Materiais**;
-- busca e filtros recolhíveis dentro de Favoritos e pastas;
-- página **Sobre** com explicações e FAQ;
-- criação de uma trilha de ensino a partir de busca livre e tags clicáveis;
-- cartões de descoberta com objetivo breve, ações dos estudantes e materiais,
-  ligados ao Acervo;
-- salvamento local de trilhas com nome, objetivo, cor de fundo e ícone
-  personalizados;
-- área **Minhas Trilhas**, com sequência visual conectada, reordenação por
-  arrastar e soltar, duração por material, tempo total calculado e confirmação
-  explícita das alterações;
-- criação estruturada de uma proposta para uma, duas ou três aulas de 50 minutos;
-- seleção explícita de materiais do Acervo alinhados ao ano e à habilidade;
-- visualizações **Em Blocos** e **Descritivo** do mesmo plano;
-- salvamento, pesquisa, edição e download de planos em PDF;
-- persistência local da sessão, favoritos, pastas e planos, com interface responsiva e acessível.
+- página inicial pública com contexto e objetivos do projeto;
+- sessão local de demonstração, sem autenticação real;
+- **Buscar Materiais** com pesquisa e filtros por ano, eixo e características;
+- cartões de descoberta com informações pedagógicas concisas;
+- detalhe de cada material com descrição, condições de uso, fonte e licença;
+- **Trilhas Prontas** com um percurso funcional para cada eixo da BNCC
+  Computação;
+- criação de trilhas próprias a partir dos materiais selecionados;
+- **Minhas Trilhas** com edição de nome, objetivo, cor e ícone;
+- reordenação das etapas, escolha de duração por material e cálculo do tempo
+  total;
+- persistência local da sessão e das trilhas;
+- páginas **Meu perfil** e **Sobre**;
+- interface responsiva, navegação por teclado e testes de acessibilidade.
 
-**Meu perfil**, **Minhas Turmas** e **Meus Planos de Aula** são exibidos como
-itens inativos nesta versão. As rotas legadas de planos permanecem preservadas
-para continuidade dos dados locais.
+Favoritos, pastas pessoais, turmas e planos de aula não fazem parte do escopo
+atual. Endereços antigos dessas áreas apenas redirecionam para os fluxos atuais.
 
-## Criação de trilhas
+## Trilhas Prontas
 
-O fluxo principal do menu é **Criar Trilha de Ensino**. O docente pode começar
-por uma busca livre de área, assunto ou habilidade e refinar o resultado por
-tags clicáveis de ano escolar, material plugado ou desplugado e abordagem ativa
-ou expositiva. Sem filtros, os materiais do piloto aparecem imediatamente.
+Há uma trilha funcional por eixo:
 
-O piloto usa três recursos do 5º ano vinculados curatorialmente a `EF05CO04`:
-**Vinte Palpites — Teoria da Informação**, **Blockly Games** e **Sertão.bit —
-Livro-jogo de Pensamento Computacional**. Cada cartão funciona como uma prévia
-compacta: apresenta objetivo breve, o que será feito e como, além dos materiais
-usados; ao clicar nele, abre a página correspondente no Acervo. O docente pode
-adicionar o material a uma nova trilha em criação ou, quando houver uma
-sequência salva, a uma trilha existente. Para salvar, é obrigatório informar o
-nome e o objetivo da trilha; o docente também escolhe a cor de fundo e o ícone
-que a representam. Em **Minhas Trilhas**, nome, objetivo, cor e ícone continuam
-editáveis. A sequência pode ser reordenada por arrastar e soltar, e cada
-material abre uma ficha enxuta para selecionar 1, 2 ou 3 aulas de 50 minutos.
-Reordenação, duração, edição dos dados da trilha e remoção são alterações de
-rascunho: um material marcado para remoção pode ser desfeito e nada é
-persistido até usar **Salvar alterações**. Quando todas as durações forem
-definidas, o tempo total aparece no topo. O marco final conectado à sequência
-apresenta o nome, o objetivo personalizado, o ícone escolhido e os códigos
-curriculares sob o rótulo de apresentação **Competências da BNCC relacionados**.
+- **Pensamento Computacional:** Algoritmos: decisões, blocos e desafios;
+- **Mundo Digital:** Mensagens sem erro: paridade e protocolos;
+- **Cultura Digital:** Privacidade e armadilhas online.
 
-## Criação de planos
+Cada trilha apresenta uma sequência pedagógica sugerida e pode ser adicionada a
+**Minhas Trilhas**, onde passa a aceitar os mesmos ajustes das trilhas criadas
+pelo docente.
 
-O fluxo de **Criar Plano de Aula** possui uma tela própria para compor, sem IA,
-uma única proposta de uma, duas ou três aulas de 50 minutos. O docente informa
-tema, ano escolar e habilidade, seleciona um material alinhado do Acervo, define
-o objetivo, escolhe entre os tipos de metodologia — expositiva dialogada,
-ativa/prática ou combinada — e pode incluir avaliação.
-
-O Acervo continua sendo uma área de navegação independente. No criador, ano e
-habilidade filtram todos os materiais com alinhamento curricular e link seguro;
-metadados pedagógicos ausentes não ocultam os novos recursos. Quando o material
-possui um objetivo de aprendizagem cadastrado, ele aparece como sugestão editável
-com sua origem identificada; caso contrário, o objetivo começa vazio.
-
-Metodologia e avaliação usam temporariamente textos distintos de lorem ipsum
-enquanto seus modelos pedagógicos são discutidos. O mesmo registro alimenta a
-visualização **Em Blocos**, com composição gráfica de documento pedagógico, e a
-visualização **Descritivo**, organizada por aula. Um material selecionado pode
-sustentar uma, duas ou três aulas; a avaliação opcional ocupa dez minutos da
-última aula.
-
-Planos podem ser salvos no navegador, pesquisados pelo tema, reabertos para
-edição e baixados como PDF A4. O PDF é gerado localmente e não envia dados a um
-servidor.
-
-Metadados ausentes aparecem como não informados. Proposta de aplicação e
-sugestão de avaliação permanecem internas quando existem. O processo usado
-para converter a indicação ampla da Unicamp em anos e correspondências da BNCC
-está em
-[`docs/processo-curadoria-unicamp.md`](docs/processo-curadoria-unicamp.md); o
-processo aplicado à coleção de Rozelma está em
-[`docs/processo-curadoria-rozelma.md`](docs/processo-curadoria-rozelma.md); o
-estado implementado permanece em [`docs/estado-atual.md`](docs/estado-atual.md).
-
-## Fora do escopo atual
-
-- backend, API e banco de dados;
-- login Google ou qualquer autenticação real;
-- inteligência artificial no recorte atual de planos; uma investigação futura exige especificação própria;
-- inclusão de recursos por usuários;
-- contas ou dados de estudantes;
-- sincronização entre dispositivos ou compartilhamento remoto dos planos;
-- analytics e cookies de rastreamento.
 ## Tecnologias
 
 - React 19, TypeScript e Vite;
@@ -151,14 +83,14 @@ pnpm dev
 ```
 
 Abra [http://127.0.0.1:4173](http://127.0.0.1:4173). O botão **Entrar** cria
-somente uma sessão local de demonstração e leva diretamente ao Acervo.
+uma sessão local de demonstração e leva diretamente a **Buscar Materiais**.
 
 ### Comandos disponíveis
 
 | Comando | Finalidade |
 |---|---|
 | `pnpm dev` | servidor local com atualização automática |
-| `pnpm build` | typecheck e build otimizado em `dist` |
+| `pnpm build` | checagem de tipos e build otimizado em `dist` |
 | `pnpm preview` | prévia local do build de produção |
 | `pnpm typecheck` | validação estática do TypeScript |
 | `pnpm lint` | análise de padrões de código |
@@ -166,90 +98,54 @@ somente uma sessão local de demonstração e leva diretamente ao Acervo.
 | `pnpm test:watch` | testes durante o desenvolvimento |
 | `pnpm test:e2e` | fluxos completos em desktop e mobile |
 
-Na primeira execução do E2E, instale o navegador:
-
-```bash
-pnpm exec playwright install chromium
-```
-
-## Rotas
+## Rotas atuais
 
 | Rota lógica | Conteúdo |
 |---|---|
-| `/` | landing page pública |
-| `/app/acervo` | Acervo, busca e filtros |
-| `/app/acervo/:slug` | detalhe de um recurso |
-| `/app/pastas` | Favoritos e pastas pessoais |
-| `/app/pastas/:folderId` | conteúdo de uma pasta |
-| `/app/planos` | planos salvos, busca, edição e download |
-| `/app/planos/:planId/editar` | edição de um plano salvo |
-| `/app/trilha-de-ensino` | busca por tags e seleção de uma trilha piloto |
+| `/` | página inicial pública |
+| `/app/trilha-de-ensino` | busca e seleção de materiais |
+| `/app/materiais/:slug` | detalhe de um material |
+| `/app/trilhas-prontas` | trilhas preparadas por eixo |
 | `/app/minhas-trilhas` | consulta e edição das trilhas salvas |
-| `/app/plano-de-aula` | criação e visualização de uma proposta de plano |
-| `/app/sobre` | propósito, organização de materiais e FAQ |
+| `/app/perfil` | perfil demonstrativo |
+| `/app/sobre` | propósito e perguntas frequentes |
 
-No GitHub Pages, essas rotas aparecem após `#`, por exemplo
-`https://akl77.github.io/informatica-explorer/#/app/acervo`. O hash permite
-recarregar links internos com segurança em uma hospedagem estática.
+No GitHub Pages, as rotas aparecem depois de `#`, por exemplo
+`https://akl77.github.io/informatica-explorer/#/app/trilhas-prontas`.
 
 ## Persistência e privacidade
 
-A sessão demonstrativa, favoritos e pastas ficam no `localStorage` do próprio
-navegador, nas chaves `informatica-explorer:session:v1` e
-`informatica-explorer:library:v1`. Limpar os dados do site reinicia o
-protótipo. Nenhuma credencial, informação pessoal ou dado de estudante é
-coletado pelo Informática Explorer.
+A sessão demonstrativa e as trilhas ficam no `localStorage` do próprio
+navegador, em chaves independentes e versionadas. Limpar os dados do site
+reinicia o protótipo. Nenhuma credencial, informação pessoal ou dado de
+estudante é coletado pelo Informática Explorer.
 
-Os links do Acervo levam a sites externos, que possuem políticas próprias.
-
-## Estrutura do repositório
-
-```text
-.
-├── .github/workflows/       # verificação e deploy automático
-├── config/                  # configurações das ferramentas
-├── docs/                    # produto, TCC, arquitetura e créditos
-├── public/                  # imagens e identidade distribuídas
-├── src/                     # aplicação React organizada por features
-├── tests/e2e/               # fluxos completos no Playwright
-├── README.md                # visão geral e instruções
-└── package.json             # scripts e dependências
-```
-
-A visão das camadas e as decisões técnicas estão em
-[`docs/arquitetura.md`](docs/arquitetura.md).
-
-> A pasta `.github` contém somente o workflow exigido pelo GitHub para validar
-> e publicar a plataforma automaticamente no Pages.
+Os materiais podem direcionar a sites externos, que possuem políticas próprias.
 
 ## Documentação
 
 - [Estado atual do protótipo](docs/estado-atual.md)
-- [Especificação funcional e de interface](docs/especificacao-plataforma.md)
-- [Histórico do plano de implementação](docs/historico/plano-implementacao.md)
 - [Arquitetura do frontend](docs/arquitetura.md)
 - [Deploy no GitHub Pages](docs/deploy-github-pages.md)
 - [Créditos e licenças de ativos](docs/creditos-e-licencas.md)
 - [Curadoria da coleção Computação Desplugada — Unicamp](docs/processo-curadoria-unicamp.md)
 - [Curadoria dos materiais didáticos de Rozelma França](docs/processo-curadoria-rozelma.md)
 - [Registro mestre do TCC](docs/registro-mestre-tcc.md)
+- [Histórico da especificação](docs/especificacao-plataforma.md)
 
 ## Deploy
 
-Pushes para `main` passam por typecheck, lint, testes unitários, build e testes
-E2E. Somente após todas as verificações o artefato `dist` é publicado no
-GitHub Pages. Pull requests executam as mesmas verificações, sem deploy.
-
-O processo e a simulação local estão documentados em
-[`docs/deploy-github-pages.md`](docs/deploy-github-pages.md).
+Pushes para `main` passam por checagem de tipos, lint, testes unitários, build e
+testes E2E. Somente após todas as verificações o artefato `dist` é publicado no
+GitHub Pages.
 
 ## Autoria, ativos e licença
 
 Desenvolvido por **Augusto Lunardi** como protótipo acadêmico. Código e
-documentação permanecem com direitos reservados; consulte [`LICENSE`](LICENSE).
-Ativos de terceiros mantêm seus próprios termos e são detalhados em
-[`docs/creditos-e-licencas.md`](docs/creditos-e-licencas.md).
+documentação permanecem com direitos reservados; consulte [LICENSE](LICENSE).
+Ativos de terceiros mantêm seus próprios termos, detalhados em
+[Créditos e licenças](docs/creditos-e-licencas.md).
 
-Informática Explorer é independente e não possui afiliação ou endosso da
+O Informática Explorer é independente e não possui afiliação ou endosso da
 Microsoft, UFSM, MEC, CNE, ALT+INOVARE, Google, Rozelma França ou dos
 responsáveis pela BNCC.

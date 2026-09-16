@@ -121,7 +121,7 @@ describe("resources fixture", () => {
     ).toBe(true);
   });
 
-  it("não força no acervo os materiais da Rozelma fora do recorte ou sem metadados", () => {
+  it("não força no catálogo os materiais da Rozelma fora do recorte ou sem metadados", () => {
     expect(
       resources.some(({ title }) => title.includes("Gato de Botas na Era Digital")),
     ).toBe(false);
@@ -177,7 +177,7 @@ describe("resources fixture", () => {
     );
   });
 
-  it("preenche todos os campos obrigatórios do acervo", () => {
+  it("preenche todos os campos obrigatórios do catálogo", () => {
     for (const resource of resources) {
       expect(resource.title.trim()).not.toBe("");
       expect(resource.topic.trim()).not.toBe("");

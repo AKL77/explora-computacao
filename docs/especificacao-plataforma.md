@@ -1,10 +1,15 @@
 # Informática Explorer — Especificação funcional e de interface
 
-**Status:** protótipo frontend com criador estruturado de planos implementado no workspace
+**Status:** documento histórico da versão anterior do protótipo
 **Versão:** 0.7
 **Data:** 30 de agosto de 2026
 **Nome do produto:** Informática Explorer — provisório
-**Escopo desta versão:** frontend com dados locais, Acervo, organização pessoal e criador determinístico de planos; sem backend, autenticação real ou IA neste recorte
+**Escopo registrado:** frontend com Acervo, organização pessoal e criador determinístico de planos
+
+> **Atenção:** este documento preserva requisitos e decisões da versão anterior
+> para fins acadêmicos. Favoritos, pastas e planos de aula foram removidos do
+> produto em 14 de setembro de 2026. O escopo executável está descrito em
+> [`estado-atual.md`](estado-atual.md).
 
 ## 1. Origem e precedência dos requisitos
 

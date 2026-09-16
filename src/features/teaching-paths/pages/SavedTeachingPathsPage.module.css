@@ -993,10 +993,10 @@
   max-width: 58rem;
 }
 
-.pathTitleArea > .pathObjective {
+.pathHeader .pathTitleArea > .pathObjective {
   max-width: 56rem;
   margin: 0.65rem 0 0;
-  color: rgb(248 250 252 / 0.88);
+  color: #f8fafc;
   line-height: 1.65;
 }
 
@@ -1388,5 +1388,243 @@
 
   .stepNode {
     min-height: 12rem;
+  }
+}
+
+/* Ficha de planejamento exibida ao abrir uma etapa da trilha. */
+.blockPlan {
+  position: relative;
+  overflow: hidden;
+  color: var(--text-primary);
+  background: var(--surface-page);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  container-name: teaching-path-blocks;
+  container-type: inline-size;
+}
+
+.blockPlanHeading {
+  position: relative;
+  display: flex;
+  min-height: 9.5rem;
+  padding: 3.25rem clamp(1rem, 3vw, 1.6rem) 1.6rem;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 90% 16%, rgb(34 211 238 / 22%), transparent 22rem),
+    linear-gradient(135deg, var(--brand-navy-deep), var(--brand-navy) 64%, var(--brand-blue));
+  border-bottom: 4px solid var(--brand-yellow);
+  align-items: flex-end;
+}
+
+.blockPlanHeading > div {
+  position: relative;
+  z-index: 2;
+  max-width: 44rem;
+}
+
+.blockPlanHeading p {
+  margin: 0 0 0.3rem;
+  color: #67e8f9;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.blockPlanHeading h3 {
+  margin: 0;
+  color: var(--text-on-dark);
+  font-family: var(--font-serif);
+  font-size: clamp(1.4rem, 2.4vw, 2rem);
+  line-height: 1.08;
+}
+
+.blockPlanHeading div > span {
+  display: block;
+  padding-bottom: 0.15rem;
+  margin-top: 0.72rem;
+  color: rgb(248 250 252 / 82%);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.geometricShapeOne,
+.geometricShapeTwo,
+.geometricShapeThree {
+  display: none;
+}
+
+.blockGrid {
+  display: grid;
+  gap: 0.55rem;
+  padding: 1.05rem clamp(0.75rem, 2vw, 1.3rem) 1.1rem;
+  align-items: stretch;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.planBlock {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  padding: 0.92rem 1rem 1rem;
+  color: var(--text-primary);
+  background: var(--surface-card);
+  border: 1px solid var(--border-soft);
+  border-left: 5px solid var(--brand-cyan);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+}
+
+.planBlock > h3 {
+  padding-bottom: 0.3rem;
+  margin: 0 0 0.42rem;
+  color: var(--brand-navy);
+  border-bottom: 1px solid var(--border-soft);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.planBlock p {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 0.91rem;
+  line-height: 1.45;
+}
+
+.bnccBlock,
+.objectiveBlock {
+  grid-column: 1 / -1;
+}
+
+.bnccBlock {
+  background: #f2f8fb;
+  border-left-color: var(--brand-blue);
+}
+
+.objectiveBlock {
+  background: #f4fbfc;
+  border-left-color: var(--brand-cyan);
+}
+
+.materialsBlock {
+  background: #fffdf1;
+  border-left-color: var(--brand-yellow);
+  grid-column: span 5;
+}
+
+.methodologyBlock {
+  background: #f3f9fb;
+  border-left-color: var(--brand-cyan);
+  grid-column: span 7;
+}
+
+.evaluationBlock {
+  background: #f2f8fb;
+  border-left-color: var(--brand-blue);
+  grid-column: 1 / -1;
+}
+
+.bnccReference {
+  margin: 0;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.materialList {
+  display: grid;
+  gap: 0.25rem;
+  padding-left: 1.2rem;
+  margin: 0;
+  font-size: 0.89rem;
+  line-height: 1.35;
+}
+
+.materialList li {
+  padding: 0.12rem 0;
+  overflow-wrap: anywhere;
+}
+
+.durationOptions {
+  display: grid;
+  gap: 0.55rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.durationOption {
+  position: relative;
+  display: grid;
+  min-height: 4.1rem;
+  padding: 0.5rem;
+  text-align: center;
+  background: #fff;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  place-items: center;
+  align-content: center;
+}
+
+.durationOption:hover {
+  background: var(--surface-soft);
+  border-color: var(--brand-cyan);
+}
+
+.durationOption:has(input:checked) {
+  background: var(--surface-soft);
+  border-color: var(--brand-blue);
+  box-shadow: inset 0 0 0 1px var(--brand-blue);
+}
+
+.durationOption:has(input:focus-visible) {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.durationOption input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.durationOption strong {
+  color: var(--brand-navy);
+  font-size: 0.92rem;
+}
+
+.durationOption small {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+
+.blockPlanFooter {
+  position: relative;
+  height: 2.4rem;
+  overflow: hidden;
+  background: linear-gradient(90deg, var(--brand-navy), var(--brand-blue), var(--brand-cyan));
+}
+
+.blockPlanFooter span {
+  display: none;
+}
+
+.compactBlockPlan {
+  width: 100%;
+}
+
+@container teaching-path-blocks (max-width: 40rem) {
+  .blockGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .bnccBlock,
+  .objectiveBlock,
+  .materialsBlock,
+  .methodologyBlock,
+  .evaluationBlock {
+    grid-column: auto;
   }
 }

@@ -47,8 +47,8 @@ PLAYWRIGHT_USE_PREVIEW=true pnpm test:e2e
 ## Por que as URLs contêm `#`
 
 O Pages entrega arquivos estáticos e não redireciona automaticamente uma rota
-como `/app/acervo` para `index.html`. A URL
-`/informatica-explorer/#/app/acervo` preserva o roteamento no navegador e
+como `/app/trilhas-prontas` para `index.html`. A URL
+`/informatica-explorer/#/app/trilhas-prontas` preserva o roteamento no navegador e
 permite atualizar ou compartilhar telas internas sem receber 404.
 
 ## Diagnóstico

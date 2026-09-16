@@ -1,4 +1,6 @@
-import type { LessonCount } from "@/domain/lessonPlan";
+export const TEACHING_PATH_LESSON_DURATION_MINUTES = 50 as const;
+
+export type TeachingPathLessonCount = 1 | 2 | 3;
 
 export const TEACHING_PATH_BACKGROUND_COLORS = [
   "turquoise",
@@ -36,7 +38,7 @@ export interface SavedTeachingPath {
   readonly backgroundColor: TeachingPathBackgroundColor;
   readonly icon: TeachingPathIcon;
   readonly resourceIds: readonly string[];
-  readonly lessonCountsByResourceId: Readonly<Record<string, LessonCount | undefined>>;
+  readonly lessonCountsByResourceId: Readonly<Record<string, TeachingPathLessonCount | undefined>>;
   readonly createdAt: string;
   readonly updatedAt: string;
 }
@@ -58,7 +60,7 @@ function isIsoDate(value: unknown): value is string {
   return typeof value === "string" && Number.isFinite(Date.parse(value));
 }
 
-function isLessonCount(value: unknown): value is LessonCount | undefined {
+function isLessonCount(value: unknown): value is TeachingPathLessonCount | undefined {
   return value === undefined || value === 1 || value === 2 || value === 3;
 }
 

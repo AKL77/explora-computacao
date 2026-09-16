@@ -32,6 +32,8 @@ describe("ResourceDetailPage", () => {
       "href",
       "/app/trilha-de-ensino",
     );
+    expect(screen.queryByRole("button", { name: /favoritar/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /pasta/i })).not.toBeInTheDocument();
 
     const descriptionTab = screen.getByRole("tab", { name: "Descrição" });
     expect(descriptionTab).toHaveAttribute("aria-selected", "true");

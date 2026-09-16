@@ -36,16 +36,10 @@ const navigationItems = [
 ] as const;
 
 function getPageTitle(pathname: string) {
-  if (pathname.startsWith("/app/pastas/")) return "Conteúdo da pasta";
-  if (pathname === "/app/pastas") return "Meus Materiais";
-  if (pathname.startsWith("/app/materiais/") || pathname.startsWith("/app/acervo/")) {
+  if (pathname.startsWith("/app/materiais/")) {
     return "Detalhe do material";
   }
-  if (pathname === "/app/acervo") return "Buscar Materiais";
   if (pathname === "/app/perfil") return "Meu perfil";
-  if (pathname.startsWith("/app/planos/")) return "Editar Plano de Aula";
-  if (pathname === "/app/planos") return "Meus Planos de Aula";
-  if (pathname === "/app/plano-de-aula") return "Criar Plano de Aula";
   if (pathname === "/app/trilha-de-ensino") return "Buscar Materiais";
   if (pathname === "/app/trilhas-prontas") return "Trilhas Prontas";
   if (pathname === "/app/minhas-trilhas") return "Minhas Trilhas";
