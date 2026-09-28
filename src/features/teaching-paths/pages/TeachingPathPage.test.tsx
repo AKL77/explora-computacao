@@ -221,8 +221,8 @@ describe("TeachingPathPage", () => {
       ),
     ).not.toBeInTheDocument();
     expect(within(dialog).queryByText(/materiais? (será|serão) salvos?/i)).not.toBeInTheDocument();
-    expect(within(dialog).getByRole("button", { name: "Verde" })).toBeInTheDocument();
-    expect(within(dialog).getByRole("button", { name: "Índigo" })).toBeInTheDocument();
+    expect(within(dialog).getByRole("button", { name: "Bronze" })).toBeInTheDocument();
+    expect(within(dialog).getByRole("button", { name: "Chumbo" })).toBeInTheDocument();
     expect(
       within(dialog).getByRole("button", { name: "Usar ícone Lâmpada" }),
     ).toBeInTheDocument();

@@ -27,8 +27,8 @@ primeiro deploy bem-sucedido.
 PowerShell:
 
 ```powershell
-$env:VITE_BASE_PATH='/informatica-explorer/'
-$env:PLAYWRIGHT_BASE_PATH='/informatica-explorer/'
+$env:VITE_BASE_PATH='/explora-computacao/'
+$env:PLAYWRIGHT_BASE_PATH='/explora-computacao/'
 $env:PLAYWRIGHT_USE_PREVIEW='true'
 pnpm build
 pnpm test:e2e
@@ -38,9 +38,9 @@ Remove-Item Env:VITE_BASE_PATH, Env:PLAYWRIGHT_BASE_PATH, Env:PLAYWRIGHT_USE_PRE
 Bash:
 
 ```bash
-VITE_BASE_PATH=/informatica-explorer/ pnpm build
-VITE_BASE_PATH=/informatica-explorer/ \
-PLAYWRIGHT_BASE_PATH=/informatica-explorer/ \
+VITE_BASE_PATH=/explora-computacao/ pnpm build
+VITE_BASE_PATH=/explora-computacao/ \
+PLAYWRIGHT_BASE_PATH=/explora-computacao/ \
 PLAYWRIGHT_USE_PREVIEW=true pnpm test:e2e
 ```
 
@@ -48,7 +48,7 @@ PLAYWRIGHT_USE_PREVIEW=true pnpm test:e2e
 
 O Pages entrega arquivos estáticos e não redireciona automaticamente uma rota
 como `/app/trilhas-prontas` para `index.html`. A URL
-`/informatica-explorer/#/app/trilhas-prontas` preserva o roteamento no navegador e
+`/explora-computacao/#/app/trilhas-prontas` preserva o roteamento no navegador e
 permite atualizar ou compartilhar telas internas sem receber 404.
 
 ## Diagnóstico

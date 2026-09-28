@@ -11,7 +11,7 @@
 
 .eyebrow {
   margin: 0 0 0.35rem;
-  color: var(--brand-cyan);
+  color: var(--brand-blue);
   font-size: 0.74rem;
   font-weight: 850;
   letter-spacing: 0.1em;
@@ -72,8 +72,8 @@
 
 .categoryFilters button:hover,
 .categoryFilters button[aria-pressed="true"] {
-  border-color: var(--brand-cyan);
-  background: var(--brand-yellow-soft);
+  border-color: var(--brand-blue);
+  background: var(--brand-gold-soft);
 }
 
 .collectionSection {
@@ -117,11 +117,11 @@
 }
 
 .trailCard {
-  --ready-card-accent: #087e9c;
-  --ready-card-deep: #075985;
-  --ready-card-glow: rgb(250 204 21 / 0.26);
-  --ready-card-tint: #f5fbfc;
-  --ready-card-ring: rgb(8 145 178 / 0.14);
+  --ready-card-accent: #005c8b;
+  --ready-card-deep: #003f61;
+  --ready-card-glow: rgb(209 156 44 / 0.22);
+  --ready-card-tint: #f7f8f8;
+  --ready-card-ring: rgb(0 92 139 / 0.14);
 
   position: relative;
   display: flex;
@@ -173,19 +173,19 @@
 }
 
 .trailCard[data-category="Mundo Digital"] {
-  --ready-card-accent: #4f46e5;
-  --ready-card-deep: #3730a3;
-  --ready-card-glow: rgb(99 102 241 / 0.18);
-  --ready-card-tint: #f7f7ff;
-  --ready-card-ring: rgb(79 70 229 / 0.14);
+  --ready-card-accent: #d19c2c;
+  --ready-card-deep: #805523;
+  --ready-card-glow: rgb(209 156 44 / 0.18);
+  --ready-card-tint: #fffaf0;
+  --ready-card-ring: rgb(209 156 44 / 0.16);
 }
 
 .trailCard[data-category="Cultura Digital"] {
-  --ready-card-accent: #059669;
-  --ready-card-deep: #047857;
-  --ready-card-glow: rgb(16 185 129 / 0.18);
-  --ready-card-tint: #f2fcf7;
-  --ready-card-ring: rgb(5 150 105 / 0.14);
+  --ready-card-accent: #f58634;
+  --ready-card-deep: #805523;
+  --ready-card-glow: rgb(245 134 52 / 0.18);
+  --ready-card-tint: #fffaf6;
+  --ready-card-ring: rgb(245 134 52 / 0.16);
 }
 
 .trailIcon {
@@ -267,12 +267,12 @@
 }
 
 .readyPath {
-  --ready-accent: #0891b2;
-  --ready-accent-deep: #075985;
+  --ready-accent: #005c8b;
+  --ready-accent-deep: #003f61;
   --ready-header-deep: var(--brand-navy-deep);
   --ready-header-end: var(--brand-blue);
-  --ready-header-glow: rgb(34 211 238 / 0.28);
-  --ready-soft-text: #cffafe;
+  --ready-header-glow: rgb(245 134 52 / 0.18);
+  --ready-soft-text: #e6e6e6;
 
   overflow: hidden;
   margin-top: 2rem;
@@ -284,21 +284,21 @@
 }
 
 .readyPath[data-category="Mundo Digital"] {
-  --ready-accent: #6366f1;
-  --ready-accent-deep: #4338ca;
-  --ready-header-deep: #25205f;
-  --ready-header-end: #4338ca;
-  --ready-header-glow: rgb(165 180 252 / 0.28);
-  --ready-soft-text: #e0e7ff;
+  --ready-accent: #d19c2c;
+  --ready-accent-deep: #a06e38;
+  --ready-header-deep: #805523;
+  --ready-header-end: #a06e38;
+  --ready-header-glow: rgb(209 156 44 / 0.2);
+  --ready-soft-text: #f8edcf;
 }
 
 .readyPath[data-category="Cultura Digital"] {
-  --ready-accent: #059669;
-  --ready-accent-deep: #047857;
-  --ready-header-deep: #063f36;
-  --ready-header-end: #047857;
-  --ready-header-glow: rgb(110 231 183 / 0.24);
-  --ready-soft-text: #d1fae5;
+  --ready-accent: #f58634;
+  --ready-accent-deep: #a06e38;
+  --ready-header-deep: #805523;
+  --ready-header-end: #a06e38;
+  --ready-header-glow: rgb(245 134 52 / 0.2);
+  --ready-soft-text: #f8edcf;
 }
 
 .pathHeader {
@@ -321,17 +321,17 @@
   align-items: center;
   justify-content: center;
   gap: 0.45rem;
-  border: 1px solid var(--brand-yellow);
+  border: 1px solid var(--brand-gold);
   border-radius: 0.8rem;
   color: var(--brand-navy-deep);
-  background: var(--brand-yellow);
+  background: var(--brand-gold);
   font: inherit;
   font-weight: 850;
   cursor: pointer;
 }
 
 .copyButton:hover {
-  background: var(--brand-yellow-soft);
+  background: var(--brand-gold-soft);
   transform: translateY(-1px);
 }
 
@@ -342,10 +342,10 @@
 .featuredLabel {
   display: inline-flex;
   padding: 0.25rem 0.6rem;
-  border: 1px solid rgb(250 204 21 / 0.55);
+  border: 1px solid rgb(209 156 44 / 0.55);
   border-radius: 999px;
-  color: var(--brand-yellow-soft);
-  background: rgb(250 204 21 / 0.1);
+  color: var(--brand-gold-soft);
+  background: rgb(209 156 44 / 0.1);
   font-size: 0.7rem;
   font-weight: 850;
   letter-spacing: 0.08em;
@@ -437,7 +437,7 @@
   bottom: -1.15rem;
   left: 1.2rem;
   width: 2px;
-  background: linear-gradient(var(--ready-accent), var(--brand-yellow));
+  background: linear-gradient(var(--ready-accent), var(--brand-gold));
   content: "";
 }
 
@@ -534,7 +534,7 @@
 
 .stageContent .stageObjective {
   padding-left: 0.7rem;
-  border-left: 3px solid var(--brand-yellow);
+  border-left: 3px solid var(--brand-gold);
   font-size: 0.78rem;
 }
 

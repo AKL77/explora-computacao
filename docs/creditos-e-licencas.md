@@ -4,16 +4,15 @@ Este manifesto cobre os ativos distribuídos em `public/`. Dependências de
 software e suas licenças estão registradas no `package.json` e no
 `pnpm-lock.yaml`.
 
-## Identidade do Informática Explorer
+## Identidade do Explora Computação
 
 | Arquivo | Origem | Termos |
 |---|---|---|
-| `public/branding/informatica-explorer-logo.png` | Criação original assistida por ImageGen para Augusto Lunardi, em 9 ago. 2026 | Abrangido pelo aviso do projeto; identidade provisória |
+| `public/branding/explora-computacao-mark.svg` | Desenho vetorial original criado para esta identidade visual | Abrangido pelo aviso do projeto |
 | `public/branding/resource-placeholder.svg` | Criação original no próprio projeto | Abrangido pelo aviso do projeto |
 
-O símbolo usa uma letra “i” e uma órbita como metáforas de informação e
-exploração. Não reproduz o símbolo do Internet Explorer e não indica afiliação
-ou endosso da Microsoft.
+O símbolo reúne a letra “E” e três pontos em sequência para representar
+exploração, conexão e percursos de aprendizagem.
 
 ## Fotografia da UFSM
 
@@ -69,7 +68,7 @@ repositório público nem do artefato publicado.
 
 ## Aviso de não afiliação
 
-Informática Explorer é um protótipo acadêmico independente. Microsoft, UFSM,
-MEC, CNE, ALT+INOVARE, Google, Rozelma França e BNCC são citados apenas para
+Explora Computação é um protótipo acadêmico independente. UFSM, MEC, CNE,
+ALT+INOVARE, Google, Rozelma França e BNCC são citados apenas para
 identificação, contexto ou referência curricular; nenhuma afiliação ou
 aprovação é alegada.

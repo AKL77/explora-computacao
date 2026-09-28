@@ -61,7 +61,7 @@ de informações dos materiais e para criar propostas de Trilhas Prontas a parti
 de temas e recursos selecionados. A incorporação dos resultados ao protótipo
 depende de decisão humana.
 
-O Informática Explorer não chama modelos ou APIs de IA em tempo de execução e
+O Explora Computação não chama modelos ou APIs de IA em tempo de execução e
 não oferece geração automática de trilhas ao docente.
 
 ## Avaliação
@@ -87,7 +87,7 @@ telas órfãs e links quebrados.
 
 Somente a sessão demonstrativa e as trilhas são persistidas no `localStorage`,
 em chaves independentes e versionadas. Nenhum dado é enviado a um servidor do
-Informática Explorer.
+Explora Computação.
 
 Dados antigos das funcionalidades removidas podem continuar no armazenamento
 do navegador de quem utilizou versões anteriores, mas não são mais lidos nem

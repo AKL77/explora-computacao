@@ -99,7 +99,7 @@ function createUnicampActivity({
     provenance: {
       source: `${COLLECTION_NAME} — Atividade ${number}: ${topic}`,
       license: COLLECTION_LICENSE,
-      curator: "Informática Explorer",
+      curator: "Explora Computação",
       lastVerifiedAt: LAST_VERIFIED_AT,
       status: "verified",
     },

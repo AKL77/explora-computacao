@@ -11,7 +11,7 @@
 
 .eyebrow {
   margin: 0 0 0.35rem;
-  color: var(--brand-cyan);
+  color: var(--brand-blue);
   font-size: 0.74rem;
   font-weight: 850;
   letter-spacing: 0.1em;
@@ -54,11 +54,11 @@
   place-items: center;
   border-radius: 1.25rem;
   color: white;
-  background: linear-gradient(145deg, var(--brand-cyan), var(--brand-blue));
+  background: linear-gradient(145deg, var(--brand-blue), var(--brand-blue));
 }
 
 .identity > span {
-  color: var(--brand-cyan);
+  color: var(--brand-blue);
   font-size: 0.76rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -146,7 +146,7 @@
 }
 
 .shortcuts a:hover {
-  border-color: var(--brand-cyan);
+  border-color: var(--brand-blue);
   box-shadow: var(--shadow-sm);
   transform: translateY(-2px);
 }

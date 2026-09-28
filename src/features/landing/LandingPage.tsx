@@ -65,15 +65,15 @@ export function LandingPage() {
 
       <header className={styles.header}>
         <div className={`${styles.container} ${styles.headerInner}`}>
-          <Link className={styles.brand} to="/" aria-label="Informática Explorer — início">
+          <Link className={styles.brand} to="/" aria-label="Explora Computação — início">
             <img
               className={styles.brandMark}
-              src={publicAsset("branding/informatica-explorer-logo.png")}
+              src={publicAsset("branding/explora-computacao-mark.svg")}
               alt=""
               width="48"
               height="48"
             />
-            <span className={styles.brandName}>Informática Explorer</span>
+            <span className={styles.brandName}>Explora Computação</span>
           </Link>
 
           <nav className={styles.siteNav} aria-label="Navegação principal">
@@ -149,7 +149,7 @@ export function LandingPage() {
           <div className={`${styles.container} ${styles.heroContent}`}>
             <h1 id="titulo-principal">Explore. Planeje. Ensine.</h1>
             <p className={styles.heroDescription}>
-              O Informática Explorer organiza recursos e apoia a criação de trilhas de ensino
+              O Explora Computação organiza recursos e apoia a criação de trilhas de ensino
               fundamentadas na BNCC Computação e em materiais selecionados.
             </p>
             <a
@@ -169,13 +169,13 @@ export function LandingPage() {
           aria-labelledby="titulo-problema"
         >
           <div className={`${styles.container} ${styles.problemContent}`}>
-            <p className={styles.sectionKicker}>Por que o Informática Explorer?</p>
+            <p className={styles.sectionKicker}>Por que o Explora Computação?</p>
             <h2 id="titulo-problema">Direcionamento e praticidade</h2>
             <p>
               Recursos para o ensino de Computação estão espalhados por diferentes sites e
               descritos de formas pouco consistentes. Existem plataformas que buscam agrupar esses
               conteúdos, contudo nem sempre é fácil saber para qual contexto um material é adequado
-              e como utilizá-lo em sala de aula. O Informática Explorer propõe uma forma de buscar
+              e como utilizá-lo em sala de aula. O Explora Computação propõe uma forma de buscar
               recursos e combiná-los em trilhas de ensino contextualizadas, apoiando a decisão do
               docente sem substituí-la.
             </p>
@@ -270,12 +270,12 @@ export function LandingPage() {
           <div className={styles.footerIntro}>
             <div className={styles.footerBrand}>
               <img
-                src={publicAsset("branding/informatica-explorer-logo.png")}
+                src={publicAsset("branding/explora-computacao-mark.svg")}
                 alt=""
                 width="42"
                 height="42"
               />
-              <strong>Informática Explorer</strong>
+              <strong>Explora Computação</strong>
             </div>
             <p>Recursos e planejamento contextualizado para o ensino de Computação.</p>
           </div>

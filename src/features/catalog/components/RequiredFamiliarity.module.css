@@ -13,14 +13,14 @@
 }
 
 .audience {
-  color: var(--text-muted, #52616b);
+  color: var(--text-muted, #56616a);
   font-size: 0.78rem;
   font-weight: 750;
   grid-column: 1 / -1;
 }
 
 .level {
-  color: var(--brand-navy, #082f49);
+  color: var(--brand-navy, #003f61);
   font-size: 0.95rem;
   line-height: 1.35;
 }
@@ -48,7 +48,7 @@
 }
 
 .bars > .filled {
-  background: var(--brand-cyan, #0891b2);
+  background: var(--brand-blue, #005c8b);
 }
 
 .compact {

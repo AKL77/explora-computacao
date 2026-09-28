@@ -1,9 +1,9 @@
-# Informática Explorer — Especificação funcional e de interface
+# Explora Computação — Especificação funcional e de interface
 
 **Status:** documento histórico da versão anterior do protótipo
 **Versão:** 0.7
 **Data:** 30 de agosto de 2026
-**Nome do produto:** Informática Explorer — provisório
+**Nome do produto:** Explora Computação
 **Escopo registrado:** frontend com Acervo, organização pessoal e criador determinístico de planos
 
 > **Atenção:** este documento preserva requisitos e decisões da versão anterior
@@ -24,11 +24,11 @@ Esta especificação consolida:
 
 Quando o pedido atual acrescenta ou restringe algo que estava em aberto no registro mestre, esta especificação trata a informação mais recente como decisão de produto. Antes do início da implementação, essas novas decisões deverão ser registradas também no arquivo mestre.
 
-As imagens de inspiração orientaram composição e ritmo visual, mas não são redistribuídas no repositório público. Textos, identidade, componentes, cores, conteúdo e comportamento respondem ao contexto do Informática Explorer.
+As imagens de inspiração orientaram composição e ritmo visual, mas não são redistribuídas no repositório público. Textos, identidade, componentes, cores, conteúdo e comportamento respondem ao contexto do Explora Computação.
 
 ## 2. Visão do produto
 
-O Informática Explorer é uma plataforma web para apoiar docentes do 4º ao 9º ano do Ensino Fundamental a encontrar, compreender e organizar recursos voltados ao ensino de Computação e a criar planos de aula estruturados.
+O Explora Computação é uma plataforma web para apoiar docentes do 4º ao 9º ano do Ensino Fundamental a encontrar, compreender e organizar recursos voltados ao ensino de Computação e a criar planos de aula estruturados.
 
 O produto responde a três problemas:
 
@@ -160,7 +160,7 @@ A estrutura curricular deverá preservar a hierarquia:
 
 As rotas `/app/*` usam uma proteção de sessão local. Sem sessão, o usuário volta à página pública. Ao selecionar **Entrar**, a demonstração cria a sessão e abre diretamente `/app/acervo`; o fluxo Google e o redirecionamento pós-autenticação ficam adiados.
 
-Em produção, o `HashRouter` serializa a rota lógica depois de `#`, por exemplo `/informatica-explorer/#/app/acervo`. O fragmento preserva links diretos e recarregamento no GitHub Pages sem depender de rewrite no servidor.
+Em produção, o `HashRouter` serializa a rota lógica depois de `#`, por exemplo `/explora-computacao/#/app/acervo`. O fragmento preserva links diretos e recarregamento no GitHub Pages sem depender de rewrite no servidor.
 
 ### 5.2 Fluxo principal
 
@@ -186,32 +186,33 @@ flowchart LR
 
 ### 6.1 Marca
 
-O símbolo principal está em [`public/branding/informatica-explorer-logo.png`](../public/branding/informatica-explorer-logo.png).
+O símbolo principal está em [`public/branding/explora-computacao-mark.svg`](../public/branding/explora-computacao-mark.svg).
 
-- Formato: PNG quadrado, 1254 × 1254 px, fundo transparente.
-- Conceito: um “i” minúsculo azul/ciano atravessado por uma órbita amarela, associado a descoberta, navegação e conexão.
-- Uso no cabeçalho: símbolo à esquerda e o texto “Informática Explorer” renderizado em HTML; o nome não deve ser incorporado como texto rasterizado.
-- Área de proteção mínima: 20% da largura do ponto do “i”.
+- Formato: SVG quadrado, escalável.
+- Conceito: letra “E” com três pontos que sugerem exploração, conexão e percursos de aprendizagem.
+- Uso no cabeçalho: símbolo à esquerda e o texto “Explora Computação” renderizado em HTML; o nome não deve ser incorporado como texto rasterizado.
+- Área de proteção mínima: 20% da largura do símbolo.
 - Tamanho mínimo recomendado do símbolo: 32 × 32 px.
 - Não distorcer, girar, recolorir ou aplicar sombra adicional.
 
-O símbolo é uma exploração provisória de marca para o TCC, não uma identidade final registrada. Antes de divulgação pública, deverá passar por revisão de legibilidade, originalidade e aplicação em tamanhos pequenos.
+O símbolo é a identidade visual adotada neste protótipo acadêmico.
 
-### 6.2 Paleta provisória
+### 6.2 Paleta
 
-> Nota de consistência: a versão 0.4 do registro mestre menciona uma paleta no pedido, mas não contém nomes nem valores de cores. Por isso, os tokens abaixo são **provisórios**, derivados da marca criada e do caráter educacional do produto. Eles não devem ser apresentados como cores extraídas do registro mestre.
+A interface usa como referência as cores fornecidas para esta revisão de identidade. A fotografia do campus da UFSM permanece na página inicial, sem uso do brasão ou indicação de afiliação institucional.
 
 | Token | Valor | Uso |
 |---|---:|---|
-| `brand.navy` | `#082F49` | Cabeçalho, rodapé, texto sobre fundos claros. |
-| `brand.blue` | `#075985` | Ações primárias e estados ativos. |
-| `brand.cyan` | `#0891B2` | Destaques, ícones e apoio visual; não usar como texto pequeno sobre branco. |
-| `brand.yellow` | `#FACC15` | Acentos, órbitas e destaques; usar texto escuro por cima. |
-| `surface.page` | `#F8FAFC` | Fundo geral. |
-| `surface.soft` | `#EAF4F7` | Seções alternadas, filtros e estados suaves. |
+| `brand.navy` | `#003F61` | Tom escuro derivado do azul para cabeçalho e rodapé. |
+| `brand.blue` | `#005C8B` | Ações primárias e estados ativos. |
+| `brand.orange` | `#F58634` | Destaques e pontos do símbolo. |
+| `brand.gold` | `#D19C2C` | Acentos e destaques; usar texto escuro por cima. |
+| `brand.bronze` | `#A06E38` | Apoio visual e variações das trilhas. |
+| `surface.page` | `#F7F8F8` | Fundo geral derivado da prata. |
+| `surface.soft` | `#F0F2F3` | Seções alternadas, filtros e estados suaves. |
 | `surface.card` | `#FFFFFF` | Cards e diálogos. |
-| `text.primary` | `#14212B` | Texto principal. |
-| `text.muted` | `#52616B` | Texto secundário com contraste validado. |
+| `text.primary` | `#202427` | Texto principal. |
+| `text.muted` | `#56616A` | Texto secundário com contraste validado. |
 | `state.success` | `#287A4B` | Confirmações. |
 | `state.warning` | `#9A6700` | Metadados em validação. |
 | `state.error` | `#B42318` | Erros e ações destrutivas. |
@@ -272,11 +273,11 @@ Inspirado na organização horizontal da primeira referência visual privada, ad
 
 **Texto breve sugerido:**
 
-> O Informática Explorer organiza recursos e facilita a criação de planos de aula contextualizados a partir da BNCC Computação e da realidade de cada turma.
+> O Explora Computação organiza recursos e facilita a criação de planos de aula contextualizados a partir da BNCC Computação e da realidade de cada turma.
 
 **Ação:** botão **Conheça o projeto**, que rola para a próxima seção. Não haverá busca pública no hero nesta fase.
 
-### 7.3 Seção “Por que o Informática Explorer?”
+### 7.3 Seção “Por que o Explora Computação?”
 
 Faixa clara, com texto central de leitura curta.
 
@@ -286,7 +287,7 @@ Faixa clara, com texto central de leitura curta.
 
 **Texto-base editável:**
 
-> Recursos para o ensino de Computação estão espalhados por diferentes sites e descritos de formas pouco consistentes. Existem plataformas que buscam agrupar esses conteúdos, contudo nem sempre é fácil saber para qual contexto um material é adequado e como utilizá-lo em sala de aula. O Informática Explorer propõe uma forma de buscar recursos e criar planos de aula de forma contextualizada, apoiando a decisão do docente sem substituí-la.
+> Recursos para o ensino de Computação estão espalhados por diferentes sites e descritos de formas pouco consistentes. Existem plataformas que buscam agrupar esses conteúdos, contudo nem sempre é fácil saber para qual contexto um material é adequado e como utilizá-lo em sala de aula. O Explora Computação propõe uma forma de buscar recursos e criar planos de aula de forma contextualizada, apoiando a decisão do docente sem substituí-la.
 
 ### 7.4 Seção do Acervo
 
@@ -507,7 +508,7 @@ O conteúdo é aberto em rota própria com aparência de painel expandido, inspi
   - botão de coração para favoritar/desfavoritar;
   - **Adicionar à pasta**.
 
-O acesso externo abre em nova guia com `rel="noopener noreferrer"` e um aviso textual de que o usuário sairá do Informática Explorer.
+O acesso externo abre em nova guia com `rel="noopener noreferrer"` e um aviso textual de que o usuário sairá do Explora Computação.
 
 ### 12.2 Abas do detalhe
 
@@ -677,7 +678,7 @@ O item **Minhas Turmas** também permanece visível e inativo. Ele antecipa uma 
 
 ### 15.9 Sobre
 
-A página **Sobre** apresenta o propósito do Informática Explorer, explica o uso de Favoritos e Meus Materiais e termina com um FAQ conciso. Não contém uma seção separada de passo a passo ou “Como utilizar”. O FAQ desta iteração possui seis perguntas e não descreve persistência local, propriedade dos recursos nem um processo interno de curadoria.
+A página **Sobre** apresenta o propósito do Explora Computação, explica o uso de Favoritos e Meus Materiais e termina com um FAQ conciso. Não contém uma seção separada de passo a passo ou “Como utilizar”. O FAQ desta iteração possui seis perguntas e não descreve persistência local, propriedade dos recursos nem um processo interno de curadoria.
 
 ## 16. Modelo de dados do frontend
 

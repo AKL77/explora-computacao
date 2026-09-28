@@ -62,7 +62,7 @@ const luaBitBitResource: Resource = {
   provenance: {
     source: "As aventuras de Lua & Bit-Bit no parque de diversão — Programando com Variáveis",
     license: CC_BY_NC_4,
-    curator: "Informática Explorer",
+    curator: "Explora Computação",
     lastVerifiedAt: LAST_VERIFIED_AT,
     status: "verified",
   },
@@ -148,7 +148,7 @@ const sertaoBitResource: Resource = {
   provenance: {
     source: "Sertão.bit — livro-jogo e guia de apoio ao docente",
     license: CC_BY_NC_4,
-    curator: "Informática Explorer",
+    curator: "Explora Computação",
     lastVerifiedAt: LAST_VERIFIED_AT,
     status: "verified",
   },
@@ -194,7 +194,7 @@ const aventurasDigitaisResource: Resource = {
   summary:
     "Livro com histórias clássicas adaptadas e atividades plugadas e desplugadas sobre privacidade, segurança, ética, pensamento crítico, notícias falsas, direitos autorais e cidadania digital.",
   additionalInformation:
-    "O livro possui seis capítulos e um diário de aprendizagem; o guia do professor apresenta objetivos, preparação e propostas de aplicação. A fonte destina a coleção aos anos iniciais do Ensino Fundamental e declara habilidades do 1º ao 5º ano. Como o recorte atual do Informática Explorer começa no 4º ano, o cadastro inclui somente os alinhamentos declarados para o 4º e o 5º ano. A fonte não informa duração nem licença de reutilização.",
+    "O livro possui seis capítulos e um diário de aprendizagem; o guia do professor apresenta objetivos, preparação e propostas de aplicação. A fonte destina a coleção aos anos iniciais do Ensino Fundamental e declara habilidades do 1º ao 5º ano. Como o recorte atual do Explora Computação começa no 4º ano, o cadastro inclui somente os alinhamentos declarados para o 4º e o 5º ano. A fonte não informa duração nem licença de reutilização.",
   recommendedGrades: [4, 5],
   curriculum: {
     alignments: [

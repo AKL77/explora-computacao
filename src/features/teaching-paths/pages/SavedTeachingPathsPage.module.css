@@ -6,59 +6,59 @@
 }
 
 .themeTurquoise {
-  --trail-accent: #0e7490;
-  --trail-accent-deep: #075985;
-  --trail-soft: #ddf4f6;
-  --trail-line: #79cbd8;
-  --trail-highlight: #f2fcfd;
+  --trail-accent: #003f61;
+  --trail-accent-deep: #002f49;
+  --trail-soft: #e6eff3;
+  --trail-line: #9aabb4;
+  --trail-highlight: #f7f8f8;
 }
 
 .themeBlue {
-  --trail-accent: #2563eb;
-  --trail-accent-deep: #1d4ed8;
-  --trail-soft: #e6efff;
-  --trail-line: #8bb3ff;
-  --trail-highlight: #f5f8ff;
+  --trail-accent: #005c8b;
+  --trail-accent-deep: #004b72;
+  --trail-soft: #e6eff3;
+  --trail-line: #8fb6c8;
+  --trail-highlight: #f7f8f8;
 }
 
 .themeGreen {
-  --trail-accent: #047857;
-  --trail-accent-deep: #065f46;
-  --trail-soft: #dff7ec;
-  --trail-line: #79c9a6;
-  --trail-highlight: #f2fcf7;
+  --trail-accent: #a06e38;
+  --trail-accent-deep: #805523;
+  --trail-soft: #f4ede3;
+  --trail-line: #cfb99e;
+  --trail-highlight: #faf8f4;
 }
 
 .themeIndigo {
-  --trail-accent: #4338ca;
-  --trail-accent-deep: #3730a3;
-  --trail-soft: #e8e9ff;
-  --trail-line: #a5a7ee;
-  --trail-highlight: #f7f7ff;
+  --trail-accent: #6d7479;
+  --trail-accent-deep: #40474b;
+  --trail-soft: #e6e6e6;
+  --trail-line: #bebebe;
+  --trail-highlight: #f7f8f8;
 }
 
 .themeViolet {
-  --trail-accent: #7c3aed;
-  --trail-accent-deep: #6d28d9;
-  --trail-soft: #f0eaff;
-  --trail-line: #c5a9ff;
-  --trail-highlight: #faf8ff;
+  --trail-accent: #f58634;
+  --trail-accent-deep: #b96220;
+  --trail-soft: #fff0e3;
+  --trail-line: #f6bb90;
+  --trail-highlight: #fffaf6;
 }
 
 .themeAmber {
-  --trail-accent: #b45309;
-  --trail-accent-deep: #92400e;
-  --trail-soft: #fff1cf;
-  --trail-line: #edbf60;
+  --trail-accent: #a87916;
+  --trail-accent-deep: #805b00;
+  --trail-soft: #f8edcf;
+  --trail-line: #eacb68;
   --trail-highlight: #fffaf0;
 }
 
 .themeCoral {
-  --trail-accent: #c24134;
-  --trail-accent-deep: #9f2f26;
-  --trail-soft: #ffe9e5;
-  --trail-line: #f3aaa1;
-  --trail-highlight: #fff8f7;
+  --trail-accent: #6d7479;
+  --trail-accent-deep: #40474b;
+  --trail-soft: #e6e6e6;
+  --trail-line: #bebebe;
+  --trail-highlight: #f7f8f8;
 }
 
 .listHeader {
@@ -87,7 +87,7 @@
 .stepText > span,
 .curriculumSummary strong {
   margin: 0;
-  color: var(--brand-cyan);
+  color: var(--brand-blue);
   font-size: 0.74rem;
   font-weight: 850;
   letter-spacing: 0.085em;
@@ -424,12 +424,12 @@
 .pendingRemoval .stepCard {
   opacity: 0.68;
   background: #fffaf9;
-  border-color: #e7aaa2;
+  border-color: #f6bb90;
 }
 
 .pendingRemoval .dragHandle {
   color: #a3483d;
-  background: #ffebe8;
+  background: #fff0e3;
   cursor: not-allowed;
 }
 
@@ -505,7 +505,7 @@
   font-size: 0.75rem;
   font-style: normal;
   font-weight: 780;
-  background: #ffebe8;
+  background: #fff0e3;
   border-radius: 999px;
 }
 
@@ -543,8 +543,8 @@
 .restoreButton {
   padding: 0.45rem 0.6rem;
   color: #8e3e35;
-  background: #fff8f7;
-  border-color: #e7aaa2;
+  background: #fffaf6;
+  border-color: #f6bb90;
 }
 
 .pathConnector {
@@ -662,9 +662,9 @@
   padding: 0.62rem 0.9rem;
   margin: 1rem;
   color: var(--brand-navy) !important;
-  background: var(--brand-yellow-soft);
+  background: var(--brand-gold-soft);
   border: 1px solid #d7aa00;
-  box-shadow: 0 2px 8px rgb(8 47 73 / 10%);
+  box-shadow: 0 2px 8px rgb(0 63 97 / 10%);
   transition: background 150ms ease, border-color 150ms ease, transform 150ms ease;
 }
 
@@ -744,35 +744,35 @@
   height: 0.9rem;
   background: var(--option-color);
   border-radius: 50%;
-  box-shadow: inset 0 0 0 1px rgb(8 47 73 / 16%);
+  box-shadow: inset 0 0 0 1px rgb(0 63 97 / 16%);
 }
 
 .colorTurquoise {
-  --option-color: #0e7490;
+  --option-color: #003f61;
 }
 
 .colorBlue {
-  --option-color: #2563eb;
+  --option-color: #005c8b;
 }
 
 .colorGreen {
-  --option-color: #047857;
+  --option-color: #a06e38;
 }
 
 .colorIndigo {
-  --option-color: #4338ca;
+  --option-color: #bebebe;
 }
 
 .colorViolet {
-  --option-color: #7c3aed;
+  --option-color: #f58634;
 }
 
 .colorAmber {
-  --option-color: #d97706;
+  --option-color: #d19c2c;
 }
 
 .colorCoral {
-  --option-color: #e85d4f;
+  --option-color: #e6e6e6;
 }
 
 .iconOption {
@@ -785,8 +785,8 @@
 .colorOption[aria-pressed="true"],
 .iconOption[aria-pressed="true"] {
   background: var(--surface-soft);
-  border-color: var(--brand-cyan);
-  box-shadow: inset 0 0 0 1px var(--brand-cyan);
+  border-color: var(--brand-blue);
+  box-shadow: inset 0 0 0 1px var(--brand-blue);
 }
 
 .dialogActions {
@@ -967,7 +967,7 @@
   overflow: hidden;
   color: white;
   background:
-    radial-gradient(circle at 88% 8%, rgb(34 211 238 / 0.28), transparent 20rem),
+    radial-gradient(circle at 88% 8%, rgb(245 134 52 / 0.28), transparent 20rem),
     linear-gradient(130deg, var(--brand-navy-deep), var(--trail-accent-deep));
   border-radius: 0 0 var(--radius-lg) var(--radius-lg);
 }
@@ -980,7 +980,7 @@
 }
 
 .pathHeader .eyebrow {
-  color: #a5f3fc;
+  color: #f8edcf;
 }
 
 .pathHeader h1 {
@@ -996,7 +996,7 @@
 .pathHeader .pathTitleArea > .pathObjective {
   max-width: 56rem;
   margin: 0.65rem 0 0;
-  color: #f8fafc;
+  color: #f7f8f8;
   line-height: 1.65;
 }
 
@@ -1014,7 +1014,7 @@
   align-items: center;
   gap: 0.35rem;
   border-radius: 999px;
-  color: #cffafe;
+  color: #e6eff3;
   background: rgb(255 255 255 / 0.11);
   font-size: 0.74rem;
   font-weight: 760;
@@ -1046,12 +1046,12 @@
 
 .saveChangesButton {
   color: var(--brand-navy-deep);
-  background: var(--brand-yellow);
-  border-color: var(--brand-yellow);
+  background: var(--brand-gold);
+  border-color: var(--brand-gold);
 }
 
 .saveChangesButton:hover:not(:disabled) {
-  background: var(--brand-yellow-soft);
+  background: var(--brand-gold-soft);
 }
 
 .sequenceHeader {
@@ -1102,7 +1102,7 @@
   bottom: -1.25rem;
   left: 1.225rem;
   width: 2px;
-  background: linear-gradient(var(--trail-accent), var(--brand-yellow));
+  background: linear-gradient(var(--trail-accent), var(--brand-gold));
   content: "";
 }
 
@@ -1194,7 +1194,7 @@
 }
 
 .stepText > span {
-  color: var(--brand-cyan);
+  color: var(--brand-blue);
   font-size: 0.7rem;
 }
 
@@ -1216,7 +1216,7 @@
   font-weight: 500;
   line-height: 1.5;
   background: transparent;
-  border-left: 3px solid var(--brand-yellow);
+  border-left: 3px solid var(--brand-gold);
   border-radius: 0;
 }
 
@@ -1229,7 +1229,7 @@
   width: fit-content;
   padding: 0.24rem 0.42rem;
   color: #953e35;
-  background: #ffebe8;
+  background: #fff0e3;
   border: 0;
   border-radius: 999px;
   font-weight: 780;
@@ -1261,7 +1261,7 @@
   top: 0;
   bottom: 0.4rem;
   width: 2px;
-  background: linear-gradient(var(--trail-accent), var(--brand-yellow));
+  background: linear-gradient(var(--trail-accent), var(--brand-gold));
 }
 
 .connectorRoute::after {
@@ -1278,7 +1278,7 @@
   margin-left: 3.45rem;
   color: white;
   background:
-    radial-gradient(circle at 92% 8%, rgb(34 211 238 / 0.24), transparent 16rem),
+    radial-gradient(circle at 92% 8%, rgb(245 134 52 / 0.24), transparent 16rem),
     linear-gradient(130deg, var(--brand-navy-deep), var(--brand-blue));
   border: 0;
 }
@@ -1299,7 +1299,7 @@
 }
 
 .curriculumSummary strong {
-  color: #a5f3fc;
+  color: #f8edcf;
 }
 
 @media (max-width: 56rem) {
@@ -1411,9 +1411,9 @@
   padding: 3.25rem clamp(1rem, 3vw, 1.6rem) 1.6rem;
   overflow: hidden;
   background:
-    radial-gradient(circle at 90% 16%, rgb(34 211 238 / 22%), transparent 22rem),
+    radial-gradient(circle at 90% 16%, rgb(245 134 52 / 22%), transparent 22rem),
     linear-gradient(135deg, var(--brand-navy-deep), var(--brand-navy) 64%, var(--brand-blue));
-  border-bottom: 4px solid var(--brand-yellow);
+  border-bottom: 4px solid var(--brand-gold);
   align-items: flex-end;
 }
 
@@ -1425,7 +1425,7 @@
 
 .blockPlanHeading p {
   margin: 0 0 0.3rem;
-  color: #67e8f9;
+  color: #f8edcf;
   font-size: 0.72rem;
   font-weight: 900;
   letter-spacing: 0.2em;
@@ -1471,7 +1471,7 @@
   color: var(--text-primary);
   background: var(--surface-card);
   border: 1px solid var(--border-soft);
-  border-left: 5px solid var(--brand-cyan);
+  border-left: 5px solid var(--brand-blue);
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-sm);
 }
@@ -1506,24 +1506,24 @@
 
 .objectiveBlock {
   background: #f4fbfc;
-  border-left-color: var(--brand-cyan);
+  border-left-color: var(--brand-blue);
 }
 
 .familiarityBlock {
   background: #f5fafb;
-  border-left-color: var(--brand-cyan);
+  border-left-color: var(--brand-blue);
   grid-column: 1 / -1;
 }
 
 .materialsBlock {
   background: #fffdf1;
-  border-left-color: var(--brand-yellow);
+  border-left-color: var(--brand-gold);
   grid-column: span 5;
 }
 
 .methodologyBlock {
   background: #f3f9fb;
-  border-left-color: var(--brand-cyan);
+  border-left-color: var(--brand-blue);
   grid-column: span 7;
 }
 
@@ -1575,7 +1575,7 @@
 
 .durationOption:hover {
   background: var(--surface-soft);
-  border-color: var(--brand-cyan);
+  border-color: var(--brand-blue);
 }
 
 .durationOption:has(input:checked) {
@@ -1610,7 +1610,7 @@
   position: relative;
   height: 2.4rem;
   overflow: hidden;
-  background: linear-gradient(90deg, var(--brand-navy), var(--brand-blue), var(--brand-cyan));
+  background: linear-gradient(90deg, var(--brand-navy), var(--brand-blue), var(--brand-blue));
 }
 
 .blockPlanFooter span {

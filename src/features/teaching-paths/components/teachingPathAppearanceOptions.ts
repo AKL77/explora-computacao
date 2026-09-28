@@ -14,11 +14,11 @@ export const teachingPathIconLabels: Record<TeachingPathIcon, string> = {
 };
 
 export const teachingPathColorLabels: Record<TeachingPathBackgroundColor, string> = {
-  turquoise: "Turquesa",
+  turquoise: "Azul profundo",
   blue: "Azul",
-  green: "Verde",
-  indigo: "Índigo",
-  violet: "Violeta",
-  amber: "Âmbar",
-  coral: "Coral",
+  green: "Bronze",
+  indigo: "Chumbo",
+  violet: "Laranja",
+  amber: "Dourado",
+  coral: "Prata",
 };

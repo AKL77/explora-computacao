@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-const SESSION_STORAGE_KEY = "informatica-explorer:session:v1";
+const SESSION_STORAGE_KEY = "explora-computacao:session:v1";
 
 interface SessionStore {
   isAuthenticated: boolean;

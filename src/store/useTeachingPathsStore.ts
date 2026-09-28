@@ -17,7 +17,7 @@ import {
   type TeachingPathLessonCount,
 } from "@/domain/savedTeachingPath";
 
-export const TEACHING_PATHS_STORAGE_KEY = "informatica-explorer:teaching-paths:v1";
+export const TEACHING_PATHS_STORAGE_KEY = "explora-computacao:teaching-paths:v1";
 export const TEACHING_PATHS_SCHEMA_VERSION = 2 as const;
 
 export interface TeachingPathMetadata {

@@ -1,5 +1,5 @@
 {
-  "name": "informatica-explorer",
+  "name": "explora-computacao",
   "private": true,
   "version": "0.1.0",
   "description": "Protótipo web para organizar recursos de Computação alinhados à BNCC e apoiar o planejamento docente.",
@@ -12,11 +12,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AKL77/informatica-explorer.git"
+    "url": "git+https://github.com/AKL77/explora-computacao.git"
   },
-  "homepage": "https://akl77.github.io/informatica-explorer/",
+  "homepage": "https://akl77.github.io/explora-computacao/",
   "bugs": {
-    "url": "https://github.com/AKL77/informatica-explorer/issues"
+    "url": "https://github.com/AKL77/explora-computacao/issues"
   },
   "type": "module",
   "scripts": {

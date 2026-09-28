@@ -11,8 +11,8 @@ interface BrandProps {
 export function Brand({ compact = false, inverted = false, to = "/" }: BrandProps) {
   const destinationLabel =
     to === "/"
-      ? "Informática Explorer — página inicial"
-      : "Informática Explorer — buscar materiais";
+      ? "Explora Computação — página inicial"
+      : "Explora Computação — buscar materiais";
 
   return (
     <Link
@@ -22,14 +22,14 @@ export function Brand({ compact = false, inverted = false, to = "/" }: BrandProp
     >
       <img
         className={styles.mark}
-        src={publicAsset("branding/informatica-explorer-logo.png")}
+        src={publicAsset("branding/explora-computacao-mark.svg")}
         alt=""
         width="48"
         height="48"
       />
       {!compact && (
         <span className={styles.wordmark}>
-          Informática <strong>Explorer</strong>
+          Explora <strong>Computação</strong>
         </span>
       )}
     </Link>

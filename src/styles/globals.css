@@ -58,7 +58,7 @@ p {
 }
 
 ::selection {
-  background: var(--brand-yellow);
+  background: var(--brand-gold);
   color: var(--brand-navy-deep);
 }
 
@@ -74,7 +74,7 @@ p {
   left: 12px;
   padding: 10px 16px;
   border-radius: var(--radius-sm);
-  background: var(--brand-yellow);
+  background: var(--brand-gold);
   color: var(--brand-navy-deep);
   font-weight: 800;
   transform: translateY(-150%);

@@ -1,4 +1,4 @@
-# Informática Explorer — Plano e decisões de implementação
+# Explora Computação — Plano e decisões de implementação
 
 **Status:** protótipo implementado; manutenção incremental
 **Versão:** 0.2
@@ -131,8 +131,8 @@ Implementações futuras, fora deste plano:
 
 | Chave | Conteúdo |
 |---|---|
-| `informatica-explorer:session:v1` | Booleano/objeto mínimo indicando sessão de demonstração. |
-| `informatica-explorer:library:v1` | Favoritos, pastas e `schemaVersion`. |
+| `explora-computacao:session:v1` | Booleano/objeto mínimo indicando sessão de demonstração. |
+| `explora-computacao:library:v1` | Favoritos, pastas e `schemaVersion`. |
 
 Não armazenar nome, e-mail, foto, escola, dados de estudantes ou tokens.
 

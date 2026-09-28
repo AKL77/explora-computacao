@@ -165,7 +165,7 @@ describe("SavedTeachingPathsPage", () => {
     const objective = within(dialog).getByRole("textbox", { name: "Objetivo da trilha" });
     await user.clear(objective);
     await user.type(objective, "Objetivo revisado pela professora.");
-    await user.click(within(dialog).getByRole("button", { name: "Verde" }));
+    await user.click(within(dialog).getByRole("button", { name: "Bronze" }));
     await user.click(within(dialog).getByRole("button", { name: "Usar ícone Quebra-cabeça" }));
     await user.click(within(dialog).getByRole("button", { name: "Aplicar ao rascunho" }));
 

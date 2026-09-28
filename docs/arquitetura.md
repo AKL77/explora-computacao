@@ -2,7 +2,7 @@
 
 ## Visão geral
 
-O Informática Explorer é uma SPA estática construída com React, TypeScript e
+O Explora Computação é uma SPA estática construída com React, TypeScript e
 Vite. A versão atual não depende de servidor próprio: o catálogo é local e a
 sessão demonstrativa e as trilhas ficam no navegador.
 

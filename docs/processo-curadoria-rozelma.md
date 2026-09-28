@@ -4,7 +4,7 @@
 **Recorte do projeto:** 4º ao 9º ano do Ensino Fundamental
 
 Este documento registra como os materiais da página de Rozelma França e o jogo
-Interland foram avaliados para o Informática Explorer. O objetivo é separar
+Interland foram avaliados para o Explora Computação. O objetivo é separar
 fatos publicados pelas fontes, correspondências curriculares produzidas pela
 curadoria e informações que permaneceram ausentes.
 

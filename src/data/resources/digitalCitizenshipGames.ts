@@ -16,7 +16,7 @@ const interlandResource: Resource = {
   summary:
     "Jogo on-line de aventura que permite praticar segurança e cidadania digital em quatro mundos sobre compartilhamento responsável, identificação de armadilhas, gentileza, bullying, senhas e proteção de informações.",
   additionalInformation:
-    "O programa Seja Incrível na Internet foi projetado para estudantes do 2º ao 6º ano, de 7 a 12 anos. No recorte atual do Informática Explorer, isso corresponde ao 4º, 5º e 6º ano. Rio da Realidade aborda golpes, phishing e informações falsas; Montanha da Consciência, compartilhamento; Reino da Bondade, gentileza e bullying; Torre do Tesouro, senhas e privacidade. O Google recomenda discutir os conceitos antes e usar o jogo como reforço. A fonte não informa duração nem licença de reutilização para o jogo ou suas imagens; por isso, a plataforma usa a imagem padrão. Os alinhamentos à BNCC Computação são curatoriais e permanecem pendentes de validação.",
+    "O programa Seja Incrível na Internet foi projetado para estudantes do 2º ao 6º ano, de 7 a 12 anos. No recorte atual do Explora Computação, isso corresponde ao 4º, 5º e 6º ano. Rio da Realidade aborda golpes, phishing e informações falsas; Montanha da Consciência, compartilhamento; Reino da Bondade, gentileza e bullying; Torre do Tesouro, senhas e privacidade. O Google recomenda discutir os conceitos antes e usar o jogo como reforço. A fonte não informa duração nem licença de reutilização para o jogo ou suas imagens; por isso, a plataforma usa a imagem padrão. Os alinhamentos à BNCC Computação são curatoriais e permanecem pendentes de validação.",
   recommendedGrades: [4, 5, 6],
   curriculum: {
     alignments: [

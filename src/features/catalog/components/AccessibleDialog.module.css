@@ -4,15 +4,15 @@
   margin: auto;
   padding: 0;
   overflow: auto;
-  color: var(--text-primary, #14212b);
+  color: var(--text-primary, #202427);
   background: transparent;
   border: 0;
   border-radius: 1.25rem;
-  box-shadow: 0 24px 64px rgb(8 47 73 / 28%);
+  box-shadow: 0 24px 64px rgb(0 63 97 / 28%);
 }
 
 .dialog::backdrop {
-  background: rgb(8 47 73 / 64%);
+  background: rgb(0 63 97 / 64%);
   backdrop-filter: blur(2px);
 }
 
@@ -82,7 +82,7 @@
 
 .title {
   margin: 0;
-  color: var(--brand-navy, #082f49);
+  color: var(--brand-navy, #003f61);
   font-size: clamp(1.35rem, 4vw, 1.75rem);
   line-height: 1.2;
 }
@@ -90,7 +90,7 @@
 .description {
   max-width: 58ch;
   margin: 0.5rem 0 0;
-  color: var(--text-muted, #52616b);
+  color: var(--text-muted, #56616a);
   line-height: 1.55;
 }
 
@@ -102,14 +102,14 @@
 }
 
 .headerlessClose .closeButton {
-  color: var(--brand-navy, #082f49);
+  color: var(--brand-navy, #003f61);
   background: rgb(255 255 255 / 92%);
-  border: 1px solid rgb(8 47 73 / 14%);
-  box-shadow: var(--shadow-sm, 0 1px 2px rgb(8 47 73 / 8%));
+  border: 1px solid rgb(0 63 97 / 14%);
+  box-shadow: var(--shadow-sm, 0 1px 2px rgb(0 63 97 / 8%));
 }
 
 .headerlessClose .closeButton:hover {
-  background: var(--brand-yellow-soft, #fef3a3);
+  background: var(--brand-gold-soft, #f8edcf);
 }
 
 .closeButton {
@@ -118,10 +118,10 @@
   width: 2.75rem;
   height: 2.75rem;
   padding: 0;
-  color: var(--brand-navy, #082f49);
+  color: var(--brand-navy, #003f61);
   font-size: 1.75rem;
   line-height: 1;
-  background: var(--surface-soft, #eaf4f7);
+  background: var(--surface-soft, #f0f2f3);
   border: 0;
   border-radius: 999px;
   cursor: pointer;
@@ -133,7 +133,7 @@
 }
 
 .closeButton:focus-visible {
-  outline: 3px solid var(--brand-yellow, #facc15);
+  outline: 3px solid var(--brand-gold, #d19c2c);
   outline-offset: 3px;
 }
 

@@ -15,7 +15,7 @@ describe("AboutPage", () => {
     );
 
     expect(
-      screen.getByRole("heading", { name: "Sobre o Informática Explorer" }),
+      screen.getByRole("heading", { name: "Sobre o Explora Computação" }),
     ).toBeInTheDocument();
     expect(screen.queryByText("Como utilizar")).not.toBeInTheDocument();
     expect(screen.queryByText("Encontre recursos")).not.toBeInTheDocument();
@@ -32,7 +32,7 @@ describe("AboutPage", () => {
       screen.queryByText("Orientações rápidas para aproveitar os recursos disponíveis nesta versão."),
     ).not.toBeInTheDocument();
     expect(screen.queryByText("Meus favoritos e materiais ficam salvos?")).not.toBeInTheDocument();
-    expect(screen.queryByText("Os recursos pertencem ao Informática Explorer?")).not.toBeInTheDocument();
+    expect(screen.queryByText("Os recursos pertencem ao Explora Computação?")).not.toBeInTheDocument();
     expect(
       screen.getByText(
         "Não nesta versão. Os materiais disponíveis são selecionados previamente, e o docente pode consultá-los e usá-los para montar suas trilhas.",

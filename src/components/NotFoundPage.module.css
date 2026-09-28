@@ -4,7 +4,7 @@
   padding: 1.5rem;
   place-items: center;
   background:
-    radial-gradient(circle at 50% 18%, rgb(34 211 238 / 0.18), transparent 24rem),
+    radial-gradient(circle at 50% 18%, rgb(245 134 52 / 0.18), transparent 24rem),
     var(--brand-navy-deep);
 }
 
@@ -21,11 +21,11 @@
 
 .card svg {
   margin: 0 auto 1rem;
-  color: var(--brand-yellow);
+  color: var(--brand-gold);
 }
 
 .card > span {
-  color: #a5f3fc;
+  color: #f8edcf;
   font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 0.14em;
@@ -51,7 +51,7 @@
   margin-top: 0.6rem;
   padding: 0.65rem 1rem;
   border-radius: var(--radius-sm);
-  background: var(--brand-yellow);
+  background: var(--brand-gold);
   color: var(--brand-navy-deep);
   font-weight: 800;
   text-decoration: none;

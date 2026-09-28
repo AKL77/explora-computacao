@@ -1,4 +1,4 @@
-# Análise exploratória de plataformas relacionadas ao Informática Explorer
+# Análise exploratória de plataformas relacionadas ao Explora Computação
 
 **Consulta:** 22 de setembro de 2026. **Finalidade:** apoiar a escolha e a discussão de trabalhos relacionados no TCC; este documento não é texto pronto para a seção.
 
@@ -27,7 +27,7 @@ Observei: (1) entrada por ano, eixo e habilidade; (2) busca textual e filtros, e
 
 ### Aplicativo BNCC Computação 2.0 — comparador local e curricular
 
-Em [Explorar por ano](https://bncc-comp-2-0.vercel.app/guia/ano?ano=5), selecionei 5º ano e encontrei as habilidades EF05CO01 a EF05CO04 sob Pensamento Computacional. A [ficha EF05CO04](https://bncc-comp-2-0.vercel.app/detalhes/EF05CO04) apresenta código, etapa, eixo, definição e exemplos. Um [exemplo examinado](https://bncc-comp-2-0.vercel.app/detalhes/EF05CO04/exemplos/cmc7jcje504w30000b0nx59sf) traz abordagem “Híbrido”, tags e fonte NTEM/SM. “Minha página” apresenta favoritos de habilidades. Não encontrei, nesse caminho, montagem de sequência de vários recursos. A [UFSM](https://www.ufsm.br/2026/05/15/aplicativo-bncc-computacao) descreve a origem do aplicativo no trabalho com a rede de Santa Maria; por isso ele merece discussão destacada como trabalho próximo, inclusive para esclarecer o que o Informática Explorer acrescenta. O [repositório da versão 2.0](https://github.com/Brunop10/bncc-comp-2.0) descreve IA integrada; esse é **outro projeto** e não deve ser atribuído ao Informática Explorer.
+Em [Explorar por ano](https://bncc-comp-2-0.vercel.app/guia/ano?ano=5), selecionei 5º ano e encontrei as habilidades EF05CO01 a EF05CO04 sob Pensamento Computacional. A [ficha EF05CO04](https://bncc-comp-2-0.vercel.app/detalhes/EF05CO04) apresenta código, etapa, eixo, definição e exemplos. Um [exemplo examinado](https://bncc-comp-2-0.vercel.app/detalhes/EF05CO04/exemplos/cmc7jcje504w30000b0nx59sf) traz abordagem “Híbrido”, tags e fonte NTEM/SM. “Minha página” apresenta favoritos de habilidades. Não encontrei, nesse caminho, montagem de sequência de vários recursos. A [UFSM](https://www.ufsm.br/2026/05/15/aplicativo-bncc-computacao) descreve a origem do aplicativo no trabalho com a rede de Santa Maria; por isso ele merece discussão destacada como trabalho próximo, inclusive para esclarecer o que o Explora Computação acrescenta. O [repositório da versão 2.0](https://github.com/Brunop10/bncc-comp-2.0) descreve IA integrada; esse é **outro projeto** e não deve ser atribuído ao Explora Computação.
 
 ### MEC RED — comparador funcional brasileiro
 
@@ -55,7 +55,7 @@ A [busca por “pensamento computacional”](https://novaescola.org.br/busca?que
 
 ### OER Commons — referência para descoberta e coleção
 
-Na [busca por “unplugged computational thinking” e Upper Primary](https://oercommons.org/search?search_source=homepage&f.search=unplugged+computational+thinking&f.sublevel=upper-primary), apareceram quatro resultados no teste. A ficha [“Simon Says”](https://oercommons.org/courses/cs-fundamentals-5-5-simon-says) traz tag “Unplugged”, nível, provedor, licença e informação curricular, mas estava marcada para grade 4: “Upper Primary” não garante 5º ano. Selecionei **dois resultados**; o menu “Save” respondeu “Please log in to save materials”. A [apresentação da plataforma](https://oercommons.org/) descreve grupos, pastas compartilhadas e coleções. Isso confirma uma intenção de organização com conta, mas não provei a experiência após login nem uma ordenação pedagógica equivalente às etapas do Informática Explorer.
+Na [busca por “unplugged computational thinking” e Upper Primary](https://oercommons.org/search?search_source=homepage&f.search=unplugged+computational+thinking&f.sublevel=upper-primary), apareceram quatro resultados no teste. A ficha [“Simon Says”](https://oercommons.org/courses/cs-fundamentals-5-5-simon-says) traz tag “Unplugged”, nível, provedor, licença e informação curricular, mas estava marcada para grade 4: “Upper Primary” não garante 5º ano. Selecionei **dois resultados**; o menu “Save” respondeu “Please log in to save materials”. A [apresentação da plataforma](https://oercommons.org/) descreve grupos, pastas compartilhadas e coleções. Isso confirma uma intenção de organização com conta, mas não provei a experiência após login nem uma ordenação pedagógica equivalente às etapas do Explora Computação.
 
 ### MERLOT — referência para metadados e coleções de favoritos
 
@@ -75,7 +75,7 @@ Na [Coleção](https://www.gov.br/secom/pt-br/assuntos/educacao-midiatica/coleca
 
 O **ProfComp** e o **Computacional** são boas fontes especializadas e podem ser discutidos em conjunto, como portais que encaminham a materiais. O **CIEB** cabe melhor na fundamentação da navegação curricular do que como concorrente direto. **Nova Escola** e **MERLOT** são comparações de apoio: mantê-las no levantamento, mas só incluí-las no texto principal se exemplificarem um critério que as plataformas centrais não mostrem.
 
-## Cuidado ao posicionar o Informática Explorer
+## Cuidado ao posicionar o Explora Computação
 
 O [estado atual do protótipo](estado-atual.md) registra pesquisa e filtros por **ano, formato e abordagem** em Buscar Materiais; alinhamentos curatoriais por ano/eixo/habilidade; detalhe com proposta pedagógica; seleção de vários recursos; **Minhas Trilhas** com reordenação e duração por etapa; e **Trilhas Prontas** filtradas por eixo. Suas trilhas ficam no `localStorage` do navegador, sem conta real ou sincronização. Portanto, a vantagem demonstrável é o **encadeamento integrado** entre descoberta de materiais e sequência de propostas para o docente, no recorte BNCC Computação. Não seria correto afirmar que ele é o único a oferecer coleções, que valida pedagogicamente as trilhas, que guarda dados na conta do usuário ou que oferece IA ao professor dentro da aplicação.
 

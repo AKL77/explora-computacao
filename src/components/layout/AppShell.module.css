@@ -1,7 +1,7 @@
 .shell {
   min-height: 100vh;
   background:
-    radial-gradient(circle at 90% 5%, rgb(34 211 238 / 0.09), transparent 26rem),
+    radial-gradient(circle at 90% 5%, rgb(245 134 52 / 0.09), transparent 26rem),
     var(--surface-page);
 }
 
@@ -13,7 +13,7 @@
   width: var(--sidebar-width);
   flex-direction: column;
   background:
-    radial-gradient(circle at 20% 4%, rgb(34 211 238 / 0.19), transparent 14rem),
+    radial-gradient(circle at 20% 4%, rgb(245 134 52 / 0.19), transparent 14rem),
     var(--brand-navy-deep);
   color: var(--text-on-dark);
   box-shadow: 8px 0 30px rgb(3 25 38 / 0.08);
@@ -70,8 +70,8 @@
 }
 
 .active {
-  border-color: rgb(250 204 21 / 0.28);
-  background: rgb(250 204 21 / 0.13);
+  border-color: rgb(209 156 44 / 0.28);
+  background: rgb(209 156 44 / 0.13);
   color: white;
 }
 
@@ -81,7 +81,7 @@
   width: 4px;
   height: 28px;
   border-radius: 0 4px 4px 0;
-  background: var(--brand-yellow);
+  background: var(--brand-gold);
   content: "";
 }
 
@@ -91,8 +91,8 @@
   margin-top: -0.25rem;
   padding: 0.12rem 0.42rem;
   border-radius: 999px;
-  background: rgb(34 211 238 / 0.14);
-  color: #a5f3fc;
+  background: rgb(245 134 52 / 0.14);
+  color: #f8edcf;
   font-size: 0.62rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -134,7 +134,7 @@
   place-items: center;
   border: 2px solid rgb(255 255 255 / 0.15);
   border-radius: 999px;
-  background: var(--brand-cyan);
+  background: var(--brand-blue);
   font-weight: 850;
 }
 
@@ -189,7 +189,7 @@
 }
 
 .eyebrow {
-  color: var(--brand-cyan);
+  color: var(--brand-blue);
   font-size: 0.67rem;
   font-weight: 800;
   letter-spacing: 0.12em;

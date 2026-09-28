@@ -1,21 +1,21 @@
 <div align="center">
-  <img src="public/branding/informatica-explorer-logo.png" alt="Símbolo do Informática Explorer" width="128" />
+  <img src="public/branding/explora-computacao-mark.svg" alt="Símbolo do Explora Computação" width="128" />
 
-  # Informática Explorer
+  # Explora Computação
 
   **Explore. Planeje. Ensine.**
 
   Protótipo web para descobrir materiais e montar trilhas de ensino alinhadas à
   BNCC Computação.
 
-  [![Qualidade e GitHub Pages](https://github.com/AKL77/informatica-explorer/actions/workflows/quality-and-pages.yml/badge.svg)](https://github.com/AKL77/informatica-explorer/actions/workflows/quality-and-pages.yml)
-  [![GitHub Pages](https://img.shields.io/badge/demo-GitHub%20Pages-0969da?logo=github)](https://akl77.github.io/informatica-explorer/)
+  [![Qualidade e GitHub Pages](https://github.com/AKL77/explora-computacao/actions/workflows/quality-and-pages.yml/badge.svg)](https://github.com/AKL77/explora-computacao/actions/workflows/quality-and-pages.yml)
+  [![GitHub Pages](https://img.shields.io/badge/demo-GitHub%20Pages-0969da?logo=github)](https://akl77.github.io/explora-computacao/)
   [![Licença](https://img.shields.io/badge/licença-direitos%20reservados-6b7280)](LICENSE)
 </div>
 
 ## Sobre o projeto
 
-O Informática Explorer é parte de um Trabalho de Conclusão de Curso. A
+O Explora Computação é parte de um Trabalho de Conclusão de Curso. A
 plataforma aproxima materiais externos, currículo e condições reais de uso em
 sala de aula, oferecendo direcionamento sem substituir a decisão do docente.
 O recorte atual abrange do 4º ao 9º ano do Ensino Fundamental.
@@ -30,7 +30,7 @@ de cyberbullying da ALT+INOVARE, Lightbot, Blockly Games, Interland, quatro
 materiais didáticos de Rozelma França e as 23 atividades da coleção Computação
 Desplugada — Unicamp.
 
-> Consulte a [demonstração publicada](https://akl77.github.io/informatica-explorer/)
+> Consulte a [demonstração publicada](https://akl77.github.io/explora-computacao/)
 > e o [estado atual do protótipo](docs/estado-atual.md).
 
 ## Funcionalidades
@@ -85,8 +85,8 @@ pelo docente.
 - pnpm 11.
 
 ```bash
-git clone https://github.com/AKL77/informatica-explorer.git
-cd informatica-explorer
+git clone https://github.com/AKL77/explora-computacao.git
+cd explora-computacao
 pnpm install --frozen-lockfile
 pnpm dev
 ```
@@ -120,14 +120,14 @@ uma sessão local de demonstração e leva diretamente a **Buscar Materiais**.
 | `/app/sobre` | propósito e perguntas frequentes |
 
 No GitHub Pages, as rotas aparecem depois de `#`, por exemplo
-`https://akl77.github.io/informatica-explorer/#/app/trilhas-prontas`.
+`https://akl77.github.io/explora-computacao/#/app/trilhas-prontas`.
 
 ## Persistência e privacidade
 
 A sessão demonstrativa e as trilhas ficam no `localStorage` do próprio
 navegador, em chaves independentes e versionadas. Limpar os dados do site
 reinicia o protótipo. Nenhuma credencial, informação pessoal ou dado de
-estudante é coletado pelo Informática Explorer.
+estudante é coletado pelo Explora Computação.
 
 Os materiais podem direcionar a sites externos, que possuem políticas próprias.
 
@@ -155,6 +155,6 @@ documentação permanecem com direitos reservados; consulte [LICENSE](LICENSE).
 Ativos de terceiros mantêm seus próprios termos, detalhados em
 [Créditos e licenças](docs/creditos-e-licencas.md).
 
-O Informática Explorer é independente e não possui afiliação ou endosso da
-Microsoft, UFSM, MEC, CNE, ALT+INOVARE, Google, Rozelma França ou dos
+O Explora Computação é independente e não possui afiliação ou endosso da
+UFSM, MEC, CNE, ALT+INOVARE, Google, Rozelma França ou dos
 responsáveis pela BNCC.

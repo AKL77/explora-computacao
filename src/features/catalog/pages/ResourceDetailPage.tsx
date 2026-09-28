@@ -214,7 +214,7 @@ export function ResourceDetailPage() {
           </dl>
 
           <p className={styles.externalNotice}>
-            O recurso é externo. Ao acessá-lo, você sairá do Informática Explorer.
+            O recurso é externo. Ao acessá-lo, você sairá do Explora Computação.
           </p>
           <div className={styles.actions}>
             <a

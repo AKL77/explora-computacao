@@ -44,7 +44,7 @@ function getPageTitle(pathname: string) {
   if (pathname === "/app/trilhas-prontas") return "Trilhas Prontas";
   if (pathname === "/app/minhas-trilhas") return "Minhas Trilhas";
   if (pathname === "/app/sobre") return "Sobre";
-  return "Informática Explorer";
+  return "Explora Computação";
 }
 
 export function AppShell() {
@@ -58,7 +58,7 @@ export function AppShell() {
   const pageTitle = getPageTitle(location.pathname);
 
   useEffect(() => {
-    document.title = `${pageTitle} | Informática Explorer`;
+    document.title = `${pageTitle} | Explora Computação`;
     const frame = window.requestAnimationFrame(() => {
       mainRef.current?.focus({ preventScroll: true });
     });

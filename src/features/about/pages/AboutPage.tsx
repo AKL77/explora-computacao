@@ -10,7 +10,7 @@ import styles from "./AboutPage.module.css";
 
 const questions = [
   {
-    question: "O que é o Informática Explorer?",
+    question: "O que é o Explora Computação?",
     answer:
       "É uma plataforma de apoio a docentes que organiza referências e materiais para o ensino de Computação na Educação Básica. O objetivo é facilitar a descoberta, a compreensão e a organização de recursos relacionados à BNCC Computação.",
   },
@@ -57,7 +57,7 @@ export function AboutPage() {
       <header className={styles.hero}>
         <div className={styles.heroContent}>
           <p className={styles.eyebrow}>Conheça o projeto</p>
-          <h1 id="about-page-title">Sobre o Informática Explorer</h1>
+          <h1 id="about-page-title">Sobre o Explora Computação</h1>
           <p className={styles.lead}>
             Uma plataforma para aproximar recursos educacionais, currículo e realidade escolar,
             facilitando o ensino de Computação sem retirar do docente a decisão pedagógica.
@@ -90,8 +90,8 @@ export function AboutPage() {
         <div className={styles.purposeCopy}>
           <p>
             Recursos para o ensino de Computação estão distribuídos em diferentes sites e nem
-            sempre apresentam informações suficientes para orientar sua escolha. O Informática
-            Explorer reúne referências externas e materiais autorizados, relacionando-os a
+            sempre apresentam informações suficientes para orientar sua escolha. O Explora
+            Computação reúne referências externas e materiais autorizados, relacionando-os a
             informações curriculares, pedagógicas e práticas.
           </p>
           <p>
