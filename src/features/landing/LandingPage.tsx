@@ -19,7 +19,7 @@ import { publicAsset } from "@/lib/publicAsset";
 import styles from "./LandingPage.module.css";
 
 const HERO_IMAGE_URL = publicAsset("images/hero-ufsm-campus-santa-maria.jpg");
-const RESOURCE_PLACEHOLDER_URL = publicAsset("branding/resource-placeholder.svg");
+const RESOURCE_PLACEHOLDER_URL = publicAsset("branding/resource-placeholder-explora.svg");
 const SEARCH_MATERIALS_PREVIEW_URL = publicAsset("images/interface/buscar-materiais.png");
 const READY_TRAILS_PREVIEW_URL = publicAsset("images/interface/trilhas-prontas.png");
 
@@ -68,7 +68,7 @@ export function LandingPage() {
           <Link className={styles.brand} to="/" aria-label="Explora Computação — início">
             <img
               className={styles.brandMark}
-              src={publicAsset("branding/explora-computacao-mark.svg")}
+              src={publicAsset("branding/explora-computacao-symbol.svg")}
               alt=""
               width="48"
               height="48"
@@ -270,7 +270,7 @@ export function LandingPage() {
           <div className={styles.footerIntro}>
             <div className={styles.footerBrand}>
               <img
-                src={publicAsset("branding/explora-computacao-mark.svg")}
+                src={publicAsset("branding/explora-computacao-symbol.svg")}
                 alt=""
                 width="42"
                 height="42"

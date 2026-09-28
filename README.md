@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="public/branding/explora-computacao-mark.svg" alt="Símbolo do Explora Computação" width="128" />
+  <img src="public/branding/explora-computacao-symbol.svg" alt="Símbolo do Explora Computação" width="128" />
 
   # Explora Computação
 

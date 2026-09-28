@@ -186,10 +186,10 @@ flowchart LR
 
 ### 6.1 Marca
 
-O símbolo principal está em [`public/branding/explora-computacao-mark.svg`](../public/branding/explora-computacao-mark.svg).
+O símbolo principal está em [`public/branding/explora-computacao-symbol.svg`](../public/branding/explora-computacao-symbol.svg).
 
 - Formato: SVG quadrado, escalável.
-- Conceito: letra “E” com três pontos que sugerem exploração, conexão e percursos de aprendizagem.
+- Conceito: sinais de código em uma composição geométrica simples, com acento laranja.
 - Uso no cabeçalho: símbolo à esquerda e o texto “Explora Computação” renderizado em HTML; o nome não deve ser incorporado como texto rasterizado.
 - Área de proteção mínima: 20% da largura do símbolo.
 - Tamanho mínimo recomendado do símbolo: 32 × 32 px.
@@ -237,7 +237,7 @@ Todos os pares de foreground/background devem ser validados para WCAG 2.2 AA. Co
 
 ### 6.5 Imagem padrão de conteúdo
 
-Recursos sem imagem autorizada usam [`public/branding/resource-placeholder.svg`](../public/branding/resource-placeholder.svg).
+Recursos sem imagem autorizada usam [`public/branding/resource-placeholder-explora.svg`](../public/branding/resource-placeholder-explora.svg).
 
 - Proporção: 16:9.
 - Uso: decorativo, com `alt=""` quando o título do card já identifica o recurso.

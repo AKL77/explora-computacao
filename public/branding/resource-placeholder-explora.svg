@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title description">
+  <title id="title">Imagem padrão de recurso do Explora Computação</title>
+  <desc id="description">Fundo azul com formas geométricas e o símbolo de código da plataforma.</desc>
+  <defs>
+    <linearGradient id="background" x2="1" y2="1">
+      <stop offset="0" stop-color="#003F61"/>
+      <stop offset="1" stop-color="#005C8B"/>
+    </linearGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#fff" stroke-opacity=".07"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="675" rx="32" fill="url(#background)"/>
+  <rect width="1200" height="675" rx="32" fill="url(#grid)"/>
+  <path d="M0 516h246l84-84h168M702 420h170l98-98h230" fill="none" stroke="#D19C2C" stroke-opacity=".52" stroke-width="6"/>
+  <path d="M0 558h265l84-84h149M702 462h189l98-98h211" fill="none" stroke="#E6E6E6" stroke-opacity=".2" stroke-width="3"/>
+  <rect x="502" y="239" width="196" height="196" rx="49" fill="#005C8B" stroke="#fff" stroke-opacity=".3" stroke-width="3"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="17">
+    <path d="m571 284-36 53 36 53" stroke="#fff"/>
+    <path d="m623 279-42 116" stroke="#F58634"/>
+    <path d="m629 284 36 53-36 53" stroke="#fff"/>
+  </g>
+</svg>

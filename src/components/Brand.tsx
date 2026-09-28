@@ -22,7 +22,7 @@ export function Brand({ compact = false, inverted = false, to = "/" }: BrandProp
     >
       <img
         className={styles.mark}
-        src={publicAsset("branding/explora-computacao-mark.svg")}
+        src={publicAsset("branding/explora-computacao-symbol.svg")}
         alt=""
         width="48"
         height="48"

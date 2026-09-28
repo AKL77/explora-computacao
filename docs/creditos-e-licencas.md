@@ -8,11 +8,10 @@ software e suas licenças estão registradas no `package.json` e no
 
 | Arquivo | Origem | Termos |
 |---|---|---|
-| `public/branding/explora-computacao-mark.svg` | Desenho vetorial original criado para esta identidade visual | Abrangido pelo aviso do projeto |
-| `public/branding/resource-placeholder.svg` | Criação original no próprio projeto | Abrangido pelo aviso do projeto |
+| `public/branding/explora-computacao-symbol.svg` | Desenho vetorial original criado para esta identidade visual | Abrangido pelo aviso do projeto |
+| `public/branding/resource-placeholder-explora.svg` | Criação original no próprio projeto | Abrangido pelo aviso do projeto |
 
-O símbolo reúne a letra “E” e três pontos em sequência para representar
-exploração, conexão e percursos de aprendizagem.
+O símbolo usa sinais de código em uma composição simples e legível em tamanhos pequenos.
 
 ## Fotografia da UFSM
 
