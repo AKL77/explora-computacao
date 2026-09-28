@@ -1,31 +1,74 @@
 # Registro mestre da proposta de TCC
 
-**Tema provisório:** Plataforma web de curadoria de recursos para o ensino de Computação, alinhada à BNCC, com criação estruturada de planos de aula
-**Versão:** 1.1
-**Data de atualização:** 30 de agosto de 2026
+**Título do trabalho:** Trajetórias de aprendizagem para a BNCC Computação: desenvolvimento colaborativo de uma solução com apoio de IA generativa
+**Versão:** 1.2
+**Data de atualização:** 20 de setembro de 2026
 **Função deste arquivo:** registrar a visão e as decisões acadêmicas do TCC. A especificação reúne os requisitos aceitos; o estado atual e os testes descrevem o que está implementado.
 
-> **Hipótese central do projeto.** O diferencial mais defensável não é apenas reunir links nem produzir textos extensos de planejamento. É preservar a relação **habilidade curricular → material curado → metodologia executável → avaliação, quando aplicável**. Acervo e criador são fluxos de navegação independentes; no criador, o docente escolhe um material alinhado depois de definir ano e habilidade. O recorte atual não utiliza IA.
+> **Escopo vigente.** O trabalho desenvolve, em colaboração com o NTEM, uma
+> plataforma web que apoia docentes na descoberta, compreensão e organização de
+> materiais para o ensino de Computação. A IA generativa é um pilar do processo
+> de construção: auxilia a curadoria, a padronização e a sumarização das
+> informações e a criação de Trilhas Prontas a partir de temas e materiais
+> definidos pelo autor. A IA não integra a aplicação executável, não gera
+> conteúdo durante o uso e não toma decisões pelo docente.
+
+> **Precedência das decisões.** Este arquivo preserva o histórico do projeto.
+> Quando houver conflito, a síntese inicial, as seções 28 a 30 e o documento
+> `estado-atual.md` prevalecem sobre propostas anteriores, especialmente as
+> relacionadas a planos de aula.
 
 ## 1. Resumo da proposta
 
-O trabalho propõe desenvolver e avaliar um protótipo de plataforma web que reúna conteúdos relacionados ao ensino de Computação na Educação Básica, do 4º ao 9º ano do Ensino Fundamental. O acervo poderá incluir sites, jogos, textos, vídeos, atividades, ferramentas e outros recursos. A experiência será orientada por três pilares: **Exposição**, **Organização** e **Filtragem**.
+O trabalho propõe desenvolver um protótipo de plataforma web que reúne materiais
+relacionados ao ensino de Computação na Educação Básica, do 4º ao 9º ano do
+Ensino Fundamental. O catálogo pode incluir sites, jogos, textos, vídeos,
+atividades, ferramentas e outros recursos. A experiência é orientada por três
+ações: **descobrir**, **compreender** e **organizar** materiais.
 
-O usuário pode navegar pelo acervo e localizar recursos associados a determinado ano escolar e a elementos da BNCC Computação. Em um fluxo de navegação independente, pode criar uma proposta única de plano para uma, duas ou três aulas de 50 minutos. Ano e habilidade filtram os materiais compatíveis e o docente escolhe qual deles fundamentará o plano. A intenção é reduzir um problema observado em geradores generalistas: planos aparentemente completos, mas pouco aplicáveis, com metodologia genérica, materiais desconectados das ações e distribuição irreal de tempo.
+O docente pode pesquisar os materiais, refinar a busca por ano escolar, formato
+e abordagem, consultar informações curriculares, pedagógicas e operacionais e
+selecionar recursos para compor uma trilha própria. A ordem das etapas é definida
+pelo docente; a plataforma não sugere nem valida automaticamente uma progressão
+pedagógica. Como alternativa, o usuário pode copiar uma Trilha Pronta e adaptá-la
+em seu espaço pessoal.
 
-O recorte de criação de planos é determinístico e baseado em opções controladas, metadados curatoriais e conteúdo pedagógico previamente estruturado. Há seleção explícita do material, mas não há troca entre propostas alternativas nem chamada a modelos de inteligência artificial nesta fase. Metodologia e avaliação permanecem provisoriamente como lorem ipsum até definição com a orientadora.
+Ao abrir uma etapa de uma trilha salva, o docente visualiza uma **proposta de
+atividade** vinculada ao material. Essa proposta reúne referência curricular,
+objetivo, materiais necessários, uma descrição do que os estudantes farão e uma
+duração escolhida pelo docente entre uma, duas ou três aulas de 50 minutos. Ela
+não constitui um plano de aula completo e não inclui geração automática,
+avaliação pedagógica ou validação da sequência.
 
-Há uma possibilidade futura de geração de planos de estudo para estudantes. Essa funcionalidade ainda não está definida e, por envolver outro público, outra linguagem e outra lógica pedagógica, é tratada neste registro como extensão, e não como parte confirmada do produto mínimo viável.
+O desenvolvimento ocorre em colaboração com o NTEM e utiliza IA generativa como
+ferramenta de apoio fora da aplicação. O autor pode solicitar ao Codex, por
+exemplo, a criação de uma trilha sobre determinado tema com base em materiais
+selecionados. A IA auxilia a estruturar e sumarizar a proposta; a decisão de
+incorporá-la ao produto permanece humana. Não há API, modelo ou geração de
+trilhas disponível ao usuário da plataforma.
 
 ## 2. Formulação recomendada do problema
 
-Professores que precisam trabalhar habilidades de Computação encontram grande quantidade de recursos digitais dispersos, descritos de forma inconsistente e nem sempre relacionados claramente ao currículo ou a formas concretas de aplicação. Ao planejar, também encontram modelos formalmente completos, porém pouco úteis, porque nomeiam uma metodologia sem explicar como executá-la, separam materiais das atividades ou distribuem ações demais no tempo disponível.
+Professores que precisam trabalhar habilidades de Computação encontram recursos
+distribuídos em diferentes sites e formatos, descritos de maneira heterogênea e
+nem sempre relacionados claramente ao currículo ou às condições necessárias
+para sua aplicação. Mesmo depois de localizar um material, permanece o trabalho
+de compreender sua adequação e articulá-lo com outros recursos em uma trajetória
+adaptável à realidade da turma.
 
-**Problema de pesquisa provisório:** como apoiar docentes do 4º ao 9º ano do Ensino Fundamental na descoberta e no uso pedagógico de recursos de Computação, criando planos cuja metodologia seja clara, viável no tempo disponível e fundamentada em materiais curados compatíveis?
+**Problema de pesquisa vigente:** como apoiar docentes do 4º ao 9º ano do Ensino
+Fundamental na localização, compreensão e organização de recursos educacionais
+para o ensino de Computação alinhados à BNCC?
 
-**Pergunta de pesquisa candidata:** em que medida um fluxo estruturado que recupera automaticamente materiais curados compatíveis com a habilidade melhora a clareza e a aplicabilidade de planos de aula para docentes do 4º ao 9º ano do Ensino Fundamental?
+**Pergunta de projeto:** como projetar uma plataforma web que integre curadoria,
+informações curriculares e operacionais, busca de materiais e composição de
+trilhas, preservando a decisão pedagógica do docente?
 
-**Possível contribuição acadêmica:** propor e avaliar um modelo de metadados para recursos e um modelo estruturado de plano de aula, com foco na ligação rastreável entre currículo, material curado, objetivo, metodologia e avaliação opcional.
+**Contribuição pretendida:** desenvolver uma solução que articule um catálogo
+curado de materiais, sua relação com a BNCC Computação, propostas de atividade
+e a organização dos recursos em trilhas próprias ou previamente preparadas. O
+trabalho também registra o uso supervisionado de IA generativa na curadoria e
+na criação das Trilhas Prontas, sem incorporar IA ao produto executável.
 
 ## 3. Escopo já definido
 
@@ -34,38 +77,41 @@ Professores que precisam trabalhar habilidades de Computação encontram grande 
 - Público principal: docentes que ensinam conteúdos de Computação.
 - Etapa: Ensino Fundamental, do 4º ao 9º ano, incluindo 4º e 5º anos dos anos iniciais e todos os anos finais.
 - Faixa etária de referência: aproximadamente 9 a 14 anos, reconhecendo que idade e ano podem variar.
-- Público secundário potencial: estudantes que desejem estudar uma habilidade de forma autônoma.
+- A plataforma não possui contas ou fluxo autônomo para estudantes.
 
 ### 3.2 Objetivos declarados
 
-- Facilitar e agilizar a preparação de aulas.
+- Facilitar a descoberta, a triagem e a organização de materiais para o ensino
+  de Computação.
 - Orientar docentes diante da quantidade e dispersão dos materiais disponíveis.
 - Apresentar novas possibilidades para abordar conhecimentos de Computação.
-- Propor formas variadas de trabalhar habilidades curriculares.
+- Apresentar propostas de atividade associadas aos materiais das trilhas.
 - Permitir adaptação à realidade da escola e à visão pedagógica de cada docente.
+- Investigar e registrar como a IA generativa pode apoiar, sob supervisão
+  humana, a curadoria, a padronização das informações e a preparação de Trilhas
+  Prontas.
 
 ### 3.3 Pilares do repositório
 
-1. **Exposição:** tornar recursos relevantes visíveis e compreensíveis.
-2. **Organização:** estruturar recursos por metadados pedagógicos, curriculares e operacionais.
-3. **Filtragem:** permitir recortes úteis por ano, habilidade, formato, metodologia, duração e condições de uso.
+1. **Descoberta:** tornar recursos relevantes localizáveis por busca e filtros.
+2. **Compreensão:** apresentar metadados pedagógicos, curriculares e operacionais
+   que apoiem a análise do docente.
+3. **Organização:** permitir reunir e ordenar materiais em trilhas próprias e
+   adaptar Trilhas Prontas.
 
-### 3.4 Elementos do plano de aula no recorte atual
+### 3.4 Elementos da proposta de atividade no recorte atual
 
-- Tema da aula.
-- Ano escolar, distinto de uma turma ou classe específica.
-- Uma, duas ou três aulas, sempre com 50 minutos cada.
-- Habilidade curricular e seus vínculos curriculares derivados.
-- Material do Acervo alinhado ao ano e à habilidade.
+- Material selecionado como etapa da trilha.
+- Ano escolar e referências curriculares vinculadas ao material.
 - Objetivo de aprendizagem.
-- Tipo de metodologia controlado: **expositiva dialogada**, **ativa/prática** ou **combinada**.
-- Metodologia preenchida provisoriamente com lorem ipsum; a estrutura pedagógica definitiva será discutida com a orientadora.
-- Avaliação, quando aplicável.
+- Materiais necessários.
+- Descrição da atividade, priorizando o que os estudantes farão e como.
+- Duração definida pelo docente entre uma, duas ou três aulas de 50 minutos.
 
-Não serão campos do plano nesta fase: turma, evidências de aprendizagem,
-anotações ou objeto de conhecimento. O docente seleciona um material compatível
-no formulário. A criação produz uma única proposta, exibida em **Em Blocos** ou
-**Descritivo** sem alterar seu conteúdo pedagógico.
+A proposta de atividade não é um plano de aula completo. Não inclui turma,
+avaliação, evidências de aprendizagem, distribuição detalhada do tempo,
+anotações ou geração automática. Sua função é oferecer uma síntese acionável do
+material dentro da etapa da trilha.
 
 ## 4. Refinamento conceitual necessário
 
@@ -131,14 +177,14 @@ O **modelo híbrido** é o candidato atual: hospedar materiais próprios ou auto
 Quando um recurso serve a mais de um ano, cada combinação
 **ano + eixo + objeto + habilidade + competências** deve ser armazenada como
 um alinhamento independente. O sistema não pode cruzar a habilidade de um ano
-com outro ano recomendado para o mesmo recurso, nem nos filtros nem no criador
-de planos.
+com outro ano recomendado para o mesmo recurso, nem na busca nem nas propostas
+de atividade exibidas nas trilhas.
 
 No contrato geral, os campos curatoriais podem permanecer ausentes enquanto o
-recurso está pendente. No recorte provisório atual, alinhamento ano–habilidade e
-URL segura bastam para participar do criador, porque metodologia e avaliação
-ainda usam placeholders. Função, proposta, duração e sugestão avaliativa serão
-reavaliadas quando o modelo pedagógico definitivo for definido.
+recurso está pendente. A proposta de atividade reutiliza informações existentes
+no cadastro e pode aplicar sínteses curatoriais para objetivo, materiais e
+descrição do que os estudantes farão. Informações ausentes não devem ser
+apresentadas como fatos confirmados pela fonte.
 
 ### 5.3 Metadados operacionais e de inclusão
 
@@ -173,10 +219,15 @@ Cada TAG deve ter nome preferido, definição, categoria, sinônimos, responsáv
 
 **Regra importante de produto:** TAGs ajudam a descobrir recursos, mas não
 substituem metadados estruturados, notas de curadoria, limitações nem avaliação
-pedagógica. O criador consulta o Acervo internamente e só pode compor o plano
-quando houver conteúdo curado compatível com as opções selecionadas.
+pedagógica. A pesquisa e os filtros ajudam o docente a encontrar materiais, mas
+a decisão de selecioná-los e ordená-los em uma trilha permanece humana.
 
-## 7. Estrutura do plano de aula
+## 7. Estrutura do plano de aula — registro histórico superado
+
+> Esta seção e as seções 8 e 9 documentam uma direção anterior do projeto. A
+> criação de planos de aula foi removida do produto em 14 de setembro de 2026 e
+> não integra o escopo vigente. O conceito atual é a **proposta de atividade**
+> descrita na Seção 3.4.
 
 ### 7.1 Elementos essenciais
 
@@ -319,60 +370,44 @@ origem de cada item.
 ### 10.13 Falta de critério de sucesso
 
 **Risco:** demonstrar que a aplicação funciona tecnicamente, mas não que melhora o planejamento.
-**Resposta:** aplicar uma rubrica ao plano estruturado e realizar avaliação por docentes, separando qualidade pedagógica de funcionamento técnico.
+**Resposta vigente:** limitar as conclusões ao desenvolvimento e à verificação
+técnica do protótipo. Uma eventual avaliação de utilidade ou efeito sobre o
+planejamento docente dependerá de pesquisa futura ainda não definida.
 
-## 11. Proposta de avaliação acadêmica
+## 11. Avaliação com docentes — trabalho futuro não definido
 
-### 11.1 Avaliação principal
+A avaliação do protótipo com docentes não integra o escopo atual e não possui
+previsão, método, amostra, instrumento ou métricas definidos. Questionários,
+rubricas e possibilidades de uso do SUS discutidos anteriormente constituem
+apenas material exploratório e não um protocolo de pesquisa aprovado.
 
-Produzir planos estruturados para cenários equivalentes, variando quantidade de
-aulas e tipo de metodologia. Avaliar tanto **Em Blocos** quanto **Descritivo**,
-confirmando que as duas representam a mesma proposta. O desenho comparativo e
-a eventual linha de base ainda deverão ser definidos antes da coleta.
+Se uma avaliação for realizada futuramente, seu desenho deverá ser definido em
+uma etapa própria, incluindo objetivo, participantes, tarefas, critérios de
+análise e procedimentos éticos. Até essa definição, o TCC não deve afirmar que
+a plataforma foi avaliada, validada ou que melhora o planejamento docente.
 
-### 11.2 Rubrica candidata
-
-Avaliar cada critério em escala definida, por exemplo de 0 a 4:
-
-- Alinhamento à habilidade curricular.
-- Clareza dos objetivos.
-- Coerência entre objetivo, metodologia e avaliação.
-- Clareza operacional da metodologia.
-- Coerência entre a habilidade e os materiais recuperados do Acervo.
-- Viabilidade no tempo disponível.
-- Integração dos materiais às ações descritas.
-- Adequação à faixa etária.
-- Inclusão e acessibilidade.
-- Coerência da avaliação, quando houver.
-- Equivalência entre as visualizações Em Blocos e Descritivo.
-- Quantidade de correções necessárias antes do uso.
-
-### 11.3 Métricas complementares
-
-- Tempo para configurar, compreender e concluir um plano.
-- Percentual de planos considerados utilizáveis com pequenas alterações.
-- Número de ações que excedem o tempo disponível ou citam materiais não integrados.
-- Percentual de solicitações atendidas com base curada suficiente.
-- Usabilidade percebida, possivelmente com SUS.
-- Comentários qualitativos dos docentes.
-
-**Ponto ético:** se houver participação de professores ou estudantes em pesquisa, verificar antecipadamente as exigências da instituição, termos de consentimento e eventual submissão ao comitê de ética. Não iniciar coleta antes dessa definição.
+**Ponto ético:** se houver participação de professores ou estudantes em pesquisa,
+verificar antecipadamente as exigências da instituição, os termos de
+consentimento e a eventual submissão ao comitê de ética. Nenhuma coleta deve ser
+iniciada antes dessa definição.
 
 ## 12. Registro de pontos em aberto
 
 | ID | Questão a decidir | Prioridade | Critério para decisão |
 |---|---|---|---|
-| A-001 | Qual é a formulação final do problema e da pergunta de pesquisa? | P0 | Deve ser investigável e vinculada à avaliação |
+| A-001 | Qual será a redação final do problema e da pergunta apresentada no TCC? | P1 | Refinar a formulação vigente sem ampliar o escopo |
 | A-002 | Quem fará a validação acadêmica final das correspondências curatoriais entre recursos, habilidades e competências? | P0 | Preservar fidelidade curricular e tornar a aprovação auditável |
 | A-003 | Quem ministra esses conteúdos no contexto pesquisado? | P0 | Define personas e recrutamento |
 | A-004 | Quais habilidades compõem o corpus avaliado do 4º ao 9º ano? | P0 | Viabilidade de curadoria e diversidade mínima |
 | A-006 | Qual rubrica valida a qualidade de um recurso? | P0 | Reprodutibilidade da curadoria |
-| A-007 | Qual rubrica avalia um plano de aula? | P0 | Deve responder à pergunta de pesquisa |
-| A-008 | Quais conteúdos estruturados alimentam cada combinação de habilidade e metodologia? | P0 | Equilibrar cobertura, qualidade pedagógica e custo de curadoria |
+| A-007 | Haverá avaliação com docentes em uma etapa futura e, em caso positivo, com qual método? | P2 | Não há previsão nem protocolo definidos |
+| A-008 | Quais critérios mínimos devem compor cada proposta de atividade? | P1 | Equilibrar utilidade, fidelidade às fontes e custo de curadoria |
 | A-010 | Recursos serão apenas referenciados ou também hospedados? | P1 | Direitos, custo e manutenção |
 | A-011 | Quem cadastra e quem aprova recursos? | P1 | Governança e qualidade |
 | A-012 | Será necessário login? | P1 | Recursos salvos/exportação versus privacidade |
 | A-013 | Quais requisitos de acessibilidade serão obrigatórios? | P1 | Público e normas aplicáveis |
+| A-017 | Qual é a denominação completa do NTEM e quais contribuições institucionais serão descritas no TCC? | P0 | Dar crédito preciso à colaboração sem presumir atribuições |
+| A-018 | Como registrar prompts, fontes, revisões e decisões humanas no uso da IA generativa? | P0 | Assegurar transparência e reprodutibilidade do processo |
 | A-014 | Qual backend, hospedagem e orçamento? | P1 | Google Workspace é hipótese; decisão com a orientadora |
 | A-015 | Como lidar com indisponibilidade e mudanças nos links? | P1 | Manutenção e confiabilidade |
 | A-016 | Qual será o nome da plataforma? | P2 | Identidade; não bloqueia pesquisa |
@@ -683,3 +718,65 @@ anteriores descrita ao final da seção 27.
 - **Decisão de persistência:** somente a sessão demonstrativa e as trilhas são
   lidas e atualizadas pela aplicação. Dados locais de versões anteriores são
   ignorados.
+
+## 29. Alinhamento acadêmico, IA generativa e propostas de atividade — 20 de setembro de 2026
+
+- **Decisão de título:** o título de trabalho passa a ser **Trajetórias de
+  aprendizagem para a BNCC Computação: desenvolvimento colaborativo de uma
+  solução com apoio de IA generativa**.
+- **Decisão de colaboração:** “desenvolvimento colaborativo” refere-se à
+  construção da solução em colaboração com o NTEM. A denominação completa da
+  instituição e a descrição precisa de suas contribuições ainda deverão ser
+  registradas antes da redação final.
+- **Decisão sobre o papel da IA:** a IA generativa é utilizada como ferramenta
+  de apoio ao processo de desenvolvimento, especialmente na curadoria dos
+  materiais e na criação das Trilhas Prontas. O apoio inclui organização e
+  padronização de informações, sumarização de fontes e redução do tempo de
+  elaboração.
+- **Fluxo de criação de Trilhas Prontas com IA:** o autor informa ao Codex um
+  tema e/ou um conjunto de materiais previamente selecionados e solicita uma
+  proposta de trilha. A IA estrutura objetivos, sínteses e uma possível ordem
+  das etapas; o resultado não é publicado automaticamente e depende de decisão
+  humana para ser incorporado ao protótipo.
+- **Limite da IA:** a aplicação não contém modelo, API, agente, botão de geração
+  ou chamada a serviço de IA. O professor não gera trilhas dinamicamente pela
+  interface. Portanto, “apoio de IA generativa” descreve o método de construção
+  e curadoria do artefato, não uma funcionalidade oferecida pelo produto.
+- **Decisão sobre planos de aula:** planos de aula deixam definitivamente de
+  integrar o problema, os objetivos e as contribuições do recorte vigente.
+- **Decisão sobre propostas de atividade:** ao abrir uma etapa em **Minhas
+  Trilhas**, o docente consulta uma proposta de atividade associada ao material,
+  com referência curricular, objetivo, materiais, descrição do que os
+  estudantes farão e duração ajustável. A proposta é uma síntese de apoio e não
+  equivale a um plano de aula completo.
+- **Decisão sobre busca por eixo:** **Buscar Materiais** oferece pesquisa textual
+  e filtros por ano, assunto, formato e abordagem. Os 44 assuntos foram derivados
+  dos três eixos da BNCC Computação e são vinculados diretamente aos materiais,
+  sem aparecer nos cartões. A seleção múltipla ocorre em uma janela ao lado de
+  Ano escolar; assuntos sem materiais associados permanecem disponíveis. O
+  filtro explícito pelos três eixos da BNCC Computação pertence a **Trilhas
+  Prontas**.
+- **Decisão sobre avaliação:** uma avaliação com docentes poderá ser conduzida
+  futuramente, mas não há previsão ou método definido. Ela não faz parte do
+  escopo atual e o protótipo não deve ser descrito como validado por docentes.
+- **Decisões preservadas sem alteração:** permanecem os rótulos curriculares da
+  interface e o uso da expressão “sequência pedagógica” para as Trilhas Prontas,
+  conforme orientação do autor.
+
+## 30. Familiaridade para uso dos materiais — 28 de setembro de 2026
+
+- **Decisão de escopo:** cada material recebe uma avaliação curatorial separada
+  do nível de familiaridade recomendado ao aluno e ao professor. Os valores são
+  **Básico**, **Intermediário** e **Avançado**; não equivalem ao ano escolar.
+- **Decisão de apresentação:** os níveis aparecem na busca, no detalhe do
+  material e na proposta de atividade em **Minhas Trilhas**. No cartão de busca,
+  a apresentação compacta mostra somente Aluno, Professor e as barras; os nomes
+  completos dos níveis permanecem nas telas de detalhe e proposta.
+- **Decisão de interpretação:** a avaliação se refere à forma de uso descrita
+  no catálogo. Em coleções com atividades de complexidade variável, considera a
+  entrada da proposta e pode não representar etapas posteriores.
+- **Decisão de explicação:** a página **Sobre** define os três níveis para cada
+  público e informa que a classificação é uma orientação da curadoria.
+- **Decisão sobre pré-requisitos:** o campo listado na seção 5.2 permanece uma
+  possibilidade futura; não há cadastro nem exibição de pré-requisitos nesta
+  implementação.

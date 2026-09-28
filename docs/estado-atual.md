@@ -1,6 +1,6 @@
 # Estado atual do protótipo
 
-**Referência:** 14 de setembro de 2026
+**Referência:** 28 de setembro de 2026
 
 **Versão do protótipo:** 0.1.0
 
@@ -12,10 +12,15 @@ documentos em `docs/historico` preservam decisões de etapas anteriores do TCC.
 ## Implementado
 
 - página inicial pública e sessão local demonstrativa, sem conta real;
-- **Buscar Materiais** com 31 recursos e filtros por ano, eixo e
-  características;
+- **Buscar Materiais** com 31 recursos, pesquisa textual e filtros por ano,
+  assunto, formato e abordagem. O filtro de assuntos reúne 44 palavras-chave
+  baseadas nos três eixos da BNCC Computação, com seleção múltipla em uma janela;
+  algumas opções ainda não têm materiais associados;
 - alinhamentos explícitos por ano, eixo, habilidade e competências, incluindo
   correspondências curatoriais sinalizadas para validação;
+- níveis curatoriais de familiaridade (Básico, Intermediário e Avançado) para
+  aluno e professor em cada material, exibidos na busca, no detalhe e na
+  proposta de atividade, com explicação na página **Sobre**;
 - detalhe do material em três abas, com informações pedagógicas, condições de
   uso, fonte, licença e materiais complementares;
 - seleção de materiais para criar uma trilha própria;
@@ -23,8 +28,9 @@ documentos em `docs/historico` preservam decisões de etapas anteriores do TCC.
 - **Minhas Trilhas** com sequência visual conectada, reordenação por arrastar e
   soltar, duração de uma a três aulas por etapa e tempo total calculado;
 - edição em rascunho, com descarte ou confirmação explícita de alterações;
-- ficha de planejamento ao abrir uma etapa, com acesso destacado ao material
-  completo;
+- proposta de atividade ao abrir uma etapa, com referência curricular,
+  objetivo, materiais, descrição da atividade, duração ajustável e acesso
+  destacado ao material completo;
 - **Trilhas Prontas** com filtros por eixo e três percursos funcionais:
   - Pensamento Computacional: **Algoritmos: decisões, blocos e desafios**;
   - Mundo Digital: **Mensagens sem erro: paridade e protocolos**;
@@ -41,11 +47,28 @@ documentos em `docs/historico` preservam decisões de etapas anteriores do TCC.
 - criação, armazenamento ou exportação de planos de aula;
 - backend, API e banco de dados;
 - autenticação real ou gestão de contas;
-- inteligência artificial;
+- inteligência artificial integrada à aplicação ou disponível ao usuário;
 - inclusão de materiais por usuários;
 - contas ou dados de estudantes;
 - sincronização, colaboração ou compartilhamento remoto;
 - analytics, cookies de rastreamento e service worker.
+
+## Uso de IA generativa no projeto
+
+A IA generativa é utilizada fora da aplicação como apoio ao desenvolvimento e
+à curadoria. O autor utiliza o Codex para auxiliar na padronização e sumarização
+de informações dos materiais e para criar propostas de Trilhas Prontas a partir
+de temas e recursos selecionados. A incorporação dos resultados ao protótipo
+depende de decisão humana.
+
+O Informática Explorer não chama modelos ou APIs de IA em tempo de execução e
+não oferece geração automática de trilhas ao docente.
+
+## Avaliação
+
+Uma avaliação com docentes poderá ser realizada futuramente, mas não possui
+previsão ou método definido e não integra o escopo atual. A versão executável
+não deve ser descrita como validada por docentes.
 
 As antigas páginas de Favoritos, Pastas e Planos de Aula foram removidas. URLs
 legadas redirecionam para **Buscar Materiais** ou **Minhas Trilhas**, evitando

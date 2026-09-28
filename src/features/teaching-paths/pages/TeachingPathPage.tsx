@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { AccessibleDialog } from "@/features/catalog/components/AccessibleDialog";
 import { CatalogStatus } from "@/features/catalog/components/CatalogStatus";
+import { RequiredFamiliarity } from "@/features/catalog/components/RequiredFamiliarity";
 import {
   RESOURCE_PLACEHOLDER,
   typeLabels,
@@ -19,6 +20,11 @@ import {
   type TeachingPathIcon,
 } from "@/domain/savedTeachingPath";
 import type { Resource } from "@/domain/resource";
+import {
+  getMaterialKeywordIds,
+  materialKeywordGroups,
+  type MaterialKeywordId,
+} from "@/data/materialKeywords";
 import { useTeachingPathsStore } from "@/store/useTeachingPathsStore";
 import {
   TeachingPathIconGlyph,
@@ -107,6 +113,9 @@ export function TeachingPathPage() {
   const [selectedGrades, setSelectedGrades] = useState<Grade[]>([]);
   const [selectedActivityModes, setSelectedActivityModes] = useState<ActivityFilter[]>([]);
   const [selectedApproaches, setSelectedApproaches] = useState<ApproachFilter[]>([]);
+  const [selectedKeywordIds, setSelectedKeywordIds] = useState<MaterialKeywordId[]>([]);
+  const [isKeywordDialogOpen, setIsKeywordDialogOpen] = useState(false);
+  const [keywordQuery, setKeywordQuery] = useState("");
   const [trailIds, setTrailIds] = useState<string[]>([]);
   const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
   const [pathName, setPathName] = useState("");
@@ -139,15 +148,19 @@ export function TeachingPathPage() {
           selectedApproaches.length === 0 ||
           (item.teaching.teachingApproach !== "combined" &&
             selectedApproaches.includes(item.teaching.teachingApproach));
+        const matchesKeyword =
+          selectedKeywordIds.length === 0 ||
+          selectedKeywordIds.some((id) => getMaterialKeywordIds(item.resource.id).includes(id));
 
         return (
           matchesGrade &&
           matchesActivityMode &&
           matchesApproach &&
+          matchesKeyword &&
           matchesSearch(item, query)
         );
       }),
-    [teachingResources, query, selectedActivityModes, selectedApproaches, selectedGrades],
+    [teachingResources, query, selectedActivityModes, selectedApproaches, selectedGrades, selectedKeywordIds],
   );
 
   const trail = trailIds.flatMap((id) => {
@@ -158,7 +171,17 @@ export function TeachingPathPage() {
     query.trim().length > 0 ||
     selectedGrades.length > 0 ||
     selectedActivityModes.length > 0 ||
-    selectedApproaches.length > 0;
+    selectedApproaches.length > 0 ||
+    selectedKeywordIds.length > 0;
+  const normalizedKeywordQuery = normalizeSearchTerm(keywordQuery);
+  const visibleKeywordGroups = materialKeywordGroups
+    .map((group) => ({
+      axis: group.axis,
+      options: group.options.filter((option) =>
+        normalizeSearchTerm(option.label).includes(normalizedKeywordQuery),
+      ),
+    }))
+    .filter((group) => group.options.length > 0);
 
   const addToTrail = (item: TeachingResourceView) => {
     if (trailIds.includes(item.resource.id)) return;
@@ -177,6 +200,7 @@ export function TeachingPathPage() {
     setSelectedGrades([]);
     setSelectedActivityModes([]);
     setSelectedApproaches([]);
+    setSelectedKeywordIds([]);
   };
 
   const savePath = () => {
@@ -294,6 +318,26 @@ export function TeachingPathPage() {
           </div>
 
           <div className={styles.tagGroup}>
+            <span className={styles.tagLabel}>Assuntos</span>
+            <button
+              className={`${styles.filterTag} ${styles.keywordTrigger} ${selectedKeywordIds.length > 0 ? styles.keywordTriggerActive : ""}`}
+              type="button"
+              aria-haspopup="dialog"
+              onClick={() => {
+                setKeywordQuery("");
+                setIsKeywordDialogOpen(true);
+              }}
+            >
+              Ver opções
+            </button>
+            <span className="sr-only" aria-live="polite">
+              {selectedKeywordIds.length === 0
+                ? "Nenhum assunto selecionado"
+                : `${selectedKeywordIds.length} ${selectedKeywordIds.length === 1 ? "assunto selecionado" : "assuntos selecionados"}`}
+            </span>
+          </div>
+
+          <div className={styles.tagGroup}>
             <span className={styles.tagLabel}>Formato</span>
             <div className={styles.tagList}>
               {([
@@ -346,29 +390,25 @@ export function TeachingPathPage() {
         ) : null}
       </section>
 
-      <section className={styles.trailSummary} aria-labelledby="trail-title">
-        <div className={styles.trailHeading}>
-          <span className={styles.trailIcon} aria-hidden="true">
-            <ListChecks size={20} />
-          </span>
-          <div>
-            <h2 id="trail-title">Nova trilha em criação</h2>
-            {trail.length > 0 ? (
+      {trail.length > 0 ? (
+        <section className={styles.trailSummary} aria-labelledby="trail-title">
+          <div className={styles.trailHeading}>
+            <span className={styles.trailIcon} aria-hidden="true">
+              <ListChecks size={20} />
+            </span>
+            <div>
+              <h2 id="trail-title">Nova trilha em criação</h2>
               <p>{trail.length} {trail.length === 1 ? "material selecionado" : "materiais selecionados"}.</p>
-            ) : null}
+            </div>
+            <button
+              className={styles.saveButton}
+              type="button"
+              onClick={() => setIsSaveDialogOpen(true)}
+            >
+              Salvar trilha
+            </button>
           </div>
-          <button
-            className={styles.saveButton}
-            type="button"
-            disabled={trail.length === 0}
-            title={trail.length === 0 ? "Selecione ao menos um material para salvar." : undefined}
-            onClick={() => setIsSaveDialogOpen(true)}
-          >
-            Salvar trilha
-          </button>
-        </div>
 
-        {trail.length > 0 ? (
           <ul className={styles.selectedMaterials} aria-label="Materiais selecionados">
             {trail.map((item) => (
               <li key={item.resource.id}>
@@ -384,8 +424,8 @@ export function TeachingPathPage() {
               </li>
             ))}
           </ul>
-        ) : null}
-      </section>
+        </section>
+      ) : null}
 
       <section className={styles.results} aria-labelledby="results-title">
         <div className={styles.resultsHeader}>
@@ -449,6 +489,12 @@ export function TeachingPathPage() {
                           <strong>Materiais</strong>
                           {teaching.materials.join(" · ")}
                         </p>
+                        {resource.requiredFamiliarity ? (
+                          <div className={styles.cardFamiliarity}>
+                            <span>Preparação necessária</span>
+                            <RequiredFamiliarity levels={resource.requiredFamiliarity} compact />
+                          </div>
+                        ) : null}
                       </div>
                     </div>
                   </Link>
@@ -497,6 +543,72 @@ export function TeachingPathPage() {
       <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">
         {announcement}
       </p>
+
+      <AccessibleDialog
+        open={isKeywordDialogOpen}
+        title="Selecionar assuntos"
+        onClose={() => setIsKeywordDialogOpen(false)}
+        size="wide"
+      >
+        <div className={styles.keywordDialogContent}>
+          <div className={styles.keywordSearchControl}>
+            <label className={styles.keywordSearchLabel} htmlFor="material-keyword-query">
+              Buscar palavras-chave
+            </label>
+            <div className={styles.keywordSearch}>
+              <Search size={18} aria-hidden="true" />
+              <input
+                id="material-keyword-query"
+                type="search"
+                placeholder="Digite um assunto"
+                value={keywordQuery}
+                onChange={(event) => setKeywordQuery(event.target.value)}
+              />
+            </div>
+          </div>
+          <div className={styles.keywordGroups}>
+            {visibleKeywordGroups.map((group, index) => (
+              <section
+                className={styles.keywordGroup}
+                aria-labelledby={`material-keyword-axis-${index}`}
+                key={group.axis}
+              >
+                <h3 className={styles.keywordGroupTitle} id={`material-keyword-axis-${index}`}>
+                  {group.axis}
+                </h3>
+                <div className={styles.keywordOptions}>
+                  {group.options.map((option) => (
+                    <button
+                      className={`${styles.filterTag} ${styles.keywordOption}`}
+                      type="button"
+                      aria-pressed={selectedKeywordIds.includes(option.id)}
+                      key={option.id}
+                      onClick={() => setSelectedKeywordIds((current) => toggleFilter(current, option.id))}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </section>
+            ))}
+            {visibleKeywordGroups.length === 0 ? (
+              <p className={styles.keywordEmpty}>Nenhum assunto corresponde à busca.</p>
+            ) : null}
+          </div>
+          <div className={styles.keywordDialogActions}>
+            <button
+              type="button"
+              onClick={() => setSelectedKeywordIds([])}
+              disabled={selectedKeywordIds.length === 0}
+            >
+              Limpar assuntos
+            </button>
+            <button type="button" onClick={() => setIsKeywordDialogOpen(false)}>
+              Concluir
+            </button>
+          </div>
+        </div>
+      </AccessibleDialog>
 
       <AccessibleDialog
         open={isSaveDialogOpen}

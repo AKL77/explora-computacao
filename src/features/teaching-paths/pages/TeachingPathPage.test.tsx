@@ -47,6 +47,12 @@ describe("TeachingPathPage", () => {
       screen.getByRole("heading", { name: binaryNumbersTitle, level: 3 }),
     ).toBeInTheDocument();
     expect(screen.getByText("31 materiais", { exact: true })).toBeInTheDocument();
+    expect(getResourceCard(blocklyTitle).getByText("Preparação necessária"))
+      .toBeInTheDocument();
+    expect(getResourceCard(blocklyTitle).getByText("Intermediário"))
+      .toHaveClass("sr-only");
+    expect(getResourceCard(blocklyTitle).getByText("Professor").parentElement)
+      .toHaveAttribute("title", "Professor: Intermediário");
     expect(screen.queryByText("Árvores Geradoras Mínimas", { exact: true })).not.toBeInTheDocument();
 
     const search = screen.getByRole("searchbox", {
@@ -103,6 +109,43 @@ describe("TeachingPathPage", () => {
     expect(screen.getByText("31 materiais", { exact: true })).toBeInTheDocument();
   });
 
+  it("combina assuntos com os demais filtros e aceita opções ainda sem materiais", async () => {
+    const user = await renderPage();
+    await user.click(screen.getByRole("button", { name: "Ver opções" }));
+
+    const dialog = screen.getByRole("dialog", { name: "Selecionar assuntos" });
+    expect(dialog.querySelectorAll("[aria-pressed]")).toHaveLength(44);
+    const keywordSearch = within(dialog).getByRole("searchbox", { name: "Buscar palavras-chave" });
+    await user.type(keywordSearch, "arvores");
+    expect(within(dialog).getByRole("button", { name: "Grafos e árvores" })).toBeInTheDocument();
+    expect(dialog.querySelectorAll("[aria-pressed]")).toHaveLength(1);
+    await user.clear(keywordSearch);
+    await user.click(within(dialog).getByRole("button", { name: "Cyberbullying" }));
+    expect(within(dialog).getByRole("button", { name: "Cyberbullying" })).toHaveAttribute("aria-pressed", "true");
+    await user.click(within(dialog).getByRole("button", { name: "Concluir" }));
+
+    expect(screen.getByText("1 assunto selecionado")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Cyberbullying — Jogo Educativo" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Interland" })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: blocklyTitle })).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "5º ano" }));
+    expect(screen.getByRole("heading", { name: "Interland" })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Cyberbullying — Jogo Educativo" })).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Ver opções" }));
+    expect(within(dialog).getByRole("searchbox", { name: "Buscar palavras-chave" })).toHaveValue("");
+    expect(within(dialog).getByRole("button", { name: "Cyberbullying" })).toHaveAttribute("aria-pressed", "true");
+    await user.click(within(dialog).getByRole("button", { name: "Cyberbullying" }));
+    await user.click(within(dialog).getByRole("button", { name: "Componentes do computador" }));
+    await user.click(within(dialog).getByRole("button", { name: "Concluir" }));
+
+    expect(screen.getByText("Nenhum material encontrado")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Limpar filtros" }));
+    expect(screen.getByText("31 materiais", { exact: true })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Ver opções" })).toBeInTheDocument();
+  });
+
   it("leva o cartão ao detalhe e permite selecionar e remover materiais sem reordenação", async () => {
     const user = await renderPage();
     const blocklyCard = getResourceCard(blocklyTitle);
@@ -111,6 +154,7 @@ describe("TeachingPathPage", () => {
       blocklyCard.getByRole("link", { name: `Abrir detalhes de ${blocklyTitle}` }),
     ).toHaveAttribute("href", "/app/materiais/blockly-games");
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(screen.queryByRole("region", { name: "Nova trilha em criação" })).not.toBeInTheDocument();
 
     await user.click(
       blocklyCard.getByRole("button", {
@@ -145,6 +189,15 @@ describe("TeachingPathPage", () => {
     );
     expect(within(trail).queryByText(blocklyTitle)).not.toBeInTheDocument();
     expect(within(trail).getByText("1 material selecionado.")).toBeInTheDocument();
+    await user.click(
+      within(trail).getByRole("button", { name: `Remover ${vinteTitle} da trilha` }),
+    );
+    expect(screen.queryByRole("region", { name: "Nova trilha em criação" })).not.toBeInTheDocument();
+    expect(
+      getResourceCard(vinteTitle).getByRole("button", {
+        name: `Adicionar ${vinteTitle} a uma nova trilha`,
+      }),
+    ).toBeEnabled();
   });
 
   it("solicita um nome e salva a trilha em Minhas Trilhas", async () => {

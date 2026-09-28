@@ -2,6 +2,7 @@ import type { Resource } from "@/domain/resource";
 import { publicAsset } from "@/lib/publicAsset";
 
 import { createCurriculumAlignment } from "./bnccComputing";
+import { addRequiredFamiliarity } from "./resourceFamiliarity";
 import { digitalCitizenshipGameResources } from "./resources/digitalCitizenshipGames";
 import { programmingGameResources } from "./resources/programmingGames";
 import { rozelmaTeachingMaterials } from "./resources/rozelmaTeachingMaterials";
@@ -85,6 +86,6 @@ export const resources: Resource[] = [
   ...programmingGameResources,
   ...rozelmaTeachingMaterials,
   ...digitalCitizenshipGameResources,
-];
+].map(addRequiredFamiliarity);
 
 export const mockResources = resources;

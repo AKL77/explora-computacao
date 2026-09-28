@@ -23,6 +23,45 @@ test.beforeEach(async ({ page }) => {
   await resetDemo(page);
 });
 
+test("seleciona assuntos no diálogo e combina a busca com ano escolar", async ({ page }) => {
+  await enterDemo(page);
+
+  await page.getByRole("button", { name: "Ver opções" }).click();
+  const dialog = page.getByRole("dialog", { name: "Selecionar assuntos" });
+  await expect(dialog).toBeVisible();
+  const scrollState = await dialog.evaluate((element) => ({
+    dialogScrollable: element.scrollHeight > element.clientHeight + 2,
+    nestedScrollers: [...element.querySelectorAll("*")].filter((child) => {
+      const overflow = getComputedStyle(child).overflowY;
+      return (overflow === "auto" || overflow === "scroll") && child.scrollHeight > child.clientHeight + 2;
+    }).length,
+  }));
+  expect(scrollState).toEqual({ dialogScrollable: false, nestedScrollers: 1 });
+  expect((await dialog.boundingBox())?.width).toBeGreaterThan((page.viewportSize()?.width ?? 0) * 0.9);
+  await expect(dialog.locator("[aria-pressed]")).toHaveCount(44);
+  await dialog.getByRole("searchbox", { name: "Buscar palavras-chave" }).fill("cyber");
+  await expect(dialog.locator("[aria-pressed]")).toHaveCount(1);
+  await expect(page.getByText("31 materiais", { exact: true }).first()).toBeVisible();
+  await dialog.getByRole("button", { name: "Cyberbullying" }).click();
+  await expect(dialog.getByRole("button", { name: "Cyberbullying" })).toHaveAttribute("aria-pressed", "true");
+  await dialog.getByRole("button", { name: "Concluir" }).click();
+
+  await expect(page.getByText("1 assunto selecionado")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Interland" })).toBeVisible();
+  await page.getByRole("button", { name: "5º ano" }).click();
+  await expect(page.getByText("1 material", { exact: true })).toBeVisible();
+
+  await page.getByRole("button", { name: "Ver opções" }).click();
+  await expect(dialog.getByRole("searchbox", { name: "Buscar palavras-chave" })).toHaveValue("");
+  await dialog.getByRole("button", { name: "Cyberbullying" }).click();
+  await dialog.getByRole("button", { name: "Componentes do computador" }).click();
+  await dialog.getByRole("button", { name: "Concluir" }).click();
+  await expect(page.getByText("Nenhum material encontrado")).toBeVisible();
+
+  await page.getByRole("button", { name: "Limpar filtros" }).click();
+  await expect(page.getByText("31 materiais", { exact: true }).first()).toBeVisible();
+});
+
 test("apresenta a proposta e entra em Buscar Materiais", async ({ page }) => {
   await expect(
     page.getByRole("heading", { name: "Explore. Planeje. Ensine.", level: 1 }),
@@ -103,7 +142,7 @@ test("abre o perfil e adiciona uma Trilha Pronta às trilhas pessoais", async ({
 
   const pathSteps = page
     .getByRole("list", { name: "Etapas da trilha" })
-    .getByRole("button", { name: /Abrir planejamento de/ });
+    .getByRole("button", { name: /Abrir proposta de atividade de/ });
   await expect(pathSteps).toHaveCount(3);
 
   const firstStepBox = await pathSteps.nth(0).boundingBox();
@@ -148,9 +187,17 @@ test("busca materiais com tags e seleciona uma trilha", async ({
   const blocklyCard = page.getByRole("article").filter({
     has: page.getByRole("heading", { name: "Blockly Games", exact: true }),
   });
+  const trail = page.getByRole("region", { name: "Nova trilha em criação" });
+  await expect(trail).toHaveCount(0);
   await expect(
     blocklyCard.getByRole("link", { name: "Abrir detalhes de Blockly Games" }),
   ).toHaveAttribute("href", /\/app\/materiais\/blockly-games$/);
+  await blocklyCard
+    .getByRole("button", { name: "Adicionar Blockly Games a uma nova trilha" })
+    .click();
+  await expect(trail).toBeVisible();
+  await trail.getByRole("button", { name: "Remover Blockly Games da trilha" }).click();
+  await expect(trail).toHaveCount(0);
   await blocklyCard
     .getByRole("button", { name: "Adicionar Blockly Games a uma nova trilha" })
     .click();
@@ -167,7 +214,6 @@ test("busca materiais com tags e seleciona uma trilha", async ({
     })
     .click();
 
-  const trail = page.getByRole("region", { name: "Nova trilha em criação" });
   await expect(trail.getByText("2 materiais selecionados.")).toBeVisible();
   await expect(trail.getByText("Blockly Games")).toBeVisible();
   await expect(trail.getByText("Vinte Palpites — Teoria da Informação")).toBeVisible();

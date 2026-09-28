@@ -24,25 +24,43 @@
   max-width: 42rem;
 }
 
-.large {
+.large,
+.wide {
   width: min(96vw, 62rem);
   max-width: 62rem;
   max-height: calc(100vh - 1rem);
 }
 
-.large .panel {
+.wide {
+  width: min(96vw, 84rem);
+  max-width: 84rem;
+  max-height: min(88vh, 760px);
+  overflow: hidden;
+}
+
+.large .panel,
+.wide .panel {
   padding: clamp(1rem, 2vw, 1.5rem);
 }
 
-.large .header {
+.wide .panel {
+  display: flex;
+  max-height: min(88vh, 760px);
+  flex-direction: column;
+}
+
+.large .header,
+.wide .header {
   margin-bottom: 1rem;
 }
 
-.large .title {
+.large .title,
+.wide .title {
   font-size: clamp(1.15rem, 2vw, 1.45rem);
 }
 
-.large .description {
+.large .description,
+.wide .description {
   margin-top: 0.25rem;
   font-size: 0.8rem;
   line-height: 1.35;

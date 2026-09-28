@@ -16,6 +16,7 @@ import {
 } from "@/domain/resourceCurriculum";
 
 import { CatalogStatus } from "../components/CatalogStatus";
+import { RequiredFamiliarity } from "../components/RequiredFamiliarity";
 import {
   formatRecommendedGrades,
   RESOURCE_PLACEHOLDER,
@@ -227,6 +228,19 @@ export function ResourceDetailPage() {
           </div>
         </div>
       </header>
+
+      {resource.requiredFamiliarity ? (
+        <section className={styles.familiaritySection} aria-labelledby="required-familiarity-title">
+          <div>
+            <h2 id="required-familiarity-title">Preparação necessária</h2>
+            <p>Nível de familiaridade recomendado para usar este material.</p>
+          </div>
+          <RequiredFamiliarity levels={resource.requiredFamiliarity} />
+          <Link to="/app/sobre" className={styles.familiarityHelp}>
+            Entenda os níveis
+          </Link>
+        </section>
+      ) : null}
 
       <section className={styles.tabSection} aria-label="Detalhes do recurso">
         <div className={styles.tabList} role="tablist" aria-label="Informações do recurso">

@@ -163,6 +163,42 @@
   border-radius: 1rem;
 }
 
+.familiaritySection {
+  display: grid;
+  gap: 1rem 1.5rem;
+  margin-top: 1.25rem;
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  background: #fff;
+  border: 1px solid rgb(8 47 73 / 10%);
+  border-radius: 1rem;
+  grid-template-columns: minmax(0, 1fr) minmax(15rem, 1fr);
+  align-items: center;
+}
+
+.familiaritySection h2 {
+  margin: 0 0 0.3rem;
+  color: var(--brand-navy, #082f49);
+  font-size: 1.15rem;
+}
+
+.familiaritySection p {
+  margin: 0;
+  color: var(--text-muted, #52616b);
+  font-size: 0.88rem;
+}
+
+.familiarityHelp {
+  color: var(--brand-blue, #075985);
+  font-size: 0.82rem;
+  font-weight: 750;
+  grid-column: 2;
+}
+
+.familiarityHelp:focus-visible {
+  outline: 3px solid var(--brand-yellow, #facc15);
+  outline-offset: 3px;
+}
+
 .tabList {
   display: flex;
   overflow-x: auto;
@@ -278,6 +314,14 @@
 }
 
 @media (max-width: 47.99rem) {
+  .familiaritySection {
+    grid-template-columns: 1fr;
+  }
+
+  .familiarityHelp {
+    grid-column: 1;
+  }
+
   .tabPanel .detailGrid {
     grid-template-columns: 1fr;
   }

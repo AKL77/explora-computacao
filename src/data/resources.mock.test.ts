@@ -31,6 +31,22 @@ describe("resources fixture", () => {
     ).toBe(false);
   });
 
+  it("avalia separadamente a familiaridade do aluno e do professor em todo o catálogo", () => {
+    for (const resource of resources) {
+      expect(["basic", "intermediate", "advanced"]).toContain(
+        resource.requiredFamiliarity?.student,
+      );
+      expect(["basic", "intermediate", "advanced"]).toContain(
+        resource.requiredFamiliarity?.teacher,
+      );
+    }
+
+    expect(resources.find((resource) => resource.id === "google-blockly-games")?.requiredFamiliarity)
+      .toEqual({ student: "basic", teacher: "intermediate" });
+    expect(resources.find((resource) => resource.id === "unicamp-desplugada-atividade-19")?.requiredFamiliarity)
+      .toEqual({ student: "advanced", teacher: "advanced" });
+  });
+
   it("registra os quatro materiais da Rozelma compatíveis com o recorte atual", () => {
     const luaBitBit = resources.find(
       (resource) => resource.id === "rozelma-lua-bit-bit-variaveis",

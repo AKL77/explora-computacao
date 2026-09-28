@@ -25,6 +25,11 @@ const questions = [
       "Acesse Buscar Materiais para pesquisar por nome, tema ou habilidade. Use os filtros para reduzir os resultados e abra um cartão para consultar as informações pedagógicas e operacionais.",
   },
   {
+    question: "O que significam os níveis Básico, Intermediário e Avançado?",
+    answer:
+      "Eles indicam a familiaridade recomendada para usar o material, avaliada separadamente para aluno e professor. Para o aluno, Básico significa que a atividade introduz o assunto; Intermediário, que ajuda já conhecer as ideias principais; Avançado, que a atividade trabalha conceitos ou estratégias mais complexas. Para o professor, Básico significa que pode conduzir a proposta com as orientações do material; Intermediário, que convém ter familiaridade com o tema para explicar e adaptar a atividade; Avançado, que a mediação exige domínio mais aprofundado. Os níveis são uma avaliação da curadoria sobre o uso apresentado no catálogo, não equivalem ao ano escolar nem medem a capacidade de cada pessoa. Em coleções com várias atividades, o nível considera a proposta inicial e pode variar nas etapas seguintes.",
+  },
+  {
     question: "O que são as Trilhas Prontas?",
     answer:
       "São percursos previamente organizados por conteúdo, ano escolar e objetivo de aprendizagem. Elas apresentam uma sequência pedagógica sugerida e permanecem separadas das trilhas criadas pelo docente.",

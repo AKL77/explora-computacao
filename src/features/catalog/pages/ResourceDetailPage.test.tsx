@@ -34,6 +34,11 @@ describe("ResourceDetailPage", () => {
     );
     expect(screen.queryByRole("button", { name: /favoritar/i })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /pasta/i })).not.toBeInTheDocument();
+    const familiarity = screen.getByRole("region", { name: "Preparação necessária" });
+    expect(familiarity).toHaveTextContent("AlunoBásico");
+    expect(familiarity).toHaveTextContent("ProfessorBásico");
+    expect(within(familiarity).getByRole("link", { name: "Entenda os níveis" }))
+      .toHaveAttribute("href", "/app/sobre");
 
     const descriptionTab = screen.getByRole("tab", { name: "Descrição" });
     expect(descriptionTab).toHaveAttribute("aria-selected", "true");

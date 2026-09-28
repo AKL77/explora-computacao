@@ -14,6 +14,7 @@ import {
 import { Link } from "react-router-dom";
 
 import { AccessibleDialog } from "@/features/catalog/components/AccessibleDialog";
+import { RequiredFamiliarity } from "@/features/catalog/components/RequiredFamiliarity";
 import { CatalogStatus } from "@/features/catalog/components/CatalogStatus";
 import { RESOURCE_PLACEHOLDER, typeLabels } from "@/features/catalog/components/resourcePresentation";
 import { useCatalogResources } from "@/features/catalog/hooks/useCatalog";
@@ -504,7 +505,7 @@ export function SavedTeachingPathsPage() {
                 <button
                   className={styles.stepButton}
                   type="button"
-                  aria-label={`Abrir planejamento de ${item.resource.title}`}
+                  aria-label={`Abrir proposta de atividade de ${item.resource.title}`}
                   onClick={() => setPreviewResourceId(item.resourceId)}
                 >
                   <span className={styles.stepNode} aria-hidden="true">
@@ -572,7 +573,7 @@ export function SavedTeachingPathsPage() {
         {preview ? (
           <article
             className={`${styles.blockPlan} ${styles.compactBlockPlan}`}
-            aria-label="Planejamento em blocos da etapa"
+            aria-label="Proposta de atividade da etapa"
           >
             <header className={styles.blockPlanHeading}>
               <span className={styles.geometricShapeOne} aria-hidden="true" />
@@ -603,6 +604,12 @@ export function SavedTeachingPathsPage() {
                 <h3>Objetivo</h3>
                 <p>{preview.teaching.objective}</p>
               </section>
+              {preview.resource.requiredFamiliarity ? (
+                <section className={`${styles.planBlock} ${styles.familiarityBlock}`}>
+                  <h3>Preparação necessária</h3>
+                  <RequiredFamiliarity levels={preview.resource.requiredFamiliarity} />
+                </section>
+              ) : null}
               <section className={`${styles.planBlock} ${styles.materialsBlock}`}>
                 <h3>Materiais</h3>
                 <ul className={styles.materialList}>
@@ -610,7 +617,7 @@ export function SavedTeachingPathsPage() {
                 </ul>
               </section>
               <section className={`${styles.planBlock} ${styles.methodologyBlock}`}>
-                <h3>Metodologia</h3>
+                <h3>Atividade proposta</h3>
                 <p>{preview.teaching.studentActivity}</p>
               </section>
               <section className={`${styles.planBlock} ${styles.evaluationBlock}`}>

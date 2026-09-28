@@ -28,6 +28,13 @@ export type PedagogicalFunction =
 
 export type PricingModel = "free" | "freemium" | "paid" | "unknown";
 
+export type FamiliarityLevel = "basic" | "intermediate" | "advanced";
+
+export interface RequiredFamiliarity {
+  student: FamiliarityLevel;
+  teacher: FamiliarityLevel;
+}
+
 export type ResourceAvailabilityStatus =
   | "draft"
   | "verified"
@@ -47,6 +54,7 @@ export interface Resource {
   additionalInformation: string;
   curatorNotes?: string;
   recommendedGrades: Grade[];
+  requiredFamiliarity?: RequiredFamiliarity;
   curriculum: {
     alignments: CurriculumAlignment[];
   };

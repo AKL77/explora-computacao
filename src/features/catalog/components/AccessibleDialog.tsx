@@ -14,7 +14,7 @@ interface AccessibleDialogProps {
   description?: string;
   children: ReactNode;
   onClose: () => void;
-  size?: "small" | "medium" | "large";
+  size?: "small" | "medium" | "large" | "wide";
   hideHeader?: boolean;
 }
 

@@ -1509,6 +1509,12 @@
   border-left-color: var(--brand-cyan);
 }
 
+.familiarityBlock {
+  background: #f5fafb;
+  border-left-color: var(--brand-cyan);
+  grid-column: 1 / -1;
+}
+
 .materialsBlock {
   background: #fffdf1;
   border-left-color: var(--brand-yellow);

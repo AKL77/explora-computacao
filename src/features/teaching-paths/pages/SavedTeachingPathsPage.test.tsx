@@ -44,7 +44,7 @@ describe("SavedTeachingPathsPage", () => {
     expect(screen.queryByText("Competências da BNCC relacionados")).not.toBeInTheDocument();
     expect(screen.queryByText(/EF05CO04/)).not.toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: "Abrir planejamento de Blockly Games" }));
+    await user.click(screen.getByRole("button", { name: "Abrir proposta de atividade de Blockly Games" }));
     const dialog = screen.getByRole("dialog", { name: "Blockly Games" });
     expect(
       within(dialog).queryByText(
@@ -58,6 +58,9 @@ describe("SavedTeachingPathsPage", () => {
     expect(
       within(dialog).getByRole("heading", { name: "Competências da BNCC", level: 3 }),
     ).toBeInTheDocument();
+    expect(within(dialog).getByRole("heading", { name: "Preparação necessária", level: 3 }))
+      .toBeInTheDocument();
+    expect(within(dialog).getByText("Intermediário")).toBeInTheDocument();
     await user.click(within(dialog).getByRole("radio", { name: /2 aulas.*100 min/i }));
     await user.click(within(dialog).getByRole("button", { name: "Fechar diálogo" }));
 
@@ -94,7 +97,7 @@ describe("SavedTeachingPathsPage", () => {
       "unicamp-desplugada-atividade-5",
     ]);
     expect(
-      screen.queryByRole("button", { name: "Abrir planejamento de Blockly Games" }),
+      screen.queryByRole("button", { name: "Abrir proposta de atividade de Blockly Games" }),
     ).not.toBeInTheDocument();
   });
 
@@ -107,8 +110,8 @@ describe("SavedTeachingPathsPage", () => {
     const user = renderPage();
     await user.click(await screen.findByRole("button", { name: /Ordem dos materiais/i }));
 
-    const source = screen.getByRole("button", { name: "Abrir planejamento de Blockly Games" }).closest("li");
-    const target = screen.getByRole("button", { name: /Abrir planejamento de Vinte Palpites/i }).closest("li");
+    const source = screen.getByRole("button", { name: "Abrir proposta de atividade de Blockly Games" }).closest("li");
+    const target = screen.getByRole("button", { name: /Abrir proposta de atividade de Vinte Palpites/i }).closest("li");
     if (!source || !target) throw new Error("Etapas não encontradas");
     const dataTransfer = {
       effectAllowed: "",
@@ -138,7 +141,7 @@ describe("SavedTeachingPathsPage", () => {
     await user.click(await screen.findByRole("button", { name: /Números binários/i }));
 
     const openMaterial = screen.getByRole("button", {
-      name: "Abrir planejamento de Contando os Pontos — Números Binários",
+      name: "Abrir proposta de atividade de Contando os Pontos — Números Binários",
     });
     expect(openMaterial).toBeInTheDocument();
     await user.click(openMaterial);

@@ -20,6 +20,11 @@ plataforma aproxima materiais externos, currículo e condições reais de uso em
 sala de aula, oferecendo direcionamento sem substituir a decisão do docente.
 O recorte atual abrange do 4º ao 9º ano do Ensino Fundamental.
 
+O trabalho é desenvolvido em colaboração com o NTEM e utiliza IA generativa
+fora da aplicação para apoiar a curadoria, a padronização das informações e a
+criação das Trilhas Prontas. A plataforma não contém geração por IA nem chama
+modelos ou serviços de IA durante seu uso.
+
 Esta entrega é um frontend demonstrativo com **31 materiais**: o jogo educativo
 de cyberbullying da ALT+INOVARE, Lightbot, Blockly Games, Interland, quatro
 materiais didáticos de Rozelma França e as 23 atividades da coleção Computação
@@ -32,15 +37,19 @@ Desplugada — Unicamp.
 
 - página inicial pública com contexto e objetivos do projeto;
 - sessão local de demonstração, sem autenticação real;
-- **Buscar Materiais** com pesquisa e filtros por ano, eixo e características;
+- **Buscar Materiais** com pesquisa e filtros por ano, assunto, formato e abordagem;
 - cartões de descoberta com informações pedagógicas concisas;
+- níveis de familiaridade para aluno e professor em cada material, explicados
+  na página **Sobre**;
 - detalhe de cada material com descrição, condições de uso, fonte e licença;
-- **Trilhas Prontas** com um percurso funcional para cada eixo da BNCC
-  Computação;
+- **Trilhas Prontas** com filtro por eixo e um percurso funcional para cada
+  eixo da BNCC Computação;
 - criação de trilhas próprias a partir dos materiais selecionados;
 - **Minhas Trilhas** com edição de nome, objetivo, cor e ícone;
 - reordenação das etapas, escolha de duração por material e cálculo do tempo
   total;
+- proposta de atividade ao abrir cada etapa, com objetivo, materiais, descrição
+  do que os estudantes farão, referências curriculares e duração;
 - persistência local da sessão e das trilhas;
 - páginas **Meu perfil** e **Sobre**;
 - interface responsiva, navegação por teclado e testes de acessibilidade.
