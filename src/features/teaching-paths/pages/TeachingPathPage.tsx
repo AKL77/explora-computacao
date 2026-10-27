@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Check, ListChecks, Plus, Search, X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { trackClarityEvent } from "@/lib/clarity";
 
 import { AccessibleDialog } from "@/features/catalog/components/AccessibleDialog";
 import { CatalogStatus } from "@/features/catalog/components/CatalogStatus";
@@ -187,6 +188,7 @@ export function TeachingPathPage() {
     if (trailIds.includes(item.resource.id)) return;
 
     setTrailIds((current) => [...current, item.resource.id]);
+    trackClarityEvent("material_selecionado");
     setAnnouncement(`${item.resource.title} foi adicionado à trilha em criação.`);
   };
 
@@ -211,6 +213,7 @@ export function TeachingPathPage() {
     });
     if (!path) return;
 
+    trackClarityEvent("trilha_criada");
     setAnnouncement(`A trilha “${path.name}” foi salva em Minhas Trilhas.`);
     setTrailIds([]);
     setPathName("");
@@ -235,6 +238,7 @@ export function TeachingPathPage() {
     const path = savedPaths.find((item) => item.id === existingPathId);
     if (!resource || !path || !addResourceToPath(path.id, resource.id)) return;
 
+    trackClarityEvent("material_adicionado_trilha");
     setAnnouncement(`${resource.title} foi adicionado à trilha “${path.name}”.`);
     setResourceToAddToExisting(null);
     setExistingPathId("");
@@ -540,7 +544,7 @@ export function TeachingPathPage() {
         )}
       </section>
 
-      <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+      <p className="sr-only" role="status" aria-live="polite" aria-atomic="true" data-clarity-mask="true">
         {announcement}
       </p>
 

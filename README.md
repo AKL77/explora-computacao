@@ -25,10 +25,15 @@ fora da aplicação para apoiar a curadoria, a padronização das informações 
 criação das Trilhas Prontas. A plataforma não contém geração por IA nem chama
 modelos ou serviços de IA durante seu uso.
 
-Esta entrega é um frontend demonstrativo com **31 materiais**: o jogo educativo
+Esta entrega é um frontend demonstrativo com **38 materiais**: o jogo educativo
 de cyberbullying da ALT+INOVARE, Lightbot, Blockly Games, Interland, quatro
 materiais didáticos de Rozelma França e as 23 atividades da coleção Computação
-Desplugada — Unicamp.
+Desplugada — Unicamp, quatro atividades do Computacional, IA para os Oceanos,
+Crachá — micro:bit e o guia Internet com Responsa — Só para Adolescentes.
+
+A versão **0.2.0**, de 27 de outubro de 2026, reúne os sete materiais da
+ampliação do catálogo, os ajustes nas propostas das trilhas e a integração do
+Microsoft Clarity com escolha de análise de uso.
 
 > Consulte a [demonstração publicada](https://akl77.github.io/explora-computacao/)
 > e o [estado atual do protótipo](docs/estado-atual.md).
@@ -112,6 +117,7 @@ uma sessão local de demonstração e leva diretamente a **Buscar Materiais**.
 | Rota lógica | Conteúdo |
 |---|---|
 | `/` | página inicial pública |
+| `/privacidade` | informações e preferências de análise de uso, sem login |
 | `/app/trilha-de-ensino` | busca e seleção de materiais |
 | `/app/materiais/:slug` | detalhe de um material |
 | `/app/trilhas-prontas` | trilhas preparadas por eixo |
@@ -126,8 +132,17 @@ No GitHub Pages, as rotas aparecem depois de `#`, por exemplo
 
 A sessão demonstrativa e as trilhas ficam no `localStorage` do próprio
 navegador, em chaves independentes e versionadas. Limpar os dados do site
-reinicia o protótipo. Nenhuma credencial, informação pessoal ou dado de
-estudante é coletado pelo Explora Computação.
+reinicia o protótipo. A plataforma não solicita credenciais ou dados de estudantes.
+
+Em produção, o Microsoft Clarity analisa a navegação somente depois de o
+visitante aceitar. A escolha pode ser alterada em **Privacidade e preferências**,
+acessível pelo rodapé e pelo menu da área docente. A integração usa o projeto
+`z4honwtjtg`, mantém negado o consentimento para armazenamento de publicidade
+e mascara nomes e objetivos das trilhas nas reconstituições.
+
+O Clarity não é carregado no servidor de desenvolvimento. A variável opcional
+`VITE_CLARITY_PROJECT_ID` troca o projeto; definida como vazia, desativa a análise
+no build. Consulte a [documentação da integração](docs/integracao-clarity.md).
 
 Os materiais podem direcionar a sites externos, que possuem políticas próprias.
 
@@ -136,9 +151,11 @@ Os materiais podem direcionar a sites externos, que possuem políticas próprias
 - [Estado atual do protótipo](docs/estado-atual.md)
 - [Arquitetura do frontend](docs/arquitetura.md)
 - [Deploy no GitHub Pages](docs/deploy-github-pages.md)
+- [Microsoft Clarity e privacidade](docs/integracao-clarity.md)
 - [Créditos e licenças de ativos](docs/creditos-e-licencas.md)
 - [Curadoria da coleção Computação Desplugada — Unicamp](docs/processo-curadoria-unicamp.md)
 - [Curadoria dos materiais didáticos de Rozelma França](docs/processo-curadoria-rozelma.md)
+- [Curadoria da ampliação de outubro de 2026](docs/processo-curadoria-2026-10-26.md)
 - [Registro mestre do TCC](docs/registro-mestre-tcc.md)
 - [Histórico da especificação](docs/especificacao-plataforma.md)
 

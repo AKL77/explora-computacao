@@ -1,8 +1,8 @@
 # Registro mestre da proposta de TCC
 
 **Título do trabalho:** Trajetórias de aprendizagem para a BNCC Computação: desenvolvimento colaborativo de uma solução com apoio de IA generativa
-**Versão:** 1.2
-**Data de atualização:** 20 de setembro de 2026
+**Versão:** 1.3
+**Data de atualização:** 29 de setembro de 2026
 **Função deste arquivo:** registrar a visão e as decisões acadêmicas do TCC. A especificação reúne os requisitos aceitos; o estado atual e os testes descrevem o que está implementado.
 
 > **Escopo vigente.** O trabalho desenvolve, em colaboração com o NTEM, uma
@@ -14,9 +14,14 @@
 > conteúdo durante o uso e não toma decisões pelo docente.
 
 > **Precedência das decisões.** Este arquivo preserva o histórico do projeto.
-> Quando houver conflito, a síntese inicial, as seções 28 a 30 e o documento
+> Quando houver conflito, a síntese inicial, as seções 28 a 31 e o documento
 > `estado-atual.md` prevalecem sobre propostas anteriores, especialmente as
 > relacionadas a planos de aula.
+
+> **Contexto de redação vigente.** A seção 31 registra a etapa acadêmica atual,
+> as orientações do autor e os três momentos de colaboração com o NTEM. Ela
+> deve ser consultada nas próximas tarefas de escrita. Os registros antigos
+> sobre ausência de avaliação não descrevem os retornos do NTEM já recebidos.
 
 ## 1. Resumo da proposta
 
@@ -780,3 +785,183 @@ anteriores descrita ao final da seção 27.
 - **Decisão sobre pré-requisitos:** o campo listado na seção 5.2 permanece uma
   possibilidade futura; não há cadastro nem exibição de pré-requisitos nesta
   implementação.
+
+## 31. Contexto de redação e colaboração com o NTEM — 29 de setembro de 2026
+
+### Etapa acadêmica e orientação de escrita
+
+- O autor está preparando o **texto da prévia do TCC**, apresentado no meio do
+  semestre para avaliação por uma banca. Após essa apresentação, terá o restante
+  do semestre para preparar o texto final e o projeto final.
+- Essa informação é contexto para a colaboração e para os tempos verbais. Por
+  orientação explícita do autor, **não repetir essa explicação no texto
+  acadêmico** nem apresentar todo o trabalho como concluído.
+- A redação segue por subseção principal, mantendo o documento de trabalho em
+  `output/tcc/desenvolvimento.tex`. A versão reescrita pelo autor para a abertura
+  da seção 4 e para 4.1 foi incorporada com ajustes pontuais de linguagem e a
+  reinserção do título de 4.1. A subseção 4.2 foi redigida a partir da
+  implementação atual. Após o retorno do autor, 4.2 foi condensada para
+  privilegiar as tecnologias centrais e as razões de uso; a persistência ficou
+  em um parágrafo e permaneceu somente o diagrama geral de arquitetura.
+  A subseção 4.3 foi redigida em 30/09/2026, com exemplos dos registros de
+  curadoria, um quadro de informações e dois fluxogramas em TikZ.
+  As partes 4.4 a 4.7 mantêm a estrutura, os comentários de orientação e os
+  textos anteriormente alocados para readequação posterior.
+- Os comentários de fonte no arquivo LaTeX são notas de trabalho; não há
+  entradas bibliográficas inventadas para a transcrição ou o documento de
+  colaboração. As imagens e referências bibliográficas do rascunho permanecem
+  dependentes do projeto original no Overleaf.
+
+### Origem e evolução da proposta, conforme relato do autor
+
+- O interesse inicial era desenvolver um TCC sobre Computação na Educação.
+  A primeira ideia era uma plataforma de programação em blocos com Blockly,
+  com fases de avaliação para abordar competências dos três eixos da BNCC
+  Computação de forma integrada, conforme a versão reescrita pelo autor.
+- A definição do escopo amadureceu com a apresentação de duas propostas ao
+  NTEM: a plataforma de programação em blocos e um repositório de conteúdos de
+  Computação. O relato desse encontro deve ficar em 4.1.1, sobre colaboração.
+- Funcionalidades surgiram da exploração de plataformas e foram refinadas ao
+  longo do desenvolvimento, com contribuições do NTEM e da professora
+  orientadora. Não atribuir ao trabalho uma metodologia formal não informada.
+- A indicação de familiaridade com os conteúdos decorreu de sugestão do NTEM.
+  A organização em trilhas foi desenvolvida nas conversas com a orientadora.
+  Na versão reescrita, o autor esclareceu que a concepção das **Trilhas Prontas**
+  também se apoiou no encontro inicial com o NTEM, quando discutiu a articulação
+  de diferentes materiais para ensinar um assunto específico.
+- A transcrição também registra a discussão sobre a diversidade dos planos de
+  aula de cada professor e a opção por propostas de atividade, além da
+  preparação de Trilhas Prontas como ponto de partida para o docente.
+
+### Três momentos de colaboração já realizados
+
+1. **Conversa inicial, presencialmente em 31 de julho de 2026:** realizada no
+   Núcleo de Tecnologia Educacional Municipal de Santa Maria, com duas
+   profissionais do NTEM. Foram apresentadas as duas propostas e discutidas
+   necessidades e dificuldades, incluindo localizar, compreender e associar
+   materiais à BNCC Computação. A data e o caráter presencial foram informados
+   pelo autor na sua versão reescrita da seção 4.1.
+2. **Encontro remoto, em 14 de setembro de 2026:** apresentação do estado da
+   proposta pelo Google Meet, com três profissionais do NTEM, conforme relato
+   do autor, além do autor e da orientadora. As falas da equipe estão reunidas
+   na transcrição sob a conta institucional `NTEM SMED`, portanto a lista de
+   contas não equivale à quantidade de profissionais. A sugestão de indicar o
+   nível de conhecimento/familiaridade aparece na página 13, perto de 25
+   minutos. Nas páginas 18–22 é discutida a continuidade por documento
+   compartilhado com perguntas orientadoras.
+3. **Exploração da plataforma e retorno escrito:** o protótipo no GitHub Pages
+   foi disponibilizado com um documento compartilhado de perguntas. O arquivo
+   fornecido **já contém respostas**, além de sugestões de identificação de
+   habilidades, nomenclatura curricular, esclarecimento sobre criação de
+   trilhas e o nome Explora Computação. As perguntas são orientadoras e não
+   exigem resposta a todos os itens. A data e o número de respondentes desse
+   momento não foram informados; não presumir que sejam os mesmos do encontro.
+
+### Fontes locais e limites do relato
+
+Os PDFs foram fornecidos pelo autor em
+`C:/Users/augus/Documents/Faculdade/10º semestre - TCC/TCCs Exemplo/`:
+
+- `Reunião NTEM-UFSM TCC Augusto - 2026_09_14 13_59 GMT-03_00 - Transcript.pdf`
+  (23 páginas; transcrição automática, sujeita a erros).
+- `Colaboração CT_UFSM-NTEM - Trajetórias de aprendizagem BNCC Computação.pdf`
+  (3 páginas; perguntas e respostas em documento compartilhado).
+
+A colaboração e sua influência no desenvolvimento são descritas em 4.1.1.
+O detalhamento das respostas e sua análise ficam reservados à seção 5 do TCC.
+As contribuições recebidas não devem ser tratadas automaticamente como
+alterações já implementadas. Os registros anteriores de que não havia uma
+avaliação definida precisam ser lidos à luz deste retorno qualitativo do NTEM;
+não afirmar ausência de qualquer retorno dos profissionais nem concluir, a
+partir dele, que houve validação de aprendizagem ou aplicação em sala de aula.
+Na sua versão reescrita de 4.1, o autor informou que está previsto ao menos mais
+um encontro presencial com professores no NTEM para avaliar e explicar o
+funcionamento da plataforma. Não há data informada; tratar como encontro
+previsto, sem afirmar que já ocorreu.
+
+### Redação da arquitetura e tecnologias (4.2)
+
+- Em 30/09/2026, por decisão do autor durante a revisão da estrutura, a
+  subsubseção "Organização dos dados dos materiais e das trilhas" foi retirada
+  de 4.2. Os detalhes dos registros curatoriais ficam para 4.3.2; a
+  apresentação desses dados, para 4.5; a composição e edição das trilhas,
+  para 4.6. A seção 4.2 permanece centrada nas escolhas tecnológicas e na
+  persistência local resumida. O texto ainda não foi expandido nas seções
+  futuras; há comentários de redação no arquivo LaTeX para recuperá-lo.
+- A descrição foi conferida no código e em `docs/arquitetura.md`: aplicação
+  estática React, TypeScript e Vite; navegação por hash; Zustand; CSS Modules;
+  catálogo incorporado à aplicação e trilhas pessoais no `localStorage`.
+- A entrada é demonstrativa, sem credenciais nem contas individuais. Não há
+  banco remoto ou sincronização entre dispositivos.
+- As trilhas guardam identificadores ordenados de materiais e durações; não
+  duplicam o cadastro completo dos recursos. A etapa no diagrama é uma
+  representação conceitual, sem entidade persistida independente.
+- Metadados curatoriais complementam as propostas de atividade. As Trilhas
+  Prontas têm definições próprias e geram registros pessoais editáveis ao
+  serem adicionadas a Minhas Trilhas.
+- O diagrama geral está no próprio LaTeX, com TikZ. A documentação oficial
+  das tecnologias centrais foi indicada em notas de rodapé, sem inventar
+  chaves de bibliografia para o projeto do autor. Tecnologias secundárias,
+  como CSS Modules, não precisam ser listadas na subseção.
+
+### Redação da preparação dos conteúdos (4.3) — 30 de setembro de 2026
+
+- A subseção contém quatro partes: fontes e critérios; padronização e
+  classificações curatoriais; curadoria com apoio de IA e revisão humana;
+  elaboração e revisão das Trilhas Prontas.
+- A redação usa o estado de 31 materiais e três Trilhas Prontas. O exemplo de
+  curadoria é Vinte Palpites; Gato de Botas na Era Digital exemplifica a exclusão
+  por público fora do recorte. A trilha de exemplo é Algoritmos: decisões,
+  blocos e desafios, com Vinte Palpites, Blockly Games e Sertão.bit.
+- Os critérios foram descritos a partir dos registros de curadoria, respeitando
+  a distinção entre dados declarados pela fonte e interpretação curatorial.
+  Vínculos curatoriais permanecem pendentes de validação acadêmica.
+- A afirmação abrangente de que todos os materiais podem ser abertamente
+  compartilhados foi substituída pela distinção entre acesso e licença. O
+  catálogo referencia recursos sem licença declarada e pode usar imagem padrão.
+- Codex é a ferramenta documentada para curadoria e preparação das trilhas.
+  Foi perguntado ao autor se utilizou outras ferramentas e quais modelos ou
+  versões; a redação não atribui modelo específico nem inventa um prompt original.
+- Os dois fluxogramas foram desenhados no próprio LaTeX, preservando os
+  rótulos, com barreiras antes da próxima subsubseção. Não dependem mais dos
+  arquivos fluxo_curadoria.png e fluxo_trilhas.png.
+- O texto alocado anterior de 4.3 está preservado em
+  `output/tcc/historico/4.3-antes-da-redacao.txt`. A parte 4.4 em diante não foi
+  reescrita nesta etapa.
+
+## 32. Ampliação local do catálogo — 26 de outubro de 2026
+
+- O autor selecionou sete materiais: Bugs, Tetris — Repetição, Autômatos da
+  Mônica 2026, Portas Lógicas, IA para os Oceanos, Crachá — micro:bit e Internet
+  com Responsa — Só para Adolescentes. O catálogo local passa de 31 para 38.
+- A inclusão contempla busca, 45 assuntos (incluindo Inteligência artificial),
+  anos, formato e abordagem, familiaridade, ficha e propostas em Minhas Trilhas.
+- Os ZIPs e PDFs oficiais foram examinados integralmente. O Tetris escolhido é
+  Repetição; o download prévio de Instruções não foi usado como substituto.
+- Anos de aplicação e pares ano–habilidade são registrados separadamente. Todos
+  os novos alinhamentos são curatoriais e pendentes de validação acadêmica.
+- Somente o plano oficial de IA consultado fornece duração (45 minutos). Não
+  foram presumidos tempos para os demais recursos.
+- Bugs, Tetris e Portas Lógicas recebem imagens locais sob CC BY-NC-SA 4.0.
+  Autômatos não herda a licença de outros materiais do mesmo site. O guia do
+  NIC.br declara especificamente CC BY-ND, com versão não indicada no PDF.
+- A atividade Crachá admite simulador; a placa física não é requisito obrigatório.
+- Fontes e decisões: [processo-curadoria-2026-10-26.md](processo-curadoria-2026-10-26.md).
+- Por solicitação do autor, esta ampliação fica na versão local. A publicação
+  no GitHub Pages será realizada somente em uma solicitação futura.
+
+## 33. Microsoft Clarity e publicação da versão 0.2.0 — 27 de outubro de 2026
+
+- O autor autorizou a integração do Microsoft Clarity para análise de navegação
+  dos docentes, com coleta somente após aceitação do visitante.
+- O projeto usa o ID público `z4honwtjtg`. A integração não requer autenticação
+  real no Explora e mantém negado o consentimento para armazenamento de publicidade.
+- Uma página pública de privacidade oferece recusa e revogação. Nomes e objetivos
+  das trilhas são mascarados, e os eventos personalizados não enviam textos livres.
+- O autor solicitou atualizar o GitHub Pages com o conjunto das alterações locais,
+  incluindo os sete materiais descritos na seção 32. Essa solicitação substitui
+  a orientação anterior de manter a ampliação somente no ambiente local.
+- A versão do protótipo passa a 0.2.0. O fluxo de publicação continua exigindo
+  verificações de código, testes unitários, build e testes em computador e celular.
+- A análise de uso não representa validação de aprendizagem nem altera o relato
+  das contribuições do NTEM ou as exigências acadêmicas para pesquisas futuras.

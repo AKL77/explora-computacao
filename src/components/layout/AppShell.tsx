@@ -180,6 +180,9 @@ export function AppShell() {
             <LogOut aria-hidden="true" size={20} />
             Sair
           </button>
+          <NavLink className={styles.signOut} to="/privacidade" onClick={() => closeMenu()}>
+            Privacidade e preferências
+          </NavLink>
         </div>
       </aside>
 

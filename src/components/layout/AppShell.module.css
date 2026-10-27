@@ -149,6 +149,7 @@
   background: transparent;
   color: rgb(248 250 252 / 0.82);
   font-weight: 700;
+  text-decoration: none;
   cursor: pointer;
 }
 

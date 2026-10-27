@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo, useState, type ComponentType } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { trackClarityEvent } from "@/lib/clarity";
 
 import { CatalogStatus } from "@/features/catalog/components/CatalogStatus";
 import { RESOURCE_PLACEHOLDER, typeLabels } from "@/features/catalog/components/resourcePresentation";
@@ -290,6 +291,7 @@ export function ReadyTeachingPathsPage() {
     resourceIds.forEach((resourceId) => {
       setResourceLessonCount(path.id, resourceId, 1);
     });
+    trackClarityEvent("trilha_pronta_adicionada");
     setAnnouncement(`A trilha “${selectedReadyPath.name}” foi adicionada a Minhas Trilhas.`);
   };
 

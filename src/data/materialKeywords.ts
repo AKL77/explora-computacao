@@ -57,6 +57,7 @@ export const materialKeywordGroups = [
       { id: "convivencia-respeito", label: "Convivência e respeito online" },
       { id: "cyberbullying", label: "Cyberbullying" },
       { id: "impactos-sociedade", label: "Impactos da tecnologia na sociedade" },
+      { id: "inteligencia-artificial", label: "Inteligência artificial" },
       { id: "tecnologia-trabalho", label: "Tecnologia e trabalho" },
       { id: "desigualdade-acesso", label: "Desigualdade de acesso digital" },
       { id: "sustentabilidade-descarte", label: "Sustentabilidade e descarte eletrônico" },
@@ -92,6 +93,7 @@ export const materialKeywordIdsByResourceId: Record<string, readonly MaterialKey
   ],
   "unicamp-desplugada-atividade-18": ["protocolos-comunicacao", "seguranca-cibernetica"],
   "unicamp-desplugada-atividade-19": ["criptografia", "seguranca-cibernetica"],
+  "unicamp-desplugada-atividade-21": ["inteligencia-artificial", "impactos-sociedade"],
   "unicamp-desplugada-atividade-22": ["armazenamento-dados", "arquivos-compactacao"],
   "unicamp-desplugada-atividade-23": ["matrizes-coordenadas", "decomposicao"],
   "lightbot-web": ["algoritmos", "sequencias-instrucoes", "repeticoes", "programacao"],
@@ -108,6 +110,16 @@ export const materialKeywordIdsByResourceId: Record<string, readonly MaterialKey
   "google-interland": [
     "confiabilidade-fontes", "desinformacao", "etica-digital",
     "dados-pessoais-privacidade", "convivencia-respeito", "cyberbullying",
+  ],
+  "computacional-bugs": ["algoritmos", "sequencias-instrucoes", "condicoes", "repeticoes", "depuracao"],
+  "computacional-tetris-repeticao": ["algoritmos", "sequencias-instrucoes", "repeticoes"],
+  "computacional-automatos-monica": ["automatos-eventos", "grafos-arvores", "algoritmos", "condicoes"],
+  "computacional-portas-logicas": ["logica-computacional", "condicoes"],
+  "codeorg-ia-oceanos": ["inteligencia-artificial", "etica-digital", "impactos-sociedade"],
+  "microbit-cracha": ["programacao", "algoritmos", "sequencias-instrucoes", "repeticoes"],
+  "nicbr-internet-responsa-adolescentes": [
+    "cyberbullying", "dados-pessoais-privacidade", "convivencia-respeito", "redes-sociais",
+    "etica-digital", "inteligencia-artificial", "impactos-sociedade",
   ],
 };
 

@@ -51,6 +51,21 @@ como `/app/trilhas-prontas` para `index.html`. A URL
 `/explora-computacao/#/app/trilhas-prontas` preserva o roteamento no navegador e
 permite atualizar ou compartilhar telas internas sem receber 404.
 
+## Microsoft Clarity
+
+O build já usa o ID público `z4honwtjtg` por padrão. Não é necessário cadastrar
+segredo ou variável no GitHub para ativar esse projeto. Após a publicação, o
+rastreador só carrega quando o visitante aceita a análise. O servidor de
+desenvolvimento não o carrega.
+
+Para trocar o projeto, defina `VITE_CLARITY_PROJECT_ID` no ambiente do build.
+Defina a variável como vazia para gerar um build sem análise. O arquivo
+`.env.example` documenta a opção; nenhum dado de acesso ao painel é necessário.
+
+Os testes de análise interceptam as solicitações ao Clarity e usam respostas
+locais, sem enviar sessões de teste à Microsoft. As verificações finais no
+painel e no site publicado estão em `integracao-clarity.md`.
+
 ## Diagnóstico
 
 - **Tela sem estilos/imagens:** confirme que `VITE_BASE_PATH` começa e termina

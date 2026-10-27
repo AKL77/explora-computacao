@@ -15,6 +15,9 @@ flowchart LR
   UI --> SESSION["SessionStore"]
   PATHS --> LS["localStorage"]
   SESSION --> LS
+  UI --> CONSENT["Consentimento de análise"]
+  CONSENT --> LS
+  CONSENT -->|"Somente após aceitação"| CLARITY["Microsoft Clarity"]
   UI --> EXT["Materiais externos"]
 ```
 
@@ -32,7 +35,7 @@ flowchart LR
 │   ├── data/                # catálogo local curado
 │   ├── domain/              # tipos e validações de domínio
 │   ├── features/            # funcionalidades por contexto
-│   ├── lib/                 # utilitários puros
+│   ├── lib/                 # utilitários e integração de análise de uso
 │   ├── repositories/        # limite de acesso ao catálogo
 │   ├── store/               # sessão e trilhas pessoais
 │   ├── styles/              # tokens e estilos globais
@@ -40,7 +43,7 @@ flowchart LR
 └── tests/e2e/               # fluxos reais no Playwright
 ```
 
-Cada feature expõe sua API pública em `index.ts`. Componentes compartilhados do
+As features principais expõem sua API pública em `index.ts`. Componentes compartilhados do
 catálogo — diálogo acessível, estados de carregamento e apresentação de
 metadados — continuam disponíveis para Buscar Materiais, Trilhas Prontas e
 Minhas Trilhas.
@@ -54,7 +57,7 @@ servidor, atualizar uma tela interna não depende de regras de reescrita no
 GitHub Pages.
 
 As rotas atuais são Buscar Materiais, detalhe do material, Trilhas Prontas,
-Minhas Trilhas, Perfil e Sobre. URLs antigas de acervo, pastas e planos apenas
+Minhas Trilhas, Perfil, Sobre e a página pública Privacidade. URLs antigas de acervo, pastas e planos apenas
 redirecionam para um fluxo atual e não carregam módulos legados.
 
 ### Caminho-base configurável
@@ -105,6 +108,22 @@ da sequência para permitir edição.
 
 Favoritos, pastas e planos de aula não possuem store, domínio ou feature na
 versão atual. Chaves antigas no `localStorage` são ignoradas.
+
+### Análise de uso com consentimento
+
+`src/lib/clarity.ts` concentra o ID público, a escolha do visitante, o carregamento
+assíncrono e os eventos sem texto livre. `AnalyticsConsent` sincroniza a escolha
+e a área visitada. `PrivacyPage` oferece informações e revogação sem autenticação.
+
+O rastreador só é baixado em produção, com ID válido e aceitação. A revogação
+nega o consentimento e recarrega o documento para encerrar também eventuais
+reinícios do SDK sem cookies. Outras abas recebem a mudança pelo evento
+`storage`. As rotas por hash são etiquetadas com valores fixos e eventos de
+visita; isso não transforma essas rotas em pageviews nativos distintos.
+
+Os nomes e objetivos das trilhas, além das mensagens que os reproduzem, têm
+mascaramento explícito. Campos digitados são mascarados pelo Clarity. A integração
+mantém `ad_Storage` negado. O detalhamento está em `integracao-clarity.md`.
 
 ## Qualidade
 

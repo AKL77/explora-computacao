@@ -5,6 +5,7 @@ import {
   useState,
 } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
+import { trackClarityEvent } from "@/lib/clarity";
 
 import type {
   ParticipationMode,
@@ -219,6 +220,7 @@ export function ResourceDetailPage() {
           <div className={styles.actions}>
             <a
               href={externalUrl}
+              onClick={() => trackClarityEvent("fonte_material_aberta")}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.primaryLink}

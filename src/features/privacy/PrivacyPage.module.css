@@ -1,0 +1,81 @@
+.page {
+  width: min(100% - 2rem, 64rem);
+  margin-inline: auto;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding-block: 1.5rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header > a:last-child,
+.content a {
+  color: var(--brand-blue);
+  font-weight: 700;
+}
+
+.content {
+  max-width: 48rem;
+  padding-block: 2rem 4rem;
+  margin-inline: auto;
+}
+
+.content h1,
+.content h2 {
+  color: var(--brand-navy);
+}
+
+.content h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.2;
+}
+
+.content h2 {
+  margin-block: 2rem 0.75rem;
+  font-size: 1.3rem;
+}
+
+.preferences {
+  padding: 1.5rem;
+  margin-top: 2rem;
+  background: var(--surface-card);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+}
+
+.preferences h2 {
+  margin-top: 0;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.actions button {
+  min-height: 2.75rem;
+  padding: 0.65rem 1rem;
+  color: var(--brand-blue);
+  font-weight: 750;
+  background: var(--surface-card);
+  border: 1px solid var(--brand-blue);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.actions button:hover:not(:disabled) {
+  background: var(--surface-soft);
+}
+
+.actions button:disabled {
+  color: var(--text-muted);
+  border-color: var(--border-soft);
+  cursor: default;
+}

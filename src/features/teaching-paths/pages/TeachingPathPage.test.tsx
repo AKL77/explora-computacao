@@ -46,7 +46,7 @@ describe("TeachingPathPage", () => {
     expect(
       screen.getByRole("heading", { name: binaryNumbersTitle, level: 3 }),
     ).toBeInTheDocument();
-    expect(screen.getByText("31 materiais", { exact: true })).toBeInTheDocument();
+    expect(screen.getByText("38 materiais", { exact: true })).toBeInTheDocument();
     expect(getResourceCard(blocklyTitle).getByText("Preparação necessária"))
       .toBeInTheDocument();
     expect(getResourceCard(blocklyTitle).getByText("Intermediário"))
@@ -106,7 +106,7 @@ describe("TeachingPathPage", () => {
     expect(screen.getByRole("heading", { name: sertaoTitle, level: 3 })).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Limpar filtros" }));
-    expect(screen.getByText("31 materiais", { exact: true })).toBeInTheDocument();
+    expect(screen.getByText("38 materiais", { exact: true })).toBeInTheDocument();
   });
 
   it("combina assuntos com os demais filtros e aceita opções ainda sem materiais", async () => {
@@ -114,7 +114,7 @@ describe("TeachingPathPage", () => {
     await user.click(screen.getByRole("button", { name: "Ver opções" }));
 
     const dialog = screen.getByRole("dialog", { name: "Selecionar assuntos" });
-    expect(dialog.querySelectorAll("[aria-pressed]")).toHaveLength(44);
+    expect(dialog.querySelectorAll("[aria-pressed]")).toHaveLength(45);
     const keywordSearch = within(dialog).getByRole("searchbox", { name: "Buscar palavras-chave" });
     await user.type(keywordSearch, "arvores");
     expect(within(dialog).getByRole("button", { name: "Grafos e árvores" })).toBeInTheDocument();
@@ -142,7 +142,7 @@ describe("TeachingPathPage", () => {
 
     expect(screen.getByText("Nenhum material encontrado")).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Limpar filtros" }));
-    expect(screen.getByText("31 materiais", { exact: true })).toBeInTheDocument();
+    expect(screen.getByText("38 materiais", { exact: true })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Ver opções" })).toBeInTheDocument();
   });
 

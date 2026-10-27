@@ -59,6 +59,26 @@ foram incorporadas em 29 de agosto de 2026. Não foram armazenadas imagens de
 **Interland**, pois as fontes consultadas não apresentam licença explícita de
 reutilização para esses ativos; esses recursos usam o placeholder do projeto.
 
+## Atividades do Computacional — ampliação de outubro de 2026
+
+As imagens `bugs.jpg`, `tetris-repeticao.jpg` e `portas-logicas.jpg`, em
+`public/images/cards/computacional/` e `public/images/cards/thumbnails/computacional/`,
+são renderizações integrais das folhas oficiais, redimensionadas e comprimidas
+para identificação dos recursos. Atribuição: **Computacional — Christian Brackmann**.
+
+Fontes: [pacote Bugs](https://www.computacional.com.br/atividades_download/por/06-Bugs-Resolucao-de-Problemas.zip),
+[pacote Tetris — Repetição](https://www.computacional.com.br/atividades_download/por/09-Tetris2-repeticao.zip)
+e [folha Portas Lógicas](https://www.computacional.com.br/atividades_download/Portas_Logicas.pdf).
+A licença **CC BY-NC-SA 4.0** consta dos documentos de licença dos dois pacotes
+e do rodapé da folha de Portas Lógicas. O conteúdo das folhas foi preservado,
+incluindo o crédito e a licença quando impressos na página. Uso acadêmico não
+comercial, sob a licença original dos ativos. Verificação: 26 de outubro de 2026.
+
+Autômatos da Mônica, IA para os Oceanos, Crachá e Internet com Responsa usam o
+placeholder. As licenças dos respectivos materiais e seus limites estão no
+[registro de curadoria](processo-curadoria-2026-10-26.md); não foram estendidas
+automaticamente a personagens, ativos do jogo ou imagens do site.
+
 ## Referências de design não distribuídas
 
 As imagens usadas apenas durante a exploração visual foram movidas para a

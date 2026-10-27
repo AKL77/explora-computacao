@@ -101,6 +101,14 @@ export const BNCC_SKILLS = {
     "EF15CO09",
     "Entender que as tecnologias devem ser utilizadas de maneira segura, ética e responsável, respeitando direitos autorais, de imagem e as leis vigentes.",
   ),
+  EF06CO01: officialSkill(
+    "EF06CO01",
+    "Classificar informações, agrupando-as em coleções (conjuntos) e associando cada coleção a um ‘tipo de dados’",
+  ),
+  EF06CO02: officialSkill(
+    "EF06CO02",
+    "Elaborar algoritmos que envolvam instruções sequenciais, de repetição e de seleção usando uma linguagem de programação.",
+  ),
   EF06CO06: officialSkill(
     "EF06CO06",
     "Comparar diferentes casos particulares (instâncias) de um mesmo problema, identificando as semelhanças e diferenças entre eles, e criar um algoritmo para resolver todos, fazendo uso de variáveis (parâmetros) para permitir o tratamento de todos os casos de forma genérica.",

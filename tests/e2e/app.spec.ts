@@ -10,6 +10,7 @@ function routeUrl(path = "") {
 async function resetDemo(page: import("@playwright/test").Page) {
   await page.goto(basePath);
   await page.evaluate(() => window.localStorage.clear());
+  await page.evaluate(() => window.localStorage.setItem("explora:analytics-consent:v1", "denied"));
   await page.reload();
 }
 
@@ -38,10 +39,10 @@ test("seleciona assuntos no diálogo e combina a busca com ano escolar", async (
   }));
   expect(scrollState).toEqual({ dialogScrollable: false, nestedScrollers: 1 });
   expect((await dialog.boundingBox())?.width).toBeGreaterThan((page.viewportSize()?.width ?? 0) * 0.9);
-  await expect(dialog.locator("[aria-pressed]")).toHaveCount(44);
+  await expect(dialog.locator("[aria-pressed]")).toHaveCount(45);
   await dialog.getByRole("searchbox", { name: "Buscar palavras-chave" }).fill("cyber");
   await expect(dialog.locator("[aria-pressed]")).toHaveCount(1);
-  await expect(page.getByText("31 materiais", { exact: true }).first()).toBeVisible();
+  await expect(page.getByText("38 materiais", { exact: true }).first()).toBeVisible();
   await dialog.getByRole("button", { name: "Cyberbullying" }).click();
   await expect(dialog.getByRole("button", { name: "Cyberbullying" })).toHaveAttribute("aria-pressed", "true");
   await dialog.getByRole("button", { name: "Concluir" }).click();
@@ -59,7 +60,7 @@ test("seleciona assuntos no diálogo e combina a busca com ano escolar", async (
   await expect(page.getByText("Nenhum material encontrado")).toBeVisible();
 
   await page.getByRole("button", { name: "Limpar filtros" }).click();
-  await expect(page.getByText("31 materiais", { exact: true }).first()).toBeVisible();
+  await expect(page.getByText("38 materiais", { exact: true }).first()).toBeVisible();
 });
 
 test("apresenta a proposta e entra em Buscar Materiais", async ({ page }) => {
@@ -164,7 +165,7 @@ test("busca materiais com tags e seleciona uma trilha", async ({
     page.getByRole("heading", { name: "Buscar Materiais", level: 1 }),
   ).toBeVisible();
 
-  await expect(page.getByText("31 materiais", { exact: true }).first()).toBeVisible();
+  await expect(page.getByText("38 materiais", { exact: true }).first()).toBeVisible();
 
   await page.getByRole("button", { name: "Material plugado" }).click();
   await expect(
@@ -241,6 +242,77 @@ test("busca materiais com tags e seleciona uma trilha", async ({
       () => document.documentElement.scrollWidth <= document.documentElement.clientWidth,
     ),
   ).toBe(true);
+});
+
+test("apresenta os sete novos materiais com fontes, licenças e durações corretas", async ({ page }, testInfo) => {
+  await enterDemo(page);
+  const additions = [
+    ["computacional-bugs", "Bugs", "CC BY-NC-SA 4.0"],
+    ["tetris-repeticao", "Tetris — Repetição", "CC BY-NC-SA 4.0"],
+    ["automatos-da-monica", "Autômatos da Mônica — Versão 2026", "Não informada"],
+    ["portas-logicas", "Portas Lógicas", "CC BY-NC-SA 4.0"],
+    ["ia-para-os-oceanos", "IA para os Oceanos", "CC BY-NC-SA 4.0 (plano docente); licença do jogo não verificada"],
+    ["microbit-cracha", "Crachá — micro:bit", "CC BY-SA 4.0"],
+    ["internet-com-responsa-adolescentes", "Internet com Responsa — Só para Adolescentes", "CC BY-ND (versão não indicada no PDF)"],
+  ];
+  for (const [slug, title, license] of additions) {
+    await page.goto(routeUrl(`/app/materiais/${slug}`));
+    await expect(page.getByRole("heading", { name: title, level: 1 })).toBeVisible();
+    await expect(page.getByRole("region", { name: "Preparação necessária" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Acessar recurso" })).toHaveAttribute("href", /^https:/);
+    await page.getByRole("tab", { name: "Informações adicionais" }).click();
+    const additional = page.getByRole("tabpanel");
+    const duration = additional.locator("div").filter({ has: page.getByText("Duração", { exact: true }) }).last();
+    await expect(duration).toContainText(slug === "ia-para-os-oceanos" ? "45 min" : "Não informado");
+    await page.getByRole("tab", { name: "Fonte", exact: true }).click();
+    await expect(page.getByRole("tabpanel").getByText(license, { exact: true })).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+  }
+  await page.goto(routeUrl("/app/materiais/portas-logicas"));
+  await expect(page.getByRole("img", { name: /Desafios com lâmpadas/ })).toBeVisible();
+  await page.evaluate(() => { (document.activeElement as HTMLElement)?.blur(); window.scrollTo(0, 0); });
+  await page.screenshot({ path: testInfo.outputPath("novo-material.png"), fullPage: true });
+});
+
+test("filtra novos assuntos e conserva os novos materiais nas propostas de uma trilha salva", async ({ page }, testInfo) => {
+  await enterDemo(page);
+  await page.getByRole("button", { name: "Ver opções" }).click();
+  const dialog = page.getByRole("dialog", { name: "Selecionar assuntos" });
+  await dialog.getByRole("button", { name: "Inteligência artificial", exact: true }).click();
+  await dialog.getByRole("button", { name: "Concluir" }).click();
+  await expect(page.getByRole("heading", { name: "IA para os Oceanos", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Internet com Responsa — Só para Adolescentes", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Blockly Games", exact: true })).toHaveCount(0);
+  await page.getByRole("button", { name: "Limpar filtros" }).click();
+
+  const search = page.getByRole("searchbox", { name: "Pesquisar área, assunto ou habilidade" });
+  await search.fill("microbit");
+  await expect(page.getByRole("heading", { name: "Crachá — micro:bit", exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Material desplugado", exact: true }).click();
+  await expect(page.getByText("Nenhum material encontrado")).toBeVisible();
+  await page.getByRole("button", { name: "Limpar filtros" }).click();
+
+  await page.getByRole("button", { name: "Adicionar Bugs a uma nova trilha", exact: true }).click();
+  await page.getByRole("button", { name: "Adicionar IA para os Oceanos a uma nova trilha", exact: true }).click();
+  await page.getByRole("region", { name: "Nova trilha em criação" }).getByRole("button", { name: "Salvar trilha" }).click();
+  const saveDialog = page.getByRole("dialog", { name: "Salvar trilha" });
+  await saveDialog.getByRole("textbox", { name: "Nome da trilha" }).fill("Novos materiais — teste local");
+  await saveDialog.getByRole("textbox", { name: "Objetivo da trilha" }).fill("Explorar algoritmos e dados de treinamento.");
+  await saveDialog.getByRole("button", { name: "Salvar trilha" }).click();
+  await page.reload();
+  await page.getByRole("button", { name: /Novos materiais — teste local/ }).click();
+  await page.getByRole("button", { name: "Abrir proposta de atividade de IA para os Oceanos", exact: true }).click();
+  const proposal = page.getByRole("article", { name: "Proposta de atividade da etapa" });
+  await expect(proposal).toContainText("4º, 5º, 6º, 7º, 8º e 9º anos");
+  await expect(proposal.getByText("6º ano ·", { exact: true })).toBeVisible();
+  await expect(proposal.getByText("9º ano ·", { exact: true })).toBeVisible();
+  await expect(proposal).toContainText("Treinar e testar um modelo");
+  const materialLink = proposal.getByRole("link", { name: /Ver material completo/ });
+  await expect(materialLink).toHaveAttribute("href", /\/app\/materiais\/ia-para-os-oceanos$/);
+  await page.screenshot({ path: testInfo.outputPath("nova-trilha.png") });
+  await materialLink.click();
+  await expect(page.getByRole("heading", { name: "IA para os Oceanos", level: 1 })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Acessar recurso" })).toHaveAttribute("href", /studio\.code\.org\/courses\/oceans/);
 });
 
 test("redireciona os endereços antigos para os fluxos atuais", async ({ page }) => {

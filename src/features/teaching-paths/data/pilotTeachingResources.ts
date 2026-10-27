@@ -111,6 +111,10 @@ export const pilotTeachingResources: readonly PilotTeachingResource[] = [
 ];
 
 function inferActivityMode(resource: Resource): ActivityMode {
+  // O simulador é uma alternativa à placa; ler o guia também admite impressão.
+  if (resource.id === "microbit-cracha") return "plugged";
+  if (resource.id === "nicbr-internet-responsa-adolescentes") return "mixed";
+
   const needsDigitalAccess =
     resource.requirements.internet === true || (resource.requirements.devices?.length ?? 0) > 0;
   const usesClassroomMaterials = (resource.pedagogy.materials?.length ?? 0) > 0;

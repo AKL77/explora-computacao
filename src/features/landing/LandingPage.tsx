@@ -1,4 +1,5 @@
 import {
+  useEffect,
   useRef,
   useState,
   type KeyboardEvent,
@@ -32,6 +33,9 @@ function handleImageError(event: SyntheticEvent<HTMLImageElement>) {
 }
 
 export function LandingPage() {
+  useEffect(() => {
+    document.title = "Explora Computação";
+  }, []);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const mobileNavButtonRef = useRef<HTMLButtonElement>(null);
   const signIn = useSessionStore((state) => state.signIn);
@@ -284,6 +288,7 @@ export function LandingPage() {
             <a href="#projeto" onClick={handleSectionLink("projeto")}>O projeto</a>
             <a href="#materiais" onClick={handleSectionLink("materiais")}>Materiais</a>
             <Link to="/app/trilha-de-ensino" onClick={signIn}>Entrar</Link>
+            <Link to="/privacidade">Privacidade e preferências</Link>
           </nav>
 
           <div className={styles.footerMeta}>

@@ -1,0 +1,74 @@
+.banner {
+  position: fixed;
+  z-index: 80;
+  right: 1rem;
+  bottom: 1rem;
+  left: 1rem;
+  display: flex;
+  max-width: 64rem;
+  max-height: calc(100dvh - 2rem);
+  gap: 1.5rem;
+  padding: 1.25rem;
+  margin-inline: auto;
+  overflow: auto;
+  color: var(--text-primary);
+  background: var(--surface-card);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  align-items: center;
+}
+
+.banner h2 {
+  margin: 0 0 0.4rem;
+  color: var(--brand-navy);
+  font-size: 1.1rem;
+}
+
+.banner p {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.banner a {
+  color: var(--brand-blue);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.actions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 0.65rem;
+}
+
+.actions button {
+  min-height: 2.75rem;
+  padding: 0.65rem 0.9rem;
+  color: var(--brand-blue);
+  font-weight: 750;
+  background: var(--surface-card);
+  border: 1px solid var(--brand-blue);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.actions button:hover {
+  background: var(--surface-soft);
+}
+
+@media (max-width: 47.99rem) {
+  .banner {
+    right: 0.75rem;
+    bottom: 0.75rem;
+    left: 0.75rem;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+
+  .actions button {
+    flex: 1;
+  }
+}

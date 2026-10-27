@@ -1,8 +1,8 @@
 # Estado atual do protótipo
 
-**Referência:** 28 de setembro de 2026
+**Referência:** 27 de outubro de 2026
 
-**Versão do protótipo:** 0.1.0
+**Versão do protótipo:** 0.2.0
 
 **Fonte de verdade do estado implementado:** este documento e os testes automatizados
 
@@ -12,8 +12,8 @@ documentos em `docs/historico` preservam decisões de etapas anteriores do TCC.
 ## Implementado
 
 - página inicial pública e sessão local demonstrativa, sem conta real;
-- **Buscar Materiais** com 31 recursos, pesquisa textual e filtros por ano,
-  assunto, formato e abordagem. O filtro de assuntos reúne 44 palavras-chave
+- **Buscar Materiais** com 38 recursos locais, pesquisa textual e filtros por ano,
+  assunto, formato e abordagem. O filtro de assuntos reúne 45 palavras-chave
   baseadas nos três eixos da BNCC Computação, com seleção múltipla em uma janela;
   algumas opções ainda não têm materiais associados;
 - alinhamentos explícitos por ano, eixo, habilidade e competências, incluindo
@@ -37,6 +37,8 @@ documentos em `docs/historico` preservam decisões de etapas anteriores do TCC.
   - Cultura Digital: **Privacidade e armadilhas online**;
 - cópia de qualquer trilha pronta para **Minhas Trilhas**;
 - páginas **Meu perfil** e **Sobre**;
+- integração do Microsoft Clarity em produção, condicionada à aceitação do
+  visitante, com recusa, revogação e página pública de privacidade;
 - layout responsivo, navegação por teclado, testes automatizados e publicação no
   GitHub Pages.
 
@@ -51,7 +53,7 @@ documentos em `docs/historico` preservam decisões de etapas anteriores do TCC.
 - inclusão de materiais por usuários;
 - contas ou dados de estudantes;
 - sincronização, colaboração ou compartilhamento remoto;
-- analytics, cookies de rastreamento e service worker.
+- service worker.
 
 ## Uso de IA generativa no projeto
 
@@ -85,9 +87,11 @@ telas órfãs e links quebrados.
 
 ## Persistência
 
-Somente a sessão demonstrativa e as trilhas são persistidas no `localStorage`,
-em chaves independentes e versionadas. Nenhum dado é enviado a um servidor do
-Explora Computação.
+A sessão demonstrativa, as trilhas e a preferência de análise de uso são
+persistidas no `localStorage`, em chaves independentes e versionadas. O Explora
+Computação não possui servidor próprio. Com aceitação, dados de navegação são
+enviados ao Microsoft Clarity, conforme `integracao-clarity.md`. A integração
+faz parte da versão 0.2.0 e permanece condicionada à aceitação do visitante.
 
 Dados antigos das funcionalidades removidas podem continuar no armazenamento
 do navegador de quem utilizou versões anteriores, mas não são mais lidos nem
@@ -95,11 +99,16 @@ alterados pela aplicação.
 
 ## URLs
 
+A versão 0.2.0 reúne a ampliação de sete materiais de 26 de outubro e a integração
+do Clarity. Em 27 de outubro, o autor solicitou publicar o conjunto das alterações
+no GitHub Pages. O processo de curadoria está em `processo-curadoria-2026-10-26.md`.
+
 O desenvolvimento local usa `http://127.0.0.1:4173/`. No GitHub Pages, as rotas
 ficam depois de `#`.
 
 | Rota lógica | Conteúdo |
 |---|---|
+| `/privacidade` | informações e preferências de análise, sem login |
 | `/app/trilha-de-ensino` | busca e seleção de materiais |
 | `/app/materiais/:slug` | detalhe de um material |
 | `/app/trilhas-prontas` | percursos prontos por eixo |

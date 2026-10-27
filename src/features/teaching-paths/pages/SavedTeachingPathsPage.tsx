@@ -12,11 +12,12 @@ import {
   Undo2,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { trackClarityEvent } from "@/lib/clarity";
 
 import { AccessibleDialog } from "@/features/catalog/components/AccessibleDialog";
 import { RequiredFamiliarity } from "@/features/catalog/components/RequiredFamiliarity";
 import { CatalogStatus } from "@/features/catalog/components/CatalogStatus";
-import { RESOURCE_PLACEHOLDER, typeLabels } from "@/features/catalog/components/resourcePresentation";
+import { formatRecommendedGrades, RESOURCE_PLACEHOLDER, typeLabels } from "@/features/catalog/components/resourcePresentation";
 import { useCatalogResources } from "@/features/catalog/hooks/useCatalog";
 import {
   TEACHING_PATH_BACKGROUND_COLORS,
@@ -288,6 +289,7 @@ export function SavedTeachingPathsPage() {
     );
 
     if (saved) {
+      trackClarityEvent("trilha_atualizada");
       // Recarrega o rascunho a partir da versão persistida para que itens
       // confirmados como removidos deixem de aparecer na sequência.
       setDraft(createDraft(saved));
@@ -381,8 +383,8 @@ export function SavedTeachingPathsPage() {
                   </span>
                   <span className={styles.pathCardContent}>
                     <span className={styles.cardLabel}>Trilha de ensino</span>
-                    <strong>{path.name}</strong>
-                    <span>{path.objective}</span>
+                    <strong data-clarity-mask="true">{path.name}</strong>
+                    <span data-clarity-mask="true">{path.objective}</span>
                     <small>
                       {resourceCount} {resourceCount === 1 ? "material" : "materiais"} · {definedDurations}/{resourceCount} durações definidas · atualizada em {updatedAtLabel(path.updatedAt)}
                     </small>
@@ -419,8 +421,8 @@ export function SavedTeachingPathsPage() {
         </button>
         <div className={styles.pathTitleArea}>
           <p className={styles.eyebrow}>Trilha de ensino</p>
-          <h1 id="path-title">{draft.name}</h1>
-          <p className={styles.pathObjective}>{draft.objective}</p>
+          <h1 id="path-title" data-clarity-mask="true">{draft.name}</h1>
+          <p className={styles.pathObjective} data-clarity-mask="true">{draft.objective}</p>
           <div className={styles.pathMetadata} aria-label="Informações da trilha">
             <span>{currentResourceIds.length} {currentResourceIds.length === 1 ? "material" : "materiais"}</span>
             {allLessonCountsDefined ? (
@@ -561,7 +563,7 @@ export function SavedTeachingPathsPage() {
 
       </ol>
 
-      <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">{announcement}</p>
+      <p className="sr-only" role="status" aria-live="polite" aria-atomic="true" data-clarity-mask="true">{announcement}</p>
 
       <AccessibleDialog
         open={preview !== null}
@@ -582,7 +584,7 @@ export function SavedTeachingPathsPage() {
               <div>
                 <h3>{preview.resource.title}</h3>
                 <span>
-                  {getRelevantAlignments(preview)[0]?.grade ?? preview.teaching.grades[0]}º ano · {draft.lessonCountsByResourceId[preview.resourceId]
+                  {formatRecommendedGrades([...preview.teaching.grades])} · {draft.lessonCountsByResourceId[preview.resourceId]
                     ? lessonCountLabel(draft.lessonCountsByResourceId[preview.resourceId]!)
                     : "duração não definida"}
                 </span>
@@ -595,6 +597,7 @@ export function SavedTeachingPathsPage() {
                   {getRelevantAlignments(preview).map((alignment, index) => (
                     <span key={`${alignment.grade}-${alignment.skill.code}`}>
                       {index > 0 ? <br /> : null}
+                      <span>{alignment.grade}º ano · </span>
                       <strong>{alignment.skill.code}</strong> — {alignment.skill.officialText}
                     </span>
                   ))}

@@ -34,6 +34,13 @@ const byResourceId: Record<string, RequiredFamiliarity> = {
   "rozelma-aventuras-digitais": { student: "basic", teacher: "intermediate" },
   "rozelma-cyberbullying-brincadeira-mau-gosto": { student: "basic", teacher: "intermediate" },
   "google-interland": { student: "basic", teacher: "basic" },
+  "computacional-bugs": { student: "basic", teacher: "intermediate" },
+  "computacional-tetris-repeticao": { student: "intermediate", teacher: "intermediate" },
+  "computacional-automatos-monica": { student: "intermediate", teacher: "advanced" },
+  "computacional-portas-logicas": { student: "intermediate", teacher: "intermediate" },
+  "codeorg-ia-oceanos": { student: "basic", teacher: "intermediate" },
+  "microbit-cracha": { student: "basic", teacher: "intermediate" },
+  "nicbr-internet-responsa-adolescentes": { student: "basic", teacher: "intermediate" },
 };
 
 export function addRequiredFamiliarity(resource: Resource): Resource {
