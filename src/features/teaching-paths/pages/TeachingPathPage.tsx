@@ -147,8 +147,8 @@ export function TeachingPathPage() {
           selectedActivityModes.includes(item.teaching.activityMode);
         const matchesApproach =
           selectedApproaches.length === 0 ||
-          (item.teaching.teachingApproach !== "combined" &&
-            selectedApproaches.includes(item.teaching.teachingApproach));
+          item.teaching.teachingApproach === "combined" ||
+          selectedApproaches.includes(item.teaching.teachingApproach);
         const matchesKeyword =
           selectedKeywordIds.length === 0 ||
           selectedKeywordIds.some((id) => getMaterialKeywordIds(item.resource.id).includes(id));

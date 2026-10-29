@@ -41,7 +41,7 @@ describe("SavedTeachingPathsPage", () => {
     expect(screen.getByRole("heading", { name: "Programação com blocos", level: 1 })).toBeInTheDocument();
     expect(screen.getAllByText("Construir uma base de programação em blocos.")).not.toHaveLength(0);
     expect(screen.queryByText("Resultado da trilha")).not.toBeInTheDocument();
-    expect(screen.queryByText("Competências da BNCC relacionados")).not.toBeInTheDocument();
+    expect(screen.queryByText("Habilidades da BNCC")).not.toBeInTheDocument();
     expect(screen.queryByText(/EF05CO04/)).not.toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Abrir proposta de atividade de Blockly Games" }));
@@ -56,8 +56,9 @@ describe("SavedTeachingPathsPage", () => {
       within(dialog).getByRole("heading", { name: "Blockly Games", level: 3 }),
     ).toBeInTheDocument();
     expect(
-      within(dialog).getByRole("heading", { name: "Competências da BNCC", level: 3 }),
+      within(dialog).getByRole("heading", { name: "Habilidades da BNCC", level: 3 }),
     ).toBeInTheDocument();
+    expect(within(dialog).queryByText("Competências da BNCC")).not.toBeInTheDocument();
     expect(within(dialog).getByRole("heading", { name: "Preparação necessária", level: 3 }))
       .toBeInTheDocument();
     expect(within(dialog).getByText("Intermediário")).toBeInTheDocument();

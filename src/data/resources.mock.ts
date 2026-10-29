@@ -4,7 +4,9 @@ import { publicAsset } from "@/lib/publicAsset";
 import { createCurriculumAlignment } from "./bnccComputing";
 import { addRequiredFamiliarity } from "./resourceFamiliarity";
 import { additionalTeachingMaterials } from "./resources/additionalTeachingMaterials";
+import { approvedMaterialsOctober28 } from "./resources/approvedMaterialsOctober28";
 import { digitalCitizenshipGameResources } from "./resources/digitalCitizenshipGames";
+import { expositoryMaterials } from "./resources/expositoryMaterials";
 import { programmingGameResources } from "./resources/programmingGames";
 import { rozelmaTeachingMaterials } from "./resources/rozelmaTeachingMaterials";
 import { unicampUnpluggedResources } from "./resources/unicampUnplugged";
@@ -88,6 +90,8 @@ export const resources: Resource[] = [
   ...rozelmaTeachingMaterials,
   ...digitalCitizenshipGameResources,
   ...additionalTeachingMaterials,
+  ...approvedMaterialsOctober28,
+  ...expositoryMaterials,
 ].map(addRequiredFamiliarity);
 
 export const mockResources = resources;

@@ -29,6 +29,7 @@ const byResourceId: Record<string, RequiredFamiliarity> = {
   "unicamp-desplugada-atividade-23": { student: "intermediate", teacher: "intermediate" },
   "lightbot-web": { student: "basic", teacher: "intermediate" },
   "google-blockly-games": { student: "basic", teacher: "intermediate" },
+  "toxicode-compute-it": { student: "basic", teacher: "basic" },
   "rozelma-lua-bit-bit-variaveis": { student: "intermediate", teacher: "intermediate" },
   "rozelma-sertao-bit": { student: "basic", teacher: "advanced" },
   "rozelma-aventuras-digitais": { student: "basic", teacher: "intermediate" },
@@ -41,6 +42,15 @@ const byResourceId: Record<string, RequiredFamiliarity> = {
   "codeorg-ia-oceanos": { student: "basic", teacher: "intermediate" },
   "microbit-cracha": { student: "basic", teacher: "intermediate" },
   "nicbr-internet-responsa-adolescentes": { student: "basic", teacher: "intermediate" },
+  "computacional-evolucao-computacao": { student: "basic", teacher: "intermediate" },
+  "certbr-guardiao-cibernetico": { student: "basic", teacher: "intermediate" },
+  "sme-goiania-as-fake-news": { student: "basic", teacher: "basic" },
+  "ufsc-splashcode": { student: "basic", teacher: "intermediate" },
+  "nicbr-tabuleiro-seguranca-online": { student: "basic", teacher: "basic" },
+  "sme-goiania-tecnologia-vida-humana": { student: "basic", teacher: "basic" },
+  "manual-mundo-computadores-pessoas": { student: "basic", teacher: "intermediate" },
+  "manual-mundo-memoria-computador": { student: "basic", teacher: "intermediate" },
+  "nicbr-como-funciona-internet-playlist": { student: "basic", teacher: "intermediate" },
 };
 
 export function addRequiredFamiliarity(resource: Resource): Resource {

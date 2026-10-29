@@ -49,6 +49,7 @@ export interface Resource {
   provider: string;
   type: ResourceType;
   language: string;
+  /** Tema curatorial exibido como Assunto e usado na busca e no apoio aos objetivos. */
   topic: string;
   summary: string;
   additionalInformation: string;

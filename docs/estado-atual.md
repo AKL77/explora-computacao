@@ -1,8 +1,8 @@
 # Estado atual do protótipo
 
-**Referência:** 27 de outubro de 2026
+**Referência:** 28 de outubro de 2026
 
-**Versão do protótipo:** 0.2.0
+**Versão do protótipo:** 0.3.0
 
 **Fonte de verdade do estado implementado:** este documento e os testes automatizados
 
@@ -12,10 +12,34 @@ documentos em `docs/historico` preservam decisões de etapas anteriores do TCC.
 ## Implementado
 
 - página inicial pública e sessão local demonstrativa, sem conta real;
-- **Buscar Materiais** com 38 recursos locais, pesquisa textual e filtros por ano,
+- **Buscar Materiais** com 48 recursos locais, pesquisa textual e filtros por ano,
   assunto, formato e abordagem. O filtro de assuntos reúne 45 palavras-chave
   baseadas nos três eixos da BNCC Computação, com seleção múltipla em uma janela;
   algumas opções ainda não têm materiais associados;
+- cinco cadastros locais aprovados em 28 de outubro: **Evolução da Computação**,
+  **Guardião Cibernético**, **As fake news**, **SplashCode** e **Segurança Online**.
+  Os fascículos do Guardião são complementos do mesmo registro. Os jogos
+  explicitam impressão e montagem prévias; a linha do tempo sinaliza a correção
+  histórica sobre Ada Lovelace. Esses cadastros integram a entrega 0.3.0.
+  Evidências em `processo-curadoria-2026-10-28.md`;
+- **Compute It** incluído após confirmação do autor, com `?lang=pt` nos acessos
+  para fixar os comandos em português na ficha e no percurso pelas trilhas.
+  Não depende da detecção do idioma do navegador. Elementos da interface
+  permanecem em inglês; o material usa o placeholder por licença não identificada;
+- quatro novos expositivos locais: **Tecnologia e vida humana**, dois vídeos do
+  **Manual do Mundo** e a playlist oficial **Como funciona a Internet? — NIC.br**.
+  A playlist é um único cadastro com quatro episódios nos complementos. Os
+  slides incluem texto e folha de quatro questões; a duração dos vídeos é
+  distinguida da duração da aula. O material do EducaMídia foi rejeitado e não
+  foi incluído. Evidências em `processo-curadoria-expositivos-2026-10-28.md`;
+- textos breves de **O que farão e como** e listas compactas de **Materiais**
+  para os cadastros recentes e os dois outros pontos mais extensos. Os dados
+  originais dos 48 recursos foram preservados. A revisão de consistência e
+  os problemas mantidos sem correção estão em `revisao-materiais-2026-10-28.md`;
+- anos da busca e das propostas alinhados às fichas: **Blockly Games** no 4º e
+  5º anos e **Vinte Palpites** no 4º, 5º e 8º (extensão). **Sertão.bit**, de
+  abordagem combinada, permanece nos resultados ao selecionar ativa,
+  expositiva ou ambas. Somente esses dois pontos da revisão foram autorizados;
 - alinhamentos explícitos por ano, eixo, habilidade e competências, incluindo
   correspondências curatoriais sinalizadas para validação;
 - níveis curatoriais de familiaridade (Básico, Intermediário e Avançado) para
@@ -23,6 +47,10 @@ documentos em `docs/historico` preservam decisões de etapas anteriores do TCC.
   proposta de atividade, com explicação na página **Sobre**;
 - detalhe do material em três abas, com informações pedagógicas, condições de
   uso, fonte, licença e materiais complementares;
+- fichas e propostas de atividade identificam as referências curriculares como
+  **Habilidades da BNCC**. Na ficha, o tema antes chamado **Habilidade** aparece
+  como **Assunto**, antes das habilidades, e continua usado na busca e no apoio
+  aos objetivos. O filtro **Assuntos** mantém sua lista própria de palavras-chave;
 - seleção de materiais para criar uma trilha própria;
 - salvamento local de trilhas com nome, objetivo, cor e ícone;
 - **Minhas Trilhas** com sequência visual conectada, reordenação por arrastar e
@@ -31,10 +59,13 @@ documentos em `docs/historico` preservam decisões de etapas anteriores do TCC.
 - proposta de atividade ao abrir uma etapa, com referência curricular,
   objetivo, materiais, descrição da atividade, duração ajustável e acesso
   destacado ao material completo;
-- **Trilhas Prontas** com filtros por eixo e três percursos funcionais:
-  - Pensamento Computacional: **Algoritmos: decisões, blocos e desafios**;
-  - Mundo Digital: **Mensagens sem erro: paridade e protocolos**;
-  - Cultura Digital: **Privacidade e armadilhas online**;
+- **Trilhas Prontas** com filtros por eixo e nove percursos locais, três por
+  eixo. As três sequências iniciais foram preservadas; as seis novas abordam
+  execução e correção de programas (6º), busca e ordenação (8º), representação
+  e compactação de dados (6º), funcionamento da Internet (8º), cyberbullying
+  (7º) e desinformação (9º). A duração deriva das etapas, inclusive quando um
+  material ocupa duas ou três aulas, e é preservada na cópia editável.
+  Critérios em `curadoria-trilhas-prontas-2026-10-28.md`;
 - cópia de qualquer trilha pronta para **Minhas Trilhas**;
 - páginas **Meu perfil** e **Sobre**;
 - integração do Microsoft Clarity em produção, condicionada à aceitação do
@@ -99,9 +130,10 @@ alterados pela aplicação.
 
 ## URLs
 
-A versão 0.2.0 reúne a ampliação de sete materiais de 26 de outubro e a integração
-do Clarity. Em 27 de outubro, o autor solicitou publicar o conjunto das alterações
-no GitHub Pages. O processo de curadoria está em `processo-curadoria-2026-10-26.md`.
+A versão 0.3.0 reúne 48 materiais e nove Trilhas Prontas, com textos compactos,
+anos consistentes e filtro de abordagem combinada corrigido. Em 28 de outubro,
+o autor autorizou publicar o conjunto atual no GitHub Pages. A curadoria está
+documentada nos registros de materiais e trilhas de 28 de outubro.
 
 O desenvolvimento local usa `http://127.0.0.1:4173/`. No GitHub Pages, as rotas
 ficam depois de `#`.

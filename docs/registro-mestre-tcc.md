@@ -574,6 +574,9 @@ Para cada plataforma, registrar:
 
 ## 22. Simplificação dos cards e da ficha — 28 de agosto de 2026
 
+> A nomenclatura da ficha registrada nesta seção foi substituída pela decisão
+> da seção 34, de 27 de outubro de 2026.
+
 - **Decisão dos cards:** os cartões do Acervo apresentam somente imagem, título, turma e eixo. Habilidades, códigos e justificativas curriculares ficam fora dos cards para reduzir e padronizar sua altura.
 - **Decisão da ficha:** o campo visível **Habilidade** apresenta um único tema do recurso, sem código. O campo **Competências** apresenta somente os códigos `EF...` deduplicados associados ao recurso.
 - **Preservação do domínio:** a nomenclatura e os vínculos oficiais da BNCC continuam armazenados internamente como habilidades e competências; a simplificação é uma convenção de apresentação solicitada para o protótipo.
@@ -965,3 +968,160 @@ previsto, sem afirmar que já ocorreu.
   verificações de código, testes unitários, build e testes em computador e celular.
 - A análise de uso não representa validação de aprendizagem nem altera o relato
   das contribuições do NTEM ou as exigências acadêmicas para pesquisas futuras.
+
+## 34. Correção da nomenclatura curricular — 27 de outubro de 2026
+
+> A apresentação do tema na ficha foi atualizada pela seção 36, de 28 de outubro
+> de 2026, mantendo a identificação das habilidades da BNCC.
+
+- O autor aprovou remover da ficha o campo temático chamado **Habilidade** e
+  identificar os códigos curriculares como **Habilidades da BNCC** em todos os
+  materiais. A mesma correção se aplica ao título curricular das propostas de
+  atividade nas trilhas.
+- O tema curatorial (`topic`) continua interno para preservar a busca e as
+  alternativas usadas na composição de objetivos. Não é renomeado como objeto
+  de conhecimento nem apresentado como habilidade curricular.
+- As habilidades oficiais, os objetos de conhecimento e as competências
+  legítimas dos alinhamentos permanecem nos dados. Não há alteração de IDs,
+  rotas, persistência ou formato das trilhas salvas.
+- Esta decisão resolve os nomes incorretos da ficha e das propostas de atividade.
+  A sugestão do NTEM de mostrar habilidades junto aos títulos nos resultados da
+  busca continua pendente e não integra este ajuste.
+
+## 35. Exemplo de cadastro por aula de livro — 27 de outubro de 2026
+
+> O exemplo foi removido do catálogo em 28 de outubro de 2026, conforme a seção
+> 37. Esta seção preserva o histórico da inclusão local.
+
+- A pedido do autor, foi cadastrado um único exemplo da coleção Computação
+  Fundamental: **Pegue o Porco**, Aula 5 da Unidade I de **Computação e Eu**,
+  versão 2.0 (2019), para o 6º ano. O catálogo local passa de 38 para 39.
+- O registro representa uma aula com objetivo, materiais, roteiro e links
+  próprios. As versões do professor e do estudante são referências do mesmo
+  recurso, com páginas impressas e posições no PDF identificadas.
+- O acesso principal abre o PDF do professor na página 37 (página impressa 33).
+  O estudante é direcionado à página 34 (página impressa 30) em link complementar.
+- Foi mantida a ausência de duração total. A referência de cinco minutos na
+  fonte trata apenas do encerramento e distribuição da tarefa para casa.
+- `EF06CO03` foi associado por curadoria, pendente de validação; os códigos
+  CSTA presentes no livro não foram apresentados como códigos da BNCC.
+- O exemplo está somente na versão local. Fonte, licença, recorte e decisões
+  em [processo-curadoria-computacao-fundamental.md](processo-curadoria-computacao-fundamental.md).
+- Após o autor apontar falha no link, foi confirmado no navegador que o
+  Curso 2 do Code.org foi retirado. O cadastro passou a indicar um desafio
+  de sequências do Curso C (2025) como alternativa curatorial, preservando
+  a distinção em relação ao tutorial original da obra. Foram detalhados
+  os preparativos da aula e incluídos links diretos para as páginas de
+  impressão dos personagens, montagem e tarefa para casa. Blocos de comandos
+  impressos são opcionais; o roteiro também permite escrever em papel.
+
+## 36. Assunto na ficha do material — 28 de outubro de 2026
+
+- O autor aprovou exibir novamente o tema curatorial (`topic`) na ficha, agora
+  com o rótulo **Assunto**, imediatamente antes de **Habilidades da BNCC**.
+- O assunto descreve o conteúdo principal; as habilidades mantêm os códigos
+  curriculares já apresentados. O tema continua usado na busca e como apoio
+  aos objetivos das propostas, sem mudança de dados ou da persistência.
+- O filtro **Assuntos** continua usando as palavras-chave padronizadas de
+  `materialKeywords.ts`; elas não são automaticamente substituídas pelo tema
+  da ficha. A mudança não adiciona assuntos aos cards nem às propostas.
+- A alteração permanece local, sem publicação no GitHub Pages.
+
+## 37. Remoção do exemplo Pegue o Porco — 28 de outubro de 2026
+
+- A pedido do autor, a aula **Pegue o Porco**, do livro **Computação e Eu**,
+  foi removida do catálogo. O total volta a **38 materiais**.
+- Foram retirados o cadastro, suas associações de assuntos e familiaridade,
+  as duas imagens e a habilidade adicionada exclusivamente para esse exemplo.
+- A documentação atual e os testes passam a refletir o catálogo sem a aula.
+  O registro de curadoria é preservado somente como histórico.
+- A apresentação de **Assunto** e **Habilidades da BNCC** nos demais materiais
+  permanece vigente. A remoção é somente local, sem publicação no GitHub Pages.
+
+## 38. Cinco materiais aprovados — 28 de outubro de 2026
+
+- O autor aprovou incluir **Evolução da Computação**, **Guardião Cibernético**,
+  **As fake news**, **SplashCode** e **Segurança Online**. O catálogo local
+  passa de 38 para **43 materiais**, preservando a remoção de Pegue o Porco.
+- Os complementos do Guardião Cibernético ficam na mesma ficha, conforme
+  solicitado: notas, PowerPoint e fascículos não geram novos cadastros.
+- Foram conferidos os PDFs, os formatos dos anexos da SME Goiânia e os
+  preparativos dos jogos. Durações ausentes e licença não identificada da
+  SME não foram preenchidas por suposição. As associações à BNCC e as
+  propostas curatoriais permanecem pendentes de validação.
+- O painel histórico chama incorretamente Ada Lovelace de esposa de Charles
+  Babbage. A ficha e a proposta registram a correção para colaboradora e
+  vinculam referência do Computer History Museum; o original não foi alterado.
+- A nova habilidade normativa interna `EF09CO10` preserva o enunciado oficial.
+  O código `EF09LP01` declarado pela SME é identificado como Língua Portuguesa.
+- Os cadastros participam da busca, dos filtros, das fichas e das propostas
+  das trilhas. O material do livro e os três recursos rejeitados não retornam.
+- Compute It foi conferido em português em resposta à pergunta do autor,
+  sem inclusão nesta etapa. A alteração permanece local, sem publicação.
+- Fontes, licenças e limites em
+  [processo-curadoria-2026-10-28.md](processo-curadoria-2026-10-28.md).
+
+## 39. Compute It com comandos em português — 28 de outubro de 2026
+
+- Após confirmar o funcionamento do link em português, o autor aprovou
+  expressamente a inclusão de **Compute It**. O catálogo local passa a 44.
+- O parâmetro `?lang=pt` está nos endereços principal e canônico e no acesso
+  complementar. A ficha e a proposta de trilha indicam que os comandos ficam
+  em português, sem depender da detecção automática do idioma do navegador.
+- Foi preservado o foco original em leitura e simulação de código. Duração,
+  licença e imagem não foram inventadas. Anos escolares, familiaridade e
+  vínculo parcial a `EF06CO02` são curatoriais e pendentes de validação.
+- A inclusão permanece somente local, integrada à busca, filtros e trilhas.
+
+
+## Materiais expositivos e playlist — 28 de outubro de 2026
+
+- O autor aprovou Tecnologia e vida humana (SME Goiânia), dois episódios do
+  Manual do Mundo e a playlist oficial Como funciona a Internet? (NIC.br).
+  O catálogo local passa de 44 para **48 materiais**.
+- A playlist é um único cadastro, com seus quatro episódios nos complementos,
+  conforme a preferência do autor. O EducaMídia foi rejeitado e ficou fora.
+- Foram integrados assuntos, familiaridade, propostas expositivas, condições
+  de uso e vínculos curatoriais à BNCC, todos pendentes de validação.
+  EF07CO10 foi conferida no documento oficial e incluída no dicionário.
+- Fontes, durações dos vídeos, preparação, limites e direitos estão em
+  [processo-curadoria-expositivos-2026-10-28.md](processo-curadoria-expositivos-2026-10-28.md).
+- A alteração permanece local; não há publicação, mudança de versão, commit
+  ou envio para o GitHub nesta etapa.
+
+## Ampliação das Trilhas Prontas — 28 de outubro de 2026
+
+- A pedido do autor, foram criadas seis sequências com objetivos distintos,
+  preservando as três existentes. A coleção local passa a nove trilhas,
+  três por eixo, sem adicionar materiais ao catálogo de 48 recursos.
+- Os novos percursos abordam execução e depuração (6º), busca e ordenação
+  (8º), representação e compactação (6º), Internet (8º), cyberbullying (7º)
+  e desinformação (9º). Os recortes, as progressões e as estimativas são
+  curatoriais e pendentes de validação docente.
+- A duração passou a ser somada a partir de cada etapa e preservada ao copiar
+  para Minhas Trilhas. A sequência original de cyberbullying mantém três
+  aulas, seguida de uma aula com o jogo; a pesquisa sobre notícias falsas
+  recebe duas aulas antes da sistematização com o guia.
+- Os textos permanecem breves. Não foram alteradas as classificações ou
+  outras informações dos materiais mantidas na revisão anterior.
+- Critérios em
+  [curadoria-trilhas-prontas-2026-10-28.md](curadoria-trilhas-prontas-2026-10-28.md).
+  A ampliação permanece local, sem publicação ou envio ao GitHub.
+
+## Publicação da versão 0.3.0 — 28 de outubro de 2026
+
+- O autor autorizou publicar no GitHub Pages a versão atual, reunindo as
+  alterações locais aprovadas desde a entrega 0.2.0.
+- A entrega contém 48 materiais e nove Trilhas Prontas. Inclui Compute It
+  com comandos em português, os novos expositivos e jogos, textos compactos
+  de atividade e materiais, a distinção entre Assunto e Habilidades da BNCC,
+  anos de Blockly e Vinte Palpites consistentes e o filtro de abordagem
+  combinada de Sertão.bit corrigido.
+- Os demais problemas registrados na revisão de consistência permanecem
+  conforme a decisão do autor. O exemplo removido de Computação e Eu não
+  retorna ao catálogo.
+- A publicação usa o processo existente: verificações, compilação no caminho
+  `/explora-computacao/`, testes de interface e GitHub Actions na branch main.
+  Arquivos temporários de inspeção e capturas locais ficam fora da entrega.
+- Antes do envio, passaram typecheck, lint, compilação com o caminho de
+  produção, 93 testes unitários e 44 testes de interface em desktop e mobile.

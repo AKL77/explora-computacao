@@ -25,14 +25,26 @@ fora da aplicação para apoiar a curadoria, a padronização das informações 
 criação das Trilhas Prontas. A plataforma não contém geração por IA nem chama
 modelos ou serviços de IA durante seu uso.
 
-Esta entrega é um frontend demonstrativo com **38 materiais**: o jogo educativo
-de cyberbullying da ALT+INOVARE, Lightbot, Blockly Games, Interland, quatro
+Esta entrega é um frontend demonstrativo com **48 materiais**: o jogo educativo
+de cyberbullying da ALT+INOVARE, Lightbot, Blockly Games, Compute It, Interland, quatro
 materiais didáticos de Rozelma França e as 23 atividades da coleção Computação
 Desplugada — Unicamp, quatro atividades do Computacional, IA para os Oceanos,
-Crachá — micro:bit e o guia Internet com Responsa — Só para Adolescentes.
+Crachá — micro:bit, o guia Internet com Responsa — Só para Adolescentes e cinco
+materiais aprovados em 28 de outubro: Evolução da Computação, Guardião
+Cibernético, As fake news, SplashCode e Segurança Online. Outros quatro cadastros
+expositivos foram aprovados: Tecnologia e vida humana, dois episódios do Manual
+do Mundo e a playlist oficial Como funciona a Internet?, do NIC.br.
 
-A versão **0.2.0**, de 27 de outubro de 2026, reúne os sete materiais da
-ampliação do catálogo, os ajustes nas propostas das trilhas e a integração do
+Os cadastros de 28 de outubro mantêm os complementos na mesma ficha e integração
+às buscas e propostas das trilhas. Compute It usa comandos em português pelo
+endereço `?lang=pt`. Evidências, licenças, limites e correção histórica
+do cartaz em [processo-curadoria-2026-10-28.md](docs/processo-curadoria-2026-10-28.md).
+A seleção expositiva e a playlist estão documentadas em
+[processo-curadoria-expositivos-2026-10-28.md](docs/processo-curadoria-expositivos-2026-10-28.md).
+
+A versão **0.3.0**, de 28 de outubro de 2026, reúne 48 materiais e nove Trilhas
+Prontas, com descrições concisas, anos escolares consistentes entre ficha e
+busca e filtro corrigido para abordagens combinadas. Mantém a integração do
 Microsoft Clarity com escolha de análise de uso.
 
 > Consulte a [demonstração publicada](https://akl77.github.io/explora-computacao/)
@@ -46,9 +58,10 @@ Microsoft Clarity com escolha de análise de uso.
 - cartões de descoberta com informações pedagógicas concisas;
 - níveis de familiaridade para aluno e professor em cada material, explicados
   na página **Sobre**;
-- detalhe de cada material com descrição, condições de uso, fonte e licença;
-- **Trilhas Prontas** com filtro por eixo e um percurso funcional para cada
-  eixo da BNCC Computação;
+- detalhe de cada material com assunto, habilidades da BNCC, descrição, condições de uso,
+  fonte e licença;
+- **Trilhas Prontas** com filtro por eixo e nove percursos, três para
+  cada eixo da BNCC Computação;
 - criação de trilhas próprias a partir dos materiais selecionados;
 - **Minhas Trilhas** com edição de nome, objetivo, cor e ícone;
 - reordenação das etapas, escolha de duração por material e cálculo do tempo
@@ -64,15 +77,29 @@ atual. Endereços antigos dessas áreas apenas redirecionam para os fluxos atuai
 
 ## Trilhas Prontas
 
-Há uma trilha funcional por eixo:
+Há nove trilhas, preservando os três percursos iniciais:
 
 - **Pensamento Computacional:** Algoritmos: decisões, blocos e desafios;
 - **Mundo Digital:** Mensagens sem erro: paridade e protocolos;
 - **Cultura Digital:** Privacidade e armadilhas online.
 
+Os seis novos percursos são:
+
+| Trilha | Ano | Aulas sugeridas |
+|---|---|---|
+| Programas em ação: ler, testar e corrigir | 6º | 3 |
+| Buscar e ordenar com estratégia | 8º | 3 |
+| Dados: imagens, textos e compactação | 6º | 3 |
+| Internet: o caminho dos dados | 8º | 2 |
+| Cyberbullying: reconhecer e agir | 7º | 4 |
+| Desinformação: investigar antes de compartilhar | 9º | 3 |
+
 Cada trilha apresenta uma sequência pedagógica sugerida e pode ser adicionada a
 **Minhas Trilhas**, onde passa a aceitar os mesmos ajustes das trilhas criadas
-pelo docente.
+pelo docente. O tempo total deriva das aulas de cada etapa e é preservado
+na cópia. Os anos e a organização dos novos percursos são curatoriais,
+pendentes de validação docente. Critérios em
+[curadoria-trilhas-prontas-2026-10-28.md](docs/curadoria-trilhas-prontas-2026-10-28.md).
 
 ## Tecnologias
 

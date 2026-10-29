@@ -10,8 +10,8 @@ describe("resources fixture", () => {
     resource.id.startsWith("rozelma-"),
   );
 
-  it("mantém os 38 recursos do corpus atual", () => {
-    expect(resources).toHaveLength(38);
+  it("mantém os 48 recursos do corpus atual", () => {
+    expect(resources).toHaveLength(48);
     expect(unicampResources).toHaveLength(23);
     expect(rozelmaResources).toHaveLength(4);
     expect(

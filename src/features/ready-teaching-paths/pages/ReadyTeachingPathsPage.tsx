@@ -1,180 +1,22 @@
 import {
   ArrowRight,
-  Braces,
   Check,
   Clock3,
   CopyPlus,
-  Network,
-  ShieldCheck,
 } from "lucide-react";
-import { useEffect, useMemo, useState, type ComponentType } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { trackClarityEvent } from "@/lib/clarity";
 
 import { CatalogStatus } from "@/features/catalog/components/CatalogStatus";
-import { RESOURCE_PLACEHOLDER, typeLabels } from "@/features/catalog/components/resourcePresentation";
+import { formatRecommendedGrades, RESOURCE_PLACEHOLDER, typeLabels } from "@/features/catalog/components/resourcePresentation";
 import { useCatalogResources } from "@/features/catalog/hooks/useCatalog";
 import type { Resource } from "@/domain/resource";
-import type {
-  TeachingPathBackgroundColor,
-  TeachingPathIcon,
-} from "@/domain/savedTeachingPath";
 import { useTeachingPathsStore } from "@/store/useTeachingPathsStore";
+import { categories, getReadyPathLessonCount, readyPaths, type ReadyPath, type TrailCategory } from "../data/readyTeachingPaths";
 import styles from "./ReadyTeachingPathsPage.module.css";
 
-type TrailCategory = "Todas" | "Pensamento Computacional" | "Mundo Digital" | "Cultura Digital";
-
-interface TrailPreview {
-  id: string;
-  name: string;
-  summary: string;
-  category: Exclude<TrailCategory, "Todas">;
-  grades: string;
-  lessons: number;
-  icon: ComponentType<{ size?: number; "aria-hidden"?: "true" }>;
-}
-
-interface ReadyPathStage {
-  resourceId: string;
-  label: string;
-  title: string;
-  description: string;
-  objective: string;
-}
-
-interface ReadyPath extends TrailPreview {
-  objective: string;
-  journeyTitle: string;
-  backgroundColor: TeachingPathBackgroundColor;
-  savedIcon: TeachingPathIcon;
-  stages: readonly ReadyPathStage[];
-}
-
-const categories: readonly TrailCategory[] = [
-  "Todas",
-  "Pensamento Computacional",
-  "Mundo Digital",
-  "Cultura Digital",
-];
-
-const readyPaths: readonly ReadyPath[] = [
-  {
-    id: "algoritmos-decisoes-blocos-desafios",
-    name: "Algoritmos: decisões, blocos e desafios",
-    summary: "Uma progressão da lógica desplugada à programação visual e à resolução de problemas.",
-    category: "Pensamento Computacional",
-    grades: "5º ano",
-    lessons: 3,
-    icon: Braces,
-    objective:
-      "Compreender como algoritmos organizam decisões e sequências, avançando de uma experiência desplugada para a programação em blocos e um desafio integrado.",
-    journeyTitle: "Da decisão à construção de algoritmos",
-    backgroundColor: "amber",
-    savedIcon: "sparkles",
-    stages: [
-      {
-        resourceId: "unicamp-desplugada-atividade-5",
-        label: "Descobrir",
-        title: "Decisões com perguntas de sim ou não",
-        description:
-          "A turma experimenta uma estratégia desplugada e percebe como cada decisão reduz as possibilidades.",
-        objective: "Usar perguntas de “sim” ou “não” para compreender bits e decisões.",
-      },
-      {
-        resourceId: "google-blockly-games",
-        label: "Experimentar",
-        title: "Algoritmos visuais com blocos",
-        description:
-          "Os estudantes resolvem desafios progressivos e aplicam sequências, laços e condicionais.",
-        objective: "Construir algoritmos visuais com blocos, laços e condicionais.",
-      },
-      {
-        resourceId: "rozelma-sertao-bit",
-        label: "Aplicar",
-        title: "Desafios em uma narrativa brasileira",
-        description:
-          "A aprendizagem é consolidada em problemas de decomposição, padrões e construção de algoritmos.",
-        objective: "Resolver desafios para exercitar algoritmos e decomposição.",
-      },
-    ],
-  },
-  {
-    id: "mensagens-sem-erro-paridade-protocolos",
-    name: "Mensagens sem erro: paridade e protocolos",
-    summary: "Uma investigação sobre como redes detectam falhas e reconstroem mensagens.",
-    category: "Mundo Digital",
-    grades: "6º ano",
-    lessons: 2,
-    icon: Network,
-    objective:
-      "Compreender como informações são verificadas, organizadas e recuperadas quando ocorrem erros durante uma transmissão.",
-    journeyTitle: "Do erro localizado à mensagem reconstruída",
-    backgroundColor: "indigo",
-    savedIcon: "puzzle",
-    stages: [
-      {
-        resourceId: "unicamp-desplugada-atividade-4",
-        label: "Detectar",
-        title: "Encontrando um erro com paridade",
-        description:
-          "Ao virar uma carta em uma matriz, a turma usa padrões pares e ímpares para localizar a alteração.",
-        objective:
-          "Identificar como bits de paridade permitem localizar alterações em uma mensagem.",
-      },
-      {
-        resourceId: "unicamp-desplugada-atividade-13",
-        label: "Reconstruir",
-        title: "Criando regras para uma mensagem chegar inteira",
-        description:
-          "Com partes que podem atrasar, sumir ou chegar fora de ordem, a turma cria um protocolo para reconstruir a mensagem.",
-        objective:
-          "Criar regras para ordenar, confirmar e reenviar partes de uma mensagem.",
-      },
-    ],
-  },
-  {
-    id: "privacidade-armadilhas-online",
-    name: "Privacidade e armadilhas online",
-    summary: "Histórias e decisões práticas para proteger dados e reconhecer golpes na internet.",
-    category: "Cultura Digital",
-    grades: "4º e 5º anos",
-    lessons: 2,
-    icon: ShieldCheck,
-    objective:
-      "Analisar o que pode ser compartilhado na internet e reconhecer sinais de mensagens, links e situações enganosas.",
-    journeyTitle: "Das escolhas pessoais à identificação de armadilhas",
-    backgroundColor: "green",
-    savedIcon: "flag",
-    stages: [
-      {
-        resourceId: "rozelma-aventuras-digitais",
-        label: "Analisar",
-        title: "O que deve permanecer privado?",
-        description:
-          "A turma discute situações das histórias e identifica dados pessoais, riscos de exposição e escolhas responsáveis de compartilhamento.",
-        objective:
-          "Distinguir informações pessoais e avaliar riscos antes de compartilhar conteúdo.",
-      },
-      {
-        resourceId: "google-interland",
-        label: "Praticar",
-        title: "Reconhecendo golpes e decisões arriscadas",
-        description:
-          "Em desafios do Interland, os estudantes testam decisões sobre phishing, informações enganosas e compartilhamento.",
-        objective:
-          "Reconhecer sinais de phishing, informações enganosas e escolhas inseguras em ambientes digitais.",
-      },
-    ],
-  },
-] as const;
-
-interface ReadyStage {
-  resource: Resource;
-  label: string;
-  title: string;
-  description: string;
-  objective: string;
-}
+type ReadyStage = ReadyPath["stages"][number] & { resource: Resource };
 
 function getReadyStages(resources: Resource[], readyPath: ReadyPath): ReadyStage[] {
   const resourcesById = new Map(resources.map((resource) => [resource.id, resource]));
@@ -201,7 +43,7 @@ function TrailCard({
   selected,
   onSelect,
 }: {
-  trail: TrailPreview;
+  trail: ReadyPath;
   selected: boolean;
   onSelect: (trailId: string) => void;
 }) {
@@ -218,8 +60,8 @@ function TrailCard({
         <h3>{trail.name}</h3>
         <p>{trail.summary}</p>
         <div className={styles.cardMetadata}>
-          <span>{trail.grades}</span>
-          <span><Clock3 size={14} aria-hidden="true" /> {trail.lessons} aulas</span>
+          <span>{formatRecommendedGrades([...trail.grades])}</span>
+          <span><Clock3 size={14} aria-hidden="true" /> {getReadyPathLessonCount(trail)} aulas</span>
         </div>
       </div>
       <span className={styles.cardAction}>
@@ -247,6 +89,7 @@ export function ReadyTeachingPathsPage() {
   const [selectedTrailId, setSelectedTrailId] = useState<string | null>(null);
   const [announcement, setAnnouncement] = useState("");
   const selectedReadyPath = readyPaths.find((trail) => trail.id === selectedTrailId) ?? null;
+  const selectedLessonCount = selectedReadyPath ? getReadyPathLessonCount(selectedReadyPath) : 0;
   const stages = useMemo(
     () => (selectedReadyPath ? getReadyStages(resources, selectedReadyPath) : []),
     [resources, selectedReadyPath],
@@ -288,8 +131,8 @@ export function ReadyTeachingPathsPage() {
     });
     if (!path) return;
 
-    resourceIds.forEach((resourceId) => {
-      setResourceLessonCount(path.id, resourceId, 1);
+    selectedReadyPath.stages.forEach((stage) => {
+      setResourceLessonCount(path.id, stage.resourceId, stage.lessonCount ?? 1);
     });
     trackClarityEvent("trilha_pronta_adicionada");
     setAnnouncement(`A trilha “${selectedReadyPath.name}” foi adicionada a Minhas Trilhas.`);
@@ -379,11 +222,11 @@ export function ReadyTeachingPathsPage() {
               <h2 id="ready-path-title">{selectedReadyPath.name}</h2>
               <p>{selectedReadyPath.objective}</p>
               <div className={styles.metadata} aria-label="Informações da trilha">
-                <span>{selectedReadyPath.grades}</span>
+                <span>{formatRecommendedGrades([...selectedReadyPath.grades])}</span>
                 <span>{selectedReadyPath.category}</span>
                 <span>
-                  <Clock3 size={15} aria-hidden="true" /> {selectedReadyPath.lessons}{" "}
-                  {selectedReadyPath.lessons === 1 ? "aula sugerida" : "aulas sugeridas"}
+                  <Clock3 size={15} aria-hidden="true" /> {selectedLessonCount}{" "}
+                  {selectedLessonCount === 1 ? "aula sugerida" : "aulas sugeridas"}
                 </span>
               </div>
             </div>
@@ -421,7 +264,10 @@ export function ReadyTeachingPathsPage() {
                       <span>{stage.label}</span>
                     </div>
                     <div className={styles.stageContent}>
-                      <span className={styles.resourceType}>{typeLabels[stage.resource.type]}</span>
+                      <span className={styles.resourceType}>
+                        {typeLabels[stage.resource.type]} · {stage.lessonCount ?? 1}{" "}
+                        {stage.lessonCount === undefined || stage.lessonCount === 1 ? "aula" : "aulas"}
+                      </span>
                       <h4>{stage.title}</h4>
                       <p>{stage.description}</p>
                       <p className={styles.resourceName}>{stage.resource.title}</p>

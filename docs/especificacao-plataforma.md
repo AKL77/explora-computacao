@@ -11,6 +11,12 @@
 > produto em 14 de setembro de 2026. O escopo executável está descrito em
 > [`estado-atual.md`](estado-atual.md).
 
+> **Revisão de nomenclatura — 28 de outubro de 2026:** na versão atual, o campo
+> temático antes chamado **Habilidade** aparece como **Assunto**, e os códigos curriculares são
+> identificados como **Habilidades da BNCC**, inclusive nas propostas das trilhas.
+> O tema continua usado na busca e no apoio aos objetivos. As denominações
+> diferentes preservadas abaixo documentam a versão histórica.
+
 ## 1. Origem e precedência dos requisitos
 
 Esta especificação consolida:

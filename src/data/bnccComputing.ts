@@ -149,6 +149,10 @@ export const BNCC_SKILLS = {
     "EF07CO09",
     "Reconhecer e debater sobre cyberbullying.",
   ),
+  EF07CO10: officialSkill(
+    "EF07CO10",
+    "Identificar os impactos ambientais do descarte de peças de computadores e eletrônicos, bem como sua relação com a sustentabilidade.",
+  ),
   EF08CO03: officialSkill(
     "EF08CO03",
     "Utilizar algoritmos clássicos de manipulação sobre listas.",
@@ -180,6 +184,10 @@ export const BNCC_SKILLS = {
   EF09CO07: officialSkill(
     "EF09CO07",
     "Avaliar aplicações e implicações políticas, socioambientais e culturais das tecnologias digitais para propor alternativas aos desafios do mundo contemporâneo, incluindo aqueles relativos ao mundo do trabalho.",
+  ),
+  EF09CO10: officialSkill(
+    "EF09CO10",
+    "Avaliar a veracidade, credibilidade e relevância da informação em seus diferentes formatos, sendo capaz de identificar o propósito pelo qual foi disseminada.",
   ),
 } as const;
 

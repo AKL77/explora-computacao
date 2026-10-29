@@ -69,6 +69,15 @@ export type MaterialKeywordId = (typeof materialKeywordGroups)[number]["options"
 
 /** Assuntos atribuídos ao conteúdo de cada material, sem inferi-los de competências amplas. */
 export const materialKeywordIdsByResourceId: Record<string, readonly MaterialKeywordId[]> = {
+  "sme-goiania-tecnologia-vida-humana": ["impactos-sociedade", "desigualdade-acesso", "sustentabilidade-descarte"],
+  "manual-mundo-computadores-pessoas": ["componentes-computador", "impactos-sociedade", "tecnologia-trabalho"],
+  "manual-mundo-memoria-computador": ["componentes-computador", "armazenamento-dados"],
+  "nicbr-como-funciona-internet-playlist": ["redes-internet", "protocolos-comunicacao", "transmissao-dados"],
+  "computacional-evolucao-computacao": ["componentes-computador", "impactos-sociedade", "tecnologia-trabalho"],
+  "certbr-guardiao-cibernetico": ["seguranca-cibernetica", "dados-pessoais-privacidade", "etica-digital"],
+  "sme-goiania-as-fake-news": ["desinformacao", "confiabilidade-fontes", "pesquisa-internet"],
+  "ufsc-splashcode": ["algoritmos", "sequencias-instrucoes", "programacao", "decomposicao"],
+  "nicbr-tabuleiro-seguranca-online": ["seguranca-cibernetica", "dados-pessoais-privacidade", "armazenamento-dados"],
   "altinovare-cyberbullying": ["cyberbullying", "etica-digital", "convivencia-respeito"],
   "unicamp-desplugada-atividade-1": ["codificacao-digital", "sistema-binario"],
   "unicamp-desplugada-atividade-2": [
@@ -98,6 +107,7 @@ export const materialKeywordIdsByResourceId: Record<string, readonly MaterialKey
   "unicamp-desplugada-atividade-23": ["matrizes-coordenadas", "decomposicao"],
   "lightbot-web": ["algoritmos", "sequencias-instrucoes", "repeticoes", "programacao"],
   "google-blockly-games": ["algoritmos", "repeticoes", "condicoes", "programacao"],
+  "toxicode-compute-it": ["algoritmos", "sequencias-instrucoes", "repeticoes", "condicoes", "programacao"],
   "rozelma-lua-bit-bit-variaveis": ["programacao", "variaveis-tipos", "generalizacao-reuso"],
   "rozelma-sertao-bit": ["algoritmos", "decomposicao", "programacao"],
   "rozelma-aventuras-digitais": [

@@ -149,7 +149,54 @@ const blocklyGamesResource: Resource = {
   ],
 };
 
+const COMPUTE_IT_PORTUGUESE_URL = "https://compute-it.toxicode.fr/?lang=pt";
+
+const computeItResource: Resource = {
+  id: "toxicode-compute-it",
+  slug: "compute-it",
+  title: "Compute It",
+  sourceUrl: COMPUTE_IT_PORTUGUESE_URL,
+  canonicalUrl: COMPUTE_IT_PORTUGUESE_URL,
+  provider: "Toxicode",
+  type: "game",
+  language: "Português nos comandos; elementos da interface e título em inglês",
+  topic: "Leitura e simulação de algoritmos",
+  summary: "Jogo em que o estudante assume o papel do computador: lê um programa e executa seus comandos para mover uma bolinha pelo percurso correto. Os desafios introduzem sequências, repetições, condições e funções pela interpretação do código. O acesso desta ficha fixa os comandos em português.",
+  additionalInformation: "O acesso está configurado para exibir os comandos em português, independentemente do idioma do navegador. A configuração foi conferida no primeiro desafio: o comando inglês right() aparece como direita(). O título Compute It e alguns elementos da interface permanecem em inglês. O jogo foi concebido para iniciantes sem experiência prévia; a fonte não informa anos escolares brasileiros ou duração. A indicação do 6º ao 9º ano é curatorial. Os autores recomendam permitir a descoberta por experimentação e oferecer pequenas dicas quando o estudante pedir ajuda ou estiver bloqueado, evitando antecipar todas as explicações. Não exige cadastro. A licença de reutilização do jogo e das imagens não foi identificada.",
+  curatorNotes: "Português fixado pelo parâmetro lang=pt nos dois endereços do cadastro, sem depender da detecção automática do navegador. O autor confirmou o funcionamento do link em português. A conferência não afirma tradução integral da interface nem avaliação de todos os desafios. Ano, familiaridade, aplicação e vínculo parcial à BNCC são curatoriais, pendentes de validação. O foco original é leitura e execução de programas, não a autoria de código pelo aluno. Sem imagem local por ausência de licença confirmada.",
+  recommendedGrades: [6, 7, 8, 9],
+  curriculum: { alignments: [createCurriculumAlignment({
+    grade: 6,
+    axis: "Pensamento Computacional",
+    knowledgeObject: "Leitura e simulação de algoritmos com sequências, repetições e condições",
+    skillCode: "EF06CO02",
+    competencies: [4, 5],
+    strength: "partial",
+    rationale: "Ler e executar os comandos permite compreender o fluxo de instruções sequenciais, repetições e seleções. A habilidade também exige elaborar algoritmos em linguagem de programação, enquanto o jogo se concentra na interpretação de programas já apresentados; por isso o vínculo é parcial.",
+  })] },
+  pedagogy: {
+    learningObjective: "Interpretar programas e simular sua execução, acompanhando a ordem dos comandos e o efeito de repetições e condições.",
+    participation: ["individual"],
+    pedagogicalFunction: "exploration",
+    applicationProposal: "Proposta curatorial: abrir o jogo pelo acesso desta ficha, que fixa os comandos em português. Iniciar os desafios e deixar que os estudantes descubram como ler o código e executar os movimentos. Acompanhar as tentativas e, conforme a orientação dos autores, oferecer pequenas dicas apenas quando necessário. Para o fechamento, pedir que expliquem um percurso e identifiquem como a ordem das instruções, as repetições ou as condições afetaram o resultado.",
+  },
+  requirements: { internet: true, devices: ["Computador ou notebook com navegador e teclado para executar os movimentos"], accountRequired: false, pricing: "free" },
+  accessibility: {
+    evaluationStatus: "pending",
+    knownFeatures: ["Comandos disponíveis em português pelo link configurado"],
+    potentialBarriers: ["Leitura visual do programa, das cores e do percurso", "Elementos da interface em inglês"],
+    alternatives: [],
+  },
+  provenance: { source: "Toxicode — Compute It, apresentação oficial para educadores e jogo com idioma fixado em português", lastVerifiedAt: "2026-10-28", status: "verified" },
+  supplementaryLinks: [
+    { label: "Jogo com comandos em português — acesso direto", url: COMPUTE_IT_PORTUGUESE_URL },
+    { label: "Orientações oficiais para educadores (inglês)", url: "https://compute-it.toxicode.fr/en/about.html" },
+  ],
+  tags: ["Compute It", "Toxicode", "leitura de código", "interpretação de programas", "algoritmos", "simulação", "sequências de instruções", "repetições", "condições", "funções", "português"],
+};
+
 export const programmingGameResources: Resource[] = [
   lightbotResource,
   blocklyGamesResource,
+  computeItResource,
 ];

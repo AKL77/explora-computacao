@@ -79,6 +79,41 @@ placeholder. As licenças dos respectivos materiais e seus limites estão no
 [registro de curadoria](processo-curadoria-2026-10-26.md); não foram estendidas
 automaticamente a personagens, ativos do jogo ou imagens do site.
 
+## Materiais aprovados em 28 de outubro de 2026
+
+As prévias em `public/images/cards/curadoria-outubro-28/` e as cópias menores
+em `public/images/cards/thumbnails/curadoria-outubro-28/` reproduzem páginas
+integrais dos arquivos oficiais, sem alteração de conteúdo, apenas com
+renderização, redimensionamento e compressão para identificação no catálogo.
+
+| Arquivo | Fonte e crédito | Licença confirmada |
+|---|---|---|
+| `evolucao-computacao.jpg` | [Evolução da Computação](https://www.computacional.com.br/atividades_download/evolucaodacomputacao.pdf), Christian Brackmann (2025), baseado no projeto de Rogério Azambuja; painel integral com cabeçalho e atribuição | CC BY-NC-SA 4.0 no cabeçalho |
+| `guardiao-cibernetico.jpg` | [Proteja os seus dados e os da sua empresa](https://cartilha.cert.br/guardiao/fasciculo-egc-slides.pdf), CERT.br/NIC.br, Guardião Cibernético; primeira página integral, com crédito no rodapé | CC BY-NC-SA 4.0 na página oficial e nas notas do apresentador |
+| `splashcode.jpg` | [Material SplashCode](https://drive.google.com/file/d/1oGLKu591iNugt_axWSVMt7Rt25XyMDgD/view), Computação na Escola/INCoD/INE/UFSC; ilustrações creditadas no original a Freepik; primeira folha integral com atribuição e licença | CC BY-NC-SA 4.0 no rodapé |
+| `seguranca-online.jpg` | [Jogo de Tabuleiro Segurança Online](https://internetsegura.br/pdf/tabuleiro/jogo-tabuleiro-segurancaonline.pdf), Internet Segura/CERT.br/NIC.br/CGI.br; primeira folha integral, incluindo a indicação de origem e licença | CC BY-NC-ND 4.0 nas duas páginas; prévia sem adaptação do conteúdo |
+
+O uso do catálogo é acadêmico e não comercial. Os PDFs e arquivos de apoio
+continuam nas fontes originais e não são redistribuídos pela plataforma.
+**As fake news** usa o placeholder: não foi encontrada licença explícita para
+reutilizar seus ativos. A observação sobre o erro histórico do painel está
+na ficha e na proposta, sem modificar o arquivo do autor. Evidências e
+limites em [processo-curadoria-2026-10-28.md](processo-curadoria-2026-10-28.md).
+
+## Materiais expositivos aprovados em 28 de outubro de 2026
+
+**Tecnologia e vida humana**, de Mariana Araguaia/SME Goiânia, os dois
+episódios do **Manual do Mundo**, apresentados por Iberê Thenório, e a
+playlist **Como funciona a Internet?**, do NIC.br/NICbrvideos, são acessados
+nas fontes oficiais. Os quatro registros usam o placeholder do catálogo.
+Não foram republicados vídeos, slides, anexos ou miniaturas.
+
+Não foi identificada licença aberta específica para os anexos da SME ou
+os vídeos; a licença geral do site institucional do NIC.br não foi
+estendida automaticamente ao conteúdo hospedado no YouTube. Os créditos,
+as datas e os complementos constam das fichas. Evidências e limites em
+[processo-curadoria-expositivos-2026-10-28.md](processo-curadoria-expositivos-2026-10-28.md).
+
 ## Referências de design não distribuídas
 
 As imagens usadas apenas durante a exploração visual foram movidas para a

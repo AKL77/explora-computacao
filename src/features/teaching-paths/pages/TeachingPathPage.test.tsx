@@ -46,7 +46,7 @@ describe("TeachingPathPage", () => {
     expect(
       screen.getByRole("heading", { name: binaryNumbersTitle, level: 3 }),
     ).toBeInTheDocument();
-    expect(screen.getByText("38 materiais", { exact: true })).toBeInTheDocument();
+    expect(screen.getByText("48 materiais", { exact: true })).toBeInTheDocument();
     expect(getResourceCard(blocklyTitle).getByText("Preparação necessária"))
       .toBeInTheDocument();
     expect(getResourceCard(blocklyTitle).getByText("Intermediário"))
@@ -106,7 +106,52 @@ describe("TeachingPathPage", () => {
     expect(screen.getByRole("heading", { name: sertaoTitle, level: 3 })).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Limpar filtros" }));
-    expect(screen.getByText("38 materiais", { exact: true })).toBeInTheDocument();
+    expect(screen.getByText("48 materiais", { exact: true })).toBeInTheDocument();
+  });
+
+  it("encontra Blockly e Vinte Palpites pelos mesmos anos indicados nas fichas", async () => {
+    const user = await renderPage();
+
+    for (const grade of [4, 5, 8, 6]) {
+      const gradeFilter = screen.getByRole("button", { name: `${grade}º ano` });
+      await user.click(gradeFilter);
+
+      if (grade === 4 || grade === 5) {
+        expect(screen.getByRole("heading", { name: blocklyTitle, level: 3 })).toBeInTheDocument();
+      } else {
+        expect(screen.queryByRole("heading", { name: blocklyTitle, level: 3 })).not.toBeInTheDocument();
+      }
+      if (grade === 4 || grade === 5 || grade === 8) {
+        expect(screen.getByRole("heading", { name: vinteTitle, level: 3 })).toBeInTheDocument();
+      } else {
+        expect(screen.queryByRole("heading", { name: vinteTitle, level: 3 })).not.toBeInTheDocument();
+      }
+
+      await user.click(gradeFilter);
+    }
+  }, 10_000);
+
+  it("inclui Sertão.bit na abordagem ativa, expositiva e na seleção de ambas", async () => {
+    const user = await renderPage();
+    const activeFilter = screen.getByRole("button", { name: "Abordagem ativa" });
+    const expositoryFilter = screen.getByRole("button", { name: "Abordagem expositiva" });
+    const expositoryTitle = "Como funciona a Internet? — Playlist do NIC.br";
+
+    await user.click(activeFilter);
+    expect(screen.getByRole("heading", { name: sertaoTitle, level: 3 })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: blocklyTitle, level: 3 })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: expositoryTitle, level: 3 })).not.toBeInTheDocument();
+
+    await user.click(expositoryFilter);
+    expect(screen.getByRole("heading", { name: sertaoTitle, level: 3 })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: blocklyTitle, level: 3 })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: expositoryTitle, level: 3 })).toBeInTheDocument();
+    expect(screen.getByText("48 materiais", { exact: true })).toBeInTheDocument();
+
+    await user.click(activeFilter);
+    expect(screen.getByRole("heading", { name: sertaoTitle, level: 3 })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: blocklyTitle, level: 3 })).not.toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: expositoryTitle, level: 3 })).toBeInTheDocument();
   });
 
   it("combina assuntos com os demais filtros e aceita opções ainda sem materiais", async () => {
@@ -142,7 +187,7 @@ describe("TeachingPathPage", () => {
 
     expect(screen.getByText("Nenhum material encontrado")).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Limpar filtros" }));
-    expect(screen.getByText("38 materiais", { exact: true })).toBeInTheDocument();
+    expect(screen.getByText("48 materiais", { exact: true })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Ver opções" })).toBeInTheDocument();
   });
 

@@ -1,7 +1,7 @@
 {
   "name": "explora-computacao",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Protótipo web para organizar recursos de Computação alinhados à BNCC e apoiar o planejamento docente.",
   "author": "Augusto Lunardi",
   "license": "UNLICENSED",

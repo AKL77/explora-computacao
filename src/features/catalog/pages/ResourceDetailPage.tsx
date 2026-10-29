@@ -206,8 +206,8 @@ export function ResourceDetailPage() {
               {formatRecommendedGrades(resource.recommendedGrades)}
             </DetailItem>
             <DetailItem term="Eixo">{axes.join(", ")}</DetailItem>
-            <DetailItem term="Habilidade">{resource.topic}</DetailItem>
-            <DetailItem term="Competências">
+            <DetailItem term="Assunto">{resource.topic}</DetailItem>
+            <DetailItem term="Habilidades da BNCC">
               {skills.length > 0
                 ? skills.map((skill) => skill.code).join(", ")
                 : "Não informado"}

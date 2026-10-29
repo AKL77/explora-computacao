@@ -218,7 +218,7 @@ export function LandingPage() {
                 </li>
                 <li>
                   <CheckCircle2 aria-hidden="true" />
-                  Organização e filtragem por habilidade, competência, eixo e ano.
+                  Busca por ano e assunto, com habilidades da BNCC identificadas nos materiais.
                 </li>
                 <li>
                   <CheckCircle2 aria-hidden="true" />

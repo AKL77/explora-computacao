@@ -77,6 +77,14 @@ de um recurso associa ano, eixo, objeto, habilidade e competências, além da
 origem e do estado do mapeamento. Os filtros consultam esses alinhamentos sem
 combinar indevidamente uma habilidade com um ano ao qual ela não foi associada.
 
+Na ficha e na proposta de atividade, as referências curriculares aparecem como
+**Habilidades da BNCC**. Na ficha, o campo `topic` aparece como **Assunto**, antes
+das habilidades, e continua usado na busca e como alternativa para objetivos.
+Esse tema curatorial não substitui o objeto de conhecimento dos alinhamentos.
+O filtro **Assuntos** usa suas próprias palavras-chave padronizadas, que podem
+ser mais amplas que o tema principal da ficha. Essa apresentação não altera os
+dados curriculares nem o formato das trilhas salvas.
+
 O catálogo é composto em `src/data/resources.mock.ts`. Coleções ficam separadas
 por origem em `src/data/resources/`, e os textos da BNCC e o helper de criação
 dos alinhamentos ficam em `src/data/bnccComputing.ts`.
@@ -104,7 +112,10 @@ materiais continuam vindo do catálogo, evitando snapshots duplicados.
 
 As Trilhas Prontas usam os mesmos recursos e, quando copiadas, produzem um
 registro comum no store. Assim, Minhas Trilhas não precisa distinguir a origem
-da sequência para permitir edição.
+da sequência para permitir edição. A curadoria fica em
+`src/features/ready-teaching-paths/data/readyTeachingPaths.ts`. Cada etapa pode
+informar de uma a três aulas; a ausência indica uma aula. O total exibido é
+calculado pela soma das etapas, e a cópia preserva essas durações.
 
 Favoritos, pastas e planos de aula não possuem store, domínio ou feature na
 versão atual. Chaves antigas no `localStorage` são ignoradas.

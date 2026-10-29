@@ -72,7 +72,7 @@ describe("ResourceDetailPage", () => {
     expect(within(sourcePanel).getByText("CC BY-NC-ND 3.0 BR")).toBeVisible();
   });
 
-  it("apresenta uma habilidade temática e somente os códigos BNCC", async () => {
+  it("apresenta o assunto antes das habilidades da BNCC com os rótulos corretos", async () => {
     renderResourceDetail();
 
     await screen.findByRole("heading", {
@@ -85,9 +85,14 @@ describe("ResourceDetailPage", () => {
     expect(
       screen.queryByRole("heading", { name: "Alinhamento pedagógico" }),
     ).not.toBeInTheDocument();
-    expect(screen.getByText("Habilidade")).toBeVisible();
+    expect(screen.queryByText("Habilidade", { exact: true })).not.toBeInTheDocument();
+    expect(screen.getByText("Assunto", { exact: true })).toBeVisible();
     expect(screen.getByText("Cyberbullying", { exact: true })).toBeVisible();
-    expect(screen.getByText("Competências")).toBeVisible();
+    expect(screen.queryByText("Competências", { exact: true })).not.toBeInTheDocument();
+    expect(screen.getByText("Habilidades da BNCC")).toBeVisible();
+    expect(screen.getAllByRole("term").map((term) => term.textContent)).toEqual([
+      "Turma", "Eixo", "Assunto", "Habilidades da BNCC",
+    ]);
     expect(screen.getByText("EF07CO09", { exact: true })).toBeVisible();
     expect(
       screen.queryByText("Reconhecer e debater sobre cyberbullying."),
@@ -108,7 +113,9 @@ describe("ResourceDetailPage", () => {
         level: 1,
       }),
     ).toBeVisible();
+    expect(screen.getByText("Assunto", { exact: true })).toBeVisible();
     expect(screen.getByText("O Teste de Turing", { exact: true })).toBeVisible();
+    expect(screen.getByText("Habilidades da BNCC")).toBeVisible();
     expect(screen.getByText("EF05CO10", { exact: true })).toBeVisible();
 
     await user.click(screen.getByRole("tab", { name: "Informações adicionais" }));

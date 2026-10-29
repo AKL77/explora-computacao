@@ -592,7 +592,7 @@ export function SavedTeachingPathsPage() {
             </header>
             <div className={styles.blockGrid}>
               <section className={`${styles.planBlock} ${styles.bnccBlock}`}>
-                <h3>Competências da BNCC</h3>
+                <h3>Habilidades da BNCC</h3>
                 <p className={styles.bnccReference}>
                   {getRelevantAlignments(preview).map((alignment, index) => (
                     <span key={`${alignment.grade}-${alignment.skill.code}`}>

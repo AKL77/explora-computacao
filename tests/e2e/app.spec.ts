@@ -42,7 +42,7 @@ test("seleciona assuntos no diálogo e combina a busca com ano escolar", async (
   await expect(dialog.locator("[aria-pressed]")).toHaveCount(45);
   await dialog.getByRole("searchbox", { name: "Buscar palavras-chave" }).fill("cyber");
   await expect(dialog.locator("[aria-pressed]")).toHaveCount(1);
-  await expect(page.getByText("38 materiais", { exact: true }).first()).toBeVisible();
+  await expect(page.getByText("48 materiais", { exact: true }).first()).toBeVisible();
   await dialog.getByRole("button", { name: "Cyberbullying" }).click();
   await expect(dialog.getByRole("button", { name: "Cyberbullying" })).toHaveAttribute("aria-pressed", "true");
   await dialog.getByRole("button", { name: "Concluir" }).click();
@@ -60,7 +60,7 @@ test("seleciona assuntos no diálogo e combina a busca com ano escolar", async (
   await expect(page.getByText("Nenhum material encontrado")).toBeVisible();
 
   await page.getByRole("button", { name: "Limpar filtros" }).click();
-  await expect(page.getByText("38 materiais", { exact: true }).first()).toBeVisible();
+  await expect(page.getByText("48 materiais", { exact: true }).first()).toBeVisible();
 });
 
 test("apresenta a proposta e entra em Buscar Materiais", async ({ page }) => {
@@ -152,6 +152,26 @@ test("abre o perfil e adiciona uma Trilha Pronta às trilhas pessoais", async ({
   expect(secondStepBox.y).toBeGreaterThan(firstStepBox.y + firstStepBox.height);
 });
 
+test("copia uma trilha nova e preserva etapas com mais de uma aula", async ({ page }) => {
+  await enterDemo(page);
+  await page.goto(routeUrl("/app/trilhas-prontas"));
+  await expect(page.getByRole("button", { name: /Ver trilha/ })).toHaveCount(9);
+  await page.getByRole("button", { name: "Cultura Digital", exact: true }).click();
+  await expect(page.getByRole("button", { name: /Ver trilha/ })).toHaveCount(3);
+  await page.getByRole("button", { name: "Ver trilha Cyberbullying: reconhecer e agir", exact: true }).click();
+  await expect(page.getByText("4 aulas sugeridas", { exact: true })).toBeVisible();
+  await expect(page.getByRole("list", { name: "Etapas da trilha pronta" }).locator("li")).toHaveCount(2);
+  await expect(page.getByText("Atividade · 3 aulas", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Adicionar às Minhas Trilhas", exact: true }).click();
+  await page.getByRole("button", { name: "Ver em Minhas Trilhas", exact: true }).click();
+  await page.getByRole("button", { name: /Cyberbullying: reconhecer e agir/ }).click();
+  await expect(page.getByText("4 aulas sugeridas", { exact: true })).toBeVisible();
+  await expect(page.getByText("200 min no total", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Abrir proposta de atividade de Cyberbullying — Uma Brincadeira de Mau Gosto", exact: true }).click();
+  const proposal = page.getByRole("dialog", { name: "Cyberbullying — Uma Brincadeira de Mau Gosto", exact: true });
+  await expect(proposal.getByRole("radio", { name: /3 aulas.*150 min/ })).toBeChecked();
+});
+
 test("busca materiais com tags e seleciona uma trilha", async ({
   page,
 }, testInfo) => {
@@ -165,7 +185,7 @@ test("busca materiais com tags e seleciona uma trilha", async ({
     page.getByRole("heading", { name: "Buscar Materiais", level: 1 }),
   ).toBeVisible();
 
-  await expect(page.getByText("38 materiais", { exact: true }).first()).toBeVisible();
+  await expect(page.getByText("48 materiais", { exact: true }).first()).toBeVisible();
 
   await page.getByRole("button", { name: "Material plugado" }).click();
   await expect(
@@ -315,6 +335,134 @@ test("filtra novos assuntos e conserva os novos materiais nas propostas de uma t
   await expect(page.getByRole("link", { name: "Acessar recurso" })).toHaveAttribute("href", /studio\.code\.org\/courses\/oceans/);
 });
 
+test("integra os cinco materiais aprovados às fichas e à trilha local", async ({ page }, testInfo) => {
+  await enterDemo(page);
+  const additions = [
+    ["evolucao-da-computacao", "Evolução da Computação"],
+    ["guardiao-cibernetico", "Guardião Cibernético — Proteja os seus dados"],
+    ["as-fake-news-conexao-escola", "As fake news — Conexão Escola"],
+    ["splashcode", "SplashCode"],
+    ["seguranca-online-tabuleiro", "Segurança Online — Jogo de Tabuleiro"],
+  ];
+  for (const [slug, title] of additions) {
+    await page.goto(routeUrl(`/app/materiais/${slug}`));
+    await expect(page.getByRole("heading", { name: title, level: 1 })).toBeVisible();
+    await expect(page.getByRole("region", { name: "Preparação necessária" })).toBeVisible();
+    await page.getByRole("tab", { name: "Informações adicionais" }).click();
+    await expect(page.getByRole("tabpanel")).toContainText("Não informado");
+    await page.getByRole("tab", { name: "Fonte", exact: true }).click();
+    await expect(page.getByRole("tabpanel").getByRole("link").first()).toHaveAttribute("href", /^https:/);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+    if (slug === "guardiao-cibernetico") {
+      await expect(page.getByRole("link", { name: "Fascículo complementar — Proteção de Dados", exact: true })).toHaveAttribute("href", /fasciculo-protecao-de-dados-egc\.pdf$/);
+      await expect(page.getByRole("link", { name: "Slides com notas para o apresentador (PDF)", exact: true })).toBeVisible();
+      await page.screenshot({ path: testInfo.outputPath("guardiao-complementares.png"), fullPage: true });
+    }
+  }
+  await page.goto(routeUrl("/app/trilha-de-ensino"));
+  await page.getByRole("searchbox", { name: "Pesquisar área, assunto ou habilidade" }).fill("SplashCode");
+  await expect(page.getByText("1 material", { exact: true })).toBeVisible();
+  await expect(page.getByRole("article")).toContainText("Material desplugado");
+  await page.getByRole("button", { name: "Adicionar SplashCode a uma nova trilha", exact: true }).click();
+  await page.getByRole("region", { name: "Nova trilha em criação" }).getByRole("button", { name: "Salvar trilha" }).click();
+  const dialog = page.getByRole("dialog", { name: "Salvar trilha" });
+  await dialog.getByRole("textbox", { name: "Nome da trilha" }).fill("Materiais aprovados");
+  await dialog.getByRole("textbox", { name: "Objetivo da trilha" }).fill("Planejar percursos com cartas de programação.");
+  await dialog.getByRole("button", { name: "Salvar trilha" }).click();
+  await page.reload();
+  await page.getByRole("button", { name: /Materiais aprovados/ }).click();
+  await page.getByRole("button", { name: "Abrir proposta de atividade de SplashCode", exact: true }).click();
+  const proposal = page.getByRole("article", { name: "Proposta de atividade da etapa" });
+  await expect(proposal).toContainText("Jogo impresso e montado");
+  await expect(proposal).toContainText("Tampas de garrafa");
+  await expect(proposal).toContainText("EF06CO02");
+  await expect(proposal.getByRole("link", { name: /Ver material completo/ })).toHaveAttribute("href", /\/app\/materiais\/splashcode$/);
+});
+
+test("preserva o português do Compute It na ficha e no acesso pela trilha", async ({ page }, testInfo) => {
+  await enterDemo(page);
+  await page.getByRole("searchbox", { name: "Pesquisar área, assunto ou habilidade" }).fill("Compute It");
+  await expect(page.getByText("1 material", { exact: true })).toBeVisible();
+  await expect(page.getByRole("article")).toContainText("Material plugado");
+  await page.getByRole("link", { name: "Abrir detalhes de Compute It", exact: true }).click();
+  await expect(page.getByRole("link", { name: "Acessar recurso", exact: true })).toHaveAttribute("href", "https://compute-it.toxicode.fr/?lang=pt");
+  await page.getByRole("tab", { name: "Informações adicionais" }).click();
+  await expect(page.getByRole("tabpanel")).toContainText("comandos em português, independentemente do idioma do navegador");
+  await page.getByRole("tab", { name: "Fonte", exact: true }).click();
+  await expect(page.getByRole("link", { name: "Jogo com comandos em português — acesso direto", exact: true })).toHaveAttribute("href", "https://compute-it.toxicode.fr/?lang=pt");
+  await page.screenshot({ path: testInfo.outputPath("compute-it-portugues.png"), fullPage: true });
+  await page.getByRole("link", { name: "Voltar", exact: true }).click();
+  await page.getByRole("button", { name: "Adicionar Compute It a uma nova trilha", exact: true }).click();
+  await page.getByRole("region", { name: "Nova trilha em criação" }).getByRole("button", { name: "Salvar trilha" }).click();
+  const dialog = page.getByRole("dialog", { name: "Salvar trilha" });
+  await dialog.getByRole("textbox", { name: "Nome da trilha" }).fill("Interpretando programas");
+  await dialog.getByRole("textbox", { name: "Objetivo da trilha" }).fill("Simular programas com comandos em português.");
+  await dialog.getByRole("button", { name: "Salvar trilha" }).click();
+  await page.reload();
+  await page.getByRole("button", { name: /Interpretando programas/ }).click();
+  await page.getByRole("button", { name: "Abrir proposta de atividade de Compute It", exact: true }).click();
+  const proposal = page.getByRole("article", { name: "Proposta de atividade da etapa" });
+  await expect(proposal).toContainText("executam os comandos em português");
+  await proposal.getByRole("link", { name: /Ver material completo/ }).click();
+  await expect(page.getByRole("heading", { name: "Compute It", level: 1 })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Acessar recurso", exact: true })).toHaveAttribute("href", "https://compute-it.toxicode.fr/?lang=pt");
+});
+
+test("integra os expositivos às fichas e à trilha com a playlist e seus complementos", async ({ page }, testInfo) => {
+  await enterDemo(page);
+  const search = page.getByRole("searchbox", { name: "Pesquisar área, assunto ou habilidade" });
+  const titles = [
+    "Tecnologia e vida humana — Conexão Escola",
+    "Os computadores eram pessoas! — Manual do Mundo",
+    "Como funciona a memória do computador? — Manual do Mundo",
+    "Como funciona a Internet? — Playlist do NIC.br",
+  ];
+  for (const title of titles) {
+    await search.fill(title);
+    await expect(page.getByText("1 material", { exact: true })).toBeVisible();
+    await page.getByRole("button", { name: `Adicionar ${title} a uma nova trilha`, exact: true }).click();
+  }
+  await page.getByRole("region", { name: "Nova trilha em criação" }).getByRole("button", { name: "Salvar trilha" }).click();
+  const dialog = page.getByRole("dialog", { name: "Salvar trilha" });
+  await dialog.getByRole("textbox", { name: "Nome da trilha" }).fill("Computadores e Internet — exposição");
+  await dialog.getByRole("textbox", { name: "Objetivo da trilha" }).fill("Relacionar tecnologias, armazenamento e comunicação em rede.");
+  await dialog.getByRole("button", { name: "Salvar trilha" }).click();
+  await page.reload();
+  await page.getByRole("button", { name: /Computadores e Internet — exposição/ }).click();
+  const proposal = page.getByRole("article", { name: "Proposta de atividade da etapa" });
+  await page.getByRole("button", { name: `Abrir proposta de atividade de ${titles[3]}`, exact: true }).click();
+  await expect(proposal).toContainText("episódios escolhidos pelo professor");
+  await proposal.getByRole("link", { name: /Ver material completo/ }).click();
+  await expect(page.getByRole("link", { name: "Acessar recurso", exact: true })).toHaveAttribute("href", "https://www.youtube.com/playlist?list=PLQq8-9yVHyOYMFAc9v7Yb_cqmNMksEdrk");
+  await page.getByRole("tab", { name: "Informações adicionais" }).click();
+  await expect(page.getByRole("tabpanel")).toContainText("Playlist: 26 min 35 s; duração da aula não informada");
+  await page.getByRole("tab", { name: "Fonte", exact: true }).click();
+  await expect(page.getByRole("link", { name: /^Parte [1-4] —/ })).toHaveCount(4);
+  await page.evaluate(() => { (document.activeElement as HTMLElement)?.blur(); window.scrollTo(0, 0); });
+  await page.screenshot({ path: testInfo.outputPath("playlist-nicbr.png"), fullPage: true });
+
+  await page.goto(routeUrl("/app/materiais/tecnologia-e-vida-humana"));
+  await page.getByRole("tab", { name: "Informações adicionais" }).click();
+  await expect(page.getByRole("tabpanel")).toContainText("não é necessário imprimir");
+  await page.getByRole("tab", { name: "Fonte", exact: true }).click();
+  await expect(page.getByRole("link", { name: "Slides para baixar — PowerPoint (PPTX)", exact: true })).toHaveAttribute("href", /1NQKqK9-AizswnleyTr05Uo_tPdOF4ca3/);
+  await expect(page.getByRole("link", { name: /^Atividade para imprimir/ })).toBeVisible();
+});
+
+test("retira Pegue o Porco da busca e trata o endereço antigo como material não encontrado", async ({ page }) => {
+  await enterDemo(page);
+  await expect(page.getByText("48 materiais", { exact: true }).first()).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Pegue o Porco", exact: true })).toHaveCount(0);
+  for (const query of ["Pegue o Porco", "Computação e Eu"]) {
+    await page.getByRole("searchbox", { name: "Pesquisar área, assunto ou habilidade" }).fill(query);
+    await expect(page.getByText("Nenhum material encontrado")).toBeVisible();
+  }
+  await page.goto(routeUrl("/app/materiais/pegue-o-porco-computacao-e-eu"));
+  await expect(page.getByRole("heading", { name: "Recurso não encontrado" })).toBeVisible();
+  await page.getByRole("link", { name: "Voltar para Buscar Materiais" }).click();
+  await expect(page.getByText("48 materiais", { exact: true }).first()).toBeVisible();
+});
+
 test("redireciona os endereços antigos para os fluxos atuais", async ({ page }) => {
   await enterDemo(page);
 
@@ -341,13 +489,17 @@ test("mantém o detalhe responsivo e a navegação móvel operável por teclado"
     page.getByRole("heading", { name: "Cyberbullying — Jogo Educativo", level: 1 }),
   ).toBeVisible();
   await expect(page.getByText("Fornecedor: ALT+INOVARE")).toBeVisible();
-  await expect(page.getByText("Habilidade", { exact: true })).toBeVisible();
+  await expect(page.getByText("Habilidade", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("Assunto", { exact: true })).toBeVisible();
   await expect(page.getByText("Cyberbullying", { exact: true })).toBeVisible();
-  await expect(page.getByText("Competências", { exact: true })).toBeVisible();
+  await expect(page.getByText("Competências", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("Habilidades da BNCC", { exact: true })).toBeVisible();
   await expect(page.getByText("EF07CO09", { exact: true })).toBeVisible();
   await expect(
     page.getByText("Reconhecer e debater sobre cyberbullying.", { exact: true }),
   ).toHaveCount(0);
+  await page.getByText("Habilidades da BNCC", { exact: true }).scrollIntoViewIfNeeded();
+  await page.screenshot({ path: testInfo.outputPath("habilidades-bncc.png"), fullPage: true });
   await page.getByRole("tab", { name: "Fonte" }).click();
   await expect(page.getByText("CC BY-NC-ND 3.0 BR")).toBeVisible();
   await expect(
@@ -381,6 +533,7 @@ test("apresenta Lightbot e Blockly Games com os metadados verificados", async ({
   await expect(
     page.getByText("Sequências e repetições em algoritmos", { exact: true }),
   ).toBeVisible();
+  await expect(page.getByText("Habilidades da BNCC", { exact: true })).toBeVisible();
   await expect(page.getByText("EF04CO03, EF05CO04", { exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: "Acessar recurso" })).toHaveAttribute(
     "href",
@@ -394,6 +547,7 @@ test("apresenta Lightbot e Blockly Games com os metadados verificados", async ({
     page.getByRole("heading", { name: "Blockly Games", level: 1 }),
   ).toBeVisible();
   await expect(page.getByText("Programação em blocos", { exact: true })).toBeVisible();
+  await expect(page.getByText("Habilidades da BNCC", { exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: "Acessar recurso" })).toHaveAttribute(
     "href",
     "https://blockly.games/?lang=pt-br",
@@ -423,6 +577,7 @@ test("apresenta a coleção de Rozelma e o Interland com os dados verificados", 
   ).toBeVisible();
   await expect(page.getByText("6º ano", { exact: true })).toBeVisible();
   await expect(page.getByText("Generalização e variáveis", { exact: true })).toBeVisible();
+  await expect(page.getByText("Habilidades da BNCC", { exact: true })).toBeVisible();
   await expect(page.getByText("EF06CO06", { exact: true })).toBeVisible();
   await page.getByRole("tab", { name: "Fonte" }).click();
   await expect(page.getByText("CC BY-NC 4.0", { exact: true })).toBeVisible();
@@ -435,6 +590,7 @@ test("apresenta a coleção de Rozelma e o Interland com os dados verificados", 
   await expect(
     page.getByText("Segurança e cidadania digital", { exact: true }),
   ).toBeVisible();
+  await expect(page.getByText("Habilidades da BNCC", { exact: true })).toBeVisible();
   await expect(
     page.getByText("EF04CO07, EF04CO08, EF05CO08, EF06CO09", { exact: true }),
   ).toBeVisible();
