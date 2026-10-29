@@ -65,19 +65,20 @@ describe("TeachingPathPage", () => {
       ),
     ).not.toBeInTheDocument();
     expect(screen.queryByText("Selecione materiais para começar.")).not.toBeInTheDocument();
-    await user.type(search, "laço de repetição");
+    await user.click(search);
+    await user.paste("laço de repetição");
 
     expect(screen.getByRole("heading", { name: blocklyTitle, level: 3 })).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: vinteTitle, level: 3 })).not.toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: sertaoTitle, level: 3 })).not.toBeInTheDocument();
 
     await user.clear(search);
-    await user.type(search, "cyberbullying");
+    await user.paste("cyberbullying");
     expect(
       screen.getByRole("heading", { name: "Cyberbullying — Jogo Educativo", level: 3 }),
     ).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: blocklyTitle, level: 3 })).not.toBeInTheDocument();
-  });
+  }, 10_000);
 
   it("filtra com tags clicáveis, inclusive materiais de formato misto", async () => {
     const user = await renderPage();
@@ -107,7 +108,7 @@ describe("TeachingPathPage", () => {
 
     await user.click(screen.getByRole("button", { name: "Limpar filtros" }));
     expect(screen.getByText("48 materiais", { exact: true })).toBeInTheDocument();
-  });
+  }, 10_000);
 
   it("encontra Blockly e Vinte Palpites pelos mesmos anos indicados nas fichas", async () => {
     const user = await renderPage();

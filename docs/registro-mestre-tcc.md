@@ -1125,3 +1125,8 @@ previsto, sem afirmar que já ocorreu.
   Arquivos temporários de inspeção e capturas locais ficam fora da entrega.
 - Antes do envio, passaram typecheck, lint, compilação com o caminho de
   produção, 93 testes unitários e 44 testes de interface em desktop e mobile.
+- Na primeira execução remota, dois testes de integração da busca excederam
+  o limite de cinco segundos com o catálogo ampliado. A entrada dos termos
+  passou a usar colagem em vez de simular cada tecla, e esses dois cenários
+  passaram a ter o mesmo limite de dez segundos já usado por outros fluxos
+  extensos. As verificações e o comportamento da aplicação foram preservados.
