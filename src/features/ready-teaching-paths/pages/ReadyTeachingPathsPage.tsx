@@ -84,7 +84,6 @@ export function ReadyTeachingPathsPage() {
   const navigate = useNavigate();
   const paths = useTeachingPathsStore((state) => state.paths);
   const createPath = useTeachingPathsStore((state) => state.createPath);
-  const setResourceLessonCount = useTeachingPathsStore((state) => state.setResourceLessonCount);
   const [selectedCategory, setSelectedCategory] = useState<TrailCategory>("Todas");
   const [selectedTrailId, setSelectedTrailId] = useState<string | null>(null);
   const [announcement, setAnnouncement] = useState("");
@@ -115,7 +114,7 @@ export function ReadyTeachingPathsPage() {
     }
   }, [selectedTrailId]);
 
-  const copyReadyPath = () => {
+  const copyReadyPath = async () => {
     if (!selectedReadyPath) return;
 
     if (importedPath) {
@@ -124,16 +123,14 @@ export function ReadyTeachingPathsPage() {
     }
 
     const resourceIds = getReadyPathResourceIds(selectedReadyPath);
-    const path = createPath(selectedReadyPath.name, resourceIds, {
+    const path = await createPath(selectedReadyPath.name, resourceIds, {
       objective: selectedReadyPath.objective,
       backgroundColor: selectedReadyPath.backgroundColor,
       icon: selectedReadyPath.savedIcon,
+      lessonCountsByResourceId: Object.fromEntries(selectedReadyPath.stages.map((stage) => [stage.resourceId, stage.lessonCount ?? 1])),
     });
     if (!path) return;
 
-    selectedReadyPath.stages.forEach((stage) => {
-      setResourceLessonCount(path.id, stage.resourceId, stage.lessonCount ?? 1);
-    });
     trackClarityEvent("trilha_pronta_adicionada");
     setAnnouncement(`A trilha “${selectedReadyPath.name}” foi adicionada a Minhas Trilhas.`);
   };

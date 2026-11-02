@@ -1,11 +1,13 @@
-import { BookOpenCheck, Search, ShieldCheck, UserRound, Waypoints } from "lucide-react";
+import { BookOpenCheck, Search, ShieldCheck, UserRound, UsersRound, Waypoints } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import { useTeachingPathsStore } from "@/store/useTeachingPathsStore";
+import { useSessionStore } from "@/store/useSessionStore";
 import styles from "./ProfilePage.module.css";
 
 export function ProfilePage() {
   const savedPathsCount = useTeachingPathsStore((state) => state.paths.length);
+  const user = useSessionStore((state) => state.user);
 
   return (
     <div className={styles.page}>
@@ -19,15 +21,14 @@ export function ProfilePage() {
           <UserRound size={34} />
         </div>
         <div className={styles.identity}>
-          <span>Perfil de demonstração</span>
-          <h2 id="profile-name">Usuário demo</h2>
-          <p>Área do docente · Sessão armazenada neste navegador</p>
+          <span>{user ? "Conta do professor" : "Perfil de demonstração"}</span>
+          <h2 id="profile-name" data-clarity-mask="true">{user?.name ?? "Usuário demo"}</h2>
+          <p data-clarity-mask="true">{user?.email ?? "Área do docente · Sessão armazenada neste navegador"}</p>
         </div>
         <div className={styles.privacyNote}>
           <ShieldCheck size={20} aria-hidden="true" />
           <p>
-            Esta versão não solicita dados pessoais. Nome, e-mail e escola poderão ser
-            configurados quando a autenticação estiver disponível.
+            {user ? "Suas turmas e trilhas ficam vinculadas à sua conta. Em computadores compartilhados, use Sair quando terminar." : "Esta versão não solicita dados pessoais. Nome, e-mail e escola poderão ser configurados quando a autenticação estiver disponível."}
           </p>
         </div>
       </section>
@@ -56,6 +57,10 @@ export function ProfilePage() {
           <Link to="/app/minhas-trilhas">
             <span className={styles.shortcutIcon} aria-hidden="true"><Waypoints size={22} /></span>
             <span><strong>Minhas Trilhas</strong><small>Continue e organize suas trilhas salvas.</small></span>
+          </Link>
+          <Link to="/app/minhas-turmas">
+            <span className={styles.shortcutIcon} aria-hidden="true"><UsersRound size={22} /></span>
+            <span><strong>Minhas Turmas</strong><small>Organize materiais e compartilhe o código com os alunos.</small></span>
           </Link>
         </div>
       </section>

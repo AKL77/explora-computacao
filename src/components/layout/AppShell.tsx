@@ -12,11 +12,13 @@ import {
   Route,
   Waypoints,
   UserRound,
+  UsersRound,
   X,
 } from "lucide-react";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Brand } from "@/components/Brand";
 import { useSessionStore } from "@/store/useSessionStore";
+import { WorkspaceContent } from "@/features/auth/WorkspaceContent";
 import styles from "./AppShell.module.css";
 
 const navigationItems = [
@@ -32,6 +34,7 @@ const navigationItems = [
     label: "Minhas Trilhas",
     icon: Waypoints,
   },
+  { to: "/app/minhas-turmas", label: "Minhas Turmas", icon: UsersRound },
   { to: "/app/sobre", label: "Sobre", icon: CircleHelp },
 ] as const;
 
@@ -43,6 +46,7 @@ function getPageTitle(pathname: string) {
   if (pathname === "/app/trilha-de-ensino") return "Buscar Materiais";
   if (pathname === "/app/trilhas-prontas") return "Trilhas Prontas";
   if (pathname === "/app/minhas-trilhas") return "Minhas Trilhas";
+  if (pathname.startsWith("/app/minhas-turmas")) return "Minhas Turmas";
   if (pathname === "/app/sobre") return "Sobre";
   return "Explora Computação";
 }
@@ -55,6 +59,7 @@ export function AppShell() {
   const location = useLocation();
   const navigate = useNavigate();
   const signOut = useSessionStore((state) => state.signOut);
+  const user = useSessionStore((state) => state.user);
   const pageTitle = getPageTitle(location.pathname);
 
   useEffect(() => {
@@ -111,7 +116,7 @@ export function AppShell() {
   };
 
   const leave = () => {
-    signOut();
+    void signOut();
     navigate("/", { replace: true });
   };
 
@@ -170,10 +175,10 @@ export function AppShell() {
 
         <div className={styles.sidebarFooter}>
           <div className={styles.demoUser}>
-            <span className={styles.avatar} aria-hidden="true">D</span>
+            <span className={styles.avatar} aria-hidden="true">{user?.name.charAt(0).toUpperCase() || "D"}</span>
             <span>
-              <strong>Usuário demo</strong>
-              <small>Sessão local</small>
+              <strong data-clarity-mask="true">{user?.name ?? "Usuário demo"}</strong>
+              <small>{user ? "Conta do professor" : "Sessão local"}</small>
             </span>
           </div>
           <button className={styles.signOut} type="button" onClick={leave}>
@@ -203,7 +208,7 @@ export function AppShell() {
           tabIndex={-1}
           aria-label={pageTitle}
         >
-          <Outlet />
+          <WorkspaceContent><Outlet /></WorkspaceContent>
         </main>
       </div>
     </div>

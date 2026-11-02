@@ -51,7 +51,9 @@ jobs:
       - name: Executar testes unitários
         run: pnpm test
 
-      - name: Compilar para produção
+      - name: Compilar demonstração para os testes
+        env:
+          VITE_APP_MODE: demo
         run: pnpm build
 
       - name: Instalar navegador dos testes
@@ -59,6 +61,12 @@ jobs:
 
       - name: Executar testes de interface
         run: pnpm test:e2e
+
+      - name: Testar integração com o backend em desktop e celular
+        run: pnpm test:e2e:backend
+
+      - name: Compilar versão online para produção
+        run: pnpm build
 
       - name: Configurar GitHub Pages
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'

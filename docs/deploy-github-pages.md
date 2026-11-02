@@ -9,10 +9,10 @@ as verificações e, se todas passarem, publica o conteúdo de `dist`.
 1. checkout do commit;
 2. instalação reproduzível com Node e pnpm fixados;
 3. typecheck, lint e testes unitários;
-4. build com `VITE_BASE_PATH=/<repositorio>/`;
-5. testes E2E contra o build de produção no mesmo subdiretório;
-6. empacotamento exclusivo de `dist`;
-7. deploy no ambiente protegido `github-pages`.
+4. build demonstrativo com `VITE_BASE_PATH=/<repositorio>/`;
+5. testes E2E contra esse build no mesmo subdiretório e testes da integração online;
+6. novo build online, usando a configuração pública de `.env.production`;
+7. empacotamento exclusivo de `dist` e deploy no ambiente protegido `github-pages`.
 
 Pull requests executam as verificações, mas não publicam.
 
@@ -30,15 +30,16 @@ PowerShell:
 $env:VITE_BASE_PATH='/explora-computacao/'
 $env:PLAYWRIGHT_BASE_PATH='/explora-computacao/'
 $env:PLAYWRIGHT_USE_PREVIEW='true'
+$env:VITE_APP_MODE='demo'
 pnpm build
 pnpm test:e2e
-Remove-Item Env:VITE_BASE_PATH, Env:PLAYWRIGHT_BASE_PATH, Env:PLAYWRIGHT_USE_PREVIEW
+Remove-Item Env:VITE_BASE_PATH, Env:PLAYWRIGHT_BASE_PATH, Env:PLAYWRIGHT_USE_PREVIEW, Env:VITE_APP_MODE
 ```
 
 Bash:
 
 ```bash
-VITE_BASE_PATH=/explora-computacao/ pnpm build
+VITE_BASE_PATH=/explora-computacao/ VITE_APP_MODE=demo pnpm build
 VITE_BASE_PATH=/explora-computacao/ \
 PLAYWRIGHT_BASE_PATH=/explora-computacao/ \
 PLAYWRIGHT_USE_PREVIEW=true pnpm test:e2e
@@ -65,6 +66,15 @@ Defina a variável como vazia para gerar um build sem análise. O arquivo
 Os testes de análise interceptam as solicitações ao Clarity e usam respostas
 locais, sem enviar sessões de teste à Microsoft. As verificações finais no
 painel e no site publicado estão em `integracao-clarity.md`.
+
+## Supabase e Google
+
+O build final usa o projeto gratuito configurado em `.env.production`. A chave
+publishable é pública; não são necessários segredos do banco no GitHub Pages.
+O Google precisa permitir o retorno exato à raiz do site publicado, antes do
+fragmento `#`. A configuração e o teste real de entrada estão em
+[backend-supabase.md](backend-supabase.md). Publicar o frontend não substitui a
+ativação do Google no painel.
 
 ## Diagnóstico
 

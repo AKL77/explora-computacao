@@ -7,7 +7,7 @@ import { AppShell } from "./AppShell";
 afterEach(cleanup);
 
 describe("AppShell", () => {
-  it("apresenta somente as cinco opções atuais da navegação", () => {
+  it("apresenta as áreas de materiais, trilhas e turmas na navegação", () => {
     render(
       <MemoryRouter initialEntries={["/app/trilha-de-ensino"]}>
         <Routes>
@@ -39,7 +39,9 @@ describe("AppShell", () => {
       "/app/sobre",
     );
 
-    for (const label of ["Acervo", "Meus Materiais", "Minhas Turmas", "Meus Planos de Aula"]) {
+    expect(screen.getByRole("link", { name: "Minhas Turmas" })).toHaveAttribute("href", "/app/minhas-turmas");
+
+    for (const label of ["Acervo", "Meus Materiais", "Meus Planos de Aula"]) {
       expect(screen.queryByRole("link", { name: label })).not.toBeInTheDocument();
       expect(screen.queryByRole("button", { name: label })).not.toBeInTheDocument();
     }

@@ -173,6 +173,30 @@
   transform: translateY(-1px);
 }
 
+.accessActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.studentAccessLink {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border: 1px solid rgb(255 255 255 / 45%);
+  border-radius: 10px;
+  color: white;
+  font-size: .86rem;
+  font-weight: 750;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.studentAccessLink:hover { background: rgb(255 255 255 / 10%); }
+.teacherLabelCompact { display: none; }
+
 .hero {
   position: relative;
   isolation: isolate;
@@ -750,6 +774,8 @@
 }
 
 @media (max-width: 760px) {
+  .teacherLabel { display: none; }
+  .teacherLabelCompact { display: inline; }
   .container {
     width: min(100% - 32px, 1200px);
   }
@@ -839,6 +865,13 @@
   .footerMeta {
     grid-column: auto;
   }
+}
+
+@media (max-width: 480px) {
+  .headerInner { gap: 8px; }
+  .accessActions { gap: 6px; }
+  .accessActions .signInLink, .studentAccessLink { min-width: 0; padding-inline: 8px; font-size: .75rem; }
+  .mobileNavButton { width: 36px; }
 }
 
 @media (max-width: 520px) {

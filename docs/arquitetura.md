@@ -1,10 +1,11 @@
-# Arquitetura do frontend
+# Arquitetura da plataforma
 
 ## Visão geral
 
 O Explora Computação é uma SPA estática construída com React, TypeScript e
-Vite. A versão atual não depende de servidor próprio: o catálogo é local e a
-sessão demonstrativa e as trilhas ficam no navegador.
+Vite, com Supabase Auth, PostgreSQL e uma Edge Function. O catálogo permanece
+local ao projeto; turmas e trilhas pessoais online pertencem à conta docente.
+O modo demonstrativo usa o navegador, sem importar esses dados para contas.
 
 ```mermaid
 flowchart LR
@@ -13,10 +14,15 @@ flowchart LR
   CATALOG --> FIXTURE["Catálogo local"]
   UI --> PATHS["TeachingPathsStore"]
   UI --> SESSION["SessionStore"]
-  PATHS --> LS["localStorage"]
-  SESSION --> LS
+  UI --> CLASSES["ClassroomsStore"]
+  PATHS --> DB["Supabase PostgreSQL / dono e revisão"]
+  SESSION --> AUTH["Google / Supabase Auth"]
+  AUTH --> SS["sessionStorage da aba"]
+  CLASSES --> DB
+  STUDENT["Aluno / código / sem conta"] --> EDGE["Edge Function"]
+  EDGE --> DB
   UI --> CONSENT["Consentimento de análise"]
-  CONSENT --> LS
+  CONSENT --> LS["localStorage"]
   CONSENT -->|"Somente após aceitação"| CLARITY["Microsoft Clarity"]
   UI --> EXT["Materiais externos"]
 ```
@@ -37,7 +43,7 @@ flowchart LR
 │   ├── features/            # funcionalidades por contexto
 │   ├── lib/                 # utilitários e integração de análise de uso
 │   ├── repositories/        # limite de acesso ao catálogo
-│   ├── store/               # sessão e trilhas pessoais
+│   ├── store/               # sessão, trilhas pessoais e turmas
 │   ├── styles/              # tokens e estilos globais
 │   └── test/                # configuração comum de testes
 └── tests/e2e/               # fluxos reais no Playwright
@@ -57,7 +63,8 @@ servidor, atualizar uma tela interna não depende de regras de reescrita no
 GitHub Pages.
 
 As rotas atuais são Buscar Materiais, detalhe do material, Trilhas Prontas,
-Minhas Trilhas, Perfil, Sobre e a página pública Privacidade. URLs antigas de acervo, pastas e planos apenas
+Minhas Trilhas, Minhas Turmas, Perfil, Sobre e as páginas públicas Privacidade e
+Acessar turma. URLs antigas de acervo, pastas e planos apenas
 redirecionam para um fluxo atual e não carregam módulos legados.
 
 ### Caminho-base configurável
@@ -66,11 +73,36 @@ O Vite lê `VITE_BASE_PATH`. Localmente o valor padrão é `/`; no workflow ele 
 `/<nome-do-repositorio>/`. O helper `publicAsset` aplica `BASE_URL` aos ativos
 da pasta `public`, evitando links quebrados no Pages.
 
+### Turmas e acesso dos alunos
+
+`useClassroomsStore` guarda os metadados da turma, o código, o arquivamento e uma
+lista ordenada de identificadores de materiais, com visibilidade e orientação.
+A visibilidade começa ativa e pertence à associação material/turma. Adicionar
+novamente um material existente não o duplica nem altera uma ocultação anterior.
+O código permanece ao editar ou arquivar. Excluir reserva o código antigo para
+não associá-lo acidentalmente a outra turma.
+
+As rotas docentes `/app/minhas-turmas` e `/app/minhas-turmas/:classroomId` usam a
+conta do professor no modo online. `/alunos` é pública e não usa `signIn`, não pede dados
+de estudantes e não persiste a turma escolhida em cookies, URL ou armazenamento.
+Recarregar ou reabrir a entrada exige informar o código novamente.
+Depois de entrar, a visualização usa a rota genérica `/alunos/atividades`, sem
+identificar a turma na URL. O favorito continua apontando para `/alunos`, que
+limpa a seleção anterior mesmo quando a visualização já está aberta.
+
+No modo online, `TeacherWorkspaceRepository` usa RPCs com dono e revisão.
+Gravações só alteram o store após confirmação. Trocar de conta limpa os stores e
+invalida respostas antigas. `StudentClassroomRepository` consulta apenas a Edge
+Function, sem token de professor; materiais ocultos são retirados no servidor.
+A tela do aluno atualiza a cada 20 segundos enquanto visível e ao recuperar foco.
+No modo demonstrativo, o evento `storage` sincroniza as abas locais.
+Configuração, permissões e testes estão em [backend-supabase.md](backend-supabase.md).
+
 ### Repositório de catálogo
 
 A interface consome `CatalogRepository`, atualmente implementado por
-`LocalCatalogRepository`. Um backend futuro poderá substituir essa classe sem
-acoplar os componentes ao transporte HTTP.
+`LocalCatalogRepository`. O backend registra somente os IDs válidos, preservando
+a curadoria no código e sem permitir inclusão de materiais pelos professores.
 
 Os anos escolares aceitos são centralizados em `SUPPORTED_GRADES`. O currículo
 de um recurso associa ano, eixo, objeto, habilidade e competências, além da
@@ -103,7 +135,7 @@ flowchart LR
   CREATE --> STORE["TeachingPathsStore"]
   COPY --> STORE
   STORE --> EDIT["Reordenar, definir duração e editar"]
-  STORE --> LS["localStorage"]
+  STORE --> DB["Supabase / ou localStorage na demonstração"]
 ```
 
 `useTeachingPathsStore` persiste somente os identificadores dos materiais, os

@@ -7,6 +7,7 @@ import {
 import { Link } from "react-router-dom";
 
 import styles from "./AboutPage.module.css";
+import { isOnlineMode } from "@/lib/backend/config";
 
 const questions = [
   {
@@ -48,6 +49,11 @@ const questions = [
     question: "Posso incluir novos materiais na plataforma?",
     answer:
       "Não nesta versão. Os materiais disponíveis são selecionados previamente, e o docente pode consultá-los e usá-los para montar suas trilhas.",
+  },
+  {
+    question: "Como funcionam Minhas Turmas e o acesso dos alunos?",
+    answer:
+      "Crie uma turma em Minhas Turmas e adicione materiais do acervo. Eles ficam visíveis por padrão, e você pode ocultar, ordenar e incluir uma orientação. Os alunos abrem Acessar turma e digitam o código, sem conta ou senha. Arquivar ou excluir a turma encerra esse acesso. " + (isOnlineMode ? "Suas turmas e trilhas ficam salvas na sua conta e podem ser acessadas em outros computadores." : "Nesta demonstração, as turmas ficam salvas apenas neste navegador."),
   },
 ] as const;
 

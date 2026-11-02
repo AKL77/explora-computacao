@@ -205,8 +205,8 @@ export function TeachingPathPage() {
     setSelectedKeywordIds([]);
   };
 
-  const savePath = () => {
-    const path = createPath(pathName, trailIds, {
+  const savePath = async () => {
+    const path = await createPath(pathName, trailIds, {
       objective: pathObjective,
       backgroundColor: pathBackgroundColor,
       icon: pathIcon,
@@ -232,11 +232,11 @@ export function TeachingPathPage() {
     setExistingPathId(availablePaths[0].id);
   };
 
-  const addToExistingPath = () => {
+  const addToExistingPath = async () => {
     if (!resourceToAddToExisting || !existingPathId) return;
     const resource = teachingById.get(resourceToAddToExisting)?.resource;
     const path = savedPaths.find((item) => item.id === existingPathId);
-    if (!resource || !path || !addResourceToPath(path.id, resource.id)) return;
+    if (!resource || !path || !await addResourceToPath(path.id, resource.id)) return;
 
     trackClarityEvent("material_adicionado_trilha");
     setAnnouncement(`${resource.title} foi adicionado à trilha “${path.name}”.`);

@@ -8,6 +8,7 @@ import {
   subscribeAnalyticsConsent,
 } from "@/lib/clarity";
 import styles from "./PrivacyPage.module.css";
+import { isOnlineMode } from "@/lib/backend/config";
 
 export function PrivacyPage() {
   const consent = useSyncExternalStore(subscribeAnalyticsConsent, getAnalyticsConsent);
@@ -28,14 +29,16 @@ export function PrivacyPage() {
         <h1 id="privacy-title" tabIndex={-1}>Privacidade e preferências</h1>
         <p>
           O Explora Computação é um protótipo acadêmico desenvolvido por Augusto Lunardi
-          para apoiar o planejamento de docentes. O uso da plataforma não exige cadastro real.
+          para apoiar o planejamento de docentes. {isOnlineMode ? "Professores entram com Google para organizar seu trabalho. Alunos acessam por código, sem cadastro." : "Esta demonstração não exige cadastro real."}
         </p>
-        <h2>O que fica neste navegador</h2>
+        <h2>{isOnlineMode ? "Conta e dados salvos" : "O que fica neste navegador"}</h2>
         <p>
-          A sessão demonstrativa, as trilhas criadas e sua escolha sobre análise de uso
-          ficam armazenadas neste navegador. Limpar os dados do site apaga essas informações.
-          Não solicitamos nome, e-mail, senha ou dados de estudantes.
+          {isOnlineMode ? "O Google fornece nome, e-mail e identificador da conta do professor ao Supabase, responsável pela autenticação e pelo armazenamento das turmas e trilhas. A plataforma não recebe a senha do Google. Esses registros ficam vinculados à conta, em um projeto na região de São Paulo. A sessão docente fica na aba do navegador; use Sair ao terminar em um computador compartilhado. Limpar os dados do navegador não exclui seus registros online." : "A sessão demonstrativa, as trilhas e as turmas ficam neste navegador. Limpar os dados do site apaga essas informações."}
+          {" "}Sua escolha sobre análise de uso fica neste navegador. Não solicitamos dados de estudantes.
+          O código digitado e a turma acessada pelo aluno não são salvos como sessão;
+          ao abrir novamente a página de acesso, é necessário informar o código.
         </p>
+        {isOnlineMode && <p>Quem conhece o código pode consultar os materiais visíveis e as informações exibidas da turma. Evite incluir dados pessoais dos alunos em nomes e orientações. O serviço recebe informações técnicas da conexão e usa um identificador derivado do endereço de rede para limitar tentativas, sem criar contas de alunos. Contadores antigos são removidos periodicamente durante o uso; registros técnicos do provedor seguem suas próprias regras. Consulte a <a href="https://supabase.com/privacy">política de privacidade do Supabase</a>.</p>}
         <h2>Análise de uso com Microsoft Clarity</h2>
         <p>
           Com sua aceitação, o Clarity recebe dados de navegação, cliques, rolagem,
@@ -54,7 +57,7 @@ export function PrivacyPage() {
         <p>
           O Clarity só é carregado depois da aceitação. Recusar mantém a plataforma
           disponível. Ao revogar uma aceitação anterior, a página é recarregada para
-          interromper a análise. As trilhas salvas permanecem neste navegador; alterações
+          interromper a análise. As trilhas salvas permanecem {isOnlineMode ? "na sua conta" : "neste navegador"}; alterações
           ainda não salvas podem ser perdidas. Os dados já enviados permanecem sujeitos às
           regras da Microsoft. Sites de materiais externos possuem políticas próprias.
         </p>

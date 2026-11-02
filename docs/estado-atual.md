@@ -1,6 +1,6 @@
 # Estado atual do protótipo
 
-**Referência:** 28 de outubro de 2026
+**Referência:** 2 de novembro de 2026
 
 **Versão do protótipo:** 0.3.0
 
@@ -11,7 +11,8 @@ documentos em `docs/historico` preservam decisões de etapas anteriores do TCC.
 
 ## Implementado
 
-- página inicial pública e sessão local demonstrativa, sem conta real;
+- página inicial pública, conta Google via Supabase e demonstração local opcional;
+  entrada real validada localmente, com Google liberado para contas externas;
 - **Buscar Materiais** com 48 recursos locais, pesquisa textual e filtros por ano,
   assunto, formato e abordagem. O filtro de assuntos reúne 45 palavras-chave
   baseadas nos três eixos da BNCC Computação, com seleção múltipla em uma janela;
@@ -52,7 +53,8 @@ documentos em `docs/historico` preservam decisões de etapas anteriores do TCC.
   como **Assunto**, antes das habilidades, e continua usado na busca e no apoio
   aos objetivos. O filtro **Assuntos** mantém sua lista própria de palavras-chave;
 - seleção de materiais para criar uma trilha própria;
-- salvamento local de trilhas com nome, objetivo, cor e ícone;
+- salvamento de trilhas com nome, objetivo, cor e ícone, online por professor
+  ou local no modo demonstrativo;
 - **Minhas Trilhas** com sequência visual conectada, reordenação por arrastar e
   soltar, duração de uma a três aulas por etapa e tempo total calculado;
 - edição em rascunho, com descarte ou confirmação explícita de alterações;
@@ -68,6 +70,22 @@ documentos em `docs/historico` preservam decisões de etapas anteriores do TCC.
   Critérios em `curadoria-trilhas-prontas-2026-10-28.md`;
 - cópia de qualquer trilha pronta para **Minhas Trilhas**;
 - páginas **Meu perfil** e **Sobre**;
+- **Minhas Turmas**, com cadastro e edição de nome, ano/série, escola
+  opcional, ano letivo e cor, sem campo de turno ou lista de alunos;
+- adição de materiais pela turma ou pelo atalho **Adicionar à turma** na ficha;
+  materiais ficam visíveis por padrão, com visibilidade independente por turma,
+  ordenação e orientação opcional aos alunos;
+- código fixo de seis números por turma, exibido para projeção e cópia;
+- entrada pública em `/alunos`, sem login, com turma escolhida apenas em memória;
+  reabrir a página pede o código, mesmo com sessão docente no navegador;
+- página dos alunos com materiais visíveis e links diretos para a fonte externa;
+- arquivamento que preserva os materiais e encerra o acesso; exclusão que remove
+  a turma e reserva seu código para não ser reutilizado;
+- backend Supabase Free em São Paulo, com banco e serviço público de turmas ativos;
+- isolamento de dados por professor, confirmação de gravações e detecção de conflito;
+- consulta pública dos alunos sem conta, removendo materiais ocultos no servidor;
+- atualização da tela do aluno a cada 20 segundos enquanto visível e ao recuperar foco;
+- sincronização entre abas por armazenamento somente no modo demonstrativo;
 - integração do Microsoft Clarity em produção, condicionada à aceitação do
   visitante, com recusa, revogação e página pública de privacidade;
 - layout responsivo, navegação por teclado, testes automatizados e publicação no
@@ -76,14 +94,11 @@ documentos em `docs/historico` preservam decisões de etapas anteriores do TCC.
 ## Fora do escopo atual
 
 - favoritos e pastas pessoais de materiais;
-- cadastro de turmas;
 - criação, armazenamento ou exportação de planos de aula;
-- backend, API e banco de dados;
-- autenticação real ou gestão de contas;
 - inteligência artificial integrada à aplicação ou disponível ao usuário;
 - inclusão de materiais por usuários;
 - contas ou dados de estudantes;
-- sincronização, colaboração ou compartilhamento remoto;
+- colaboração de vários professores na mesma turma;
 - service worker.
 
 ## Uso de IA generativa no projeto
@@ -109,7 +124,7 @@ telas órfãs e links quebrados.
 
 ## Fluxo principal
 
-1. O docente entra na sessão demonstrativa e chega a **Buscar Materiais**.
+1. O docente entra com Google (ou usa a demonstração local) e chega a **Buscar Materiais**.
 2. Pode pesquisar e filtrar os materiais disponíveis.
 3. Seleciona recursos, informa a identidade visual da trilha e salva.
 4. Em **Minhas Trilhas**, reorganiza etapas e define suas durações.
@@ -118,11 +133,12 @@ telas órfãs e links quebrados.
 
 ## Persistência
 
-A sessão demonstrativa, as trilhas e a preferência de análise de uso são
-persistidas no `localStorage`, em chaves independentes e versionadas. O Explora
-Computação não possui servidor próprio. Com aceitação, dados de navegação são
-enviados ao Microsoft Clarity, conforme `integracao-clarity.md`. A integração
-faz parte da versão 0.2.0 e permanece condicionada à aceitação do visitante.
+Turmas e trilhas online ficam no Supabase, vinculadas ao professor. A sessão
+docente usa `sessionStorage`; a seleção do aluno fica só em memória. No modo
+demonstrativo, sessão, trilhas e turmas continuam no `localStorage`, sem migração
+para contas. O acervo permanece no código. Com aceitação, dados de navegação
+são enviados ao Microsoft Clarity, conforme `integracao-clarity.md`.
+Detalhes de provisionamento, segurança e manutenção em `backend-supabase.md`.
 
 Dados antigos das funcionalidades removidas podem continuar no armazenamento
 do navegador de quem utilizou versões anteriores, mas não são mais lidos nem
@@ -141,18 +157,23 @@ ficam depois de `#`.
 | Rota lógica | Conteúdo |
 |---|---|
 | `/privacidade` | informações e preferências de análise, sem login |
+| `/entrar` | entrada docente com Google |
+| `/alunos` | entrada pública por código |
+| `/app/minhas-turmas` | turmas do professor |
 | `/app/trilha-de-ensino` | busca e seleção de materiais |
 | `/app/materiais/:slug` | detalhe de um material |
 | `/app/trilhas-prontas` | percursos prontos por eixo |
 | `/app/minhas-trilhas` | lista e edição de trilhas salvas |
-| `/app/perfil` | perfil demonstrativo |
+| `/app/perfil` | identificação do professor |
 | `/app/sobre` | propósito e perguntas frequentes |
 
 ## Limitações conhecidas
 
-- a persistência fica restrita ao navegador e não sincroniza entre o ambiente
-  local e o GitHub Pages;
-- limpar os dados do navegador apaga as trilhas salvas;
+- depois de cada publicação, repetir o teste de entrada no endereço do Pages;
+- o plano Free pode ser pausado por pouca atividade em sete dias; conferir o
+  painel e testar com antecedência à defesa;
+- o modo demonstrativo continua restrito ao navegador e não transfere seus dados
+  para contas online;
 - alinhamentos curatoriais ainda precisam de validação acadêmica;
 - alguns materiais externos não permitem reutilização verificada de suas
   imagens e, por isso, usam o placeholder do projeto;

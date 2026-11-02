@@ -1,5 +1,8 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { isOnlineMode, onlineMemoryStorage } from "@/lib/backend/config";
+import { remoteMutation, type MaybePromise } from "@/lib/backend/workspaceState";
+import { teacherWorkspaceRepository } from "@/repositories/TeacherWorkspaceRepository";
 
 import {
   DEFAULT_TEACHING_PATH_BACKGROUND_COLOR,
@@ -21,6 +24,7 @@ export const TEACHING_PATHS_STORAGE_KEY = "explora-computacao:teaching-paths:v1"
 export const TEACHING_PATHS_SCHEMA_VERSION = 2 as const;
 
 export interface TeachingPathMetadata {
+  readonly lessonCountsByResourceId?: Readonly<Record<string, TeachingPathLessonCount | undefined>>;
   readonly objective?: string;
   readonly backgroundColor?: TeachingPathBackgroundColor;
   readonly icon?: TeachingPathIcon;
@@ -40,16 +44,16 @@ export interface TeachingPathsStore extends LocalTeachingPathsState {
     name: string,
     resourceIds: readonly string[],
     metadata?: TeachingPathMetadata,
-  ) => SavedTeachingPath | null;
-  updatePath: (pathId: string, update: TeachingPathUpdate) => SavedTeachingPath | null;
-  addResourceToPath: (pathId: string, resourceId: string) => boolean;
-  removeResourceFromPath: (pathId: string, resourceId: string) => boolean;
-  moveResourceInPath: (pathId: string, resourceId: string, direction: -1 | 1) => boolean;
+  ) => MaybePromise<SavedTeachingPath | null>;
+  updatePath: (pathId: string, update: TeachingPathUpdate) => MaybePromise<SavedTeachingPath | null>;
+  addResourceToPath: (pathId: string, resourceId: string) => MaybePromise<boolean>;
+  removeResourceFromPath: (pathId: string, resourceId: string) => MaybePromise<boolean>;
+  moveResourceInPath: (pathId: string, resourceId: string, direction: -1 | 1) => MaybePromise<boolean>;
   setResourceLessonCount: (
     pathId: string,
     resourceId: string,
     lessonCount: TeachingPathLessonCount,
-  ) => boolean;
+  ) => MaybePromise<boolean>;
   getPath: (pathId: string) => SavedTeachingPath | undefined;
   clearPaths: () => void;
 }
@@ -210,179 +214,83 @@ export function migratePersistedTeachingPathsState(
 }
 
 export const useTeachingPathsStore = create<TeachingPathsStore>()(
-  persist(
-    (set, get) => ({
+  persist((set, get) => {
+    const replace = (path: SavedTeachingPath | null) => {
+      if (!path) return;
+      set((state) => ({ paths: [path, ...state.paths.filter((item) => item.id !== path.id)].sort(compareByMostRecentlyUpdated) }));
+    };
+    const commit = (path: SavedTeachingPath): MaybePromise<SavedTeachingPath | null> => {
+      if (isOnlineMode) return remoteMutation<SavedTeachingPath | null>(() => teacherWorkspaceRepository.savePath(path), replace, null);
+      replace(path);
+      return path;
+    };
+    const change = (id: string, transform: (path: SavedTeachingPath) => SavedTeachingPath | null): MaybePromise<boolean> => {
+      const current = get().paths.find((path) => path.id === id);
+      if (!current) return false;
+      const next = transform(current);
+      if (!next) return false;
+      const result = commit({ ...next, updatedAt: new Date().toISOString() });
+      return result instanceof Promise ? result.then(Boolean) : Boolean(result);
+    };
+    return {
       ...initialTeachingPathsState,
       createPath: (name, resourceIds, metadata) => {
         const normalizedName = normalizeTeachingPathName(name);
-        const normalizedResourceIds = uniqueResourceIds(resourceIds);
-        const normalizedObjective =
-          metadata?.objective === undefined
-            ? DEFAULT_TEACHING_PATH_OBJECTIVE
-            : normalizeTeachingPathObjective(metadata.objective);
-        if (!normalizedName || normalizedResourceIds.length === 0 || !normalizedObjective) return null;
-
-        const backgroundColor = isTeachingPathBackgroundColor(metadata?.backgroundColor)
-          ? metadata.backgroundColor
-          : DEFAULT_TEACHING_PATH_BACKGROUND_COLOR;
-        const icon = isTeachingPathIcon(metadata?.icon) ? metadata.icon : DEFAULT_TEACHING_PATH_ICON;
-
+        const ids = uniqueResourceIds(resourceIds);
+        const objective = metadata?.objective === undefined ? DEFAULT_TEACHING_PATH_OBJECTIVE : normalizeTeachingPathObjective(metadata.objective);
+        if (!normalizedName || !ids.length || !objective) return null;
+        const counts = normalizeLessonCounts(ids, metadata?.lessonCountsByResourceId ?? {});
+        if (!counts) return null;
         const now = new Date().toISOString();
-        const path: SavedTeachingPath = {
-          id: createPathId(new Set(get().paths.map((item) => item.id))),
-          name: normalizedName,
-          objective: normalizedObjective,
-          backgroundColor,
-          icon,
-          resourceIds: normalizedResourceIds,
-          lessonCountsByResourceId: {},
-          createdAt: now,
-          updatedAt: now,
-        };
-        set((state) => ({ paths: [path, ...state.paths] }));
-        return path;
+        return commit({
+          id: createPathId(new Set(get().paths.map((path) => path.id))), name: normalizedName, objective,
+          backgroundColor: isTeachingPathBackgroundColor(metadata?.backgroundColor) ? metadata.backgroundColor : DEFAULT_TEACHING_PATH_BACKGROUND_COLOR,
+          icon: isTeachingPathIcon(metadata?.icon) ? metadata.icon : DEFAULT_TEACHING_PATH_ICON,
+          resourceIds: ids, lessonCountsByResourceId: counts, createdAt: now, updatedAt: now,
+        });
       },
       updatePath: (pathId, update) => {
-        const currentPath = get().paths.find((item) => item.id === pathId);
-        if (!currentPath) return null;
-
+        const current = get().paths.find((path) => path.id === pathId);
+        if (!current) return null;
         const name = normalizeTeachingPathName(update.name);
         const objective = normalizeTeachingPathObjective(update.objective);
         const resourceIds = [...update.resourceIds];
-        if (
-          !name ||
-          !objective ||
-          !isTeachingPathBackgroundColor(update.backgroundColor) ||
-          !isTeachingPathIcon(update.icon) ||
-          !hasUniqueNonEmptyResourceIds(resourceIds)
-        ) {
-          return null;
-        }
-
-        const lessonCountsByResourceId = normalizeLessonCounts(
-          resourceIds,
-          update.lessonCountsByResourceId,
-        );
-        if (!lessonCountsByResourceId) return null;
-
-        const updatedPath: SavedTeachingPath = {
-          ...currentPath,
-          name,
-          objective,
-          backgroundColor: update.backgroundColor,
-          icon: update.icon,
-          resourceIds,
-          lessonCountsByResourceId,
-          updatedAt: new Date().toISOString(),
-        };
-
-        set((state) => ({
-          paths: state.paths
-            .map((item) => (item.id === pathId ? updatedPath : item))
-            .sort(compareByMostRecentlyUpdated),
-        }));
-        return updatedPath;
+        const counts = normalizeLessonCounts(resourceIds, update.lessonCountsByResourceId);
+        if (!name || !objective || !isTeachingPathBackgroundColor(update.backgroundColor) || !isTeachingPathIcon(update.icon) || !hasUniqueNonEmptyResourceIds(resourceIds) || !counts) return null;
+        return commit({ ...current, name, objective, backgroundColor: update.backgroundColor, icon: update.icon, resourceIds, lessonCountsByResourceId: counts, updatedAt: new Date().toISOString() });
       },
-      addResourceToPath: (pathId, resourceId) => {
-        const path = get().paths.find((item) => item.id === pathId);
-        if (!path || path.resourceIds.includes(resourceId)) return Boolean(path);
-
-        const updatedAt = new Date().toISOString();
-        set((state) => ({
-          paths: state.paths
-            .map((item) =>
-              item.id === pathId
-                ? { ...item, resourceIds: [...item.resourceIds, resourceId], updatedAt }
-                : item,
-            )
-            .sort(compareByMostRecentlyUpdated),
-        }));
-        return true;
+      addResourceToPath: (id, resourceId) => {
+        const current = get().paths.find((path) => path.id === id);
+        if (current?.resourceIds.includes(resourceId)) return true;
+        return change(id, (path) => ({ ...path, resourceIds: [...path.resourceIds, resourceId] }));
       },
-      removeResourceFromPath: (pathId, resourceId) => {
-        const path = get().paths.find((item) => item.id === pathId);
-        if (!path || !path.resourceIds.includes(resourceId) || path.resourceIds.length === 1) {
-          return false;
-        }
-
-        const updatedAt = new Date().toISOString();
-        set((state) => ({
-          paths: state.paths
-            .map((item) => {
-              if (item.id !== pathId) return item;
-              const lessonCountsByResourceId = { ...item.lessonCountsByResourceId };
-              delete lessonCountsByResourceId[resourceId];
-              return {
-                ...item,
-                resourceIds: item.resourceIds.filter((id) => id !== resourceId),
-                lessonCountsByResourceId,
-                updatedAt,
-              };
-            })
-            .sort(compareByMostRecentlyUpdated),
-        }));
-        return true;
-      },
-      moveResourceInPath: (pathId, resourceId, direction) => {
-        const path = get().paths.find((item) => item.id === pathId);
-        if (!path) return false;
-
-        const index = path.resourceIds.indexOf(resourceId);
-        const nextIndex = index + direction;
-        if (index < 0 || nextIndex < 0 || nextIndex >= path.resourceIds.length) return false;
-
-        const updatedAt = new Date().toISOString();
-        set((state) => ({
-          paths: state.paths
-            .map((item) => {
-              if (item.id !== pathId) return item;
-              const resourceIds = [...item.resourceIds];
-              [resourceIds[index], resourceIds[nextIndex]] = [
-                resourceIds[nextIndex],
-                resourceIds[index],
-              ];
-              return { ...item, resourceIds, updatedAt };
-            })
-            .sort(compareByMostRecentlyUpdated),
-        }));
-        return true;
-      },
-      setResourceLessonCount: (pathId, resourceId, lessonCount) => {
-        const path = get().paths.find((item) => item.id === pathId);
-        if (!path || !path.resourceIds.includes(resourceId)) return false;
-
-        const updatedAt = new Date().toISOString();
-        set((state) => ({
-          paths: state.paths
-            .map((item) =>
-              item.id === pathId
-                ? {
-                    ...item,
-                    lessonCountsByResourceId: {
-                      ...item.lessonCountsByResourceId,
-                      [resourceId]: lessonCount,
-                    },
-                    updatedAt,
-                  }
-                : item,
-            )
-            .sort(compareByMostRecentlyUpdated),
-        }));
-        return true;
-      },
-      getPath: (pathId) => get().paths.find((item) => item.id === pathId),
-      clearPaths: () => set({ ...initialTeachingPathsState, paths: [] }),
-    }),
-    {
-      name: TEACHING_PATHS_STORAGE_KEY,
-      storage: createJSONStorage(() => localStorage),
-      version: TEACHING_PATHS_SCHEMA_VERSION,
-      partialize: ({ schemaVersion, paths }) => ({ schemaVersion, paths }),
-      migrate: migratePersistedTeachingPathsState,
-      merge: (persistedState, currentState) => ({
-        ...currentState,
-        ...sanitizePersistedTeachingPathsState(persistedState),
+      removeResourceFromPath: (id, resourceId) => change(id, (path) => {
+        if (path.resourceIds.length === 1 || !path.resourceIds.includes(resourceId)) return null;
+        const counts = { ...path.lessonCountsByResourceId };
+        delete counts[resourceId];
+        return { ...path, resourceIds: path.resourceIds.filter((value) => value !== resourceId), lessonCountsByResourceId: counts };
       }),
-    },
-  ),
+      moveResourceInPath: (id, resourceId, direction) => change(id, (path) => {
+        const index = path.resourceIds.indexOf(resourceId);
+        const target = index + direction;
+        if (index < 0 || target < 0 || target >= path.resourceIds.length) return null;
+        const resourceIds = [...path.resourceIds];
+        [resourceIds[index], resourceIds[target]] = [resourceIds[target], resourceIds[index]];
+        return { ...path, resourceIds };
+      }),
+      setResourceLessonCount: (id, resourceId, lessonCount) => change(id, (path) => {
+        if (!path.resourceIds.includes(resourceId) || !isLessonCount(lessonCount)) return null;
+        return { ...path, lessonCountsByResourceId: { ...path.lessonCountsByResourceId, [resourceId]: lessonCount } };
+      }),
+      getPath: (id) => get().paths.find((path) => path.id === id),
+      clearPaths: () => set({ ...initialTeachingPathsState, paths: [] }),
+    };
+  }, {
+    name: TEACHING_PATHS_STORAGE_KEY,
+    storage: createJSONStorage(() => isOnlineMode ? onlineMemoryStorage : localStorage),
+    version: TEACHING_PATHS_SCHEMA_VERSION,
+    partialize: ({ schemaVersion, paths }) => ({ schemaVersion, paths }),
+    migrate: migratePersistedTeachingPathsState,
+    merge: (persistedState, currentState) => ({ ...currentState, ...sanitizePersistedTeachingPathsState(persistedState) }),
+  }),
 );

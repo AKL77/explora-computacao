@@ -38,7 +38,7 @@ test("sem aceitação, não instala nem solicita o Clarity; recusa persiste sem 
   await expect(page.locator("#microsoft-clarity")).toHaveCount(0);
   expect(requests).toHaveLength(0);
   await page.getByRole("button", { name: "Recusar análise" }).click();
-  await page.getByRole("link", { name: "Entrar", exact: true }).first().click();
+  await page.getByRole("link", { name: "Área do professor", exact: true }).first().click();
   await expect(page.getByRole("heading", { name: "Buscar Materiais", exact: true })).toBeVisible();
   await page.reload();
   await expect(page.getByRole("heading", { name: "Buscar Materiais", exact: true })).toBeVisible();
@@ -57,7 +57,7 @@ test("aceita sem login, marca as áreas com # e revoga encerrando a instalação
   ]);
   expect(requests).toEqual(["https://www.clarity.ms/tag/z4honwtjtg"]);
   await expect.poll(() => calls(page)).toContainEqual(["event", "pagina_inicio"]);
-  await page.getByRole("link", { name: "Entrar", exact: true }).first().click();
+  await page.getByRole("link", { name: "Área do professor", exact: true }).first().click();
   await expect.poll(() => calls(page)).toContainEqual(["set", "pagina", "buscar_materiais"]);
   expect(requests).toHaveLength(1);
 
@@ -83,7 +83,7 @@ test("mascara textos pessoais das trilhas e envia somente o tipo de ação", asy
   await mockClarity(page);
   await page.goto(basePath);
   await page.getByRole("button", { name: "Aceitar análise" }).click();
-  await page.getByRole("link", { name: "Entrar", exact: true }).first().click();
+  await page.getByRole("link", { name: "Área do professor", exact: true }).first().click();
   await page.getByRole("button", { name: "Adicionar Bugs a uma nova trilha", exact: true }).click();
   await page.getByRole("region", { name: "Nova trilha em criação" }).getByRole("button", { name: "Salvar trilha" }).click();
   const dialog = page.getByRole("dialog", { name: "Salvar trilha" });

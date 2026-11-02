@@ -7,6 +7,8 @@ import {
 } from "react";
 
 import styles from "./AccessibleDialog.module.css";
+import { isOnlineMode } from "@/lib/backend/config";
+import { useWorkspaceState } from "@/lib/backend/workspaceState";
 
 interface AccessibleDialogProps {
   open: boolean;
@@ -31,6 +33,7 @@ export function AccessibleDialog({
   const openerRef = useRef<HTMLElement | null>(null);
   const titleId = useId();
   const descriptionId = useId();
+  const writeError = useWorkspaceState((state) => state.error);
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -126,6 +129,7 @@ export function AccessibleDialog({
             </button>
           </header>
         )}
+        {isOnlineMode && writeError && <p role="alert">{writeError}</p>}
         {children}
       </div>
     </dialog>

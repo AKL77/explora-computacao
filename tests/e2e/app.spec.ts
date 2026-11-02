@@ -15,7 +15,7 @@ async function resetDemo(page: import("@playwright/test").Page) {
 }
 
 async function enterDemo(page: import("@playwright/test").Page) {
-  await page.getByRole("link", { name: "Entrar", exact: true }).first().click();
+  await page.getByRole("link", { name: "Área do professor", exact: true }).first().click();
   await expect(page).toHaveURL(/\/app\/trilha-de-ensino$/);
   await expect(page.getByRole("heading", { name: "Buscar Materiais", level: 1 })).toBeVisible();
 }
@@ -84,10 +84,10 @@ test("apresenta somente as opções atuais na navegação", async ({ page }, tes
     await page.getByRole("button", { name: "Abrir menu" }).click();
   }
 
-  for (const label of ["Meu perfil", "Buscar Materiais", "Trilhas Prontas", "Minhas Trilhas", "Sobre"]) {
+  for (const label of ["Meu perfil", "Buscar Materiais", "Trilhas Prontas", "Minhas Trilhas", "Minhas Turmas", "Sobre"]) {
     await expect(page.getByRole("link", { name: label, exact: true })).toBeVisible();
   }
-  for (const label of ["Acervo", "Meus Materiais", "Minhas Turmas", "Meus Planos de Aula"]) {
+  for (const label of ["Acervo", "Meus Materiais", "Meus Planos de Aula"]) {
     await expect(page.getByRole("link", { name: label, exact: true })).toHaveCount(0);
   }
 

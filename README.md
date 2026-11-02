@@ -25,7 +25,7 @@ fora da aplicação para apoiar a curadoria, a padronização das informações 
 criação das Trilhas Prontas. A plataforma não contém geração por IA nem chama
 modelos ou serviços de IA durante seu uso.
 
-Esta entrega é um frontend demonstrativo com **48 materiais**: o jogo educativo
+Esta entrega tem frontend estático, backend Supabase e **48 materiais**: o jogo educativo
 de cyberbullying da ALT+INOVARE, Lightbot, Blockly Games, Compute It, Interland, quatro
 materiais didáticos de Rozelma França e as 23 atividades da coleção Computação
 Desplugada — Unicamp, quatro atividades do Computacional, IA para os Oceanos,
@@ -53,7 +53,7 @@ Microsoft Clarity com escolha de análise de uso.
 ## Funcionalidades
 
 - página inicial pública com contexto e objetivos do projeto;
-- sessão local de demonstração, sem autenticação real;
+- entrada docente com Google via Supabase e demonstração local opcional;
 - **Buscar Materiais** com pesquisa e filtros por ano, assunto, formato e abordagem;
 - cartões de descoberta com informações pedagógicas concisas;
 - níveis de familiaridade para aluno e professor em cada material, explicados
@@ -68,12 +68,23 @@ Microsoft Clarity com escolha de análise de uso.
   total;
 - proposta de atividade ao abrir cada etapa, com objetivo, materiais, descrição
   do que os estudantes farão, referências curriculares e duração;
-- persistência local da sessão e das trilhas;
+- turmas e trilhas salvas online por professor;
 - páginas **Meu perfil** e **Sobre**;
+- **Minhas Turmas**, com nome, ano/série, escola opcional, ano letivo e cor;
+- código fixo por turma e entrada pública **Acessar turma**, sem login de alunos;
+- seleção, ordenação, orientações e visibilidade de materiais por turma, visíveis
+  por padrão ao adicionar; atalho **Adicionar à turma** na ficha do material;
+- arquivamento e exclusão de turmas, encerrando o acesso pelo código;
 - interface responsiva, navegação por teclado e testes de acessibilidade.
 
-Favoritos, pastas pessoais, turmas e planos de aula não fazem parte do escopo
+Favoritos, pastas pessoais e planos de aula não fazem parte do escopo
 atual. Endereços antigos dessas áreas apenas redirecionam para os fluxos atuais.
+
+**Backend:** projeto gratuito em São Paulo, banco e serviço de acesso dos alunos
+ativos. Google OAuth configurado para professores, com entrada real validada
+localmente. O build publicado no Pages usa essa integração online. Consulte
+[configuração e manutenção](docs/backend-supabase.md).
+O aluno não recebe uma sessão persistente: reabrir a entrada pede o código novamente.
 
 ## Trilhas Prontas
 
@@ -105,6 +116,7 @@ pendentes de validação docente. Critérios em
 
 - React 19, TypeScript e Vite;
 - React Router e Zustand;
+- Supabase Auth, PostgreSQL com RLS e Edge Function para acesso por código;
 - CSS Modules, Lucide e fontes locais do Fontsource;
 - Vitest, Testing Library, Playwright e axe-core;
 - GitHub Actions e GitHub Pages.
@@ -123,8 +135,12 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-Abra [http://127.0.0.1:4173](http://127.0.0.1:4173). O botão **Entrar** cria
-uma sessão local de demonstração e leva diretamente a **Buscar Materiais**.
+Abra [http://127.0.0.1:4173](http://127.0.0.1:4173). Sem `.env.local`, o desenvolvimento
+usa demonstração. Para conectar o projeto online, use os valores públicos de
+`.env.production` em `.env.local`. **Área do professor** abre a entrada com Google
+no modo online, ou a sessão demonstrativa no modo local.
+**Acessar turma** abre a página pública de entrada por código, disponível também
+em `/#/alunos`, sem criar uma sessão de professor.
 
 ### Comandos disponíveis
 
@@ -138,6 +154,8 @@ uma sessão local de demonstração e leva diretamente a **Buscar Materiais**.
 | `pnpm test` | testes unitários e de componentes |
 | `pnpm test:watch` | testes durante o desenvolvimento |
 | `pnpm test:e2e` | fluxos completos em desktop e mobile |
+| `pnpm test:e2e:backend` | integração online com respostas controladas |
+| `pnpm backend:catalog` | prepara os IDs do acervo para o banco |
 
 ## Rotas atuais
 
@@ -145,11 +163,15 @@ uma sessão local de demonstração e leva diretamente a **Buscar Materiais**.
 |---|---|
 | `/` | página inicial pública |
 | `/privacidade` | informações e preferências de análise de uso, sem login |
+| `/entrar` | entrada docente com Google |
+| `/alunos` | entrada por código e materiais visíveis da turma, sem login |
 | `/app/trilha-de-ensino` | busca e seleção de materiais |
 | `/app/materiais/:slug` | detalhe de um material |
 | `/app/trilhas-prontas` | trilhas preparadas por eixo |
 | `/app/minhas-trilhas` | consulta e edição das trilhas salvas |
-| `/app/perfil` | perfil demonstrativo |
+| `/app/minhas-turmas` | turmas ativas e arquivadas |
+| `/app/minhas-turmas/:classroomId` | materiais, visibilidade e código da turma |
+| `/app/perfil` | identificação do professor |
 | `/app/sobre` | propósito e perguntas frequentes |
 
 No GitHub Pages, as rotas aparecem depois de `#`, por exemplo
@@ -157,9 +179,10 @@ No GitHub Pages, as rotas aparecem depois de `#`, por exemplo
 
 ## Persistência e privacidade
 
-A sessão demonstrativa e as trilhas ficam no `localStorage` do próprio
-navegador, em chaves independentes e versionadas. Limpar os dados do site
-reinicia o protótipo. A plataforma não solicita credenciais ou dados de estudantes.
+No modo online, turmas e trilhas ficam vinculadas à conta docente no Supabase,
+com isolamento por professor. A sessão usa `sessionStorage` da aba; Sair limpa
+os dados em memória. A demonstração mantém dados apenas no `localStorage` e não
+os importa para contas reais. A plataforma não solicita dados de estudantes.
 
 Em produção, o Microsoft Clarity analisa a navegação somente depois de o
 visitante aceitar. A escolha pode ser alterada em **Privacidade e preferências**,
@@ -177,6 +200,7 @@ Os materiais podem direcionar a sites externos, que possuem políticas próprias
 
 - [Estado atual do protótipo](docs/estado-atual.md)
 - [Arquitetura do frontend](docs/arquitetura.md)
+- [Backend Supabase: configuração, testes e continuidade](docs/backend-supabase.md)
 - [Deploy no GitHub Pages](docs/deploy-github-pages.md)
 - [Microsoft Clarity e privacidade](docs/integracao-clarity.md)
 - [Créditos e licenças de ativos](docs/creditos-e-licencas.md)

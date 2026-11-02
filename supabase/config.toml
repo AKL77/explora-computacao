@@ -1,0 +1,9 @@
+project_id = "explora-computacao"
+
+[db.seed]
+enabled = true
+sql_paths = ["./seed.sql"]
+
+# Alunos acessam com chave pública e código. A função valida ambos e limita tentativas.
+[functions.student-classroom]
+verify_jwt = false

@@ -32,6 +32,7 @@ export const DEFAULT_TEACHING_PATH_BACKGROUND_COLOR = "turquoise" as const;
 export const DEFAULT_TEACHING_PATH_ICON = "book-open-check" as const;
 
 export interface SavedTeachingPath {
+  readonly revision?: number;
   readonly id: string;
   readonly name: string;
   readonly objective: string;

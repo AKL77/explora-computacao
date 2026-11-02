@@ -38,7 +38,7 @@ describe("AboutPage", () => {
         "Não nesta versão. Os materiais disponíveis são selecionados previamente, e o docente pode consultá-los e usá-los para montar suas trilhas.",
       ),
     ).toBeInTheDocument();
-    expect(screen.getAllByRole("group")).toHaveLength(8);
+    expect(screen.getAllByRole("group")).toHaveLength(9);
   });
 
   it("oferece atalhos para Buscar Materiais e Trilhas Prontas", () => {

@@ -28,14 +28,14 @@ describe("useTeachingPathsStore", () => {
     vi.useRealTimers();
   });
 
-  it("salva uma trilha nomeada com os metadados de apresentação e mantém a duração", () => {
-    const created = useTeachingPathsStore
+  it("salva uma trilha nomeada com os metadados de apresentação e mantém a duração", async () => {
+    const created = (await useTeachingPathsStore
       .getState()
       .createPath(" Algoritmos   para o 5º ano ", ["recurso-1", "recurso-2"], {
         objective: " Criar   algoritmos para resolver problemas. ",
         backgroundColor: "violet",
         icon: "route",
-      });
+      }));
 
     expect(created).toMatchObject({
       name: "Algoritmos para o 5º ano",
@@ -48,9 +48,9 @@ describe("useTeachingPathsStore", () => {
     });
     expect(created).not.toBeNull();
 
-    useTeachingPathsStore
+    (await useTeachingPathsStore
       .getState()
-      .setResourceLessonCount(created?.id ?? "", "recurso-1", 2);
+      .setResourceLessonCount(created?.id ?? "", "recurso-1", 2));
 
     expect(
       useTeachingPathsStore.getState().getPath(created?.id ?? "")?.lessonCountsByResourceId,
@@ -58,8 +58,8 @@ describe("useTeachingPathsStore", () => {
     expect(localStorage.getItem(TEACHING_PATHS_STORAGE_KEY)).toContain("Algoritmos para o 5º ano");
   });
 
-  it("mantém createPath compatível e aplica metadados padrão", () => {
-    const created = useTeachingPathsStore.getState().createPath("Sequência", ["recurso-1"]);
+  it("mantém createPath compatível e aplica metadados padrão", async () => {
+    const created = (await useTeachingPathsStore.getState().createPath("Sequência", ["recurso-1"]));
 
     expect(created).toMatchObject({
       objective: DEFAULT_TEACHING_PATH_OBJECTIVE,
@@ -68,24 +68,24 @@ describe("useTeachingPathsStore", () => {
     });
   });
 
-  it("atualiza a trilha inteira de uma vez, preserva a criação e remove durações órfãs", () => {
-    const created = useTeachingPathsStore
+  it("atualiza a trilha inteira de uma vez, preserva a criação e remove durações órfãs", async () => {
+    const created = (await useTeachingPathsStore
       .getState()
-      .createPath("Sequência", ["um", "dois"], { objective: "Objetivo inicial" });
+      .createPath("Sequência", ["um", "dois"], { objective: "Objetivo inicial" }));
     const pathId = created?.id ?? "";
 
-    useTeachingPathsStore.getState().setResourceLessonCount(pathId, "um", 1);
-    useTeachingPathsStore.getState().setResourceLessonCount(pathId, "dois", 3);
+    (await useTeachingPathsStore.getState().setResourceLessonCount(pathId, "um", 1));
+    (await useTeachingPathsStore.getState().setResourceLessonCount(pathId, "dois", 3));
     vi.setSystemTime(new Date("2026-09-01T20:05:00.000Z"));
 
-    const updated = useTeachingPathsStore.getState().updatePath(pathId, {
+    const updated = (await useTeachingPathsStore.getState().updatePath(pathId, {
       name: "  Sequência revisada ",
       objective: "  Compreender algoritmos em sequência. ",
       backgroundColor: "coral",
       icon: "target",
       resourceIds: ["dois", "três"],
       lessonCountsByResourceId: { um: 1, dois: 2, três: undefined },
-    });
+    }));
 
     expect(updated).toMatchObject({
       name: "Sequência revisada",
@@ -99,20 +99,20 @@ describe("useTeachingPathsStore", () => {
     });
   });
 
-  it("rejeita atualização inválida sem alterar a trilha persistida", () => {
-    const created = useTeachingPathsStore
+  it("rejeita atualização inválida sem alterar a trilha persistida", async () => {
+    const created = (await useTeachingPathsStore
       .getState()
-      .createPath("Sequência", ["um", "dois"], { objective: "Objetivo inicial" });
+      .createPath("Sequência", ["um", "dois"], { objective: "Objetivo inicial" }));
     const pathId = created?.id ?? "";
 
-    const result = useTeachingPathsStore.getState().updatePath(pathId, {
+    const result = (await useTeachingPathsStore.getState().updatePath(pathId, {
       name: "Sequência alterada",
       objective: "Outro objetivo",
       backgroundColor: "blue",
       icon: "flag",
       resourceIds: ["um", "um"],
       lessonCountsByResourceId: {},
-    });
+    }));
 
     expect(result).toBeNull();
     expect(useTeachingPathsStore.getState().getPath(pathId)).toMatchObject({
@@ -122,22 +122,22 @@ describe("useTeachingPathsStore", () => {
     });
   });
 
-  it("adiciona, move e remove recursos sem deixar uma trilha vazia", () => {
-    const created = useTeachingPathsStore
+  it("adiciona, move e remove recursos sem deixar uma trilha vazia", async () => {
+    const created = (await useTeachingPathsStore
       .getState()
-      .createPath("Sequência", ["um", "dois"]);
+      .createPath("Sequência", ["um", "dois"]));
     const pathId = created?.id ?? "";
 
-    expect(useTeachingPathsStore.getState().addResourceToPath(pathId, "três")).toBe(true);
-    expect(useTeachingPathsStore.getState().moveResourceInPath(pathId, "três", -1)).toBe(true);
+    expect((await useTeachingPathsStore.getState().addResourceToPath(pathId, "três"))).toBe(true);
+    expect((await useTeachingPathsStore.getState().moveResourceInPath(pathId, "três", -1))).toBe(true);
     expect(useTeachingPathsStore.getState().getPath(pathId)?.resourceIds).toEqual([
       "um",
       "três",
       "dois",
     ]);
-    expect(useTeachingPathsStore.getState().removeResourceFromPath(pathId, "um")).toBe(true);
-    expect(useTeachingPathsStore.getState().removeResourceFromPath(pathId, "três")).toBe(true);
-    expect(useTeachingPathsStore.getState().removeResourceFromPath(pathId, "dois")).toBe(false);
+    expect((await useTeachingPathsStore.getState().removeResourceFromPath(pathId, "um"))).toBe(true);
+    expect((await useTeachingPathsStore.getState().removeResourceFromPath(pathId, "três"))).toBe(true);
+    expect((await useTeachingPathsStore.getState().removeResourceFromPath(pathId, "dois"))).toBe(false);
   });
 
   it("descarta registros inválidos e versões futuras", () => {

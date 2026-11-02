@@ -15,6 +15,7 @@ import {
 import { Link } from "react-router-dom";
 
 import { useSessionStore } from "@/store/useSessionStore";
+import { isOnlineMode } from "@/lib/backend/config";
 import { publicAsset } from "@/lib/publicAsset";
 
 import styles from "./LandingPage.module.css";
@@ -91,9 +92,13 @@ export function LandingPage() {
             </a>
           </nav>
 
-          <Link className={styles.signInLink} to="/app/trilha-de-ensino" onClick={signIn}>
-            Entrar
-          </Link>
+          <div className={styles.accessActions}>
+            <Link className={styles.studentAccessLink} to="/alunos">Acessar turma</Link>
+            <Link className={styles.signInLink} to={isOnlineMode ? "/entrar" : "/app/trilha-de-ensino"} onClick={isOnlineMode ? undefined : signIn} aria-label="Área do professor">
+              <span className={styles.teacherLabel}>Área do professor</span>
+              <span className={styles.teacherLabelCompact}>Professor</span>
+            </Link>
+          </div>
 
           <button
             ref={mobileNavButtonRef}
@@ -287,7 +292,8 @@ export function LandingPage() {
           <nav className={styles.footerNav} aria-label="Navegação do rodapé">
             <a href="#projeto" onClick={handleSectionLink("projeto")}>O projeto</a>
             <a href="#materiais" onClick={handleSectionLink("materiais")}>Materiais</a>
-            <Link to="/app/trilha-de-ensino" onClick={signIn}>Entrar</Link>
+            <Link to="/alunos">Acessar turma</Link>
+            <Link to={isOnlineMode ? "/entrar" : "/app/trilha-de-ensino"} onClick={isOnlineMode ? undefined : signIn}>Área do professor</Link>
             <Link to="/privacidade">Privacidade e preferências</Link>
           </nav>
 

@@ -28,11 +28,11 @@ function renderPage() {
 
 describe("SavedTeachingPathsPage", () => {
   it("edita a trilha em rascunho, confirma a duração e apresenta a síntese final", async () => {
-    const saved = useTeachingPathsStore
+    const saved = (await useTeachingPathsStore
       .getState()
       .createPath("Programação com blocos", ["google-blockly-games"], {
         objective: "Construir uma base de programação em blocos.",
-      });
+      }));
     expect(saved).not.toBeNull();
 
     const user = renderPage();
@@ -74,11 +74,11 @@ describe("SavedTeachingPathsPage", () => {
   });
 
   it("marca remoção, permite desfazer e só altera a trilha depois de salvar", async () => {
-    const saved = useTeachingPathsStore
+    const saved = (await useTeachingPathsStore
       .getState()
       .createPath("Sequência de testes", ["google-blockly-games", "unicamp-desplugada-atividade-5"], {
         objective: "Explorar programação e informação.",
-      });
+      }));
     const user = renderPage();
     await user.click(await screen.findByRole("button", { name: /Sequência de testes/i }));
 
@@ -103,11 +103,11 @@ describe("SavedTeachingPathsPage", () => {
   });
 
   it("reordena por arrastar e soltar e salva a nova ordem", async () => {
-    const saved = useTeachingPathsStore
+    const saved = (await useTeachingPathsStore
       .getState()
       .createPath("Ordem dos materiais", ["google-blockly-games", "unicamp-desplugada-atividade-5"], {
         objective: "Experimentar a sequência de materiais.",
-      });
+      }));
     const user = renderPage();
     await user.click(await screen.findByRole("button", { name: /Ordem dos materiais/i }));
 
@@ -132,11 +132,11 @@ describe("SavedTeachingPathsPage", () => {
   });
 
   it("mantém nas trilhas os materiais recuperados do catálogo completo", async () => {
-    useTeachingPathsStore
+    (await useTeachingPathsStore
       .getState()
       .createPath("Números binários", ["unicamp-desplugada-atividade-1"], {
         objective: "Explorar a representação binária.",
-      });
+      }));
     const user = renderPage();
 
     await user.click(await screen.findByRole("button", { name: /Números binários/i }));
@@ -153,11 +153,11 @@ describe("SavedTeachingPathsPage", () => {
   });
 
   it("edita objetivo, cor e ícone no rascunho antes de salvar", async () => {
-    const saved = useTeachingPathsStore
+    const saved = (await useTeachingPathsStore
       .getState()
       .createPath("Trilha inicial", ["google-blockly-games"], {
         objective: "Objetivo inicial.",
-      });
+      }));
     const user = renderPage();
     await user.click(await screen.findByRole("button", { name: /Trilha inicial/i }));
     await user.click(screen.getByRole("button", { name: "Editar trilha" }));

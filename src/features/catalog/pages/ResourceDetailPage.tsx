@@ -24,6 +24,7 @@ import {
   typeLabels,
 } from "../components/resourcePresentation";
 import { useCatalogResource } from "../hooks/useCatalog";
+import { AddToClassroomButton } from "@/features/classrooms/components/AddToClassroomButton";
 import styles from "./ResourceDetailPage.module.css";
 
 const participationLabels: Record<ParticipationMode, string> = {
@@ -227,6 +228,7 @@ export function ResourceDetailPage() {
             >
               Acessar recurso <span aria-hidden="true">↗</span>
             </a>
+            <AddToClassroomButton key={resource.id} resource={resource} />
           </div>
         </div>
       </header>

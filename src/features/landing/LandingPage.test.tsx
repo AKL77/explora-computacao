@@ -34,7 +34,7 @@ describe("LandingPage", () => {
     const user = userEvent.setup();
     renderLanding();
 
-    const signInLinks = screen.getAllByRole("link", { name: "Entrar" });
+    const signInLinks = screen.getAllByRole("link", { name: "Área do professor" });
     expect(signInLinks).toHaveLength(2);
     expect(signInLinks[linkIndex]).toHaveAttribute("href", "/app/trilha-de-ensino");
 

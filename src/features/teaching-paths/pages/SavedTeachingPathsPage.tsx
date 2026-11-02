@@ -266,11 +266,11 @@ export function SavedTeachingPathsPage() {
     setDropTargetId(null);
   };
 
-  const handleSaveChanges = () => {
+  const handleSaveChanges = async () => {
     if (!selectedPath || !draft) return;
 
     const resourceIds = activeResourceIds(draft);
-    const saved = updatePath(selectedPath.id, {
+    const saved = await updatePath(selectedPath.id, {
       name: draft.name,
       objective: draft.objective,
       backgroundColor: draft.backgroundColor,
