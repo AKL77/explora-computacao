@@ -7,11 +7,9 @@ import {
 import {
   BookOpenCheck,
   CircleHelp,
-  LogOut,
   Menu,
   Route,
   Waypoints,
-  UserRound,
   UsersRound,
   X,
 } from "lucide-react";
@@ -19,10 +17,10 @@ import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Brand } from "@/components/Brand";
 import { useSessionStore } from "@/store/useSessionStore";
 import { WorkspaceContent } from "@/features/auth/WorkspaceContent";
+import { AccountMenu } from "./AccountMenu";
 import styles from "./AppShell.module.css";
 
 const navigationItems = [
-  { to: "/app/perfil", label: "Meu perfil", icon: UserRound },
   {
     to: "/app/trilha-de-ensino",
     label: "Buscar Materiais",
@@ -42,7 +40,6 @@ function getPageTitle(pathname: string) {
   if (pathname.startsWith("/app/materiais/")) {
     return "Detalhe do material";
   }
-  if (pathname === "/app/perfil") return "Meu perfil";
   if (pathname === "/app/trilha-de-ensino") return "Buscar Materiais";
   if (pathname === "/app/trilhas-prontas") return "Trilhas Prontas";
   if (pathname === "/app/minhas-trilhas") return "Minhas Trilhas";
@@ -59,7 +56,6 @@ export function AppShell() {
   const location = useLocation();
   const navigate = useNavigate();
   const signOut = useSessionStore((state) => state.signOut);
-  const user = useSessionStore((state) => state.user);
   const pageTitle = getPageTitle(location.pathname);
 
   useEffect(() => {
@@ -174,20 +170,7 @@ export function AppShell() {
         </nav>
 
         <div className={styles.sidebarFooter}>
-          <div className={styles.demoUser}>
-            <span className={styles.avatar} aria-hidden="true">{user?.name.charAt(0).toUpperCase() || "D"}</span>
-            <span>
-              <strong data-clarity-mask="true">{user?.name ?? "Usuário demo"}</strong>
-              <small>{user ? "Conta do professor" : "Sessão local"}</small>
-            </span>
-          </div>
-          <button className={styles.signOut} type="button" onClick={leave}>
-            <LogOut aria-hidden="true" size={20} />
-            Sair
-          </button>
-          <NavLink className={styles.signOut} to="/privacidade" onClick={() => closeMenu()}>
-            Privacidade e preferências
-          </NavLink>
+          <AccountMenu onNavigate={() => closeMenu()} onSignOut={leave} />
         </div>
       </aside>
 

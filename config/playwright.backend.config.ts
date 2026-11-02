@@ -2,10 +2,11 @@ import { defineConfig } from "@playwright/test";
 import base from "./playwright.config";
 import { fileURLToPath } from "node:url";
 
-export default defineConfig(base, {
+export default defineConfig({
+  ...base,
   testMatch: "backend.spec.ts",
   testIgnore: [],
-  use: { baseURL: "http://127.0.0.1:4175/" },
+  use: { ...base.use, baseURL: "http://127.0.0.1:4175/" },
   webServer: {
     cwd: fileURLToPath(new URL("..", import.meta.url)),
     command: "node node_modules/vite/bin/vite.js --config config/vite.config.ts --port 4175 --strictPort",

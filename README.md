@@ -69,7 +69,8 @@ Microsoft Clarity com escolha de análise de uso.
 - proposta de atividade ao abrir cada etapa, com objetivo, materiais, descrição
   do que os estudantes farão, referências curriculares e duração;
 - turmas e trilhas salvas online por professor;
-- páginas **Meu perfil** e **Sobre**;
+- menu **Minha conta** pelo nome/avatar do professor, com identificação, acesso
+  a **Privacidade e preferências** e saída; página **Sobre**;
 - **Minhas Turmas**, com nome, ano/série, escola opcional, ano letivo e cor;
 - código fixo por turma e entrada pública **Acessar turma**, sem login de alunos;
 - seleção, ordenação, orientações e visibilidade de materiais por turma, visíveis
@@ -171,7 +172,7 @@ em `/#/alunos`, sem criar uma sessão de professor.
 | `/app/minhas-trilhas` | consulta e edição das trilhas salvas |
 | `/app/minhas-turmas` | turmas ativas e arquivadas |
 | `/app/minhas-turmas/:classroomId` | materiais, visibilidade e código da turma |
-| `/app/perfil` | identificação do professor |
+| `/app/perfil` | endereço antigo, redireciona para Buscar Materiais |
 | `/app/sobre` | propósito e perguntas frequentes |
 
 No GitHub Pages, as rotas aparecem depois de `#`, por exemplo

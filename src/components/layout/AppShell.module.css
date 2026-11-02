@@ -20,12 +20,15 @@
 }
 
 .brandArea {
+  flex-shrink: 0;
   padding: 1.35rem 1.3rem 1.1rem;
   border-bottom: 1px solid rgb(255 255 255 / 0.1);
 }
 
 .nav {
   display: grid;
+  min-height: 0;
+  overflow-y: auto;
   gap: 0.35rem;
   padding: 1rem 0.75rem;
 }
@@ -101,61 +104,10 @@
 .sidebarFooter {
   display: grid;
   gap: 0.9rem;
+  flex-shrink: 0;
   margin-top: auto;
   padding: 1rem;
   border-top: 1px solid rgb(255 255 255 / 0.1);
-}
-
-.demoUser {
-  display: flex;
-  gap: 0.7rem;
-  align-items: center;
-}
-
-.demoUser > span:last-child {
-  display: grid;
-  line-height: 1.25;
-}
-
-.demoUser strong {
-  font-size: 0.8rem;
-}
-
-.demoUser small {
-  color: rgb(248 250 252 / 0.56);
-  font-size: 0.68rem;
-}
-
-.avatar {
-  display: grid;
-  width: 38px;
-  height: 38px;
-  flex: 0 0 auto;
-  place-items: center;
-  border: 2px solid rgb(255 255 255 / 0.15);
-  border-radius: 999px;
-  background: var(--brand-blue);
-  font-weight: 850;
-}
-
-.signOut {
-  display: flex;
-  min-height: 44px;
-  align-items: center;
-  gap: 0.6rem;
-  justify-content: center;
-  border: 1px solid rgb(255 255 255 / 0.14);
-  border-radius: var(--radius-sm);
-  background: transparent;
-  color: rgb(248 250 252 / 0.82);
-  font-weight: 700;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.signOut:hover {
-  background: rgb(255 255 255 / 0.08);
-  color: white;
 }
 
 .workspace {

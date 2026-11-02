@@ -63,9 +63,16 @@ servidor, atualizar uma tela interna não depende de regras de reescrita no
 GitHub Pages.
 
 As rotas atuais são Buscar Materiais, detalhe do material, Trilhas Prontas,
-Minhas Trilhas, Minhas Turmas, Perfil, Sobre e as páginas públicas Privacidade e
+Minhas Trilhas, Minhas Turmas, Sobre e as páginas públicas Privacidade e
 Acessar turma. URLs antigas de acervo, pastas e planos apenas
 redirecionam para um fluxo atual e não carregam módulos legados.
+
+**Minha conta** é um painel compacto no nome/avatar do professor, fora da
+navegação principal. Apresenta identificação, o link público de privacidade e
+saída. Fecha ao clicar fora, sair pelo teclado ou pressionar Escape; no celular,
+Escape fecha primeiro a conta e preserva o menu lateral. O endereço antigo
+`/app/perfil` redireciona para Buscar Materiais. Não há página de perfil com
+atalhos ou contadores duplicados.
 
 ### Caminho-base configurável
 

@@ -69,7 +69,9 @@ documentos em `docs/historico` preservam decisões de etapas anteriores do TCC.
   material ocupa duas ou três aulas, e é preservada na cópia editável.
   Critérios em `curadoria-trilhas-prontas-2026-10-28.md`;
 - cópia de qualquer trilha pronta para **Minhas Trilhas**;
-- páginas **Meu perfil** e **Sobre**;
+- menu **Minha conta** pelo nome/avatar no rodapé, com nome, e-mail, identificação
+  da conta Google, acesso a **Privacidade e preferências** e saída;
+- página **Sobre**; endereço antigo de perfil redireciona para **Buscar Materiais**;
 - **Minhas Turmas**, com cadastro e edição de nome, ano/série, escola
   opcional, ano letivo e cor, sem campo de turno ou lista de alunos;
 - adição de materiais pela turma ou pelo atalho **Adicionar à turma** na ficha;
@@ -164,7 +166,7 @@ ficam depois de `#`.
 | `/app/materiais/:slug` | detalhe de um material |
 | `/app/trilhas-prontas` | percursos prontos por eixo |
 | `/app/minhas-trilhas` | lista e edição de trilhas salvas |
-| `/app/perfil` | identificação do professor |
+| `/app/perfil` | endereço antigo, redireciona para Buscar Materiais |
 | `/app/sobre` | propósito e perguntas frequentes |
 
 ## Limitações conhecidas

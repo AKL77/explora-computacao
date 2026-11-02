@@ -149,7 +149,6 @@ const pages: Record<string, string> = {
   "/app/trilha-de-ensino": "buscar_materiais",
   "/app/trilhas-prontas": "trilhas_prontas",
   "/app/minhas-trilhas": "minhas_trilhas",
-  "/app/perfil": "perfil",
   "/app/sobre": "sobre",
   "/privacidade": "privacidade",
 };

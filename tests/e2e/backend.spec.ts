@@ -16,7 +16,7 @@ async function teacherSession(context: BrowserContext) {
   }, { authKey });
 }
 
-test("salva online e compartilha com outro computador sem autenticar o aluno", async ({ page, context, browser }) => {
+test("salva online e compartilha com outro computador sem autenticar o aluno", async ({ page, context, browser }, testInfo) => {
   await teacherSession(context);
   let classroom: Classroom | null = null;
   await context.route("https://backend-test.supabase.co/**", async (route) => {
@@ -74,6 +74,12 @@ test("salva online e compartilha com outro computador sem autenticar o aluno", a
 
   await page.goto(classUrl);
   if (await page.getByRole("button", { name: "Abrir menu" }).isVisible()) await page.getByRole("button", { name: "Abrir menu" }).click();
+  await page.getByRole("button", { name: "Minha conta", exact: true }).click();
+  const account = page.getByRole("dialog", { name: "Minha conta", exact: true });
+  await expect(account.getByText("Professor de Teste", { exact: true })).toBeVisible();
+  await expect(account.getByText("professor@example.com", { exact: true })).toBeVisible();
+  await expect(account.getByText("Conectada com Google", { exact: true })).toBeVisible();
+  await page.screenshot({ path: testInfo.outputPath("minha-conta-google.png") });
   await page.getByRole("button", { name: "Sair", exact: true }).click();
   await expect(page.getByRole("button", { name: "Entrar com Google", exact: true })).toBeVisible();
   expect(await page.evaluate((key) => sessionStorage.getItem(key), authKey)).toBeNull();

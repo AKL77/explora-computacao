@@ -84,10 +84,10 @@ test("apresenta somente as opções atuais na navegação", async ({ page }, tes
     await page.getByRole("button", { name: "Abrir menu" }).click();
   }
 
-  for (const label of ["Meu perfil", "Buscar Materiais", "Trilhas Prontas", "Minhas Trilhas", "Minhas Turmas", "Sobre"]) {
+  for (const label of ["Buscar Materiais", "Trilhas Prontas", "Minhas Trilhas", "Minhas Turmas", "Sobre"]) {
     await expect(page.getByRole("link", { name: label, exact: true })).toBeVisible();
   }
-  for (const label of ["Acervo", "Meus Materiais", "Meus Planos de Aula"]) {
+  for (const label of ["Meu perfil", "Acervo", "Meus Materiais", "Meus Planos de Aula"]) {
     await expect(page.getByRole("link", { name: label, exact: true })).toHaveCount(0);
   }
 
@@ -100,21 +100,41 @@ test("apresenta somente as opções atuais na navegação", async ({ page }, tes
   await expect(
     page.getByRole("link", { name: "Criar Plano de Aula", exact: true }),
   ).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Minha conta", exact: true })).toBeVisible();
 });
 
-test("abre o perfil e adiciona uma Trilha Pronta às trilhas pessoais", async ({ page }, testInfo) => {
+test("abre Minha conta e adiciona uma Trilha Pronta às trilhas pessoais", async ({ page }, testInfo) => {
   await enterDemo(page);
 
   if (testInfo.project.name === "mobile") {
     await page.getByRole("button", { name: "Abrir menu" }).click();
   }
-  await page.getByRole("link", { name: "Meu perfil", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "Meu perfil", level: 1 })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Usuário demo", level: 2 })).toBeVisible();
+  await page.getByRole("button", { name: "Minha conta", exact: true }).click();
+  const account = page.getByRole("dialog", { name: "Minha conta", exact: true });
+  await expect(account).toBeVisible();
+  await expect(account.getByText("Usuário demo", { exact: true })).toBeVisible();
+  const accountBox = await account.boundingBox();
+  const viewport = page.viewportSize()!;
+  expect(accountBox).not.toBeNull();
+  expect(accountBox!.x).toBeGreaterThanOrEqual(0);
+  expect(accountBox!.y).toBeGreaterThanOrEqual(0);
+  expect(accountBox!.x + accountBox!.width).toBeLessThanOrEqual(viewport.width);
+  expect(accountBox!.y + accountBox!.height).toBeLessThanOrEqual(viewport.height);
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+  await page.screenshot({ path: testInfo.outputPath("minha-conta.png"), fullPage: true });
+  await page.keyboard.press("Escape");
+  await expect(account).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Minha conta", exact: true })).toBeFocused();
 
+  await page.getByRole("button", { name: "Minha conta", exact: true }).click();
+  await account.getByRole("link", { name: "Privacidade e preferências", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Privacidade e preferências", exact: true })).toBeFocused();
+  await page.goto(routeUrl("/app/perfil"));
+  await expect(page).toHaveURL(/\/app\/trilha-de-ensino$/);
   if (testInfo.project.name === "mobile") {
     await page.getByRole("button", { name: "Abrir menu" }).click();
   }
+
   await page.getByRole("link", { name: "Trilhas Prontas", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Trilhas disponíveis" })).toBeVisible();
   const readyTrailCard = page.getByRole("button", { name: /Ver trilha Algoritmos: decisões, blocos e desafios/ });
@@ -517,7 +537,7 @@ test("mantém o detalhe responsivo e a navegação móvel operável por teclado"
   if (testInfo.project.name === "mobile") {
     const menuButton = page.getByRole("button", { name: "Abrir menu" });
     await menuButton.click();
-    await expect(page.getByRole("link", { name: "Meu perfil", exact: true })).toBeFocused();
+    await expect(page.getByRole("link", { name: "Buscar Materiais", exact: true })).toBeFocused();
     await page.keyboard.press("Escape");
     await expect(menuButton).toBeFocused();
   }

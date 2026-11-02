@@ -7,7 +7,6 @@ import { AboutPage } from "@/features/about";
 import { ResourceDetailPage } from "@/features/catalog";
 import { LandingPage } from "@/features/landing";
 import { SavedTeachingPathsPage, TeachingPathPage } from "@/features/teaching-paths";
-import { ProfilePage } from "@/features/profile";
 import { ReadyTeachingPathsPage } from "@/features/ready-teaching-paths";
 import { PrivacyPage } from "@/features/privacy/PrivacyPage";
 import { useSessionStore } from "@/store/useSessionStore";
@@ -54,7 +53,7 @@ export function App() {
           <Route path="acervo" element={<Navigate replace to="/app/trilha-de-ensino" />} />
           <Route path="acervo/:slug" element={<Navigate replace to="/app/trilha-de-ensino" />} />
           <Route path="materiais/:slug" element={<ResourceDetailPage />} />
-          <Route path="perfil" element={<ProfilePage />} />
+          <Route path="perfil" element={<Navigate replace to="/app/trilha-de-ensino" />} />
           <Route path="pastas/*" element={<Navigate replace to="/app/trilha-de-ensino" />} />
           <Route path="planos/*" element={<Navigate replace to="/app/minhas-trilhas" />} />
           <Route path="plano-de-aula" element={<Navigate replace to="/app/trilha-de-ensino" />} />

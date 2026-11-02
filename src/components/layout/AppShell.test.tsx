@@ -18,10 +18,8 @@ describe("AppShell", () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByRole("link", { name: "Meu perfil" })).toHaveAttribute(
-      "href",
-      "/app/perfil",
-    );
+    expect(screen.queryByRole("link", { name: "Meu perfil" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Minha conta" })).toHaveAttribute("aria-expanded", "false");
     expect(screen.getByRole("link", { name: "Buscar Materiais" })).toHaveAttribute(
       "href",
       "/app/trilha-de-ensino",
