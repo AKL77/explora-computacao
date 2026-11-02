@@ -1,4 +1,5 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, describe, expect, it } from "vitest";
 
@@ -7,6 +8,23 @@ import { AppShell } from "./AppShell";
 afterEach(cleanup);
 
 describe("AppShell", () => {
+  it("permite sair da conta pelo teclado e seguir para o conteúdo no computador", async () => {
+    render(<MemoryRouter initialEntries={["/app/trilha-de-ensino"]}>
+      <Routes><Route path="/app" element={<AppShell />}>
+        <Route path="trilha-de-ensino" element={<label>Pesquisar conteúdo<input /></label>} />
+      </Route></Routes>
+    </MemoryRouter>);
+    await waitFor(() => expect(screen.getByRole("main")).toHaveFocus());
+    const user = userEvent.setup();
+    await user.click(screen.getByRole("button", { name: "Minha conta" }));
+    await user.tab(); // Fechar
+    await user.tab(); // Privacidade
+    await user.tab(); // Sair
+    await user.tab(); // Conteúdo da página
+    expect(screen.getByRole("textbox", { name: "Pesquisar conteúdo" })).toHaveFocus();
+    expect(screen.queryByRole("dialog", { name: "Minha conta" })).not.toBeInTheDocument();
+  });
+
   it("apresenta as áreas de materiais, trilhas e turmas na navegação", () => {
     render(
       <MemoryRouter initialEntries={["/app/trilha-de-ensino"]}>

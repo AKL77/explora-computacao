@@ -87,6 +87,7 @@ export function AppShell() {
   };
 
   const handleMenuKeyDown = (event: KeyboardEvent<HTMLElement>) => {
+    if (!menuOpen) return;
     if (event.key === "Escape") {
       event.preventDefault();
       closeMenu(true);
