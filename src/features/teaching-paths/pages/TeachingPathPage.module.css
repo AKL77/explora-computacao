@@ -181,12 +181,6 @@
   border-color: var(--brand-blue);
 }
 
-.typeSelection {
-  color: var(--text-muted);
-  font-size: 0.76rem;
-  line-height: 1.5;
-}
-
 .typeDialogContent {
   display: grid;
   min-height: 0;

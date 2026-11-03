@@ -10,10 +10,7 @@ export function WorkspaceContent({ children }: { children: ReactNode }) {
   if (!isOnlineMode) return children;
   return <>
     {status === "loading" || status === "idle" ? <CatalogStatus busy title="Carregando seu espaço" message="Estamos buscando suas turmas e trilhas." /> : status === "error" ? <div className={styles.empty}><h1>Não foi possível carregar seu espaço</h1><p role="alert">{error}</p><button className={styles.primary} type="button" onClick={() => void reloadWorkspace()}>Tentar novamente</button></div> : <>
-      <div className={styles.toolbar} style={{ marginBottom: "1rem" }}>
-        <span className={styles.muted} role="status">{pending ? "Salvando online…" : "Seu espaço online"}</span>
-        <button className={styles.textButton} type="button" disabled={pending > 0} onClick={() => void reloadWorkspace()}>Atualizar dados</button>
-      </div>
+      {pending > 0 && <p className={styles.muted} role="status">Salvando alterações…</p>}
       {error && <p className={styles.error} role="alert">{error}</p>}
       <fieldset disabled={pending > 0} aria-busy={pending > 0} style={{ minWidth: 0, margin: 0, padding: 0, border: 0 }}>
         <legend className="sr-only">Conteúdo do professor</legend>{children}

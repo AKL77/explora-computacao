@@ -12,6 +12,7 @@ interface ClassroomsStore extends ClassroomsState {
   createClassroom: (input: ClassroomInput) => MaybePromise<Classroom | null>;
   updateClassroom: (id: string, input: ClassroomInput) => MaybePromise<boolean>;
   archiveClassroom: (id: string) => MaybePromise<boolean>;
+  unarchiveClassroom: (id: string) => MaybePromise<boolean>;
   deleteClassroom: (id: string) => MaybePromise<boolean>;
   addMaterials: (id: string, resourceIds: readonly string[]) => MaybePromise<boolean>;
   updateMaterial: (id: string, resourceId: string, update: Partial<Pick<ClassroomMaterial, "visible" | "instruction">>) => MaybePromise<boolean>;
@@ -76,6 +77,12 @@ export const useClassroomsStore = create<ClassroomsStore>()(persist((set, get) =
     archiveClassroom: (id) => {
       const current = get().classrooms.find((item) => item.id === id && !item.archived);
       return current ? save({ ...current, archived: true }) : false;
+    },
+    unarchiveClassroom: (id) => {
+      const current = get().classrooms.find((item) => item.id === id && item.archived);
+      if (!current) return false;
+      if (isOnlineMode) return remoteMutation<Classroom | null>(() => teacherWorkspaceRepository.unarchiveClassroom(current), replace, null).then(Boolean);
+      return save({ ...current, archived: false });
     },
     deleteClassroom: (id) => {
       const current = get().classrooms.find((item) => item.id === id);

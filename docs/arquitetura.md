@@ -128,7 +128,7 @@ O catálogo é composto em `src/data/resources.mock.ts`. Coleções ficam separa
 por origem em `src/data/resources/`, e os textos da BNCC e o helper de criação
 dos alinhamentos ficam em `src/data/bnccComputing.ts`.
 
-`src/domain/materialType.ts` define os oito tipos de material e os dois grupos
+`src/domain/materialType.ts` define os cinco tipos de material e os dois grupos
 organizadores da janela de seleção. A composição do catálogo aplica
 `src/data/materialTypes.ts`, permitindo vários tipos por cadastro. A busca usa
 união entre os tipos selecionados e interseção com os outros filtros, sem

@@ -17,12 +17,15 @@ documentos em `docs/historico` preservam decisões de etapas anteriores do TCC.
   assunto, formato e tipo de material. O filtro de assuntos reúne 45 palavras-chave
   baseadas nos três eixos da BNCC Computação, com seleção múltipla em uma janela;
   algumas opções ainda não têm materiais associados;
-- filtro **Tipo de material**, com oito opções em **Ver opções**, organizadas
+- filtro **Tipo de material**, com cinco opções em **Ver opções**, organizadas
   pelos títulos **Abordagem ativa** e **Abordagem expositiva**. Seleções de tipos
   usam união e combinam-se por interseção com ano, assunto, formato e pesquisa.
   Um material pode ter vários tipos e aparece uma única vez; a classificação
   também é exibida nas fichas, trilhas e turmas. Critérios em
   `classificacao-tipos-materiais.md`;
+- livros, livros-jogo, tutoriais e projetos reunidos em **Atividades e exercícios**,
+  com **Jogos** adicional quando pertinente; o cartaz **Evolução da Computação**
+  integra **Textos e guias**. O filtro não exibe resumo abaixo de **Ver opções**;
 - cinco cadastros locais aprovados em 28 de outubro: **Evolução da Computação**,
   **Guardião Cibernético**, **As fake news**, **SplashCode** e **Segurança Online**.
   Os fascículos do Guardião são complementos do mesmo registro. Os jogos
@@ -60,6 +63,9 @@ documentos em `docs/historico` preservam decisões de etapas anteriores do TCC.
 - seleção de materiais para criar uma trilha própria;
 - salvamento de trilhas com nome, objetivo, cor e ícone, online por professor
   ou local no modo demonstrativo;
+- área docente sem faixa permanente de status online ou botão de atualização
+  manual; avisos aparecem somente durante o salvamento ou em caso de erro,
+  com nova tentativa disponível quando o carregamento falha;
 - **Minhas Trilhas** com sequência visual conectada, reordenação por arrastar e
   soltar, duração de uma a três aulas por etapa e tempo total calculado;
 - edição em rascunho, com descarte ou confirmação explícita de alterações;
@@ -88,6 +94,9 @@ documentos em `docs/historico` preservam decisões de etapas anteriores do TCC.
 - página dos alunos com materiais visíveis e links diretos para a fonte externa;
 - arquivamento que preserva os materiais e encerra o acesso; exclusão que remove
   a turma e reserva seu código para não ser reutilizado;
+- **Desarquivar turma** no detalhe de uma turma arquivada, retornando-a às ativas
+  com o mesmo código, materiais, ordem, orientações e visibilidade. A operação
+  está ativa no Supabase, com propriedade e revisão verificadas no servidor;
 - backend Supabase Free em São Paulo, com banco e serviço público de turmas ativos;
 - isolamento de dados por professor, confirmação de gravações e detecção de conflito;
 - consulta pública dos alunos sem conta, removendo materiais ocultos no servidor;

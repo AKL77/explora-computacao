@@ -124,7 +124,6 @@ export function StudentClassroomPage() {
             {error && <p className={styles.error} id="classroom-code-error" role="alert">{error}</p>}
             <button className={styles.primary} type="submit" disabled={fetching}>{fetching ? "Buscando turma…" : "Acessar turma"} <ArrowRight size={18} aria-hidden="true" /></button>
           </form>
-          <p className={styles.entryFootnote}>Sem cadastro, conta ou senha.</p>
         </section> : !classroom ? <section className={styles.empty} role="status">
           <UsersRound size={40} aria-hidden="true" /><h1>{refreshError ? "Não foi possível atualizar a turma" : "Turma indisponível"}</h1><p>{refreshError || "O acesso a esta turma foi encerrado. Peça ao professor um código de uma turma ativa."}</p><button className={styles.primary} type="button" onClick={switchClassroom}>Digitar outro código</button>
         </section> : <section style={{ "--classroom-accent": classroomColor(classroom.color) } as CSSProperties} aria-labelledby="student-classroom-title">

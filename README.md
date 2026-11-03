@@ -78,6 +78,7 @@ Microsoft Clarity com escolha de análise de uso.
 - seleção, ordenação, orientações e visibilidade de materiais por turma, visíveis
   por padrão ao adicionar; atalho **Adicionar à turma** na ficha do material;
 - arquivamento e exclusão de turmas, encerrando o acesso pelo código;
+- desarquivamento com o mesmo código, materiais, orientações e visibilidade;
 - interface responsiva, navegação por teclado e testes de acessibilidade.
 
 Favoritos, pastas pessoais e planos de aula não fazem parte do escopo

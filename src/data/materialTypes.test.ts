@@ -26,11 +26,12 @@ describe("classificação por tipo de material", () => {
 
   it("considera os componentes oferecidos, sem confundir um PDF ou vídeo de instruções com o tipo principal", () => {
     const typesOf = (id: string) => getResourceMaterialTypes(resources.find((resource) => resource.id === id)!);
-    expect(typesOf("rozelma-sertao-bit")).toEqual(expect.arrayContaining(["book", "game", "activity"]));
+    expect(typesOf("rozelma-sertao-bit")).toEqual(["activity", "game"]);
+    expect(typesOf("rozelma-aventuras-digitais")).toEqual(["activity"]);
     expect(typesOf("sme-goiania-as-fake-news")).toEqual(expect.arrayContaining(["text", "activity", "presentation", "video"]));
     expect(typesOf("certbr-guardiao-cibernetico")).toEqual(expect.arrayContaining(["presentation", "text"]));
-    expect(typesOf("computacional-evolucao-computacao")).toEqual(["poster"]);
-    expect(typesOf("microbit-cracha")).toEqual(expect.arrayContaining(["tutorial", "activity"]));
+    expect(typesOf("computacional-evolucao-computacao")).toEqual(["text"]);
+    expect(typesOf("microbit-cracha")).toEqual(["activity"]);
     expect(typesOf("unicamp-desplugada-atividade-5")).not.toContain("video");
     expect(typesOf("unicamp-desplugada-atividade-1")).toEqual(["activity"]);
   });

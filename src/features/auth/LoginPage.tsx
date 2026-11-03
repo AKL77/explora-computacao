@@ -31,9 +31,7 @@ export function LoginPage() {
         <div><span className={styles.eyebrow}>Área do professor</span><h1 id="teacher-login-title">Seu espaço de ensino</h1><p>Entre para organizar suas turmas e encontrar suas trilhas em qualquer computador.</p></div>
         <button className={styles.primary} type="button" disabled={busy || backendConfig.mode === "invalid"} onClick={() => void enter()}>{busy ? "Abrindo Google…" : backendConfig.mode === "demo" ? "Continuar na demonstração" : "Entrar com Google"}</button>
         {(error || authError) && <p className={styles.error} role="alert">{error || authError}</p>}
-        <p className={styles.entryFootnote}>No primeiro acesso, sua conta é criada automaticamente. Em computadores compartilhados, use Sair ao terminar.</p>
         <Link className={styles.textButton} to="/alunos">Sou aluno: acessar com código</Link>
-        <Link className={styles.textButton} to="/privacidade">Privacidade e preferências</Link>
       </section>
     </main>
   </div>;

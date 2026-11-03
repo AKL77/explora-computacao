@@ -20,6 +20,15 @@ describe("confirmação de gravações online", () => {
     expect(apply).not.toHaveBeenCalled();
     expect(useWorkspaceState.getState()).toMatchObject({ pending: 0, error: expect.stringContaining("outro acesso") });
   });
+  it("explica um recurso ainda ausente no servidor sem atribuir o erro à conexão", async () => {
+    const apply = vi.fn();
+    expect(await remoteMutation(() => Promise.reject({ code: "PGRST202" }), apply, false)).toBe(false);
+    expect(apply).not.toHaveBeenCalled();
+    expect(useWorkspaceState.getState()).toMatchObject({
+      status: "ready", pending: 0,
+      error: expect.stringContaining("ainda não está disponível online"),
+    });
+  });
   it("impede gravações simultâneas e novas gravações sem sessão", async () => {
     let finish!: (value: boolean) => void;
     const first = remoteMutation(() => new Promise<boolean>((resolve) => { finish = resolve; }), vi.fn(), false);

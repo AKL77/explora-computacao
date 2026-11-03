@@ -1,5 +1,5 @@
 import { useState, type CSSProperties, type FormEvent } from "react";
-import { Archive, ArrowDown, ArrowLeft, ArrowUp, Copy, Eye, EyeOff, MessageSquare, Pencil, Plus, Trash2, UsersRound, X } from "lucide-react";
+import { Archive, ArchiveRestore, ArrowDown, ArrowLeft, ArrowUp, Copy, Eye, EyeOff, MessageSquare, Pencil, Plus, Trash2, UsersRound, X } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { classroomColor, formatClassroomCode } from "@/domain/classroom";
 import { AccessibleDialog } from "@/features/catalog/components/AccessibleDialog";
@@ -15,7 +15,7 @@ export function ClassroomDetailPage() {
   const { classroomId } = useParams<{ classroomId: string }>();
   const navigate = useNavigate();
   const classrooms = useClassroomsStore((state) => state.classrooms);
-  const { archiveClassroom, deleteClassroom, updateMaterial, removeMaterial, moveMaterial } = useClassroomsStore();
+  const { archiveClassroom, unarchiveClassroom, deleteClassroom, updateMaterial, removeMaterial, moveMaterial } = useClassroomsStore();
   const classroom = classrooms.find((item) => item.id === classroomId);
   const { resources, status } = useCatalogResources();
   const [dialog, setDialog] = useState<"edit" | "code" | "add" | "archive" | "delete" | null>(null);
@@ -56,11 +56,14 @@ export function ClassroomDetailPage() {
         </div>
         <div className={styles.actions}>
           {!classroom.archived && <button className={styles.secondary} type="button" onClick={() => setDialog("edit")}><Pencil size={17} aria-hidden="true" /> Editar turma</button>}
-          {!classroom.archived && <button className={styles.textButton} type="button" onClick={() => setDialog("archive")}><Archive size={17} aria-hidden="true" /> Arquivar</button>}
+          <button className={classroom.archived ? styles.primary : styles.textButton} type="button" onClick={async () => {
+            if (!classroom.archived) { setDialog("archive"); return; }
+            if (await unarchiveClassroom(classroom.id)) setAnnouncement("Turma desarquivada. O acesso dos alunos pelo mesmo código foi reativado.");
+          }}>{classroom.archived ? <ArchiveRestore size={17} aria-hidden="true" /> : <Archive size={17} aria-hidden="true" />}{classroom.archived ? "Desarquivar turma" : "Arquivar"}</button>
           <button className={styles.danger} type="button" onClick={() => setDialog("delete")}><Trash2 size={17} aria-hidden="true" /> Excluir turma</button>
         </div>
       </header>
-      {classroom.archived ? <p className={styles.notice}><strong>Turma arquivada.</strong> Os materiais estão preservados para sua consulta. O código não permite mais o acesso dos alunos.</p> : <div className={styles.codeStrip}>
+      {classroom.archived ? <p className={styles.notice}><strong>Turma arquivada.</strong> Os materiais estão preservados. Desarquive para voltar a editar e reativar o acesso dos alunos pelo mesmo código.</p> : <div className={styles.codeStrip}>
         <div><strong>Código da turma <span className={styles.smallCode}>{formatClassroomCode(classroom.code)}</span></strong><p>Os alunos entram em Acessar turma, sem conta ou senha.</p></div>
         <button className={styles.primary} type="button" onClick={() => { setCopyMessage(""); setDialog("code"); }}><UsersRound size={18} aria-hidden="true" /> Mostrar código</button>
       </div>}

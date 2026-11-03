@@ -29,12 +29,6 @@ export function MaterialTypeFilter({ selected, onChange }: MaterialTypeFilterPro
       >
         Ver opções
       </button>
-      <span className={styles.typeSelection} aria-live="polite">
-        {selected.length === 0
-          ? "Todos os tipos"
-          : materialTypeOptions.filter((option) => selected.includes(option.id))
-            .map((option) => option.label).join(", ")}
-      </span>
       <AccessibleDialog
         open={open}
         title="Selecionar tipos de material"

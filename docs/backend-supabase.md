@@ -99,6 +99,26 @@ e arquivamentos passam a valer na próxima consulta.
 
 ## Atualizar ou recriar
 
+### Desarquivamento
+
+A migração `20261103010444_unarchive_classroom.sql` adiciona a operação
+`unarchive_classroom`, aplicada no projeto online após autorização do responsável.
+
+A operação exige sessão docente, propriedade da turma e revisão atual. Altera
+somente o arquivamento e os campos de controle de revisão/data; mantém código,
+materiais, ordem, orientações e visibilidade. A gravação genérica continua
+bloqueando turmas arquivadas, e o aluno volta a consultar apenas materiais visíveis.
+
+As migrações completas e o teste transacional de segurança foram executados em
+PostgreSQL local via PGlite, com a infraestrutura Auth representada localmente.
+Foram verificados isolamento, permissões, revisão antiga, reativação do código
+e exclusão dos materiais ocultos da resposta pública. A mesma validação
+transacional passou no Supabase online após a aplicação da migração, com todos
+os dados de teste revertidos. As permissões da nova função também foram conferidas:
+somente professores autenticados podem chamá-la, e a função exige ser dono da turma.
+
+### Reprodução e atualização do acervo
+
 O histórico reproduzível está em `supabase/migrations/`, o registro inicial do
 acervo em `supabase/seed.sql` e o código público em `supabase/functions/`.
 Para outro projeto, aplicar as migrações em ordem, executar o seed e publicar
@@ -116,14 +136,14 @@ Ao cadastrar material novo no código:
 ## Verificação
 
 - `pnpm typecheck`, `pnpm lint`, `pnpm test` e `pnpm build`.
-  Verificações realizadas: 116 testes unitários, 50 E2E no build de produção
-  demonstrativo e quatro E2E da integração online com respostas controladas.
+  Verificações realizadas: 125 testes unitários, 52 E2E no build de produção
+  demonstrativo e seis E2E da integração online com respostas controladas.
 - `pnpm test:e2e`: fluxos demonstrativos em desktop e celular.
 - `pnpm test:e2e:backend`: gravações confirmadas, falha do servidor e acesso em
   navegadores separados, usando respostas controladas sem depender do Google.
 - `supabase/tests/workspace_security.sql`: teste transacional executado no
   projeto real, com dois professores, RLS, conflito, IDs inválidos, leitura
-  anônima bloqueada, projeção pública, arquivamento e reserva de código. Usa
+  anônima bloqueada, projeção pública, arquivamento, desarquivamento e reserva de código. Usa
   `ROLLBACK`, sem deixar contas ou turmas de teste.
 - Verificação real com Google: o autor entrou, a interface criou uma turma,
   adicionou Interland e recarregou os dados do banco. A consulta pública sem

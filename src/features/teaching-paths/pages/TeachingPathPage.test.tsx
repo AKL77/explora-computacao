@@ -141,16 +141,17 @@ describe("TeachingPathPage", () => {
     expect(within(dialog).getByRole("heading", { name: "Abordagem ativa" })).toBeInTheDocument();
     expect(within(dialog).getByRole("heading", { name: "Abordagem expositiva" })).toBeInTheDocument();
     expect(within(dialog).queryByRole("button", { name: "Abordagem ativa" })).not.toBeInTheDocument();
-    expect(dialog.querySelectorAll("[aria-pressed]")).toHaveLength(8);
+    expect(dialog.querySelectorAll("[aria-pressed]")).toHaveLength(5);
     await user.click(within(dialog).getByRole("button", { name: "Jogos" }));
-    await user.click(within(dialog).getByRole("button", { name: "Livros e livros-jogo" }));
+    await user.click(within(dialog).getByRole("button", { name: "Atividades e exercícios" }));
     await user.click(within(dialog).getByRole("button", { name: "Vídeos" }));
     await user.click(within(dialog).getByRole("button", { name: "Concluir" }));
     expect(screen.getAllByRole("heading", { name: sertaoTitle, level: 3 })).toHaveLength(1);
     expect(screen.getByRole("heading", { name: blocklyTitle, level: 3 })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: expositoryTitle, level: 3 })).toBeInTheDocument();
-    expect(screen.queryByRole("heading", { name: binaryNumbersTitle, level: 3 })).not.toBeInTheDocument();
-    expect(getResourceCard(sertaoTitle).getByText("Livro / livro-jogo")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: binaryNumbersTitle, level: 3 })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Internet com Responsa — Só para Adolescentes", level: 3 })).not.toBeInTheDocument();
+    expect(getResourceCard(sertaoTitle).getByText("Atividade", { exact: true })).toBeInTheDocument();
     expect(getResourceCard(sertaoTitle).getByText("Jogo", { exact: true })).toBeInTheDocument();
     expect(trigger).toHaveFocus();
 
@@ -162,7 +163,7 @@ describe("TeachingPathPage", () => {
     expect(screen.queryByRole("heading", { name: blocklyTitle, level: 3 })).not.toBeInTheDocument();
     expect(screen.getByRole("heading", { name: expositoryTitle, level: 3 })).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Limpar filtros" }));
-    expect(screen.getByText("Todos os tipos")).toBeInTheDocument();
+    expect(screen.queryByText("Todos os tipos")).not.toBeInTheDocument();
     expect(screen.getByText("48 materiais", { exact: true })).toBeInTheDocument();
   }, 10_000);
 

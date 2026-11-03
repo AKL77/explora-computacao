@@ -27,11 +27,21 @@ test("salva online e compartilha com outro computador sem autenticar o aluno", a
       classroom = { ...p_data, id: "11111111-1111-4111-8111-111111111111", code: "123456", revision: (classroom?.revision ?? 0) + 1, createdAt: "2026-11-02T12:00:00Z" };
       return route.fulfill({ json: classroom });
     }
+    if (name === "unarchive_classroom") {
+      const { p_id, p_revision } = route.request().postDataJSON();
+      expect(classroom?.archived).toBe(true);
+      expect(p_id).toBe(classroom!.id);
+      expect(p_revision).toBe(classroom!.revision);
+      classroom = { ...classroom!, archived: false, revision: classroom!.revision! + 1 };
+      return route.fulfill({ json: classroom });
+    }
     if (name === "logout") return route.fulfill({ status: 204 });
     throw new Error(`Consulta inesperada: ${name}`);
   });
   await page.goto("/#/app/minhas-turmas");
   await expect(page.getByRole("heading", { name: "Minhas Turmas", exact: true })).toBeVisible();
+  await expect(page.getByText("Seu espaço online", { exact: true })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Atualizar dados", exact: true })).toHaveCount(0);
   await expect(page.getByText("Turma local antiga")).toHaveCount(0);
   await page.getByRole("button", { name: "Criar turma", exact: true }).click();
   const form = page.getByRole("dialog", { name: "Criar turma", exact: true });
@@ -54,6 +64,7 @@ test("salva online e compartilha com outro computador sem autenticar o aluno", a
     expect(route.request().url()).toContain("/functions/v1/student-classroom");
     expect(route.request().headers().authorization).toBeUndefined();
     publicRequests++;
+    if (classroom?.archived) return route.fulfill({ status: 404, json: { error: "not_found" } });
     return route.fulfill({ json: { ...classroom!, materials: classroom!.materials.filter((item) => item.visible) } });
   });
   const student = await students.newPage();
@@ -70,6 +81,21 @@ test("salva online e compartilha com outro computador sem autenticar o aluno", a
   expect(await student.evaluate((key) => sessionStorage.getItem(key), authKey)).toBeNull();
   await student.reload();
   await expect(student.getByLabel("Código da turma", { exact: true })).toHaveValue("");
+  await page.getByRole("button", { name: "Arquivar", exact: true }).click();
+  await page.getByRole("dialog", { name: "Arquivar turma?", exact: true }).getByRole("button", { name: "Arquivar turma", exact: true }).click();
+  await expect(page.getByText("Turma arquivada.", { exact: true })).toBeVisible();
+  await student.getByLabel("Código da turma", { exact: true }).fill("123456");
+  await student.getByRole("button", { name: "Acessar turma", exact: true }).click();
+  await expect(student.getByRole("alert")).toContainText("Turma indisponível");
+  await page.reload();
+  await page.getByRole("button", { name: "Desarquivar turma", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Editar turma", exact: true })).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole("switch", { name: "Visível para alunos: Interland", exact: true })).toHaveAttribute("aria-checked", "false");
+  await student.getByRole("button", { name: "Acessar turma", exact: true }).click();
+  await expect(student.getByRole("heading", { name: "6º Online", exact: true })).toBeVisible();
+  await expect(student.getByRole("link", { name: /Interland/ })).toHaveCount(0);
+  await page.screenshot({ path: testInfo.outputPath("turma-desarquivada-online.png"), fullPage: true });
   await students.close();
 
   await page.goto(classUrl);
@@ -83,6 +109,26 @@ test("salva online e compartilha com outro computador sem autenticar o aluno", a
   await page.getByRole("button", { name: "Sair", exact: true }).click();
   await expect(page.getByRole("button", { name: "Entrar com Google", exact: true })).toBeVisible();
   expect(await page.evaluate((key) => sessionStorage.getItem(key), authKey)).toBeNull();
+});
+
+test("mantém a turma arquivada quando o servidor recusa o desarquivamento", async ({ page, context }) => {
+  await teacherSession(context);
+  const classroom: Classroom = { id: "11111111-1111-4111-8111-111111111111", name: "6º Arquivada", grade: 6, school: "", schoolYear: 2026, color: "blue", code: "123456", archived: true, revision: 7, materials: [], createdAt: "2026-11-02T12:00:00Z" };
+  let attempts = 0;
+  await context.route("https://backend-test.supabase.co/**", async (route) => {
+    if (route.request().url().endsWith("teacher_workspace")) return route.fulfill({ json: { classrooms: [classroom], paths: [] } });
+    expect(route.request().url()).toContain("unarchive_classroom");
+    attempts++;
+    return route.fulfill({ status: 503, json: { message: "unavailable" } });
+  });
+  await page.goto(`/#/app/minhas-turmas/${classroom.id}`);
+  await page.getByRole("button", { name: "Desarquivar turma", exact: true }).click();
+  await expect(page.getByRole("alert")).toContainText("Não foi possível salvar online");
+  await expect(page.getByText("Turma arquivada.", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Desarquivar turma", exact: true })).toBeEnabled();
+  await expect(page.getByRole("button", { name: "Editar turma", exact: true })).toHaveCount(0);
+  await expect(page.getByText("Turma desarquivada.", { exact: true })).toHaveCount(0);
+  expect(attempts).toBe(1);
 });
 
 test("não confirma criação quando o servidor falha", async ({ page, context }) => {

@@ -24,6 +24,11 @@ export const teacherWorkspaceRepository = {
   async deleteClassroom(classroom: Classroom): Promise<boolean> {
     return await rpc("delete_classroom", { p_id: classroom.id, p_revision: classroom.revision }) === true;
   },
+  async unarchiveClassroom(classroom: Classroom): Promise<Classroom> {
+    const data = await rpc("unarchive_classroom", { p_id: classroom.id, p_revision: classroom.revision });
+    if (!isClassroom(data)) throw new Error("Turma inválida");
+    return data;
+  },
   async savePath(path: SavedTeachingPath): Promise<SavedTeachingPath> {
     const data = await rpc("save_teaching_path", { p_id: path.id, p_data: path, p_revision: path.revision ?? null });
     if (!isSavedTeachingPath(data)) throw new Error("Trilha inválida");

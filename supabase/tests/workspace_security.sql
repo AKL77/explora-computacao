@@ -66,11 +66,57 @@ do $$ begin
   if public.student_classroom(current_setting('test.classroom_code'),repeat('a',64)) is not null then raise exception 'FAIL: turma arquivada acessível'; end if;
 end $$;
 set local role authenticated;
+select set_config('request.jwt.claim.sub','22222222-2222-4222-8222-222222222222',true);
+do $$ begin
+  begin
+    perform public.unarchive_classroom(current_setting('test.classroom_id')::uuid,2);
+    raise exception 'FAIL: desarquivamento por outro professor aceito';
+  exception when insufficient_privilege then null; end;
+end $$;
+set local role anon;
+do $$ begin
+  begin
+    perform public.unarchive_classroom(current_setting('test.classroom_id')::uuid,2);
+    raise exception 'FAIL: desarquivamento anônimo aceito';
+  exception when insufficient_privilege then null; end;
+end $$;
+set local role authenticated;
 select set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
-select public.delete_classroom(current_setting('test.classroom_id')::uuid,2);
+do $$
+declare c jsonb; restored jsonb;
+begin
+  c := public.teacher_workspace()->'classrooms'->0;
+  begin
+    perform public.save_classroom((c->>'id')::uuid,c || '{"archived":false}',2);
+    raise exception 'FAIL: edição genérica de turma arquivada aceita';
+  exception when check_violation then null; end;
+  begin
+    perform public.unarchive_classroom((c->>'id')::uuid,1);
+    raise exception 'FAIL: revisão antiga aceita ao desarquivar';
+  exception when serialization_failure then null; end;
+  restored := public.unarchive_classroom((c->>'id')::uuid,2);
+  if (restored->>'archived')::boolean or (restored->>'revision')::integer <> 3
+    or (restored - 'archived' - 'revision') is distinct from (c - 'archived' - 'revision')
+    then raise exception 'FAIL: desarquivamento alterou dados preservados'; end if;
+  begin
+    perform public.unarchive_classroom((c->>'id')::uuid,3);
+    raise exception 'FAIL: desarquivamento de turma já ativa aceito';
+  exception when check_violation then null; end;
+end $$;
+set local role service_role;
+do $$
+declare c jsonb;
+begin
+  c := public.student_classroom(current_setting('test.classroom_code'),repeat('a',64));
+  if c is null or jsonb_array_length(c->'materials') <> 1
+    or c->'materials'->0->>'resourceId' <> 'google-interland' or c::text like '%NÃO PUBLICAR%'
+    then raise exception 'FAIL: código ou visibilidade não preservados ao desarquivar'; end if;
+end $$;
+set local role authenticated;
+select public.delete_classroom(current_setting('test.classroom_id')::uuid,3);
 set local role postgres;
 do $$ begin
   if not exists(select 1 from private.classroom_codes where code=current_setting('test.classroom_code') and classroom_id is null) then raise exception 'FAIL: código excluído não foi reservado'; end if;
 end $$;
-select 'PASS: isolamento, permissões, visibilidade, conflitos, acervo, arquivamento e exclusão' as result;
+select 'PASS: isolamento, permissões, visibilidade, conflitos, acervo, arquivamento, desarquivamento e exclusão' as result;
 rollback;

@@ -52,6 +52,29 @@ describe("turmas locais", () => {
     expect(useClassroomsStore.getState().classrooms[0].materials).toEqual([{ resourceId: "google-interland", visible: true, instruction: "" }]);
   });
 
+  it("desarquiva com o mesmo código e preserva materiais, ordem, orientações e visibilidade", async () => {
+    const store = useClassroomsStore.getState();
+    const classroom = (await store.createClassroom(input))!;
+    expect(await store.unarchiveClassroom(classroom.id)).toBe(false);
+    await store.addMaterials(classroom.id, ["google-interland", "toxicode-compute-it"]);
+    await store.updateMaterial(classroom.id, "google-interland", { visible: false, instruction: "Em duplas." });
+    await store.moveMaterial(classroom.id, "toxicode-compute-it", -1);
+    const before = structuredClone(store.findByCode(classroom.code)!);
+    await store.archiveClassroom(classroom.id);
+    expect(store.findByCode(classroom.code)).toBeUndefined();
+    expect(await store.unarchiveClassroom(classroom.id)).toBe(true);
+    expect(store.findByCode(classroom.code)).toEqual(before);
+    expect(await store.addMaterials(classroom.id, ["lightbot-web"])).toBe(true);
+    expect(await store.updateClassroom(classroom.id, { ...input, name: "6º C" })).toBe(true);
+    await store.archiveClassroom(classroom.id);
+    await useClassroomsStore.persist.rehydrate();
+    expect(await store.unarchiveClassroom(classroom.id)).toBe(true);
+    expect(store.findByCode(classroom.code)?.name).toBe("6º C");
+    await store.deleteClassroom(classroom.id);
+    expect(await store.unarchiveClassroom(classroom.id)).toBe(false);
+    expect(await store.unarchiveClassroom("inexistente")).toBe(false);
+  });
+
   it("excluir encerra o acesso e reserva o código antigo", async () => {
     const classroom = (await useClassroomsStore.getState().createClassroom(input))!;
     const store = useClassroomsStore.getState();
