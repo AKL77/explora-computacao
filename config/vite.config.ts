@@ -15,6 +15,9 @@ export default defineConfig(() => {
     base,
     root: projectRoot,
     plugins: [react()],
+    optimizeDeps: {
+      entries: ["index.html"],
+    },
     resolve: {
       alias: {
         "@": fileURLToPath(new URL("../src", import.meta.url)),

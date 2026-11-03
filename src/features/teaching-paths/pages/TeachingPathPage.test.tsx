@@ -132,32 +132,64 @@ describe("TeachingPathPage", () => {
     }
   }, 10_000);
 
-  it("inclui Sertão.bit na abordagem ativa, expositiva e na seleção de ambas", async () => {
+  it("seleciona tipos agrupados por abordagem, com união e sem duplicar materiais", async () => {
     const user = await renderPage();
-    const activeFilter = screen.getByRole("button", { name: "Abordagem ativa" });
-    const expositoryFilter = screen.getByRole("button", { name: "Abordagem expositiva" });
+    const trigger = screen.getByRole("button", { name: "Ver opções de tipos de material" });
     const expositoryTitle = "Como funciona a Internet? — Playlist do NIC.br";
-
-    await user.click(activeFilter);
-    expect(screen.getByRole("heading", { name: sertaoTitle, level: 3 })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: blocklyTitle, level: 3 })).toBeInTheDocument();
-    expect(screen.queryByRole("heading", { name: expositoryTitle, level: 3 })).not.toBeInTheDocument();
-
-    await user.click(expositoryFilter);
-    expect(screen.getByRole("heading", { name: sertaoTitle, level: 3 })).toBeInTheDocument();
+    await user.click(trigger);
+    const dialog = screen.getByRole("dialog", { name: "Selecionar tipos de material" });
+    expect(within(dialog).getByRole("heading", { name: "Abordagem ativa" })).toBeInTheDocument();
+    expect(within(dialog).getByRole("heading", { name: "Abordagem expositiva" })).toBeInTheDocument();
+    expect(within(dialog).queryByRole("button", { name: "Abordagem ativa" })).not.toBeInTheDocument();
+    expect(dialog.querySelectorAll("[aria-pressed]")).toHaveLength(8);
+    await user.click(within(dialog).getByRole("button", { name: "Jogos" }));
+    await user.click(within(dialog).getByRole("button", { name: "Livros e livros-jogo" }));
+    await user.click(within(dialog).getByRole("button", { name: "Vídeos" }));
+    await user.click(within(dialog).getByRole("button", { name: "Concluir" }));
+    expect(screen.getAllByRole("heading", { name: sertaoTitle, level: 3 })).toHaveLength(1);
     expect(screen.getByRole("heading", { name: blocklyTitle, level: 3 })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: expositoryTitle, level: 3 })).toBeInTheDocument();
-    expect(screen.getByText("48 materiais", { exact: true })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: binaryNumbersTitle, level: 3 })).not.toBeInTheDocument();
+    expect(getResourceCard(sertaoTitle).getByText("Livro / livro-jogo")).toBeInTheDocument();
+    expect(getResourceCard(sertaoTitle).getByText("Jogo", { exact: true })).toBeInTheDocument();
+    expect(trigger).toHaveFocus();
 
-    await user.click(activeFilter);
-    expect(screen.getByRole("heading", { name: sertaoTitle, level: 3 })).toBeInTheDocument();
+    await user.click(trigger);
+    expect(within(dialog).getByRole("button", { name: "Jogos" })).toHaveAttribute("aria-pressed", "true");
+    await user.click(within(dialog).getByRole("button", { name: "Limpar tipos" }));
+    await user.click(within(dialog).getByRole("button", { name: "Vídeos" }));
+    await user.click(within(dialog).getByRole("button", { name: "Concluir" }));
     expect(screen.queryByRole("heading", { name: blocklyTitle, level: 3 })).not.toBeInTheDocument();
     expect(screen.getByRole("heading", { name: expositoryTitle, level: 3 })).toBeInTheDocument();
-  });
+    await user.click(screen.getByRole("button", { name: "Limpar filtros" }));
+    expect(screen.getByText("Todos os tipos")).toBeInTheDocument();
+    expect(screen.getByText("48 materiais", { exact: true })).toBeInTheDocument();
+  }, 10_000);
+
+  it("combina tipos de material com formato, ano, assunto e pesquisa", async () => {
+    const user = await renderPage();
+    await user.click(screen.getByRole("button", { name: "Ver opções de tipos de material" }));
+    const types = screen.getByRole("dialog", { name: "Selecionar tipos de material" });
+    await user.click(within(types).getByRole("button", { name: "Jogos" }));
+    await user.click(within(types).getByRole("button", { name: "Concluir" }));
+    await user.click(screen.getByRole("button", { name: "Material plugado" }));
+    expect(screen.queryByRole("heading", { name: vinteTitle })).not.toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "5º ano" }));
+    await user.click(screen.getByRole("button", { name: "Ver opções de assuntos" }));
+    const subjects = screen.getByRole("dialog", { name: "Selecionar assuntos" });
+    await user.click(within(subjects).getByRole("button", { name: "Cyberbullying" }));
+    await user.click(within(subjects).getByRole("button", { name: "Concluir" }));
+    expect(screen.getByText("1 material", { exact: true })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Interland" })).toBeInTheDocument();
+    await user.type(screen.getByRole("searchbox", { name: "Pesquisar área, assunto ou habilidade" }), "blockly");
+    expect(screen.getByText("Nenhum material encontrado")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Limpar filtros" }));
+    expect(screen.getByText("48 materiais", { exact: true })).toBeInTheDocument();
+  }, 10_000);
 
   it("combina assuntos com os demais filtros e aceita opções ainda sem materiais", async () => {
     const user = await renderPage();
-    await user.click(screen.getByRole("button", { name: "Ver opções" }));
+    await user.click(screen.getByRole("button", { name: "Ver opções de assuntos" }));
 
     const dialog = screen.getByRole("dialog", { name: "Selecionar assuntos" });
     expect(dialog.querySelectorAll("[aria-pressed]")).toHaveLength(45);
@@ -179,7 +211,7 @@ describe("TeachingPathPage", () => {
     expect(screen.getByRole("heading", { name: "Interland" })).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: "Cyberbullying — Jogo Educativo" })).not.toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: "Ver opções" }));
+    await user.click(screen.getByRole("button", { name: "Ver opções de assuntos" }));
     expect(within(dialog).getByRole("searchbox", { name: "Buscar palavras-chave" })).toHaveValue("");
     expect(within(dialog).getByRole("button", { name: "Cyberbullying" })).toHaveAttribute("aria-pressed", "true");
     await user.click(within(dialog).getByRole("button", { name: "Cyberbullying" }));
@@ -189,8 +221,8 @@ describe("TeachingPathPage", () => {
     expect(screen.getByText("Nenhum material encontrado")).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Limpar filtros" }));
     expect(screen.getByText("48 materiais", { exact: true })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Ver opções" })).toBeInTheDocument();
-  });
+    expect(screen.getByRole("button", { name: "Ver opções de assuntos" })).toBeInTheDocument();
+  }, 10_000);
 
   it("leva o cartão ao detalhe e permite selecionar e remover materiais sem reordenação", async () => {
     const user = await renderPage();
@@ -244,7 +276,7 @@ describe("TeachingPathPage", () => {
         name: `Adicionar ${vinteTitle} a uma nova trilha`,
       }),
     ).toBeEnabled();
-  });
+  }, 10_000);
 
   it("solicita um nome e salva a trilha em Minhas Trilhas", async () => {
     const user = await renderPage();
@@ -291,5 +323,5 @@ describe("TeachingPathPage", () => {
       icon: "book-open-check",
       resourceIds: ["unicamp-desplugada-atividade-1"],
     });
-  }, 10_000);
+  }, 15_000);
 });

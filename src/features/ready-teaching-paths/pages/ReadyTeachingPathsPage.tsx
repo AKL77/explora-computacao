@@ -9,7 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { trackClarityEvent } from "@/lib/clarity";
 
 import { CatalogStatus } from "@/features/catalog/components/CatalogStatus";
-import { formatRecommendedGrades, RESOURCE_PLACEHOLDER, typeLabels } from "@/features/catalog/components/resourcePresentation";
+import { formatRecommendedGrades, RESOURCE_PLACEHOLDER, formatResourceTypes } from "@/features/catalog/components/resourcePresentation";
 import { useCatalogResources } from "@/features/catalog/hooks/useCatalog";
 import type { Resource } from "@/domain/resource";
 import { useTeachingPathsStore } from "@/store/useTeachingPathsStore";
@@ -262,7 +262,7 @@ export function ReadyTeachingPathsPage() {
                     </div>
                     <div className={styles.stageContent}>
                       <span className={styles.resourceType}>
-                        {typeLabels[stage.resource.type]} · {stage.lessonCount ?? 1}{" "}
+                        {formatResourceTypes(stage.resource)} · {stage.lessonCount ?? 1}{" "}
                         {stage.lessonCount === undefined || stage.lessonCount === 1 ? "aula" : "aulas"}
                       </span>
                       <h4>{stage.title}</h4>

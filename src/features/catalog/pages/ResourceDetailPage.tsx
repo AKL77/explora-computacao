@@ -21,7 +21,7 @@ import { RequiredFamiliarity } from "../components/RequiredFamiliarity";
 import {
   formatRecommendedGrades,
   RESOURCE_PLACEHOLDER,
-  typeLabels,
+  getResourceTypeLabels,
 } from "../components/resourcePresentation";
 import { useCatalogResource } from "../hooks/useCatalog";
 import { AddToClassroomButton } from "@/features/classrooms/components/AddToClassroomButton";
@@ -198,7 +198,7 @@ export function ResourceDetailPage() {
 
         <div className={styles.heroContent}>
           <div className={styles.badges}>
-            <span>{typeLabels[resource.type]}</span>
+            {getResourceTypeLabels(resource).map((label) => <span key={label}>{label}</span>)}
           </div>
           <h1>{resource.title}</h1>
           <p className={styles.provider}>Fornecedor: {resource.provider}</p>

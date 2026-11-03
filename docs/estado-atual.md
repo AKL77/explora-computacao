@@ -14,9 +14,15 @@ documentos em `docs/historico` preservam decisões de etapas anteriores do TCC.
 - página inicial pública, conta Google via Supabase e demonstração local opcional;
   entrada real validada localmente, com Google liberado para contas externas;
 - **Buscar Materiais** com 48 recursos locais, pesquisa textual e filtros por ano,
-  assunto, formato e abordagem. O filtro de assuntos reúne 45 palavras-chave
+  assunto, formato e tipo de material. O filtro de assuntos reúne 45 palavras-chave
   baseadas nos três eixos da BNCC Computação, com seleção múltipla em uma janela;
   algumas opções ainda não têm materiais associados;
+- filtro **Tipo de material**, com oito opções em **Ver opções**, organizadas
+  pelos títulos **Abordagem ativa** e **Abordagem expositiva**. Seleções de tipos
+  usam união e combinam-se por interseção com ano, assunto, formato e pesquisa.
+  Um material pode ter vários tipos e aparece uma única vez; a classificação
+  também é exibida nas fichas, trilhas e turmas. Critérios em
+  `classificacao-tipos-materiais.md`;
 - cinco cadastros locais aprovados em 28 de outubro: **Evolução da Computação**,
   **Guardião Cibernético**, **As fake news**, **SplashCode** e **Segurança Online**.
   Os fascículos do Guardião são complementos do mesmo registro. Os jogos
@@ -38,9 +44,8 @@ documentos em `docs/historico` preservam decisões de etapas anteriores do TCC.
   originais dos 48 recursos foram preservados. A revisão de consistência e
   os problemas mantidos sem correção estão em `revisao-materiais-2026-10-28.md`;
 - anos da busca e das propostas alinhados às fichas: **Blockly Games** no 4º e
-  5º anos e **Vinte Palpites** no 4º, 5º e 8º (extensão). **Sertão.bit**, de
-  abordagem combinada, permanece nos resultados ao selecionar ativa,
-  expositiva ou ambas. Somente esses dois pontos da revisão foram autorizados;
+  5º anos e **Vinte Palpites** no 4º, 5º e 8º (extensão). **Sertão.bit** mantém
+  abordagem combinada na ficha e pode ser encontrado por livro, jogo ou atividade;
 - alinhamentos explícitos por ano, eixo, habilidade e competências, incluindo
   correspondências curatoriais sinalizadas para validação;
 - níveis curatoriais de familiaridade (Básico, Intermediário e Avançado) para

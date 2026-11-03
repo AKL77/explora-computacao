@@ -8,7 +8,7 @@ import { CatalogStatus } from "@/features/catalog/components/CatalogStatus";
 import { RequiredFamiliarity } from "@/features/catalog/components/RequiredFamiliarity";
 import {
   RESOURCE_PLACEHOLDER,
-  typeLabels,
+  getResourceTypeLabels,
 } from "@/features/catalog/components/resourcePresentation";
 import { useCatalogResources } from "@/features/catalog/hooks/useCatalog";
 import { SUPPORTED_GRADES, type Grade } from "@/domain/curriculum";
@@ -21,6 +21,7 @@ import {
   type TeachingPathIcon,
 } from "@/domain/savedTeachingPath";
 import type { Resource } from "@/domain/resource";
+import { getResourceMaterialTypes, type MaterialType } from "@/domain/materialType";
 import {
   getMaterialKeywordIds,
   materialKeywordGroups,
@@ -41,6 +42,7 @@ import {
   type TeachingApproach,
 } from "../data/pilotTeachingResources";
 import styles from "./TeachingPathPage.module.css";
+import { MaterialTypeFilter } from "../components/MaterialTypeFilter";
 
 interface TeachingResourceView {
   resource: Resource;
@@ -48,7 +50,6 @@ interface TeachingResourceView {
 }
 
 type ActivityFilter = Exclude<ActivityMode, "mixed">;
-type ApproachFilter = Extract<TeachingApproach, "active" | "expository">;
 
 const activityModeLabels: Record<ActivityMode, string> = {
   plugged: "Material plugado",
@@ -113,7 +114,7 @@ export function TeachingPathPage() {
   const [query, setQuery] = useState("");
   const [selectedGrades, setSelectedGrades] = useState<Grade[]>([]);
   const [selectedActivityModes, setSelectedActivityModes] = useState<ActivityFilter[]>([]);
-  const [selectedApproaches, setSelectedApproaches] = useState<ApproachFilter[]>([]);
+  const [selectedMaterialTypes, setSelectedMaterialTypes] = useState<MaterialType[]>([]);
   const [selectedKeywordIds, setSelectedKeywordIds] = useState<MaterialKeywordId[]>([]);
   const [isKeywordDialogOpen, setIsKeywordDialogOpen] = useState(false);
   const [keywordQuery, setKeywordQuery] = useState("");
@@ -145,10 +146,9 @@ export function TeachingPathPage() {
           selectedActivityModes.length === 0 ||
           item.teaching.activityMode === "mixed" ||
           selectedActivityModes.includes(item.teaching.activityMode);
-        const matchesApproach =
-          selectedApproaches.length === 0 ||
-          item.teaching.teachingApproach === "combined" ||
-          selectedApproaches.includes(item.teaching.teachingApproach);
+        const matchesMaterialType =
+          selectedMaterialTypes.length === 0 ||
+          getResourceMaterialTypes(item.resource).some((type) => selectedMaterialTypes.includes(type));
         const matchesKeyword =
           selectedKeywordIds.length === 0 ||
           selectedKeywordIds.some((id) => getMaterialKeywordIds(item.resource.id).includes(id));
@@ -156,12 +156,12 @@ export function TeachingPathPage() {
         return (
           matchesGrade &&
           matchesActivityMode &&
-          matchesApproach &&
+          matchesMaterialType &&
           matchesKeyword &&
           matchesSearch(item, query)
         );
       }),
-    [teachingResources, query, selectedActivityModes, selectedApproaches, selectedGrades, selectedKeywordIds],
+    [teachingResources, query, selectedActivityModes, selectedMaterialTypes, selectedGrades, selectedKeywordIds],
   );
 
   const trail = trailIds.flatMap((id) => {
@@ -172,7 +172,7 @@ export function TeachingPathPage() {
     query.trim().length > 0 ||
     selectedGrades.length > 0 ||
     selectedActivityModes.length > 0 ||
-    selectedApproaches.length > 0 ||
+    selectedMaterialTypes.length > 0 ||
     selectedKeywordIds.length > 0;
   const normalizedKeywordQuery = normalizeSearchTerm(keywordQuery);
   const visibleKeywordGroups = materialKeywordGroups
@@ -201,7 +201,7 @@ export function TeachingPathPage() {
     setQuery("");
     setSelectedGrades([]);
     setSelectedActivityModes([]);
-    setSelectedApproaches([]);
+    setSelectedMaterialTypes([]);
     setSelectedKeywordIds([]);
   };
 
@@ -326,6 +326,7 @@ export function TeachingPathPage() {
             <button
               className={`${styles.filterTag} ${styles.keywordTrigger} ${selectedKeywordIds.length > 0 ? styles.keywordTriggerActive : ""}`}
               type="button"
+              aria-label="Ver opções de assuntos"
               aria-haspopup="dialog"
               onClick={() => {
                 setKeywordQuery("");
@@ -363,27 +364,7 @@ export function TeachingPathPage() {
             </div>
           </div>
 
-          <div className={styles.tagGroup}>
-            <span className={styles.tagLabel}>Abordagem</span>
-            <div className={styles.tagList}>
-              {([
-                ["active", "Abordagem ativa"],
-                ["expository", "Abordagem expositiva"],
-              ] as const).map(([value, label]) => (
-                <button
-                  className={styles.filterTag}
-                  type="button"
-                  aria-pressed={selectedApproaches.includes(value)}
-                  key={value}
-                  onClick={() =>
-                    setSelectedApproaches((current) => toggleFilter(current, value))
-                  }
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-          </div>
+          <MaterialTypeFilter selected={selectedMaterialTypes} onChange={setSelectedMaterialTypes} />
         </div>
 
         {hasActiveFilters ? (
@@ -474,7 +455,7 @@ export function TeachingPathPage() {
                     <div className={styles.resourceContent}>
                       <div className={styles.resourceIntro}>
                         <div className={styles.badges}>
-                          <span>{typeLabels[resource.type]}</span>
+                          {getResourceTypeLabels(resource).map((label) => <span key={label}>{label}</span>)}
                           <span>{activityModeLabels[teaching.activityMode]}</span>
                           <span>{teachingApproachLabels[teaching.teachingApproach]}</span>
                         </div>

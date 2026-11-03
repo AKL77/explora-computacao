@@ -3,6 +3,7 @@ import { publicAsset } from "@/lib/publicAsset";
 
 import { createCurriculumAlignment } from "./bnccComputing";
 import { addRequiredFamiliarity } from "./resourceFamiliarity";
+import { addMaterialTypes } from "./materialTypes";
 import { additionalTeachingMaterials } from "./resources/additionalTeachingMaterials";
 import { approvedMaterialsOctober28 } from "./resources/approvedMaterialsOctober28";
 import { digitalCitizenshipGameResources } from "./resources/digitalCitizenshipGames";
@@ -92,6 +93,6 @@ export const resources: Resource[] = [
   ...additionalTeachingMaterials,
   ...approvedMaterialsOctober28,
   ...expositoryMaterials,
-].map(addRequiredFamiliarity);
+].map(addRequiredFamiliarity).map(addMaterialTypes);
 
 export const mockResources = resources;

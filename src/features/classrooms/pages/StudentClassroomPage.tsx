@@ -6,7 +6,7 @@ import { classroomColor, normalizeClassroomCode, type Classroom } from "@/domain
 import { isOnlineMode } from "@/lib/backend/config";
 import { fetchStudentClassroom, StudentAccessError } from "@/repositories/StudentClassroomRepository";
 import { CatalogStatus } from "@/features/catalog/components/CatalogStatus";
-import { typeLabels } from "@/features/catalog/components/resourcePresentation";
+import { formatResourceTypes } from "@/features/catalog/components/resourcePresentation";
 import { useCatalogResources } from "@/features/catalog/hooks/useCatalog";
 import { useClassroomsStore } from "@/store/useClassroomsStore";
 import styles from "../Classrooms.module.css";
@@ -137,7 +137,7 @@ export function StudentClassroomPage() {
               const resource = byId.get(material.resourceId)!;
               return <li key={resource.id}>
                 <a className={styles.studentCard} href={resource.canonicalUrl ?? resource.sourceUrl} target="_blank" rel="noopener noreferrer">
-                  <div><span className={styles.badge}>{typeLabels[resource.type]}</span><h2>{resource.title}</h2><small>{resource.provider} · Site externo</small>{material.instruction && <p className={styles.instruction}>{material.instruction}</p>}</div>
+                  <div><span className={styles.badge}>{formatResourceTypes(resource)}</span><h2>{resource.title}</h2><small>{resource.provider} · Site externo</small>{material.instruction && <p className={styles.instruction}>{material.instruction}</p>}</div>
                   <ArrowUpRight size={24} aria-hidden="true" />
                 </a>
               </li>;

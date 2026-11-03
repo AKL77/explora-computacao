@@ -1,17 +1,19 @@
 import type { Resource } from "@/domain/resource";
+import { getResourceMaterialTypes, materialTypeOptions } from "@/domain/materialType";
 
 import { publicAsset } from "@/lib/publicAsset";
 
 export const RESOURCE_PLACEHOLDER = publicAsset("branding/resource-placeholder-explora.svg");
 
-export const typeLabels: Record<Resource["type"], string> = {
-  game: "Jogo",
-  video: "Vídeo",
-  text: "Texto",
-  simulator: "Simulador",
-  activity: "Atividade",
-  tool: "Ferramenta",
-};
+export function getResourceTypeLabels(resource: Resource): string[] {
+  return getResourceMaterialTypes(resource).map(
+    (type) => materialTypeOptions.find((option) => option.id === type)!.singular,
+  );
+}
+
+export function formatResourceTypes(resource: Resource): string {
+  return getResourceTypeLabels(resource).join(" · ");
+}
 
 export function formatRecommendedGrades(
   grades: Resource["recommendedGrades"],

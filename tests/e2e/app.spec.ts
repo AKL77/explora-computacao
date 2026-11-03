@@ -27,7 +27,7 @@ test.beforeEach(async ({ page }) => {
 test("seleciona assuntos no diálogo e combina a busca com ano escolar", async ({ page }) => {
   await enterDemo(page);
 
-  await page.getByRole("button", { name: "Ver opções" }).click();
+  await page.getByRole("button", { name: "Ver opções de assuntos" }).click();
   const dialog = page.getByRole("dialog", { name: "Selecionar assuntos" });
   await expect(dialog).toBeVisible();
   const scrollState = await dialog.evaluate((element) => ({
@@ -52,7 +52,7 @@ test("seleciona assuntos no diálogo e combina a busca com ano escolar", async (
   await page.getByRole("button", { name: "5º ano" }).click();
   await expect(page.getByText("1 material", { exact: true })).toBeVisible();
 
-  await page.getByRole("button", { name: "Ver opções" }).click();
+  await page.getByRole("button", { name: "Ver opções de assuntos" }).click();
   await expect(dialog.getByRole("searchbox", { name: "Buscar palavras-chave" })).toHaveValue("");
   await dialog.getByRole("button", { name: "Cyberbullying" }).click();
   await dialog.getByRole("button", { name: "Componentes do computador" }).click();
@@ -61,6 +61,59 @@ test("seleciona assuntos no diálogo e combina a busca com ano escolar", async (
 
   await page.getByRole("button", { name: "Limpar filtros" }).click();
   await expect(page.getByText("48 materiais", { exact: true }).first()).toBeVisible();
+});
+
+test("seleciona múltiplos tipos por teclado e combina com os outros filtros", async ({ page }, testInfo) => {
+  await enterDemo(page);
+  const trigger = page.getByRole("button", { name: "Ver opções de tipos de material" });
+  await trigger.focus();
+  await page.keyboard.press("Enter");
+  const dialog = page.getByRole("dialog", { name: "Selecionar tipos de material" });
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole("heading", { name: "Abordagem ativa" })).toBeVisible();
+  await expect(dialog.getByRole("heading", { name: "Abordagem expositiva" })).toBeVisible();
+  await expect(dialog.getByRole("button", { name: /Abordagem/ })).toHaveCount(0);
+  await expect(dialog.locator("[aria-pressed]")).toHaveCount(8);
+  const games = dialog.getByRole("button", { name: "Jogos", exact: true });
+  await games.focus();
+  await page.keyboard.press("Space");
+  await dialog.getByRole("button", { name: "Livros e livros-jogo" }).click();
+  await dialog.getByRole("button", { name: "Vídeos" }).click();
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+  const bounds = await dialog.boundingBox();
+  expect(bounds).not.toBeNull();
+  expect(bounds!.x).toBeGreaterThanOrEqual(0);
+  expect(bounds!.y).toBeGreaterThanOrEqual(0);
+  expect(bounds!.width).toBeLessThanOrEqual(page.viewportSize()!.width);
+  expect(bounds!.height).toBeLessThanOrEqual(page.viewportSize()!.height);
+  await page.screenshot({ path: testInfo.outputPath("tipos-de-material.png") });
+  await page.keyboard.press("Escape");
+  await expect(dialog).not.toBeVisible();
+  await expect(trigger).toBeFocused();
+  await expect(page.getByRole("heading", { name: "Sertão.bit — Livro-jogo de Pensamento Computacional", exact: true })).toHaveCount(1);
+  await expect(page.getByRole("heading", { name: "Blockly Games", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Como funciona a Internet? — Playlist do NIC.br", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Contando os Pontos — Números Binários", exact: true })).toHaveCount(0);
+  await trigger.click();
+  await expect(games).toHaveAttribute("aria-pressed", "true");
+  await dialog.getByRole("button", { name: "Limpar tipos" }).click();
+  await expect(dialog.locator('[aria-pressed="true"]')).toHaveCount(0);
+  await dialog.getByRole("button", { name: "Jogos", exact: true }).click();
+  await dialog.getByRole("button", { name: "Concluir" }).click();
+  await page.getByRole("button", { name: "Material plugado", exact: true }).click();
+  await page.getByRole("button", { name: "5º ano" }).click();
+  await page.getByRole("button", { name: "Ver opções de assuntos" }).click();
+  const subjects = page.getByRole("dialog", { name: "Selecionar assuntos" });
+  await subjects.getByRole("button", { name: "Cyberbullying" }).click();
+  await subjects.getByRole("button", { name: "Concluir" }).click();
+  await expect(page.getByText("1 material", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Interland", exact: true })).toBeVisible();
+  await page.getByRole("searchbox", { name: "Pesquisar área, assunto ou habilidade" }).fill("blockly");
+  await expect(page.getByText("Nenhum material encontrado")).toBeVisible();
+  await page.getByRole("button", { name: "Limpar filtros" }).click();
+  await expect(page.getByText("48 materiais", { exact: true }).first()).toBeVisible();
+  await expect(page.getByText("Todos os tipos", { exact: true })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
 });
 
 test("apresenta a proposta e entra em Buscar Materiais", async ({ page }) => {
@@ -181,7 +234,7 @@ test("copia uma trilha nova e preserva etapas com mais de uma aula", async ({ pa
   await page.getByRole("button", { name: "Ver trilha Cyberbullying: reconhecer e agir", exact: true }).click();
   await expect(page.getByText("4 aulas sugeridas", { exact: true })).toBeVisible();
   await expect(page.getByRole("list", { name: "Etapas da trilha pronta" }).locator("li")).toHaveCount(2);
-  await expect(page.getByText("Atividade · 3 aulas", { exact: true })).toBeVisible();
+  await expect(page.getByText("Atividade · Texto / guia · 3 aulas", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Adicionar às Minhas Trilhas", exact: true }).click();
   await page.getByRole("button", { name: "Ver em Minhas Trilhas", exact: true }).click();
   await page.getByRole("button", { name: /Cyberbullying: reconhecer e agir/ }).click();
@@ -316,7 +369,7 @@ test("apresenta os sete novos materiais com fontes, licenças e durações corre
 
 test("filtra novos assuntos e conserva os novos materiais nas propostas de uma trilha salva", async ({ page }, testInfo) => {
   await enterDemo(page);
-  await page.getByRole("button", { name: "Ver opções" }).click();
+  await page.getByRole("button", { name: "Ver opções de assuntos" }).click();
   const dialog = page.getByRole("dialog", { name: "Selecionar assuntos" });
   await dialog.getByRole("button", { name: "Inteligência artificial", exact: true }).click();
   await dialog.getByRole("button", { name: "Concluir" }).click();

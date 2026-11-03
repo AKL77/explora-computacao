@@ -17,7 +17,7 @@ import { trackClarityEvent } from "@/lib/clarity";
 import { AccessibleDialog } from "@/features/catalog/components/AccessibleDialog";
 import { RequiredFamiliarity } from "@/features/catalog/components/RequiredFamiliarity";
 import { CatalogStatus } from "@/features/catalog/components/CatalogStatus";
-import { formatRecommendedGrades, RESOURCE_PLACEHOLDER, typeLabels } from "@/features/catalog/components/resourcePresentation";
+import { formatRecommendedGrades, RESOURCE_PLACEHOLDER, formatResourceTypes } from "@/features/catalog/components/resourcePresentation";
 import { useCatalogResources } from "@/features/catalog/hooks/useCatalog";
 import {
   TEACHING_PATH_BACKGROUND_COLORS,
@@ -521,7 +521,7 @@ export function SavedTeachingPathsPage() {
                     </span>
                   </span>
                   <span className={styles.stepText}>
-                    <span>{typeLabels[item.resource.type]}</span>
+                    <span>{formatResourceTypes(item.resource)}</span>
                     <strong>{item.resource.title}</strong>
                     <small>{item.teaching.studentActivity}</small>
                     <em>

@@ -181,6 +181,20 @@
   border-color: var(--brand-blue);
 }
 
+.typeSelection {
+  color: var(--text-muted);
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+
+.typeDialogContent {
+  display: grid;
+  min-height: 0;
+  flex: 1 1 auto;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 1rem;
+}
+
 .keywordDialogContent {
   display: grid;
   min-height: 0;

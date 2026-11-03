@@ -3,6 +3,7 @@ import type {
   Grade,
   ValidationStatus,
 } from "@/domain/curriculum";
+import type { MaterialType } from "@/domain/materialType";
 
 export type ResourceType =
   | "game"
@@ -48,6 +49,7 @@ export interface Resource {
   canonicalUrl?: string;
   provider: string;
   type: ResourceType;
+  materialTypes?: readonly MaterialType[];
   language: string;
   /** Tema curatorial exibido como Assunto e usado na busca e no apoio aos objetivos. */
   topic: string;

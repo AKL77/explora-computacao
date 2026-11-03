@@ -54,7 +54,9 @@ Microsoft Clarity com escolha de análise de uso.
 
 - página inicial pública com contexto e objetivos do projeto;
 - entrada docente com Google via Supabase e demonstração local opcional;
-- **Buscar Materiais** com pesquisa e filtros por ano, assunto, formato e abordagem;
+- **Buscar Materiais** com pesquisa e filtros por ano, assunto, formato e tipo de material;
+- seleção de vários tipos em **Ver opções**, agrupados por abordagem ativa e
+  expositiva; materiais com mais de um tipo aparecem uma única vez nos resultados;
 - cartões de descoberta com informações pedagógicas concisas;
 - níveis de familiaridade para aluno e professor em cada material, explicados
   na página **Sobre**;

@@ -4,7 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { classroomColor, formatClassroomCode } from "@/domain/classroom";
 import { AccessibleDialog } from "@/features/catalog/components/AccessibleDialog";
 import { CatalogStatus } from "@/features/catalog/components/CatalogStatus";
-import { typeLabels } from "@/features/catalog/components/resourcePresentation";
+import { formatResourceTypes } from "@/features/catalog/components/resourcePresentation";
 import { useCatalogResources } from "@/features/catalog/hooks/useCatalog";
 import { useClassroomsStore } from "@/store/useClassroomsStore";
 import { ClassroomFormDialog } from "../components/ClassroomFormDialog";
@@ -80,7 +80,7 @@ export function ClassroomDetailPage() {
               <span className={styles.position} aria-hidden="true">{index + 1}</span>
               <div className={styles.materialInfo}>
                 <h3>{resource ? <Link to={`/app/materiais/${resource.slug}`} state={{ from: `/app/minhas-turmas/${classroom.id}` }}>{title}</Link> : title}</h3>
-                <small>{resource ? `${typeLabels[resource.type]} · ${resource.provider}` : "Este material não está mais no acervo."}</small>
+                <small>{resource ? `${formatResourceTypes(resource)} · ${resource.provider}` : "Este material não está mais no acervo."}</small>
                 {material.instruction && <p className={styles.instruction}>{material.instruction}</p>}
               </div>
               {!classroom.archived && <div className={styles.rowActions}>

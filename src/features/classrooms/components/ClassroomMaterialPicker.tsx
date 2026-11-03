@@ -3,7 +3,7 @@ import { Search } from "lucide-react";
 import type { Resource } from "@/domain/resource";
 import type { Classroom } from "@/domain/classroom";
 import { AccessibleDialog } from "@/features/catalog/components/AccessibleDialog";
-import { typeLabels } from "@/features/catalog/components/resourcePresentation";
+import { formatResourceTypes } from "@/features/catalog/components/resourcePresentation";
 import { useClassroomsStore } from "@/store/useClassroomsStore";
 import styles from "../Classrooms.module.css";
 
@@ -33,7 +33,7 @@ export function ClassroomMaterialPicker({ classroom, resources, onClose, onAdded
         <div className={styles.picker} role="group" aria-label="Materiais do acervo">
           {matches.map((resource) => <label key={resource.id} className={styles.pickOption}>
             <input type="checkbox" checked={existing.has(resource.id) || selected.includes(resource.id)} disabled={existing.has(resource.id)} onChange={() => setSelected((current) => current.includes(resource.id) ? current.filter((id) => id !== resource.id) : [...current, resource.id])} />
-            <span><strong>{resource.title}</strong><small>{typeLabels[resource.type]} · {resource.provider}{existing.has(resource.id) ? " · Já adicionado" : ""}</small></span>
+            <span><strong>{resource.title}</strong><small>{formatResourceTypes(resource)} · {resource.provider}{existing.has(resource.id) ? " · Já adicionado" : ""}</small></span>
           </label>)}
           {matches.length === 0 && <p className={styles.muted}>Nenhum material encontrado. Tente outro nome ou assunto.</p>}
         </div>
