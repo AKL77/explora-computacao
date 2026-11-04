@@ -1,5 +1,6 @@
 import { expect, test, type BrowserContext } from "@playwright/test";
 import type { Classroom } from "../../src/domain/classroom";
+import type { SavedTeachingPath } from "../../src/domain/savedTeachingPath";
 
 const authKey = "explora:teacher-auth:v1";
 async function teacherSession(context: BrowserContext) {
@@ -123,7 +124,7 @@ test("mantém a turma arquivada quando o servidor recusa o desarquivamento", asy
   });
   await page.goto(`/#/app/minhas-turmas/${classroom.id}`);
   await page.getByRole("button", { name: "Desarquivar turma", exact: true }).click();
-  await expect(page.getByRole("alert")).toContainText("Não foi possível salvar online");
+  await expect(page.getByRole("alert")).toContainText("Não foi possível confirmar a ação online");
   await expect(page.getByText("Turma arquivada.", { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "Desarquivar turma", exact: true })).toBeEnabled();
   await expect(page.getByRole("button", { name: "Editar turma", exact: true })).toHaveCount(0);
@@ -141,7 +142,50 @@ test("não confirma criação quando o servidor falha", async ({ page, context }
   await form.getByRole("combobox", { name: "Ano/série", exact: true }).selectOption("6");
   await form.getByRole("button", { name: "Criar turma", exact: true }).click();
   await expect(form.getByRole("alert").filter({ hasText: "Não foi possível criar" })).toBeVisible();
-  await expect(form.getByRole("alert").filter({ hasText: "Não foi possível salvar online" })).toBeVisible();
+  await expect(form.getByRole("alert").filter({ hasText: "Não foi possível confirmar a ação online" })).toBeVisible();
   await expect(form.getByLabel("Nome da turma", { exact: true })).toHaveValue("Minha turma");
   await expect(page.getByRole("heading", { name: "Minha turma", exact: true, level: 1 })).toHaveCount(0);
+});
+
+test("exclui trilha online somente após confirmação do servidor e preserva as demais", async ({ page, context }) => {
+  await teacherSession(context);
+  const target: SavedTeachingPath = {
+    id: "33333333-3333-4333-8333-333333333333", name: "Minha trilha descartável", objective: "Explorar programação.",
+    backgroundColor: "blue", icon: "route", resourceIds: ["google-blockly-games"], lessonCountsByResourceId: {},
+    createdAt: "2026-11-03T12:00:00Z", updatedAt: "2026-11-03T12:00:00Z", revision: 3,
+  };
+  const preserved = { ...target, id: "44444444-4444-4444-8444-444444444444", name: "Trilha preservada" };
+  let paths = [target, preserved];
+  let attempts = 0;
+  await context.route("https://backend-test.supabase.co/**", async (route) => {
+    const name = new URL(route.request().url()).pathname.split("/").pop();
+    if (name === "teacher_workspace") return route.fulfill({ json: { classrooms: [], paths } });
+    if (name === "delete_teaching_path") {
+      expect(route.request().postDataJSON()).toEqual({ p_id: target.id, p_revision: 3 });
+      attempts++;
+      if (attempts === 1) return route.fulfill({ status: 503, json: { message: "unavailable" } });
+      paths = paths.filter((path) => path.id !== target.id);
+      return route.fulfill({ json: true });
+    }
+    throw new Error(`Consulta inesperada: ${name}`);
+  });
+  await page.goto("/#/app/minhas-trilhas");
+  await page.getByRole("button", { name: /Minha trilha descartável/ }).click();
+  await page.getByRole("button", { name: "Excluir trilha", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Excluir trilha", exact: true });
+  await dialog.getByRole("button", { name: "Cancelar" }).click();
+  expect(attempts).toBe(0);
+  await page.getByRole("button", { name: "Excluir trilha", exact: true }).click();
+  await dialog.getByRole("button", { name: "Excluir trilha", exact: true }).click();
+  await expect(dialog.getByRole("alert")).toContainText("Não foi possível confirmar a ação online");
+  await expect(page.getByRole("heading", { name: target.name, exact: true, level: 1 })).toBeVisible();
+  expect(paths).toHaveLength(2);
+  await dialog.getByRole("button", { name: "Excluir trilha", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Minhas Trilhas", exact: true, level: 1 })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Minha trilha descartável/ })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: /Trilha preservada/ })).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole("button", { name: /Minha trilha descartável/ })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: /Trilha preservada/ })).toBeVisible();
+  expect(attempts).toBe(2);
 });

@@ -1,6 +1,7 @@
 import { useState, type CSSProperties, type FormEvent } from "react";
 import { Archive, ArchiveRestore, ArrowDown, ArrowLeft, ArrowUp, Copy, Eye, EyeOff, MessageSquare, Pencil, Plus, Trash2, UsersRound, X } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { WorkspacePage } from "@/components/layout/WorkspacePage";
 import { classroomColor, formatClassroomCode } from "@/domain/classroom";
 import { AccessibleDialog } from "@/features/catalog/components/AccessibleDialog";
 import { CatalogStatus } from "@/features/catalog/components/CatalogStatus";
@@ -25,7 +26,7 @@ export function ClassroomDetailPage() {
   const [copyMessage, setCopyMessage] = useState("");
   const byId = new Map(resources.map((resource) => [resource.id, resource]));
 
-  if (!classroom) return <section className={styles.empty}><UsersRound size={40} aria-hidden="true" /><h1>Turma não encontrada</h1><p>Esta turma pode ter sido excluída.</p><Link className={styles.primary} to="/app/minhas-turmas">Voltar para Minhas Turmas</Link></section>;
+  if (!classroom) return <WorkspacePage title="Turma não encontrada" eyebrow="Minhas Turmas" contentClassName={styles.empty}><UsersRound size={40} aria-hidden="true" /><p>Esta turma pode ter sido excluída.</p><Link className={styles.primary} to="/app/minhas-turmas">Voltar para Minhas Turmas</Link></WorkspacePage>;
 
   const accessUrl = new URL(window.location.href);
   accessUrl.hash = "/alunos";
@@ -47,13 +48,10 @@ export function ClassroomDetailPage() {
   };
 
   return (
-    <div className={styles.page} data-clarity-mask="true" style={{ "--classroom-accent": classroomColor(classroom.color) } as CSSProperties}>
+    <WorkspacePage title={classroom.name} eyebrow={`${classroom.grade}º ano · ${classroom.schoolYear}`} contentClassName={styles.page} masked style={{ "--classroom-accent": classroomColor(classroom.color) } as CSSProperties}>
       <Link className={styles.breadcrumb} to="/app/minhas-turmas"><ArrowLeft size={16} aria-hidden="true" /> Minhas Turmas</Link>
       <header className={styles.heading}>
-        <div className={styles.classHeader}>
-          <span className={styles.classIcon}><UsersRound size={24} aria-hidden="true" /></span>
-          <div><span className={styles.eyebrow}>{classroom.grade}º ano · {classroom.schoolYear}</span><h1>{classroom.name}</h1>{classroom.school && <p>{classroom.school}</p>}</div>
-        </div>
+        {classroom.school && <p>{classroom.school}</p>}
         <div className={styles.actions}>
           {!classroom.archived && <button className={styles.secondary} type="button" onClick={() => setDialog("edit")}><Pencil size={17} aria-hidden="true" /> Editar turma</button>}
           <button className={classroom.archived ? styles.primary : styles.textButton} type="button" onClick={async () => {
@@ -127,6 +125,6 @@ export function ClassroomDetailPage() {
           <div className={styles.formFooter}><button className={styles.secondary} type="button" onClick={() => setInstructionResourceId(null)}>Cancelar</button><button className={styles.primary} type="submit">Salvar orientação</button></div>
         </form>
       </AccessibleDialog>}
-    </div>
+    </WorkspacePage>
   );
 }

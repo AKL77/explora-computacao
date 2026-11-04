@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { trackClarityEvent } from "@/lib/clarity";
+import { WorkspacePage } from "@/components/layout/WorkspacePage";
 
 import { AccessibleDialog } from "@/features/catalog/components/AccessibleDialog";
 import { RequiredFamiliarity } from "@/features/catalog/components/RequiredFamiliarity";
@@ -180,12 +181,15 @@ export function SavedTeachingPathsPage() {
   const { resources, status } = useCatalogResources();
   const paths = useTeachingPathsStore((state) => state.paths);
   const updatePath = useTeachingPathsStore((state) => state.updatePath);
+  const deletePath = useTeachingPathsStore((state) => state.deletePath);
   const [selectedPathId, setSelectedPathId] = useState<string | null>(null);
   const [draft, setDraft] = useState<TeachingPathDraft | null>(null);
   const [previewResourceId, setPreviewResourceId] = useState<string | null>(null);
   const [draggedResourceId, setDraggedResourceId] = useState<string | null>(null);
   const [dropTargetId, setDropTargetId] = useState<string | null>(null);
   const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [settingsDraft, setSettingsDraft] = useState<PathSettingsDraft | null>(null);
   const [announcement, setAnnouncement] = useState("");
 
@@ -326,6 +330,25 @@ export function SavedTeachingPathsPage() {
     setAnnouncement("As informações da trilha foram atualizadas no rascunho.");
   };
 
+  const handleDeletePath = async () => {
+    if (!selectedPath || isDeleting) return;
+    setIsDeleting(true);
+    try {
+      if (!await deletePath(selectedPath.id)) return;
+      setIsDeleteDialogOpen(false);
+      setSelectedPathId(null);
+      setDraft(null);
+      setPreviewResourceId(null);
+      setDraggedResourceId(null);
+      setDropTargetId(null);
+      setIsSettingsDialogOpen(false);
+      setSettingsDraft(null);
+      setAnnouncement("Trilha excluída.");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   if (status === "loading") {
     return <CatalogStatus busy title="Preparando suas trilhas" message="Estamos reunindo os materiais salvos." />;
   }
@@ -336,11 +359,9 @@ export function SavedTeachingPathsPage() {
 
   if (!selectedPath || !draft) {
     return (
-      <section className={styles.page} aria-labelledby="saved-paths-title">
+      <WorkspacePage title="Minhas Trilhas" eyebrow="Planejamento por materiais" titleId="saved-paths-title" contentClassName={styles.page}>
         <header className={styles.listHeader}>
           <div>
-            <p className={styles.eyebrow}>Planejamento por materiais</p>
-            <h1 id="saved-paths-title">Minhas Trilhas</h1>
             <p>Abra uma sequência para ajustar as etapas, a duração e o tempo total.</p>
           </div>
           <Link className={styles.createLink} to="/app/trilha-de-ensino">
@@ -349,6 +370,7 @@ export function SavedTeachingPathsPage() {
           </Link>
         </header>
 
+        <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">{announcement}</p>
         {paths.length === 0 ? (
           <div className={styles.emptyState}>
             <ListChecks aria-hidden="true" size={40} strokeWidth={1.6} />
@@ -395,14 +417,18 @@ export function SavedTeachingPathsPage() {
             })}
           </div>
         )}
-      </section>
+      </WorkspacePage>
     );
   }
 
   return (
-    <section
-      className={`${styles.page} ${styles[themeClassNames[draft.backgroundColor]]}`}
-      aria-labelledby="path-title"
+    <WorkspacePage
+      title={draft.name}
+      eyebrow="Trilha de ensino"
+      titleId="path-title"
+      maskTitle
+      className={styles[themeClassNames[draft.backgroundColor]]}
+      contentClassName={styles.page}
     >
       <header className={styles.pathHeader}>
         <button
@@ -420,8 +446,6 @@ export function SavedTeachingPathsPage() {
           Minhas Trilhas
         </button>
         <div className={styles.pathTitleArea}>
-          <p className={styles.eyebrow}>Trilha de ensino</p>
-          <h1 id="path-title" data-clarity-mask="true">{draft.name}</h1>
           <p className={styles.pathObjective} data-clarity-mask="true">{draft.objective}</p>
           <div className={styles.pathMetadata} aria-label="Informações da trilha">
             <span>{currentResourceIds.length} {currentResourceIds.length === 1 ? "material" : "materiais"}</span>
@@ -450,6 +474,10 @@ export function SavedTeachingPathsPage() {
           <button className={styles.editPathButton} type="button" onClick={openSettings}>
             <Pencil aria-hidden="true" size={17} />
             Editar trilha
+          </button>
+          <button className={styles.deletePathButton} type="button" onClick={() => setIsDeleteDialogOpen(true)}>
+            <Trash2 aria-hidden="true" size={17} />
+            Excluir trilha
           </button>
           {hasUnsavedChanges ? (
             <button className={styles.discardButton} type="button" onClick={handleDiscardChanges}>
@@ -750,6 +778,25 @@ export function SavedTeachingPathsPage() {
           </form>
         ) : null}
       </AccessibleDialog>
-    </section>
+      <AccessibleDialog
+        open={isDeleteDialogOpen}
+        title="Excluir trilha"
+        description="Esta ação é permanente."
+        size="small"
+        onClose={() => { if (!isDeleting) setIsDeleteDialogOpen(false); }}
+      >
+        <div className={styles.deleteConfirmation}>
+          <p>Excluir a trilha <strong data-clarity-mask="true">{selectedPath.name}</strong>?</p>
+          <p>Os materiais do catálogo e as Trilhas Prontas permanecem disponíveis.</p>
+          {hasUnsavedChanges && <p>As alterações não salvas desta trilha também serão descartadas.</p>}
+          <div className={styles.dialogActions}>
+            <button type="button" disabled={isDeleting} onClick={() => setIsDeleteDialogOpen(false)}>Cancelar</button>
+            <button className={styles.confirmDeleteButton} type="button" disabled={isDeleting} onClick={() => void handleDeletePath()}>
+              {isDeleting ? "Excluindo…" : "Excluir trilha"}
+            </button>
+          </div>
+        </div>
+      </AccessibleDialog>
+    </WorkspacePage>
   );
 }

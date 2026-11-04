@@ -17,7 +17,7 @@ export function backendError(error: unknown): string {
   if (code === "40001") return "Este conteúdo foi alterado em outro acesso. Atualize os dados e tente novamente.";
   if (code === "42501" || code === "PGRST301") return "Seu acesso não permite esta ação. Entre novamente para continuar.";
   if (code === "PGRST202") return "Este recurso ainda não está disponível online. Aguarde a atualização da plataforma.";
-  return "Não foi possível salvar online. Verifique sua conexão e tente novamente. Suas alterações ainda não foram confirmadas.";
+  return "Não foi possível confirmar a ação online. Verifique sua conexão e tente novamente. Suas alterações ainda não foram confirmadas.";
 }
 
 export async function remoteMutation<T>(operation: () => Promise<T>, apply: (value: T) => void, fallback: T): Promise<T> {

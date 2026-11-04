@@ -14,6 +14,18 @@ import {
 } from "./useTeachingPathsStore";
 
 describe("useTeachingPathsStore", () => {
+  it("exclui somente a trilha escolhida e persiste a remoção", async () => {
+    const first = await useTeachingPathsStore.getState().createPath("Excluir", ["recurso-1"]);
+    const second = await useTeachingPathsStore.getState().createPath("Preservar", ["recurso-2"]);
+    expect(first).not.toBeNull();
+    expect(second).not.toBeNull();
+    expect(await useTeachingPathsStore.getState().deletePath(first!.id)).toBe(true);
+    expect(useTeachingPathsStore.getState().paths.map((path) => path.id)).toEqual([second!.id]);
+    const stored = JSON.parse(localStorage.getItem(TEACHING_PATHS_STORAGE_KEY)!);
+    expect(stored.state.paths.map((path: { id: string }) => path.id)).toEqual([second!.id]);
+    expect(await useTeachingPathsStore.getState().deletePath(first!.id)).toBe(false);
+  });
+
   beforeEach(() => {
     localStorage.clear();
     useTeachingPathsStore.setState({

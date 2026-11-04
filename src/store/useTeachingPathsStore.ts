@@ -46,6 +46,7 @@ export interface TeachingPathsStore extends LocalTeachingPathsState {
     metadata?: TeachingPathMetadata,
   ) => MaybePromise<SavedTeachingPath | null>;
   updatePath: (pathId: string, update: TeachingPathUpdate) => MaybePromise<SavedTeachingPath | null>;
+  deletePath: (pathId: string) => MaybePromise<boolean>;
   addResourceToPath: (pathId: string, resourceId: string) => MaybePromise<boolean>;
   removeResourceFromPath: (pathId: string, resourceId: string) => MaybePromise<boolean>;
   moveResourceInPath: (pathId: string, resourceId: string, direction: -1 | 1) => MaybePromise<boolean>;
@@ -282,6 +283,16 @@ export const useTeachingPathsStore = create<TeachingPathsStore>()(
         if (!path.resourceIds.includes(resourceId) || !isLessonCount(lessonCount)) return null;
         return { ...path, lessonCountsByResourceId: { ...path.lessonCountsByResourceId, [resourceId]: lessonCount } };
       }),
+      deletePath: (id) => {
+        const current = get().paths.find((path) => path.id === id);
+        if (!current) return false;
+        const remove = (deleted: boolean) => {
+          if (deleted) set((state) => ({ paths: state.paths.filter((path) => path.id !== id) }));
+        };
+        if (isOnlineMode) return remoteMutation(() => teacherWorkspaceRepository.deletePath(current), remove, false);
+        remove(true);
+        return true;
+      },
       getPath: (id) => get().paths.find((path) => path.id === id),
       clearPaths: () => set({ ...initialTeachingPathsState, paths: [] }),
     };

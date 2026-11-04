@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Check, ListChecks, Plus, Search, X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { trackClarityEvent } from "@/lib/clarity";
+import { WorkspacePage } from "@/components/layout/WorkspacePage";
 
 import { AccessibleDialog } from "@/features/catalog/components/AccessibleDialog";
 import { CatalogStatus } from "@/features/catalog/components/CatalogStatus";
@@ -264,12 +265,7 @@ export function TeachingPathPage() {
   }
 
   return (
-    <div className={styles.page}>
-      <header className={styles.pageHeader}>
-        <p className={styles.eyebrow}>Planejamento por materiais</p>
-        <h1>Buscar Materiais</h1>
-      </header>
-
+    <WorkspacePage title="Buscar Materiais" eyebrow="Planejamento por materiais" contentClassName={styles.page}>
       <section className={styles.searchSurface} aria-labelledby="discovery-title">
         <div className={styles.sectionHeading}>
           <span className={styles.sectionIcon} aria-hidden="true">
@@ -708,6 +704,6 @@ export function TeachingPathPage() {
           </div>
         </form>
       </AccessibleDialog>
-    </div>
+    </WorkspacePage>
   );
 }

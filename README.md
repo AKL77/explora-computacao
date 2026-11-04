@@ -66,6 +66,7 @@ Microsoft Clarity com escolha de análise de uso.
   cada eixo da BNCC Computação;
 - criação de trilhas próprias a partir dos materiais selecionados;
 - **Minhas Trilhas** com edição de nome, objetivo, cor e ícone;
+- exclusão de trilhas próprias com confirmação, preservando os materiais e as Trilhas Prontas;
 - reordenação das etapas, escolha de duração por material e cálculo do tempo
   total;
 - proposta de atividade ao abrir cada etapa, com objetivo, materiais, descrição

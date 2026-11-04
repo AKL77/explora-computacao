@@ -7,6 +7,7 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { trackClarityEvent } from "@/lib/clarity";
+import { WorkspacePage } from "@/components/layout/WorkspacePage";
 
 import { CatalogStatus } from "@/features/catalog/components/CatalogStatus";
 import { formatRecommendedGrades, RESOURCE_PLACEHOLDER, formatResourceTypes } from "@/features/catalog/components/resourcePresentation";
@@ -155,12 +156,7 @@ export function ReadyTeachingPathsPage() {
   }
 
   return (
-    <div className={styles.page}>
-      <header className={styles.pageHeader}>
-        <p className={styles.eyebrow}>Sequências selecionadas</p>
-        <h1>Trilhas Prontas</h1>
-      </header>
-
+    <WorkspacePage title="Trilhas Prontas" eyebrow="Sequências selecionadas" contentClassName={styles.page}>
       <section className={styles.discovery} aria-labelledby="discovery-title">
         <div>
           <p className={styles.eyebrow}>Explore a coleção</p>
@@ -288,6 +284,6 @@ export function ReadyTeachingPathsPage() {
       <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">
         {announcement}
       </p>
-    </div>
+    </WorkspacePage>
   );
 }

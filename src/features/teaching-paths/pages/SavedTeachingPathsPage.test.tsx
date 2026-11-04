@@ -27,6 +27,23 @@ function renderPage() {
 }
 
 describe("SavedTeachingPathsPage", () => {
+  it("pede confirmação, permite cancelar e exclui somente a trilha aberta", async () => {
+    const path = await useTeachingPathsStore.getState().createPath("Trilha a excluir", ["google-blockly-games"]);
+    const preserved = await useTeachingPathsStore.getState().createPath("Outra trilha", ["google-interland"]);
+    const user = renderPage();
+    await user.click(await screen.findByRole("button", { name: /Trilha a excluir/i }));
+    await user.click(screen.getByRole("button", { name: "Excluir trilha" }));
+    const dialog = screen.getByRole("dialog", { name: "Excluir trilha" });
+    expect(within(dialog).getByText("Trilha a excluir")).toBeInTheDocument();
+    await user.click(within(dialog).getByRole("button", { name: "Cancelar" }));
+    expect(useTeachingPathsStore.getState().getPath(path!.id)).toBeDefined();
+    await user.click(screen.getByRole("button", { name: "Excluir trilha" }));
+    await user.click(within(dialog).getByRole("button", { name: "Excluir trilha" }));
+    expect(await screen.findByRole("heading", { name: "Minhas Trilhas", level: 1 })).toBeInTheDocument();
+    expect(useTeachingPathsStore.getState().getPath(path!.id)).toBeUndefined();
+    expect(useTeachingPathsStore.getState().getPath(preserved!.id)).toBeDefined();
+  });
+
   it("edita a trilha em rascunho, confirma a duração e apresenta a síntese final", async () => {
     const saved = (await useTeachingPathsStore
       .getState()

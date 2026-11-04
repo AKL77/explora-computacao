@@ -9,7 +9,8 @@ Não há importação de dados da demonstração nem contas de estudantes.
 - Nome: Explora Computação; plano Free; região São Paulo (`sa-east-1`).
 - Referência: `cxxerjudbcbcpglzllrz`.
 - [Painel](https://supabase.com/dashboard/project/cxxerjudbcbcpglzllrz).
-- Migrações `teacher_workspace` e `catalog_resource_ids` aplicadas.
+- Migrações `teacher_workspace`, `catalog_resource_ids`, `unarchive_classroom`
+  e `delete_teaching_path` aplicadas.
 - Edge Function `student-classroom` publicada e respondendo.
 - Google OAuth habilitado, com retorno para o site e `http://127.0.0.1:4173/`.
 - Projeto Google `Explora Computacao`, ID `psyched-oxide-513519-s0`, criado sem
@@ -98,6 +99,24 @@ atualizações a cada 20 segundos enquanto visível e ao recuperar foco; oculta�
 e arquivamentos passam a valer na próxima consulta.
 
 ## Atualizar ou recriar
+
+### Exclusão de trilhas próprias
+
+A migração `20261104010151_delete_teaching_path.sql` adiciona a RPC
+`delete_teaching_path`. A implementação privilegiada fica no esquema `private`,
+com autenticação, propriedade e revisão verificadas antes da exclusão. O ponto
+de entrada em `public` usa `SECURITY INVOKER`. O professor recebe somente uso do
+esquema privado e execução dessa operação; as demais funções privadas e as
+gravações diretas nas tabelas continuam bloqueadas.
+
+A interface oferece **Excluir trilha** ao abrir uma trilha própria, pede
+confirmação e remove o registro da tela apenas após a confirmação do servidor.
+Falhas e conflitos preservam a trilha carregada. Materiais do catálogo, Trilhas
+Prontas e materiais já adicionados às turmas não são removidos. A demonstração
+aplica a mesma operação ao armazenamento local. O teste transacional
+`supabase/tests/delete_teaching_path_security.sql` verifica isolamento entre
+professores, revisão antiga e bloqueio de chamadas anônimas, revertendo os dados
+temporários ao final.
 
 ### Desarquivamento
 

@@ -123,7 +123,7 @@ export function AppShell() {
 
       <header className={styles.mobileHeader}>
         <Brand compact to="/app/trilha-de-ensino" />
-        <span className={styles.mobileTitle}>{getPageTitle(location.pathname)}</span>
+        <span className={styles.mobileTitle}>Explora Computação</span>
         <button
           ref={menuButtonRef}
           className={styles.menuButton}
@@ -153,7 +153,7 @@ export function AppShell() {
         onKeyDown={handleMenuKeyDown}
       >
         <div className={styles.brandArea}>
-          <Brand inverted to="/app/trilha-de-ensino" />
+          <Brand inverted stacked to="/app/trilha-de-ensino" />
         </div>
 
         <nav className={styles.nav} aria-label="Navegação principal">
@@ -176,12 +176,6 @@ export function AppShell() {
       </aside>
 
       <div className={styles.workspace}>
-        <header className={styles.desktopTopbar}>
-          <div>
-            <span className={styles.eyebrow}>Área do docente</span>
-            <strong>{pageTitle}</strong>
-          </div>
-        </header>
         <span className={styles.routeAnnouncement} aria-live="polite" aria-atomic="true">
           {pageTitle}
         </span>

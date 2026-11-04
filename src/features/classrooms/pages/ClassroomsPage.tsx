@@ -1,6 +1,7 @@
 import { useState, type CSSProperties } from "react";
 import { ArrowRight, Plus, Search, UsersRound } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { WorkspacePage } from "@/components/layout/WorkspacePage";
 import { classroomColor, formatClassroomCode } from "@/domain/classroom";
 import { useClassroomsStore } from "@/store/useClassroomsStore";
 import { ClassroomFormDialog } from "../components/ClassroomFormDialog";
@@ -17,9 +18,9 @@ export function ClassroomsPage() {
   const activeCount = classrooms.filter((classroom) => !classroom.archived).length;
 
   return (
-    <div className={styles.page} data-clarity-mask="true">
+    <WorkspacePage title="Minhas Turmas" eyebrow="Organize e compartilhe" contentClassName={styles.page} masked>
       <header className={styles.heading}>
-        <div><span className={styles.eyebrow}>Organize e compartilhe</span><h1>Minhas Turmas</h1><p>Escolha os materiais de cada turma e compartilhe o código com os alunos.</p></div>
+        <p>Escolha os materiais de cada turma e compartilhe o código com os alunos.</p>
         <button className={styles.primary} type="button" onClick={() => setCreating(true)}><Plus size={19} aria-hidden="true" /> Criar turma</button>
       </header>
       <div className={styles.toolbar}>
@@ -48,6 +49,6 @@ export function ClassroomsPage() {
         {!archived && !query && <button className={styles.primary} type="button" onClick={() => setCreating(true)}><Plus size={18} aria-hidden="true" /> Criar minha primeira turma</button>}
       </section>}
       {creating && <ClassroomFormDialog onClose={() => setCreating(false)} onSaved={(classroom) => navigate(`/app/minhas-turmas/${classroom.id}`)} />}
-    </div>
+    </WorkspacePage>
   );
 }

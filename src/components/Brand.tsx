@@ -5,10 +5,11 @@ import { publicAsset } from "@/lib/publicAsset";
 interface BrandProps {
   compact?: boolean;
   inverted?: boolean;
+  stacked?: boolean;
   to?: string;
 }
 
-export function Brand({ compact = false, inverted = false, to = "/" }: BrandProps) {
+export function Brand({ compact = false, inverted = false, stacked = false, to = "/" }: BrandProps) {
   const destinationLabel =
     to === "/"
       ? "Explora Computação — página inicial"
@@ -16,7 +17,7 @@ export function Brand({ compact = false, inverted = false, to = "/" }: BrandProp
 
   return (
     <Link
-      className={`${styles.brand} ${inverted ? styles.inverted : ""}`}
+      className={`${styles.brand} ${inverted ? styles.inverted : ""} ${stacked ? styles.stacked : ""}`}
       to={to}
       aria-label={destinationLabel}
     >
@@ -24,12 +25,12 @@ export function Brand({ compact = false, inverted = false, to = "/" }: BrandProp
         className={styles.mark}
         src={publicAsset("branding/explora-computacao-symbol.svg")}
         alt=""
-        width="48"
-        height="48"
+        width={stacked ? 44 : 48}
+        height={stacked ? 44 : 48}
       />
       {!compact && (
         <span className={styles.wordmark}>
-          Explora <strong>Computação</strong>
+          <span>Explora</span> <strong>Computação</strong>
         </span>
       )}
     </Link>

@@ -34,4 +34,7 @@ export const teacherWorkspaceRepository = {
     if (!isSavedTeachingPath(data)) throw new Error("Trilha inválida");
     return data;
   },
+  async deletePath(path: SavedTeachingPath): Promise<boolean> {
+    return await rpc("delete_teaching_path", { p_id: path.id, p_revision: path.revision }) === true;
+  },
 };

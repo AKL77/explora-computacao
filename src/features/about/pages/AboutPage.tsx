@@ -5,6 +5,7 @@ import {
   Waypoints,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { WorkspacePage } from "@/components/layout/WorkspacePage";
 
 import styles from "./AboutPage.module.css";
 import { isOnlineMode } from "@/lib/backend/config";
@@ -59,11 +60,9 @@ const questions = [
 
 export function AboutPage() {
   return (
-    <article className={styles.page} aria-labelledby="about-page-title">
-      <header className={styles.hero}>
+    <WorkspacePage as="article" title="Sobre o Explora Computação" eyebrow="Conheça o projeto" titleId="about-page-title" contentClassName={styles.page}>
+      <div className={styles.hero}>
         <div className={styles.heroContent}>
-          <p className={styles.eyebrow}>Conheça o projeto</p>
-          <h1 id="about-page-title">Sobre o Explora Computação</h1>
           <p className={styles.lead}>
             Uma plataforma para aproximar recursos educacionais, currículo e realidade escolar,
             facilitando o ensino de Computação sem retirar do docente a decisão pedagógica.
@@ -86,7 +85,7 @@ export function AboutPage() {
           </span>
           <span className={styles.illustrationPath} />
         </div>
-      </header>
+      </div>
 
       <section className={styles.purpose} aria-labelledby="purpose-title">
         <div>
@@ -146,6 +145,6 @@ export function AboutPage() {
           ))}
         </div>
       </section>
-    </article>
+    </WorkspacePage>
   );
 }

@@ -6,6 +6,7 @@ import {
 } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { trackClarityEvent } from "@/lib/clarity";
+import { WorkspacePage } from "@/components/layout/WorkspacePage";
 
 import type {
   ParticipationMode,
@@ -160,14 +161,13 @@ export function ResourceDetailPage() {
 
   if (!resource) {
     return (
-      <section className={styles.notFound} aria-labelledby="resource-not-found-title">
+      <WorkspacePage title="Recurso não encontrado" eyebrow="Detalhe do material" titleId="resource-not-found-title" contentClassName={styles.notFound}>
         <span aria-hidden="true">◇</span>
-        <h1 id="resource-not-found-title">Recurso não encontrado</h1>
         <p>O endereço pode estar incorreto ou o material não está mais disponível.</p>
         <Link to="/app/trilha-de-ensino" className={styles.primaryLink}>
           Voltar para Buscar Materiais
         </Link>
-      </section>
+      </WorkspacePage>
     );
   }
 
@@ -176,14 +176,12 @@ export function ResourceDetailPage() {
   const externalUrl = resource.canonicalUrl ?? resource.sourceUrl;
 
   return (
-    <article className={styles.page}>
+    <WorkspacePage as="article" title={resource.title} eyebrow="Detalhe do material" contentClassName={styles.page}>
       <nav className={styles.breadcrumb} aria-label="Navegação estrutural">
         <Link to={backPath}>Voltar</Link>
-        <span aria-hidden="true">/</span>
-        <span aria-current="page">{resource.title}</span>
       </nav>
 
-      <header className={styles.hero}>
+      <div className={styles.hero}>
         <div className={styles.imageWrap}>
           <img
             src={
@@ -200,7 +198,6 @@ export function ResourceDetailPage() {
           <div className={styles.badges}>
             {getResourceTypeLabels(resource).map((label) => <span key={label}>{label}</span>)}
           </div>
-          <h1>{resource.title}</h1>
           <p className={styles.provider}>Fornecedor: {resource.provider}</p>
           <dl className={styles.heroMetadata}>
             <DetailItem term="Turma">
@@ -231,7 +228,7 @@ export function ResourceDetailPage() {
             <AddToClassroomButton key={resource.id} resource={resource} />
           </div>
         </div>
-      </header>
+      </div>
 
       {resource.requiredFamiliarity ? (
         <section className={styles.familiaritySection} aria-labelledby="required-familiarity-title">
@@ -366,6 +363,6 @@ export function ResourceDetailPage() {
           </dl>
         </div>
       </section>
-    </article>
+    </WorkspacePage>
   );
 }
