@@ -6,7 +6,7 @@ import { useClassroomsStore } from "@/store/useClassroomsStore";
 import { ClassroomFormDialog } from "./ClassroomFormDialog";
 import styles from "../Classrooms.module.css";
 
-export function AddToClassroomButton({ resource }: { resource: Resource }) {
+export function AddToClassroomButton({ resource, className }: { resource: Resource; className?: string }) {
   const classrooms = useClassroomsStore((state) => state.classrooms);
   const addMaterials = useClassroomsStore((state) => state.addMaterials);
   const [mode, setMode] = useState<"pick" | "create" | null>(null);
@@ -25,7 +25,7 @@ export function AddToClassroomButton({ resource }: { resource: Resource }) {
 
   return (
     <>
-      <button className={styles.secondary} type="button" onClick={() => { setSelected(""); setAnnouncement(""); setMode("pick"); }}>
+      <button className={className ?? styles.secondary} type="button" onClick={() => { setSelected(""); setAnnouncement(""); setMode("pick"); }}>
         <UsersRound size={18} aria-hidden="true" /> Adicionar à turma
       </button>
       <p className={styles.announcement} role="status" data-clarity-mask="true">{announcement}</p>
@@ -49,10 +49,12 @@ export function AddToClassroomButton({ resource }: { resource: Resource }) {
                 </div>
               </>
             ) : <p className={styles.muted}>Crie sua primeira turma para disponibilizar este material aos alunos.</p>}
-            <button className={styles.textButton} type="button" onClick={() => setMode("create")}><Plus size={17} aria-hidden="true" /> Criar turma</button>
-            <div className={styles.formFooter}>
-              <button className={styles.secondary} type="button" onClick={() => setMode(null)}>Cancelar</button>
-              {active.length > 0 && <button className={styles.primary} type="submit" disabled={!canAdd}>Adicionar material</button>}
+            <div className={`${styles.formFooter} ${styles.classroomPickerFooter}`}>
+              {active.length > 0 && <button className={styles.secondary} type="button" onClick={() => setMode("create")}><Plus size={17} aria-hidden="true" /> Criar turma</button>}
+              <div className={styles.actions}>
+                <button className={styles.secondary} type="button" onClick={() => setMode(null)}>Cancelar</button>
+                {active.length > 0 ? <button className={styles.primary} type="submit" disabled={!canAdd}>Adicionar material</button> : <button className={styles.primary} type="button" onClick={() => setMode("create")}><Plus size={17} aria-hidden="true" /> Criar turma</button>}
+              </div>
             </div>
           </form>
         </AccessibleDialog>

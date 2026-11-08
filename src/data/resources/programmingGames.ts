@@ -1,4 +1,5 @@
 import type { Resource } from "@/domain/resource";
+import { publicAsset } from "@/lib/publicAsset";
 
 import { createCurriculumAlignment } from "../bnccComputing";
 
@@ -59,6 +60,11 @@ const lightbotResource: Resource = {
     source: "Lightbot — versão web desenvolvida por Laurent Haan",
     lastVerifiedAt: LAST_VERIFIED_AT,
     status: "verified",
+  },
+  image: {
+    src: publicAsset("images/cards/curadoria-novembro-08/lightbot.png"),
+    alt: "Tela de apresentação de Lightbot, com o título do jogo entre circuitos e cabos",
+    license: "MIT",
   },
   tags: [
     "programação visual",
@@ -125,6 +131,11 @@ const blocklyGamesResource: Resource = {
     lastVerifiedAt: LAST_VERIFIED_AT,
     status: "verified",
   },
+  image: {
+    src: publicAsset("images/cards/curadoria-novembro-08/blockly-games.png"),
+    alt: "Bloco azul de programação com o nome Blockly",
+    license: "Apache-2.0",
+  },
   supplementaryLinks: [
     {
       label: "Informações para educadores",
@@ -188,6 +199,10 @@ const computeItResource: Resource = {
     alternatives: [],
   },
   provenance: { source: "Toxicode — Compute It, apresentação oficial para educadores e jogo com idioma fixado em português", lastVerifiedAt: "2026-10-28", status: "verified" },
+  image: {
+    src: publicAsset("images/cards/curadoria-novembro-08/compute-it.png"),
+    alt: "Imagem de apresentação de Compute It, com o título do jogo e círculos coloridos",
+  },
   supplementaryLinks: [
     { label: "Jogo com comandos em português — acesso direto", url: COMPUTE_IT_PORTUGUESE_URL },
     { label: "Orientações oficiais para educadores (inglês)", url: "https://compute-it.toxicode.fr/en/about.html" },

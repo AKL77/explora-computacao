@@ -1,4 +1,5 @@
 import type { Resource } from "@/domain/resource";
+import { publicAsset } from "@/lib/publicAsset";
 
 import { createCurriculumAlignment } from "../bnccComputing";
 
@@ -36,6 +37,10 @@ const technologyAndHumanLife: Resource = {
   requirements: { internet: false, devices: ["Computador com leitor de PowerPoint e projetor para apresentar os arquivos previamente baixados"], accountRequired: false, pricing: "free" },
   accessibility: { evaluationStatus: "pending", knownFeatures: [], potentialBarriers: ["Imagens, infográficos e gráficos exigem descrição pelo docente", "Leitura e contraste dos slides ainda não avaliados integralmente"], alternatives: ["Texto de apoio disponível em Word e na página oficial"] },
   provenance: { source: "Mariana Araguaia — Portal Conexão Escola, SME Goiânia, Ciências da Natureza, 7º ano", lastVerifiedAt: VERIFIED_AT, status: "verified" },
+  image: {
+    src: publicAsset("images/cards/curadoria-novembro-08/tecnologia-vida-humana.png"),
+    alt: "Imagem da atividade Tecnologia e vida humana com notebook, celular e diferentes suportes de armazenamento",
+  },
   supplementaryLinks: [
     { label: "Página oficial — texto, quatro questões e autoria", url: TECHNOLOGY_PAGE },
     { label: "Slides para baixar — PowerPoint (PPTX)", url: "https://drive.google.com/file/d/1NQKqK9-AizswnleyTr05Uo_tPdOF4ca3/view" },
@@ -73,6 +78,10 @@ const computersWerePeople: Resource = {
   requirements: { internet: true, devices: ["Computador com navegador, projetor ou tela e saída de som"], accountRequired: false, pricing: "free" },
   accessibility: { evaluationStatus: "pending", knownFeatures: [], potentialBarriers: ["Explicação oral e demonstrações visuais", "Legendas e demais recursos de acessibilidade ainda não avaliados"], alternatives: [] },
   provenance: { source: "Manual do Mundo — A Saga dos Computadores, episódio 1 (22/03/2022)", lastVerifiedAt: VERIFIED_AT, status: "verified" },
+  image: {
+    src: publicAsset("images/cards/curadoria-novembro-08/computadores-pessoas.jpg"),
+    alt: "Miniatura de Os computadores eram pessoas!, com Iberê Thenório e uma máquina mecânica de calcular",
+  },
   supplementaryLinks: [{ label: "Vídeo completo — canal oficial, original em português", url: HISTORY_VIDEO }],
   tags: ["vídeo", "exposição", "história da computação", "calculadores humanos", "Pascalina", "máquinas de calcular", "Manual do Mundo", "Saga dos Computadores", "transformações do trabalho"],
 };
@@ -105,6 +114,10 @@ const computerMemory: Resource = {
   requirements: { internet: true, devices: ["Computador com navegador, projetor ou tela e saída de som"], accountRequired: false, pricing: "free" },
   accessibility: { evaluationStatus: "pending", knownFeatures: [], potentialBarriers: ["Conceitos técnicos explicados por fala e demonstrações", "Legendas e demais recursos de acessibilidade ainda não avaliados"], alternatives: [] },
   provenance: { source: "Manual do Mundo — A Saga dos Computadores, episódio 7 (22/09/2022)", lastVerifiedAt: VERIFIED_AT, status: "verified" },
+  image: {
+    src: publicAsset("images/cards/curadoria-novembro-08/memoria-computador.jpg"),
+    alt: "Miniatura de Como funciona a memória do computador?, com Iberê Thenório e dispositivos de memória e armazenamento",
+  },
   supplementaryLinks: [{ label: "Vídeo completo — canal oficial, original em português", url: MEMORY_VIDEO }],
   tags: ["vídeo", "exposição", "memória", "armazenamento de dados", "RAM", "HD", "SSD", "memória volátil", "armazenamento persistente", "Manual do Mundo", "Saga dos Computadores"],
 };
@@ -120,7 +133,7 @@ const howTheInternetWorks: Resource = {
   topic: "Funcionamento da Internet, protocolos e DNS",
   summary: "Playlist oficial com quatro animações explicativas sobre o protocolo IP; Sistemas Autônomos, BGP e pontos de troca de tráfego; DNS; e governança da Internet. O conjunto tem 26min35s e permite selecionar episódios para uma exposição dialogada.",
   additionalInformation: "A playlist Como funciona a Internet?, do canal NICbrvideos, foi conferida com quatro vídeos em português: parte 1, O protocolo IP (5min44s); parte 2, Sistemas Autônomos, BGP, PTTs (7min06s); parte 3, DNS (6min55s); parte 4, Governança da Internet (6min50s). O total de 26min35s é a soma dos vídeos, sem pausas, discussão ou eventual publicidade do YouTube. Os episódios são de 2014; contextualizar essa data ao apresentar exemplos e a governança. Não há ano escolar declarado: o recorte do 7º ao 9º ano é curatorial. A parte 2 é mais técnica e requer explicação docente. O próprio canal informa que a trilha musical de fundo não pode ser ajustada separadamente e pode dificultar a escuta; testar o som antes da aula. Não acompanha folha para impressão ou plano de aula. Os episódios ficam como complementos deste único cadastro, sem cards separados.",
-  curatorNotes: "Autoria da playlist, quatro episódios e durações foram confirmados na interface do YouTube. As páginas institucionais descrevem o conteúdo de cada parte. Público, familiaridade, proposta e vínculos à BNCC são curatoriais e pendentes de validação. A licença geral do site institucional não foi estendida automaticamente aos vídeos hospedados no YouTube ou às suas miniaturas; não foram republicados arquivos de mídia.",
+  curatorNotes: "Autoria da playlist, quatro episódios e durações foram confirmados na interface do YouTube. As páginas institucionais descrevem o conteúdo de cada parte. Público, familiaridade, proposta e vínculos à BNCC são curatoriais e pendentes de validação. A licença geral do site institucional não foi estendida automaticamente aos vídeos ou às suas miniaturas. Os vídeos permanecem na fonte original; o catálogo usa a miniatura do primeiro episódio para identificar a playlist.",
   recommendedGrades: [7, 8, 9],
   curriculum: { alignments: [
     createCurriculumAlignment({
@@ -144,6 +157,10 @@ const howTheInternetWorks: Resource = {
   requirements: { internet: true, devices: ["Computador com navegador, projetor ou tela e saída de som"], accountRequired: false, pricing: "free" },
   accessibility: { evaluationStatus: "pending", knownFeatures: [], potentialBarriers: ["Música de fundo pode competir com a narração", "Animações e vocabulário técnico exigem mediação", "Legendas e demais recursos de acessibilidade ainda não avaliados"], alternatives: ["Descrições institucionais dos temas nos links complementares"] },
   provenance: { source: "NIC.br — playlist oficial Como funciona a Internet?, NICbrvideos, quatro episódios (2014)", lastVerifiedAt: VERIFIED_AT, status: "verified" },
+  image: {
+    src: publicAsset("images/cards/curadoria-novembro-08/como-funciona-internet.jpg"),
+    alt: "Miniatura de Como funciona a Internet?, do NIC.br, representando a playlist pelo primeiro episódio sobre o protocolo IP",
+  },
   supplementaryLinks: [
     { label: "Parte 1 — O protocolo IP (5min44s)", url: "https://www.youtube.com/watch?v=HNQD0qJ0TC4" },
     { label: "Parte 2 — Sistemas Autônomos, BGP, PTTs (7min06s)", url: "https://www.youtube.com/watch?v=C5qNAT_j63M" },

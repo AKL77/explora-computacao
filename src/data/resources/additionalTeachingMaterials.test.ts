@@ -49,7 +49,7 @@ describe("ampliação de outubro do catálogo", () => {
     expect(find("microbit-cracha").requirements.accountRequired).toBeUndefined();
     const automata = find("computacional-automatos-monica");
     expect(automata.provenance.license).toBeUndefined();
-    expect(automata.image).toBeUndefined();
+    expect(automata.image?.src).toContain("automatos-monica-2026.jpg");
     expect(find("nicbr-internet-responsa-adolescentes").provenance.license).toContain("CC BY-ND");
   });
 

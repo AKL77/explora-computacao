@@ -33,7 +33,7 @@ describe("materiais aprovados em 28 de outubro", () => {
     expect(fakeNews.additionalInformation).toContain("EF09LP01");
     expect(filterResources([fakeNews], { grades: [9], skills: ["EF09CO10"] })).toHaveLength(1);
     expect(filterResources([fakeNews], { grades: [8], skills: ["EF09CO10"] })).toHaveLength(0);
-    expect(fakeNews.image).toBeUndefined();
+    expect(fakeNews.image?.src).toContain("fake-news.jpg");
     expect(fakeNews.provenance.license).toBeUndefined();
   });
 

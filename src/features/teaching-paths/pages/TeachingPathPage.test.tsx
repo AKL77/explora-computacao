@@ -1,6 +1,7 @@
 import { cleanup, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it } from "vitest";
+import { useClassroomsStore } from "@/store/useClassroomsStore";
 import { MemoryRouter } from "react-router-dom";
 
 import { TEACHING_PATHS_SCHEMA_VERSION, useTeachingPathsStore } from "@/store/useTeachingPathsStore";
@@ -9,6 +10,7 @@ import { TeachingPathPage } from "./TeachingPathPage";
 afterEach(() => {
   cleanup();
   localStorage.clear();
+  useClassroomsStore.setState({ classrooms: [], retiredCodes: [] });
   useTeachingPathsStore.setState({ schemaVersion: TEACHING_PATHS_SCHEMA_VERSION, paths: [] });
 });
 
@@ -34,6 +36,20 @@ function getResourceCard(title: string) {
 
   if (!card) throw new Error(`Card não encontrado para ${title}`);
   return within(card);
+}
+
+async function toggleYear(user: ReturnType<typeof userEvent.setup>, grade: number) {
+  await user.click(screen.getByRole("button", { name: "Ver opções de anos escolares" }));
+  const dialog = screen.getByRole("dialog", { name: "Selecionar anos escolares" });
+  await user.click(within(dialog).getByRole("button", { name: `${grade}º ano` }));
+  await user.click(within(dialog).getByRole("button", { name: "Concluir" }));
+}
+
+async function toggleFormat(user: ReturnType<typeof userEvent.setup>, label: string) {
+  await user.click(screen.getByRole("button", { name: "Ver opções de formatos" }));
+  const dialog = screen.getByRole("dialog", { name: "Selecionar formatos" });
+  await user.click(within(dialog).getByRole("button", { name: label }));
+  await user.click(within(dialog).getByRole("button", { name: "Concluir" }));
 }
 
 describe("TeachingPathPage", () => {
@@ -80,28 +96,21 @@ describe("TeachingPathPage", () => {
     expect(screen.queryByRole("heading", { name: blocklyTitle, level: 3 })).not.toBeInTheDocument();
   }, 10_000);
 
-  it("filtra com tags clicáveis, inclusive materiais de formato misto", async () => {
+  it("filtra por ano e formato em janelas, inclusive materiais de formato misto", async () => {
     const user = await renderPage();
-    const fifthGrade = screen.getByRole("button", { name: "5º ano" });
+    const years = screen.getByRole("button", { name: "Ver opções de anos escolares" });
 
-    expect(screen.getByRole("button", { name: "Todos os anos" })).toHaveAttribute(
-      "aria-pressed",
-      "true",
-    );
-    await user.click(fifthGrade);
-    expect(fifthGrade).toHaveAttribute("aria-pressed", "true");
-    expect(screen.getByRole("button", { name: "Todos os anos" })).toHaveAttribute(
-      "aria-pressed",
-      "false",
-    );
+    expect(years).toHaveTextContent("Todos");
+    await toggleYear(user, 5);
+    expect(years).toHaveTextContent("5º ano");
 
-    await user.click(screen.getByRole("button", { name: "Material plugado" }));
+    await toggleFormat(user, "Material plugado");
     expect(screen.queryByRole("heading", { name: vinteTitle, level: 3 })).not.toBeInTheDocument();
     expect(screen.getByRole("heading", { name: blocklyTitle, level: 3 })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: sertaoTitle, level: 3 })).toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: "Material plugado" }));
-    await user.click(screen.getByRole("button", { name: "Material desplugado" }));
+    await toggleFormat(user, "Material plugado");
+    await toggleFormat(user, "Material desplugado");
     expect(screen.getByRole("heading", { name: vinteTitle, level: 3 })).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: blocklyTitle, level: 3 })).not.toBeInTheDocument();
     expect(screen.getByRole("heading", { name: sertaoTitle, level: 3 })).toBeInTheDocument();
@@ -114,8 +123,7 @@ describe("TeachingPathPage", () => {
     const user = await renderPage();
 
     for (const grade of [4, 5, 8, 6]) {
-      const gradeFilter = screen.getByRole("button", { name: `${grade}º ano` });
-      await user.click(gradeFilter);
+      await toggleYear(user, grade);
 
       if (grade === 4 || grade === 5) {
         expect(screen.getByRole("heading", { name: blocklyTitle, level: 3 })).toBeInTheDocument();
@@ -128,7 +136,7 @@ describe("TeachingPathPage", () => {
         expect(screen.queryByRole("heading", { name: vinteTitle, level: 3 })).not.toBeInTheDocument();
       }
 
-      await user.click(gradeFilter);
+      await user.click(screen.getByRole("button", { name: "Limpar filtros" }));
     }
   }, 10_000);
 
@@ -173,9 +181,9 @@ describe("TeachingPathPage", () => {
     const types = screen.getByRole("dialog", { name: "Selecionar tipos de material" });
     await user.click(within(types).getByRole("button", { name: "Jogos" }));
     await user.click(within(types).getByRole("button", { name: "Concluir" }));
-    await user.click(screen.getByRole("button", { name: "Material plugado" }));
+    await toggleFormat(user, "Material plugado");
     expect(screen.queryByRole("heading", { name: vinteTitle })).not.toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "5º ano" }));
+    await toggleYear(user, 5);
     await user.click(screen.getByRole("button", { name: "Ver opções de assuntos" }));
     const subjects = screen.getByRole("dialog", { name: "Selecionar assuntos" });
     await user.click(within(subjects).getByRole("button", { name: "Cyberbullying" }));
@@ -208,7 +216,7 @@ describe("TeachingPathPage", () => {
     expect(screen.getByRole("heading", { name: "Interland" })).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: blocklyTitle })).not.toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: "5º ano" }));
+    await toggleYear(user, 5);
     expect(screen.getByRole("heading", { name: "Interland" })).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: "Cyberbullying — Jogo Educativo" })).not.toBeInTheDocument();
 
@@ -225,104 +233,64 @@ describe("TeachingPathPage", () => {
     expect(screen.getByRole("button", { name: "Ver opções de assuntos" })).toBeInTheDocument();
   }, 10_000);
 
-  it("leva o cartão ao detalhe e permite selecionar e remover materiais sem reordenação", async () => {
+  it("oferece apenas adicionar à trilha existente ou à turma e orienta quando não há trilhas", async () => {
     const user = await renderPage();
-    const blocklyCard = getResourceCard(blocklyTitle);
-
-    expect(
-      blocklyCard.getByRole("link", { name: `Abrir detalhes de ${blocklyTitle}` }),
-    ).toHaveAttribute("href", "/app/materiais/blockly-games");
-    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
-    expect(screen.queryByRole("region", { name: "Nova trilha em criação" })).not.toBeInTheDocument();
-
-    await user.click(
-      blocklyCard.getByRole("button", {
-        name: `Adicionar ${blocklyTitle} a uma nova trilha`,
-      }),
-    );
-    await user.click(
-      getResourceCard(vinteTitle).getByRole("button", {
-        name: `Adicionar ${vinteTitle} a uma nova trilha`,
-      }),
-    );
-
-    const trail = screen.getByRole("region", { name: "Nova trilha em criação" });
-    expect(within(trail).getByText("2 materiais selecionados.")).toBeInTheDocument();
-    expect(within(trail).getByText(blocklyTitle)).toBeInTheDocument();
-    expect(within(trail).getByText(vinteTitle)).toBeInTheDocument();
-    expect(within(trail).getByRole("button", { name: "Salvar trilha" })).toBeEnabled();
-    expect(
-      getResourceCard(blocklyTitle).getByRole("button", {
-        name: `${blocklyTitle} já foi adicionado à nova trilha`,
-      }),
-    ).toBeDisabled();
-    expect(
-      getResourceCard(blocklyTitle).getByRole("button", {
-        name: `Não há trilha existente disponível para adicionar ${blocklyTitle}`,
-      }),
-    ).toBeDisabled();
-    expect(screen.queryByRole("button", { name: /mover .* para cima/i })).not.toBeInTheDocument();
-
-    await user.click(
-      within(trail).getByRole("button", { name: `Remover ${blocklyTitle} da trilha` }),
-    );
-    expect(within(trail).queryByText(blocklyTitle)).not.toBeInTheDocument();
-    expect(within(trail).getByText("1 material selecionado.")).toBeInTheDocument();
-    await user.click(
-      within(trail).getByRole("button", { name: `Remover ${vinteTitle} da trilha` }),
-    );
-    expect(screen.queryByRole("region", { name: "Nova trilha em criação" })).not.toBeInTheDocument();
-    expect(
-      getResourceCard(vinteTitle).getByRole("button", {
-        name: `Adicionar ${vinteTitle} a uma nova trilha`,
-      }),
-    ).toBeEnabled();
+    const card = getResourceCard(blocklyTitle);
+    expect(card.getByRole("link", { name: `Abrir detalhes de ${blocklyTitle}` })).toHaveAttribute("href", "/app/materiais/blockly-games");
+    expect(card.getByRole("button", { name: "Adicionar à trilha" })).toBeEnabled();
+    expect(card.getByRole("button", { name: "Adicionar à turma" })).toBeEnabled();
+    expect(screen.queryByRole("button", { name: /nova trilha|salvar trilha|criar trilha/i })).not.toBeInTheDocument();
+    await user.click(card.getByRole("button", { name: "Adicionar à trilha" }));
+    const dialog = screen.getByRole("dialog", { name: "Adicionar à trilha" });
+    expect(within(dialog).getByText(/Você ainda não tem trilhas/)).toBeVisible();
+    expect(within(dialog).getByRole("link", { name: "Ir para Minhas Trilhas" })).toHaveAttribute("href", "/app/minhas-trilhas");
+    expect(within(dialog).queryByRole("textbox", { name: "Nome da trilha" })).not.toBeInTheDocument();
+    expect(useTeachingPathsStore.getState().paths).toHaveLength(0);
   }, 10_000);
 
-  it("solicita um nome e salva a trilha em Minhas Trilhas", async () => {
+  it("adiciona à trilha escolhida sem criar outra nem duplicar materiais", async () => {
+    const target = await useTeachingPathsStore.getState().createPath("Trilha de algoritmos", ["unicamp-desplugada-atividade-1"], { objective: "Explorar algoritmos." });
+    await useTeachingPathsStore.getState().createPath("Trilha já completa", ["google-blockly-games"], { objective: "Experimentar blocos." });
     const user = await renderPage();
-
-    await user.click(
-      getResourceCard(binaryNumbersTitle).getByRole("button", {
-        name: `Adicionar ${binaryNumbersTitle} a uma nova trilha`,
-      }),
-    );
-    await user.click(screen.getByRole("button", { name: "Salvar trilha" }));
-
-    const dialog = screen.getByRole("dialog", { name: "Salvar trilha" });
-    const nameInput = within(dialog).getByRole("textbox", { name: "Nome da trilha" });
-    const objectiveInput = within(dialog).getByRole("textbox", { name: "Objetivo da trilha" });
-    expect(nameInput).not.toHaveAttribute("placeholder");
-    expect(objectiveInput).not.toHaveAttribute("placeholder");
-    expect(
-      within(dialog).queryByText(
-        "Defina a identificação e a intenção pedagógica da sua trilha. Você poderá editar tudo depois.",
-      ),
-    ).not.toBeInTheDocument();
-    expect(within(dialog).queryByText(/materiais? (será|serão) salvos?/i)).not.toBeInTheDocument();
-    expect(within(dialog).getByRole("button", { name: "Bronze" })).toBeInTheDocument();
-    expect(within(dialog).getByRole("button", { name: "Chumbo" })).toBeInTheDocument();
-    expect(
-      within(dialog).getByRole("button", { name: "Usar ícone Lâmpada" }),
-    ).toBeInTheDocument();
-    expect(
-      within(dialog).getByRole("button", { name: "Usar ícone Quebra-cabeça" }),
-    ).toBeInTheDocument();
-
-    await user.type(nameInput, "Laços em blocos");
-    await user.type(
-      objectiveInput,
-      "Compreender como construir algoritmos com blocos.",
-    );
-    await user.click(within(dialog).getByRole("button", { name: "Salvar trilha" }));
-
-    expect(useTeachingPathsStore.getState().paths).toHaveLength(1);
-    expect(useTeachingPathsStore.getState().paths[0]).toMatchObject({
-      name: "Laços em blocos",
-      objective: "Compreender como construir algoritmos com blocos.",
-      backgroundColor: "turquoise",
-      icon: "book-open-check",
-      resourceIds: ["unicamp-desplugada-atividade-1"],
+    await user.click(getResourceCard(blocklyTitle).getByRole("button", { name: "Adicionar à trilha" }));
+    const dialog = screen.getByRole("dialog", { name: "Adicionar à trilha" });
+    let select = within(dialog).getByRole("combobox", { name: "Escolha uma trilha" });
+    expect(select).toHaveValue("");
+    expect(within(dialog).getByRole("button", { name: "Adicionar material" })).toBeDisabled();
+    expect(within(dialog).getAllByRole("option")).toHaveLength(2);
+    expect(within(dialog).getByRole("option", { name: "Trilha de algoritmos" })).toBeInTheDocument();
+    await user.selectOptions(select, target!.id);
+    await user.click(within(dialog).getByRole("button", { name: "Cancelar" }));
+    await user.click(getResourceCard(blocklyTitle).getByRole("button", { name: "Adicionar à trilha" }));
+    select = within(dialog).getByRole("combobox", { name: "Escolha uma trilha" });
+    expect(select).toHaveValue("");
+    expect(within(dialog).getByRole("button", { name: "Adicionar material" })).toBeDisabled();
+    await user.selectOptions(select, target!.id);
+    await user.click(within(dialog).getByRole("button", { name: "Adicionar material" }));
+    expect(useTeachingPathsStore.getState().paths).toHaveLength(2);
+    expect(useTeachingPathsStore.getState().paths.find(path => path.id === target!.id)).toMatchObject({
+      name: "Trilha de algoritmos", objective: "Explorar algoritmos.", resourceIds: ["unicamp-desplugada-atividade-1", "google-blockly-games"],
     });
-  }, 15_000);
+    await user.click(getResourceCard(blocklyTitle).getByRole("button", { name: "Adicionar à trilha" }));
+    expect(screen.getByText("Este material já está em todas as suas trilhas.")).toBeVisible();
+    expect(within(screen.getByRole("dialog")).queryByRole("button", { name: "Adicionar material" })).not.toBeInTheDocument();
+  }, 10_000);
+
+  it("adiciona diretamente a uma turma ativa e impede a repetição", async () => {
+    const input = { name: "5º A", grade: 5 as const, school: "", schoolYear: 2026, color: "blue" as const };
+    const active = await useClassroomsStore.getState().createClassroom(input);
+    const archived = await useClassroomsStore.getState().createClassroom({ ...input, name: "Turma arquivada" });
+    await useClassroomsStore.getState().archiveClassroom(archived!.id);
+    const user = await renderPage();
+    await user.click(getResourceCard(blocklyTitle).getByRole("button", { name: "Adicionar à turma" }));
+    const dialog = screen.getByRole("dialog", { name: "Adicionar à turma" });
+    expect(within(dialog).queryByText("Turma arquivada")).not.toBeInTheDocument();
+    await user.click(within(dialog).getByRole("radio", { name: /5º A/ }));
+    await user.click(within(dialog).getByRole("button", { name: "Adicionar material" }));
+    expect(useClassroomsStore.getState().classrooms.find(item => item.id === active!.id)?.materials)
+      .toEqual([{ resourceId: "google-blockly-games", visible: true, instruction: "" }]);
+    await user.click(getResourceCard(blocklyTitle).getByRole("button", { name: "Adicionar à turma" }));
+    expect(within(screen.getByRole("dialog", { name: "Adicionar à turma" })).getByRole("radio", { name: /5º A/ })).toBeDisabled();
+    expect(useTeachingPathsStore.getState().paths).toHaveLength(0);
+  }, 10_000);
 });

@@ -25,7 +25,7 @@ describe("ResourceDetailPage", () => {
     expect(
       await screen.findByRole("heading", {
         name: "Cyberbullying — Jogo Educativo",
-        level: 1,
+        level: 2,
       }),
     ).toBeVisible();
     expect(screen.getByRole("link", { name: "Voltar" })).toHaveAttribute(
@@ -77,7 +77,7 @@ describe("ResourceDetailPage", () => {
 
     await screen.findByRole("heading", {
       name: "Cyberbullying — Jogo Educativo",
-      level: 1,
+      level: 2,
     });
 
     expect(screen.queryByText("Curadoria em andamento")).not.toBeInTheDocument();
@@ -110,7 +110,7 @@ describe("ResourceDetailPage", () => {
     expect(
       await screen.findByRole("heading", {
         name: "Conversas com Computadores — O Teste de Turing",
-        level: 1,
+        level: 2,
       }),
     ).toBeVisible();
     expect(screen.getByText("Assunto", { exact: true })).toBeVisible();

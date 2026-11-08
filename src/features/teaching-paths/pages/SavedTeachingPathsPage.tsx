@@ -8,7 +8,7 @@ import {
   Pencil,
   Plus,
   Save,
-  Share2,
+  UsersRound,
   Trash2,
   Undo2,
 } from "lucide-react";
@@ -622,10 +622,9 @@ export function SavedTeachingPathsPage() {
 
   return (
     <WorkspacePage
-      title={draft.name}
-      eyebrow="Trilha de ensino"
+      title="Detalhes da trilha de ensino"
+      eyebrow="Planejamento por materiais"
       titleId="path-title"
-      maskTitle
       className={styles[themeClassNames[draft.backgroundColor]]}
       contentClassName={styles.page}
     >
@@ -644,6 +643,7 @@ export function SavedTeachingPathsPage() {
           <ArrowLeft aria-hidden="true" size={18} />
           Minhas Trilhas
         </button>
+        <h2 className={styles.pathName} data-clarity-mask="true">{draft.name}</h2>
         <div className={styles.pathTitleArea}>
           <p className={styles.pathObjective} data-clarity-mask="true">{draft.objective}</p>
           <div className={styles.pathMetadata} aria-label="Informações da trilha">
@@ -677,7 +677,7 @@ export function SavedTeachingPathsPage() {
             title={hasUnsavedChanges ? "Salve as alterações da trilha antes de compartilhar." : undefined}
             onClick={() => setIsShareDialogOpen(true)}
           >
-            <Share2 aria-hidden="true" size={17} /> Compartilhar com turma
+            <UsersRound aria-hidden="true" size={17} /> Adicionar à turma
           </button>}
           <button className={styles.editPathButton} type="button" onClick={openSettings}>
             <Pencil aria-hidden="true" size={17} />
@@ -749,10 +749,12 @@ export function SavedTeachingPathsPage() {
                   onClick={() => setPreviewResourceId(item.resourceId)}
                 >
                   <span className={styles.stepNode} aria-hidden="true">
-                    <img
-                      src={item.resource.image?.thumbnailSrc ?? item.resource.image?.src ?? RESOURCE_PLACEHOLDER}
-                      alt=""
-                    />
+                    <span className={styles.stageImage}>
+                      <img
+                        src={item.resource.image?.thumbnailSrc ?? item.resource.image?.src ?? RESOURCE_PLACEHOLDER}
+                        alt=""
+                      />
+                    </span>
                     <span className={styles.stageLabel}>Etapa {index + 1}</span>
                     <span className={styles.dragHandle}>
                       <GripVertical size={18} />
@@ -914,7 +916,7 @@ export function SavedTeachingPathsPage() {
       {settingsDialog}
       {pickerDialog}
       {leaveDialog}
-      {isShareDialogOpen && <ShareTeachingPathDialog path={selectedPath} onClose={() => setIsShareDialogOpen(false)} onShared={(classroom) => { setIsShareDialogOpen(false); setAnnouncement(`Trilha compartilhada com a turma ${classroom.name}.`); }} />}
+      {isShareDialogOpen && <ShareTeachingPathDialog path={selectedPath} onClose={() => setIsShareDialogOpen(false)} onShared={(classroom) => { setIsShareDialogOpen(false); setAnnouncement(`Trilha adicionada à turma ${classroom.name}.`); }} />}
       <AccessibleDialog
         open={isDeleteDialogOpen}
         title="Excluir trilha"

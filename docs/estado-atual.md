@@ -1,7 +1,7 @@
 # Estado atual do protótipo
 
-**Referência:** 8 de novembro de 2026 (interface publicada no GitHub Pages e
-compartilhamento de trilhas ativo no banco online)
+**Referência:** 8 de novembro de 2026 (interface, compartilhamento, login e
+Buscar Materiais; esta versão é publicada pelo fluxo de qualidade do GitHub Pages)
 
 **Versão do protótipo:** 0.3.0
 
@@ -14,11 +14,49 @@ documentos em `docs/historico` preservam decisões de etapas anteriores do TCC.
 
 - página inicial pública, conta Google via Supabase e demonstração local opcional;
   entrada real validada localmente, com Google liberado para contas externas;
+- **Manter conectado neste dispositivo** na entrada docente, inicialmente
+  desmarcado: quando escolhido, o login sobrevive à reabertura do navegador,
+  com renovação de tokens pelo SDK. Sem a opção, permanece restrito à aba.
+  **Sair** encerra o acesso lembrado, inclusive nas outras abas que o usam.
+  O comportamento é coberto por testes de armazenamento e de navegação;
 - **Buscar Materiais** com 48 recursos locais, pesquisa textual e filtros por ano,
-  assunto, formato e tipo de material. O filtro de assuntos reúne 45 palavras-chave
+  assunto, habilidade da BNCC, formato e tipo de material. O filtro de assuntos reúne 45 palavras-chave
   baseadas nos três eixos da BNCC Computação, com seleção múltipla em uma janela;
   algumas opções ainda não têm materiais associados;
-- filtro **Tipo de material**, com cinco opções em **Ver opções**, organizadas
+- barra de busca com cinco campos alinhados: **Ano escolar**, **Assuntos**,
+  **Habilidades da BNCC**, **Tipo de material** e **Formato**. Cada campo abre
+  suas opções e mostra a escolha atual ou a quantidade selecionada. Ano e
+  formato também aceitam seleção múltipla em janela, com os mesmos botões
+  arredondados de Assuntos e Tipo de material. O cabeçalho **Encontre materiais** /
+  **Por onde você quer começar?** acompanha a busca. Em telas menores, os campos
+  se reorganizam em linhas;
+- prévias de materiais centralizadas, exibidas por inteiro e com margem em uma
+  área uniforme. A largura e a organização dos cartões foram preservadas; a
+  altura continua se ajustando ao texto. Quando o espaço diminui, o conteúdo
+  passa a uma coluna para evitar sobreposição com os botões. Os cartões atendem à busca e
+  à seleção de materiais em Minhas Trilhas. Imagens oficiais adicionadas para
+  **Blockly Games**, **Crachá — micro:bit** e **Internet com Responsa**, seguidas
+  pelas prévias dos 12 materiais restantes. Todos os **48 materiais** têm imagem
+  específica obtida da fonte, de seu catálogo oficial ou do próprio material,
+  com descrição alternativa. Miniaturas dos vídeos identificam os episódios;
+  a playlist do NIC.br usa a do primeiro episódio. Créditos e condições em
+  `creditos-e-licencas.md`;
+- imagens na ficha do material exibidas por inteiro, com margem e preferência
+  pelo arquivo original em vez da miniatura. Etapas de **Trilhas Prontas** e
+  **Minhas Trilhas** também preservam as proporções, com os rótulos em uma faixa
+  própria abaixo da imagem, sem gradiente cobrindo o conteúdo;
+- retorno da ficha a **Buscar Materiais** recupera a posição de rolagem, a
+  pesquisa e os filtros da entrada correspondente no histórico. Funciona pelo
+  **Voltar** da ficha e pelo retorno do navegador. O estado é temporário,
+  em memória dentro da área docente; seletores de materiais em janelas continuam
+  independentes;
+- **Habilidades da BNCC** em campo próprio, com seleção múltipla das habilidades
+  vinculadas ao acervo, agrupadas por eixo e identificadas por código, descrição
+  e anos. A janela permite pesquisar código ou descrição, limpar a seleção e
+  concluir. Habilidades escolhidas usam união; os demais filtros se combinam por
+  interseção, exigindo que ano e habilidade pertençam ao mesmo vínculo curricular.
+  O filtro também integra a seleção de materiais em Minhas Trilhas;
+- filtro **Tipo de material**, com cinco opções em janela própria, organizadas
   pelos títulos **Abordagem ativa** e **Abordagem expositiva**. Seleções de tipos
   usam união e combinam-se por interseção com ano, assunto, formato e pesquisa.
   Um material pode ter vários tipos e aparece uma única vez; a classificação
@@ -36,7 +74,8 @@ documentos em `docs/historico` preservam decisões de etapas anteriores do TCC.
 - **Compute It** incluído após confirmação do autor, com `?lang=pt` nos acessos
   para fixar os comandos em português na ficha e no percurso pelas trilhas.
   Não depende da detecção do idioma do navegador. Elementos da interface
-  permanecem em inglês; o material usa o placeholder por licença não identificada;
+  permanecem em inglês; a prévia usa uma captura obtida na página oficial,
+  com os créditos e limites registrados em `creditos-e-licencas.md`;
 - quatro novos expositivos locais: **Tecnologia e vida humana**, dois vídeos do
   **Manual do Mundo** e a playlist oficial **Como funciona a Internet? — NIC.br**.
   A playlist é um único cadastro com quatro episódios nos complementos. Os
@@ -56,19 +95,34 @@ documentos em `docs/historico` preservam decisões de etapas anteriores do TCC.
   aluno e professor em cada material, exibidos na busca, no detalhe e na
   proposta de atividade, com explicação na página **Sobre**;
 - detalhe do material em três abas, com informações pedagógicas, condições de
-  uso, fonte, licença e materiais complementares;
+  uso, fonte, licença e materiais complementares. O resumo não repete o
+  fornecedor nem o aviso de saída da plataforma; as informações de origem
+  permanecem na aba **Fonte**. O card exibe o nome do material antes de **Turma**;
+  o cabeçalho usa **Planejamento por materiais** e **Detalhes do material**;
 - fichas e propostas de atividade identificam as referências curriculares como
   **Habilidades da BNCC**. Na ficha, o tema antes chamado **Habilidade** aparece
   como **Assunto**, antes das habilidades, e continua usado na busca e no apoio
   aos objetivos. O filtro **Assuntos** mantém sua lista própria de palavras-chave;
-- seleção de materiais para criar uma trilha própria;
+- **Buscar Materiais** oferece apenas **Adicionar à trilha**, escolhendo uma
+  trilha existente, e **Adicionar à turma**, com seleção de turma ativa. As ações
+  ficam ao lado de **Preparação necessária**, dentro do conteúdo do cartão,
+  com o mesmo tamanho e hierarquia, sem a faixa extra no rodapé. Em telas
+  menores, se reorganizam abaixo da preparação.
+  A criação de trilhas foi removida da busca e permanece em **Minhas Trilhas**.
+  Quando não há trilhas, a janela orienta o acesso a essa área; materiais já
+  presentes não podem ser adicionados novamente. A lista abre sem uma trilha
+  selecionada e exige a escolha antes de habilitar a adição;
 - salvamento de trilhas com nome, objetivo, cor e ícone, online por professor
   ou local no modo demonstrativo;
 - área docente sem faixa permanente de status online ou botão de atualização
   manual; o salvamento não exibe uma faixa no topo e avisos aparecem em caso de erro,
   com nova tentativa disponível quando o carregamento falha;
 - **Minhas Trilhas** com sequência visual conectada, reordenação por arrastar e
-  soltar, duração de uma a três aulas por etapa e tempo total calculado;
+  soltar, duração de uma a três aulas por etapa e tempo total calculado. A trilha
+  aberta exibe o nome em destaque na área azul, acima do objetivo, como nas
+  **Trilhas Prontas**. O cabeçalho usa **Planejamento por materiais** e
+  **Detalhes da trilha de ensino**. As ações da trilha ficam alinhadas à base
+  das informações na área azul;
 - criação de trilhas e adição de materiais pela própria área **Minhas Trilhas**,
   em janela com os mesmos filtros e prévias de **Buscar Materiais**. Materiais
   já presentes não são duplicados; novas etapas de uma trilha existente entram
@@ -104,10 +158,12 @@ documentos em `docs/historico` preservam decisões de etapas anteriores do TCC.
 - adição de materiais pela turma ou pelo atalho **Adicionar à turma** na ficha;
   materiais ficam visíveis por padrão, com visibilidade independente por turma,
   ordenação e orientação opcional aos alunos;
+- **Criar turma** integrado ao rodapé da janela **Adicionar à turma**, com borda
+  e alinhamento aos demais controles; na primeira turma, aparece como ação principal;
 - confirmação ao remover um material ou uma trilha pelo **X** da turma;
   cancelar preserva o item e confirmar retira apenas o compartilhamento nessa turma;
-- compartilhamento de uma cópia de trilha por **Compartilhar trilha**, na turma,
-  ou **Compartilhar com turma**, em Minhas Trilhas. Cada cópia preserva nome,
+- compartilhamento de uma cópia de trilha por **Adicionar trilha**, na turma,
+  ou **Adicionar à turma**, em Minhas Trilhas. Cada cópia preserva nome,
   objetivo, aparência, etapas e durações; aceita visibilidade, reordenação e
   remoção independentes por turma. Editar ou excluir a original não modifica
   a cópia; **Atualizar cópia** aplica uma versão nova por escolha do professor;
@@ -183,7 +239,8 @@ telas órfãs e links quebrados.
 ## Persistência
 
 Turmas e trilhas online ficam no Supabase, vinculadas ao professor. A sessão
-docente usa `sessionStorage`; a seleção do aluno fica só em memória. No modo
+docente usa `sessionStorage` ou `localStorage` quando o professor escolhe manter
+o dispositivo conectado; a seleção do aluno fica só em memória. No modo
 demonstrativo, sessão, trilhas e turmas continuam no `localStorage`, sem migração
 para contas. O acervo permanece no código. Com aceitação, dados de navegação
 são enviados ao Microsoft Clarity, conforme `integracao-clarity.md`.
@@ -224,6 +281,6 @@ ficam depois de `#`.
 - o modo demonstrativo continua restrito ao navegador e não transfere seus dados
   para contas online;
 - alinhamentos curatoriais ainda precisam de validação acadêmica;
-- alguns materiais externos não permitem reutilização verificada de suas
-  imagens e, por isso, usam o placeholder do projeto;
+- as imagens de terceiros mantêm seus créditos e condições próprias no manifesto
+  de ativos; licença do recurso ou do portal não é presumida como licença da imagem;
 - as Trilhas Prontas são um conjunto inicial e ainda reduzido.

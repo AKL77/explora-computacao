@@ -139,10 +139,11 @@ test("professor publica e organiza materiais; aluno acessa sem login e acompanha
   await expect(page.getByRole("heading", { name: "Turma não encontrada", exact: true })).toBeVisible();
 });
 
-test("adiciona pela ficha do material, permite criar a primeira turma e evita duplicar ou republicar", async ({ page }) => {
+test("adiciona pela ficha do material, permite criar a primeira turma e evita duplicar ou republicar", async ({ page }, testInfo) => {
   await enterTeacher(page);
   await page.goto(route("/app/materiais/interland"));
   await page.getByRole("button", { name: "Adicionar à turma", exact: true }).click();
+  await page.screenshot({ path: testInfo.outputPath("adicionar-turma-primeira.png") });
   await page.getByRole("dialog", { name: "Adicionar à turma", exact: true }).getByRole("button", { name: "Criar turma", exact: true }).click();
   const form = page.getByRole("dialog", { name: "Criar turma", exact: true });
   await form.getByLabel("Nome da turma", { exact: true }).fill("6º A");
@@ -158,6 +159,7 @@ test("adiciona pela ficha do material, permite criar a primeira turma e evita du
   await page.goto(route("/app/materiais/interland"));
   await page.getByRole("button", { name: "Adicionar à turma", exact: true }).click();
   const pickClass = page.getByRole("dialog", { name: "Adicionar à turma", exact: true });
+  await page.screenshot({ path: testInfo.outputPath("adicionar-turma-existente.png") });
   await expect(pickClass.getByRole("radio", { name: /6º A/ })).toBeDisabled();
   await expect(pickClass.getByRole("button", { name: "Adicionar material", exact: true })).toBeDisabled();
   await pickClass.getByRole("button", { name: "Cancelar", exact: true }).click();

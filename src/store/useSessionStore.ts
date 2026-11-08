@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { AUTH_STORAGE_KEY, isOnlineMode, onlineMemoryStorage } from "@/lib/backend/config";
+import { isOnlineMode, onlineMemoryStorage } from "@/lib/backend/config";
+import { teacherAuthStorage } from "@/lib/backend/authStorage";
 import { supabase } from "@/lib/backend/client";
 import { resetWorkspace } from "@/lib/backend/resetWorkspace";
 import type { MaybePromise } from "@/lib/backend/workspaceState";
@@ -28,8 +29,8 @@ export const useSessionStore = create<SessionStore>()(
         set({ isAuthenticated: false, user: null, error: "", status: "ready" });
         if (isOnlineMode) {
           resetWorkspace(null);
-          sessionStorage.removeItem(AUTH_STORAGE_KEY);
-          return supabase?.auth.signOut({ scope: "local" }).then(() => undefined);
+          if (!supabase) { teacherAuthStorage.clearSession(); return; }
+          return supabase.auth.signOut({ scope: "local" }).then(() => undefined).finally(() => teacherAuthStorage.clearSession());
         }
       },
     }),

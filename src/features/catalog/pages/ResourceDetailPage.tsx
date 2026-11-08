@@ -3,10 +3,13 @@ import {
   type ReactNode,
   useRef,
   useState,
+  useContext,
+  useLayoutEffect,
 } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { trackClarityEvent } from "@/lib/clarity";
 import { WorkspacePage } from "@/components/layout/WorkspacePage";
+import { MaterialSearchNavigationContext } from "@/features/teaching-paths/materialSearchNavigation";
 
 import type {
   ParticipationMode,
@@ -110,10 +113,18 @@ function DetailItem({ term, children }: DetailItemProps) {
 export function ResourceDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const location = useLocation();
+  const navigate = useNavigate();
+  const searchHistory = useContext(MaterialSearchNavigationContext);
   const { resource, status } = useCatalogResource(slug);
   const backPath = getBackPath(location.state);
+  const searchEntryKey = (location.state as { searchEntryKey?: unknown } | null)?.searchEntryKey;
+  const canReturnToSearch = backPath === "/app/trilha-de-ensino"
+    && typeof searchEntryKey === "string" && searchHistory?.has(searchEntryKey);
   const [activeTab, setActiveTab] = useState<DetailTabId>("description");
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  useLayoutEffect(() => {
+    if (searchHistory) window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, [searchHistory, slug]);
 
   const selectAdjacentTab = (
     event: KeyboardEvent<HTMLButtonElement>,
@@ -176,17 +187,22 @@ export function ResourceDetailPage() {
   const externalUrl = resource.canonicalUrl ?? resource.sourceUrl;
 
   return (
-    <WorkspacePage as="article" title={resource.title} eyebrow="Detalhe do material" contentClassName={styles.page}>
+    <WorkspacePage as="article" title="Detalhes do material" eyebrow="Planejamento por materiais" contentClassName={styles.page}>
       <nav className={styles.breadcrumb} aria-label="Navegação estrutural">
-        <Link to={backPath}>Voltar</Link>
+        <Link to={backPath} onClick={(event) => {
+          if (canReturnToSearch && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
+            event.preventDefault();
+            navigate(-1);
+          }
+        }}>Voltar</Link>
       </nav>
 
       <div className={styles.hero}>
         <div className={styles.imageWrap}>
           <img
             src={
-              resource.image?.thumbnailSrc ??
               resource.image?.src ??
+              resource.image?.thumbnailSrc ??
               RESOURCE_PLACEHOLDER
             }
             alt={resource.image?.alt ?? ""}
@@ -198,7 +214,7 @@ export function ResourceDetailPage() {
           <div className={styles.badges}>
             {getResourceTypeLabels(resource).map((label) => <span key={label}>{label}</span>)}
           </div>
-          <p className={styles.provider}>Fornecedor: {resource.provider}</p>
+          <h2 className={styles.materialTitle}>{resource.title}</h2>
           <dl className={styles.heroMetadata}>
             <DetailItem term="Turma">
               {formatRecommendedGrades(resource.recommendedGrades)}
@@ -212,9 +228,6 @@ export function ResourceDetailPage() {
             </DetailItem>
           </dl>
 
-          <p className={styles.externalNotice}>
-            O recurso é externo. Ao acessá-lo, você sairá do Explora Computação.
-          </p>
           <div className={styles.actions}>
             <a
               href={externalUrl}

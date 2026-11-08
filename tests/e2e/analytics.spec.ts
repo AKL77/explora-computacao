@@ -1,6 +1,8 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 
+import { createTeachingPath } from "./teachingPathHelpers";
+
 const basePath = process.env.PLAYWRIGHT_BASE_PATH ?? "/";
 const production = process.env.PLAYWRIGHT_USE_PREVIEW === "true";
 const consentKey = "explora:analytics-consent:v1";
@@ -84,18 +86,14 @@ test("mascara textos pessoais das trilhas e envia somente o tipo de ação", asy
   await page.goto(basePath);
   await page.getByRole("button", { name: "Aceitar análise" }).click();
   await page.getByRole("link", { name: "Área do professor", exact: true }).first().click();
-  await page.getByRole("button", { name: "Adicionar Bugs a uma nova trilha", exact: true }).click();
-  await page.getByRole("region", { name: "Nova trilha em criação" }).getByRole("button", { name: "Salvar trilha" }).click();
-  const dialog = page.getByRole("dialog", { name: "Salvar trilha" });
   const privateName = "Nome privado de teste";
   const privateObjective = "Objetivo privado de teste";
-  await dialog.getByRole("textbox", { name: "Nome da trilha" }).fill(privateName);
-  await dialog.getByRole("textbox", { name: "Objetivo da trilha" }).fill(privateObjective);
-  await dialog.getByRole("button", { name: "Salvar trilha" }).click();
+  await createTeachingPath(page, privateName, privateObjective, ["Bugs"]);
+  await page.getByRole("button", { name: "Minhas Trilhas", exact: true }).click();
   await expect(page.getByText(privateName, { exact: true })).toHaveAttribute("data-clarity-mask", "true");
   await expect(page.getByText(privateObjective, { exact: true })).toHaveAttribute("data-clarity-mask", "true");
   await page.getByRole("button", { name: new RegExp(privateName) }).click();
-  await expect(page.getByRole("heading", { name: privateName })).toHaveAttribute("data-clarity-mask", "true");
+  await expect(page.getByRole("heading", { name: privateName, level: 2 })).toHaveAttribute("data-clarity-mask", "true");
   await expect(page.getByText(privateObjective, { exact: true })).toHaveAttribute("data-clarity-mask", "true");
   await expect.poll(() => calls(page)).toContainEqual(["event", "trilha_criada"]);
   const sent = JSON.stringify(await calls(page));

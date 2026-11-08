@@ -17,7 +17,7 @@ flowchart LR
   UI --> CLASSES["ClassroomsStore"]
   PATHS --> DB["Supabase PostgreSQL / dono e revisão"]
   SESSION --> AUTH["Google / Supabase Auth"]
-  AUTH --> SS["sessionStorage da aba"]
+  AUTH --> SS["sessionStorage / localStorage se autorizado"]
   CLASSES --> DB
   STUDENT["Aluno / código / sem conta"] --> EDGE["Edge Function"]
   EDGE --> DB
@@ -76,6 +76,11 @@ ações de criação/adição existentes. A seleção da janela altera somente o
 rascunho da trilha aberta. A criação solicita nome, objetivo, cor e ícone antes
 de persistir. A saída da conta também permite que o editor confirme o descarte
 antes de limpar a sessão, por `requestWorkspaceExit`.
+
+`BnccSkillFilter` reúne os códigos e textos dos vínculos curriculares do acervo,
+sem duplicar habilidades compartilhadas por vários materiais ou anos. A seleção
+aceita qualquer habilidade escolhida, mas exige que ela esteja associada a um dos
+anos selecionados no mesmo vínculo. O catálogo curricular permanece inalterado.
 
 **Minha conta** é um painel compacto no nome/avatar do professor, fora da
 navegação principal. Apresenta identificação, o link público de privacidade e

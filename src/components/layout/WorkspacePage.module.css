@@ -50,9 +50,19 @@
   align-items: center;
 }
 
+.headerActions > button {
+  width: 9.5rem;
+  min-height: 44px;
+  padding: .65rem 1rem;
+  gap: .5rem;
+  font-size: .86rem;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
 @media (max-width: 44rem) {
   .withActions { grid-template-columns: minmax(0, 1fr); }
-  .headerActions, .headerActions > * { width: 100%; }
+  .headerActions, .headerActions > *, .headerActions > button { width: 100%; }
 }
 
 .header h1 {

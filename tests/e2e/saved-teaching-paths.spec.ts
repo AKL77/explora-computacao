@@ -27,7 +27,7 @@ async function createPath(page: Page) {
   await settings.getByRole("textbox", { name: "Nome da trilha" }).fill("Trilha local de programação");
   await settings.getByRole("textbox", { name: "Objetivo da trilha" }).fill("Explorar algoritmos e programação.");
   await settings.getByRole("button", { name: "Criar trilha", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "Trilha local de programação", level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Trilha local de programação", level: 2 })).toBeVisible();
 }
 
 test.beforeEach(async ({ page }) => {
@@ -47,6 +47,15 @@ test("cria e amplia uma trilha sem sair de Minhas Trilhas", async ({ page }, tes
 
   await page.getByRole("button", { name: "Adicionar materiais", exact: true }).click();
   const picker = page.getByRole("dialog", { name: "Adicionar materiais à trilha", exact: true });
+  const skillTrigger = picker.getByRole("button", { name: "Ver opções de habilidades da BNCC", exact: true });
+  await skillTrigger.click();
+  const skills = page.getByRole("dialog", { name: "Selecionar habilidades da BNCC", exact: true });
+  await skills.getByRole("searchbox", { name: "Buscar habilidade", exact: true }).fill("EF05CO04");
+  await skills.getByRole("button", { name: /^EF05CO04 / }).click();
+  await skills.getByRole("button", { name: "Concluir", exact: true }).click();
+  await expect(skillTrigger).toBeFocused();
+  await expect(picker.getByRole("button", { name: "Já na trilha: Blockly Games" })).toBeVisible();
+  await picker.getByRole("button", { name: "Limpar filtros", exact: true }).click();
   await picker.getByRole("searchbox").fill("Blockly");
   await expect(picker.getByRole("button", { name: "Já na trilha: Blockly Games" })).toBeDisabled();
   await picker.getByRole("searchbox").fill("Lightbot");
@@ -74,7 +83,7 @@ test("cria e amplia uma trilha sem sair de Minhas Trilhas", async ({ page }, tes
   await page.screenshot({ path: testInfo.outputPath("proposta-material-completo.png") });
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
   await link.click();
-  await expect(page.getByRole("heading", { name: "Lightbot", level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Lightbot", level: 2 })).toBeVisible();
 });
 
 test("protege rascunhos ao fechar a edição, voltar, navegar e recarregar", async ({ page }) => {
@@ -105,7 +114,7 @@ test("protege rascunhos ao fechar a edição, voltar, navegar e recarregar", asy
   });
   await page.reload({ timeout: 3000 }).catch(() => undefined);
   expect(beforeUnload).toBe(true);
-  await expect(page.getByRole("heading", { name: "Nome em edição", level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Nome em edição", level: 2 })).toBeVisible();
   await page.getByRole("button", { name: "Salvar alterações" }).click();
   await page.getByRole("button", { name: "Minhas Trilhas", exact: true }).click();
   await expect(guard).not.toBeVisible();
@@ -120,7 +129,7 @@ test("protege rascunhos ao fechar a edição, voltar, navegar e recarregar", asy
   await expect(proposal.getByRole("radio", { name: /2 aulas/ })).toBeChecked();
   await proposal.getByRole("link", { name: /Ver material completo/ }).click();
   await guard.getByRole("button", { name: "Sair sem salvar", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "Blockly Games", level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Blockly Games", level: 2 })).toBeVisible();
   expect((await readPath(page)).lessonCountsByResourceId).toEqual({});
 });
 

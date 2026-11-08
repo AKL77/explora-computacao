@@ -44,7 +44,7 @@ const questions = [
   {
     question: "Como crio uma trilha de ensino?",
     answer:
-      "Em Buscar Materiais, pesquise uma área, assunto ou habilidade e refine os resultados com tags. Cada cartão mostra um objetivo breve, o que os estudantes farão e os materiais usados. Adicione os materiais a uma nova trilha e informe um nome para salvá-la.",
+      "Em Buscar Materiais, pesquise uma área, assunto ou habilidade e refine os resultados com os filtros. Cada cartão mostra um objetivo breve, o que os estudantes farão e os materiais usados. Adicione um material a uma trilha existente ou a uma turma. Para criar uma trilha, acesse Minhas Trilhas.",
   },
   {
     question: "Posso incluir novos materiais na plataforma?",

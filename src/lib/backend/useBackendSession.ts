@@ -6,6 +6,7 @@ import { useTeachingPathsStore } from "@/store/useTeachingPathsStore";
 import { teacherWorkspaceRepository } from "@/repositories/TeacherWorkspaceRepository";
 import { backendConfig, isOnlineMode } from "./config";
 import { supabase } from "./client";
+import { teacherAuthStorage } from "./authStorage";
 import { resetWorkspace } from "./resetWorkspace";
 import { useWorkspaceState } from "./workspaceState";
 
@@ -62,7 +63,10 @@ export function useBackendSession() {
     }
     const client = supabase;
     let active = true;
-    const { data: subscription } = client.auth.onAuthStateChange((_event, session) => { if (active) applyUser(session?.user ?? null); });
+    const { data: subscription } = client.auth.onAuthStateChange((_event, session) => {
+      // Eventos de outra aba só se aplicam quando ela compartilha a mesma sessão.
+      if (active && teacherAuthStorage.matchesSession(session?.access_token)) applyUser(session?.user ?? null);
+    });
     const start = async () => {
       try {
         await completeAuthCallback();

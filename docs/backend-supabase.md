@@ -92,8 +92,15 @@ enviá-los ao navegador. Turma arquivada ou excluída retorna indisponibilidade.
 Quem sabe o código pode consultar os dados públicos da turma: não incluir dados
 pessoais de alunos em nomes e orientações.
 
-A sessão docente usa `sessionStorage` da aba. Sair limpa sessão e dados em
-memória. Dados locais antigos são ignorados no modo online. A seleção do aluno
+A sessão docente usa `sessionStorage` da aba por padrão. A opção **Manter
+conectado neste dispositivo** autoriza guardar a sessão
+no `localStorage` e restaurá-la ao reabrir o navegador. A escolha também acompanha
+o verificador PKCE durante a ida ao Google e o retorno ao site. A renovação dos
+tokens continua sob responsabilidade do SDK. Sessões existentes permanecem na aba.
+Sair solicita a revogação da sessão antes de apagar as credenciais e limpa os dados
+em memória; abas que compartilham o login lembrado também saem. A preferência
+da caixa de seleção é mantida para a próxima entrada, sem conservar o login após Sair.
+Dados locais antigos são ignorados no modo online. A seleção do aluno
 existe só em memória, sem código na URL ou no armazenamento. A página consulta
 atualizações a cada 20 segundos enquanto visível e ao recuperar foco; ocultações
 e arquivamentos passam a valer na próxima consulta.

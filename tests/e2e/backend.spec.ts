@@ -1,8 +1,116 @@
+import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type BrowserContext } from "@playwright/test";
 import type { Classroom } from "../../src/domain/classroom";
 import type { SavedTeachingPath } from "../../src/domain/savedTeachingPath";
 
 const authKey = "explora:teacher-auth:v1";
+const rememberKey = "explora:remember-device:v1";
+
+for (const remember of [false, true]) {
+  test(`login ${remember ? "lembrado" : "restrito à aba"}: retorno do Google, reabertura e saída`, async ({ page, context, browser }, testInfo) => {
+    let exchanges = 0;
+    let refreshes = 0;
+    let logouts = 0;
+    const user = { id: "00000000-0000-4000-8000-000000000001", email: "professor@example.com", aud: "authenticated", role: "authenticated", app_metadata: { provider: "google" }, user_metadata: { full_name: "Professor de Teste" }, created_at: new Date().toISOString() };
+    const makeSession = (revision: number) => {
+      const payload = Buffer.from(JSON.stringify({ sub: user.id, exp: Math.floor(Date.now() / 1000) + 3600, revision })).toString("base64url");
+      return { access_token: `e30.${payload}.signature`, refresh_token: `refresh-${revision}`, token_type: "bearer", expires_in: 3600, expires_at: Math.floor(Date.now() / 1000) + 3600, user };
+    };
+    const mockAuth = async (target: BrowserContext) => {
+      await target.route("https://backend-test.supabase.co/**", async (route) => {
+        const url = new URL(route.request().url());
+        const name = url.pathname.split("/").pop();
+        if (name === "authorize") {
+          expect(url.searchParams.get("provider")).toBe("google");
+          expect(url.searchParams.get("code_challenge_method")).toBe("s256");
+          return route.fulfill({ status: 302, headers: { location: "http://127.0.0.1:4175/?code=test-auth-code" } });
+        }
+        if (name === "token") {
+          const args = route.request().postDataJSON();
+          if (url.searchParams.get("grant_type") === "pkce") {
+            exchanges++;
+            expect(args.auth_code).toBe("test-auth-code");
+            expect(args.code_verifier).toEqual(expect.any(String));
+            expect(args.code_verifier.length).toBeGreaterThan(20);
+            return route.fulfill({ json: makeSession(1) });
+          }
+          expect(url.searchParams.get("grant_type")).toBe("refresh_token");
+          expect(args.refresh_token).toBe("refresh-1");
+          refreshes++;
+          return route.fulfill({ json: makeSession(2) });
+        }
+        if (name === "teacher_workspace") {
+          expect(route.request().headers().authorization).toMatch(/^Bearer e30\./);
+          return route.fulfill({ json: { classrooms: [], paths: [] } });
+        }
+        if (name === "logout") {
+          expect(route.request().headers().authorization).toMatch(/^Bearer e30\./);
+          logouts++;
+          return route.fulfill({ status: 204 });
+        }
+        throw new Error(`Consulta inesperada: ${name}`);
+      });
+    };
+    await context.addInitScript(() => localStorage.setItem("explora:analytics-consent:v1", "denied"));
+    await mockAuth(context);
+    await page.goto("/#/entrar");
+    const checkbox = page.getByRole("checkbox", { name: "Manter conectado neste dispositivo", exact: true });
+    await expect(checkbox).not.toBeChecked();
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+    await checkbox.setChecked(remember);
+    await page.screenshot({ path: testInfo.outputPath("manter-conectado-login.png"), fullPage: true });
+    const independent = await context.newPage();
+    await independent.goto("/#/entrar");
+    await page.getByRole("button", { name: "Entrar com Google", exact: true }).click();
+    await expect(page.getByRole("heading", { name: "Buscar Materiais", exact: true })).toBeVisible();
+    expect(exchanges).toBe(1);
+    expect(await page.evaluate((key) => Boolean(localStorage.getItem(key)), authKey)).toBe(remember);
+    expect(await page.evaluate((key) => Boolean(sessionStorage.getItem(key)), authKey)).toBe(!remember);
+    if (!remember) await expect(independent.getByRole("button", { name: "Entrar com Google", exact: true })).toBeVisible();
+    else await expect(independent.getByRole("heading", { name: "Buscar Materiais", exact: true })).toBeVisible();
+    await page.reload();
+    await expect(page.getByRole("heading", { name: "Buscar Materiais", exact: true })).toBeVisible();
+    const state = await context.storageState();
+    await context.close();
+
+    // Uma nova janela só recebe o armazenamento persistente, como após reabrir o navegador.
+    if (remember) {
+      const entry = state.origins.flatMap((origin) => origin.localStorage).find((item) => item.name === authKey)!;
+      const session = JSON.parse(entry.value);
+      session.expires_at = Math.floor(Date.now() / 1000) - 60;
+      entry.value = JSON.stringify(session);
+    }
+    const reopened = await browser.newContext({ baseURL: "http://127.0.0.1:4175/", viewport: testInfo.project.use.viewport, storageState: state });
+    try {
+      await mockAuth(reopened);
+      const resumed = await reopened.newPage();
+      await resumed.goto("/#/app/minhas-turmas");
+      if (!remember) {
+        await expect(resumed.getByRole("button", { name: "Entrar com Google", exact: true })).toBeVisible();
+        await expect(resumed.getByRole("checkbox", { name: "Manter conectado neste dispositivo", exact: true })).not.toBeChecked();
+        expect(refreshes).toBe(0);
+        return;
+      }
+      await expect(resumed.getByRole("heading", { name: "Minhas Turmas", exact: true })).toBeVisible();
+      expect(refreshes).toBe(1);
+      expect(await resumed.evaluate((key) => JSON.parse(localStorage.getItem(key)!).refresh_token, authKey)).toBe("refresh-2");
+      const otherTab = await reopened.newPage();
+      await otherTab.goto("/#/app/minhas-trilhas");
+      await expect(otherTab.getByRole("heading", { name: "Minhas Trilhas", exact: true })).toBeVisible();
+      if (await resumed.getByRole("button", { name: "Abrir menu", exact: true }).isVisible()) await resumed.getByRole("button", { name: "Abrir menu", exact: true }).click();
+      await resumed.getByRole("button", { name: "Minha conta", exact: true }).click();
+      await resumed.getByRole("button", { name: "Sair", exact: true }).click();
+      await expect(resumed.getByRole("button", { name: "Entrar com Google", exact: true })).toBeVisible();
+      await expect(otherTab.getByRole("button", { name: "Entrar com Google", exact: true })).toBeVisible();
+      expect(logouts).toBe(1);
+      expect(await resumed.evaluate((key) => localStorage.getItem(key), authKey)).toBeNull();
+      expect(await resumed.evaluate((key) => sessionStorage.getItem(key), authKey)).toBeNull();
+      expect(await resumed.evaluate((key) => localStorage.getItem(key), rememberKey)).toBe("true");
+      await resumed.reload();
+      await expect(resumed.getByRole("button", { name: "Entrar com Google", exact: true })).toBeVisible();
+    } finally { await reopened.close(); }
+  });
+}
 
 test("confirma o compartilhamento de uma trilha somente após o servidor e entrega uma cópia pública", async ({ page, context }) => {
   await teacherSession(context);
@@ -36,18 +144,18 @@ test("confirma o compartilhamento de uma trilha somente após o servidor e entre
     throw new Error(`Consulta inesperada: ${name}`);
   });
   await page.goto(`/#/app/minhas-turmas/${classroom.id}`);
-  await page.getByRole("button", { name: "Compartilhar trilha", exact: true }).click();
-  const dialog = page.getByRole("dialog", { name: "Compartilhar trilha", exact: true });
+  await page.getByRole("button", { name: "Adicionar trilha", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Adicionar trilha", exact: true });
   await dialog.getByRole("radio", { name: /Algoritmos online/ }).check();
   const request = page.waitForRequest((request) => request.url().endsWith("change_classroom_teaching_path"));
   try {
-    await dialog.getByRole("button", { name: "Compartilhar trilha", exact: true }).click();
+    await dialog.getByRole("button", { name: "Adicionar trilha", exact: true }).click();
     await request;
     await expect(page.getByRole("article", { name: "Trilha Algoritmos online", exact: true })).toHaveCount(0);
     expect(classroom.sharedPaths).toHaveLength(0);
   } finally { releaseFirst(); }
   await expect(dialog.getByRole("alert").filter({ hasText: "Não foi possível confirmar a ação online" })).toBeVisible();
-  await dialog.getByRole("button", { name: "Compartilhar trilha", exact: true }).click();
+  await dialog.getByRole("button", { name: "Adicionar trilha", exact: true }).click();
   await expect(page.getByRole("article", { name: "Trilha Algoritmos online", exact: true })).toBeVisible();
   const student = await context.newPage();
   await student.goto("/#/alunos");
@@ -240,7 +348,7 @@ test("exclui trilha online somente após confirmação do servidor e preserva as
   await page.getByRole("button", { name: "Excluir trilha", exact: true }).click();
   await dialog.getByRole("button", { name: "Excluir trilha", exact: true }).click();
   await expect(dialog.getByRole("alert")).toContainText("Não foi possível confirmar a ação online");
-  await expect(page.getByRole("heading", { name: target.name, exact: true, level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: target.name, exact: true, level: 2 })).toBeVisible();
   expect(paths).toHaveLength(2);
   await dialog.getByRole("button", { name: "Excluir trilha", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Minhas Trilhas", exact: true, level: 1 })).toBeVisible();

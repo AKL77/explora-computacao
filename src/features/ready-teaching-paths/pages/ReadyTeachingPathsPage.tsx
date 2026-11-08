@@ -160,9 +160,9 @@ export function ReadyTeachingPathsPage() {
       <section className={styles.discovery} aria-labelledby="discovery-title">
         <div>
           <p className={styles.eyebrow}>Explore a coleção</p>
-          <h2 id="discovery-title">Que tema você quer trabalhar?</h2>
+          <h2 id="discovery-title">Qual eixo você quer trabalhar?</h2>
         </div>
-        <div className={styles.categoryFilters} aria-label="Filtrar trilhas por tema">
+        <div className={styles.categoryFilters} aria-label="Filtrar trilhas por eixo">
           {categories.map((category) => (
             <button
               type="button"
@@ -249,10 +249,12 @@ export function ReadyTeachingPathsPage() {
                   <span className={styles.stepNumber} aria-hidden="true">{index + 1}</span>
                   <div className={styles.stageCard}>
                     <div className={styles.imageWrap}>
-                      <img
-                        src={stage.resource.image?.thumbnailSrc ?? stage.resource.image?.src ?? RESOURCE_PLACEHOLDER}
-                        alt={stage.resource.image?.alt ?? ""}
-                      />
+                      <div className={styles.stageImage}>
+                        <img
+                          src={stage.resource.image?.thumbnailSrc ?? stage.resource.image?.src ?? RESOURCE_PLACEHOLDER}
+                          alt={stage.resource.image?.alt ?? ""}
+                        />
+                      </div>
                       <span>{stage.label}</span>
                     </div>
                     <div className={styles.stageContent}>

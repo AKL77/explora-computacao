@@ -33,11 +33,11 @@ export function ShareTeachingPathDialog({ classroom, path, onClose, onShared }: 
     setBusy(true); setError("");
     try {
       if (await share(targetClassroom.id, targetPath.id)) onShared(targetClassroom, targetPath);
-      else setError("Não foi possível compartilhar a trilha. Tente novamente.");
+      else setError("Não foi possível adicionar a trilha. Tente novamente.");
     } finally { setBusy(false); }
   };
 
-  return <AccessibleDialog open title={classroom ? "Compartilhar trilha" : "Compartilhar com turma"} onClose={() => { if (!busy) onClose(); }}>
+  return <AccessibleDialog open title={classroom ? "Adicionar trilha" : "Adicionar à turma"} onClose={() => { if (!busy) onClose(); }}>
     <form className={styles.form} onSubmit={submit}>
       <p className={styles.muted}>Uma cópia da trilha ficará disponível para os alunos. Alterações na original só entram na turma quando você atualizar a cópia.</p>
       {classroom ? paths.length > 0 ? <div className={styles.picker} role="group" aria-label="Minhas Trilhas">
@@ -46,22 +46,22 @@ export function ShareTeachingPathDialog({ classroom, path, onClose, onShared }: 
           return <label className={styles.pickOption} key={source.id}>
             <input type="radio" name={groupId} checked={selectedId === source.id} disabled={added || busy} onChange={() => { setSelectedId(source.id); setError(""); }} />
             <TeachingPathIconGlyph icon={source.icon} size={22} aria-hidden="true" />
-            <span><strong>{source.name}</strong><small>{source.resourceIds.length} {source.resourceIds.length === 1 ? "etapa" : "etapas"}{added ? " · Já compartilhada" : ""}</small></span>
+            <span><strong>{source.name}</strong><small>{source.resourceIds.length} {source.resourceIds.length === 1 ? "etapa" : "etapas"}{added ? " · Já adicionada" : ""}</small></span>
           </label>;
         })}
-      </div> : <p className={styles.muted}>Crie uma trilha em <Link to="/app/minhas-trilhas">Minhas Trilhas</Link> para compartilhar com esta turma.</p> : active.length > 0 ? <div className={styles.picker} role="group" aria-label="Suas turmas">
+      </div> : <p className={styles.muted}>Crie uma trilha em <Link to="/app/minhas-trilhas">Minhas Trilhas</Link> para adicionar a esta turma.</p> : active.length > 0 ? <div className={styles.picker} role="group" aria-label="Suas turmas">
         {active.map((target) => {
           const added = path ? alreadyShared(target, path) : false;
           return <label className={styles.pickOption} key={target.id}>
             <input type="radio" name={groupId} checked={selectedId === target.id} disabled={added || busy} onChange={() => { setSelectedId(target.id); setError(""); }} />
-            <span><strong>{target.name}</strong><small>{target.grade}º ano · {target.schoolYear}{added ? " · Já compartilhada" : ""}</small></span>
+            <span><strong>{target.name}</strong><small>{target.grade}º ano · {target.schoolYear}{added ? " · Já adicionada" : ""}</small></span>
           </label>;
         })}
-      </div> : <p className={styles.muted}>Crie uma turma em <Link to="/app/minhas-turmas">Minhas Turmas</Link> para compartilhar esta trilha.</p>}
+      </div> : <p className={styles.muted}>Crie uma turma em <Link to="/app/minhas-turmas">Minhas Turmas</Link> para adicionar esta trilha.</p>}
       {error && <p className={styles.error} role="alert">{error}</p>}
       <div className={styles.formFooter}>
         <button className={styles.secondary} type="button" disabled={busy} onClick={onClose}>Cancelar</button>
-        <button className={styles.primary} type="submit" disabled={!canShare || busy}>{busy ? "Compartilhando…" : "Compartilhar trilha"}</button>
+        <button className={styles.primary} type="submit" disabled={!canShare || busy}>{busy ? "Adicionando…" : "Adicionar trilha"}</button>
       </div>
     </form>
   </AccessibleDialog>;

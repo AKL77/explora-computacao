@@ -141,6 +141,10 @@ const fakeNews: Resource = {
   requirements: { internet: true, devices: ["Computador ou outro dispositivo com navegador para a pesquisa e a videoaula", "Projetor para a apresentação coletiva (opcional)"], accountRequired: false, pricing: "free" },
   accessibility: { ...accessibility, potentialBarriers: ["Leitura de textos e da apresentação", "Acessibilidade da videoaula e dos anexos ainda não avaliada"] },
   provenance: { source: "Marlon Santos — Portal Conexão Escola, SME Goiânia, Aprender Sempre, 9º ano", lastVerifiedAt: VERIFIED_AT, status: "verified" },
+  image: {
+    src: publicAsset("images/cards/curadoria-novembro-08/fake-news.jpg"),
+    alt: "Imagem da atividade As fake news, com uma pessoa diante de um notebook que exibe a expressão Fake News",
+  },
   supplementaryLinks: [
     { label: "Atividade para baixar — Word (DOCX)", url: "https://drive.google.com/file/d/1MkbE7Yebu6lOm2t9xM4Ds2g_vltNH3M_/view" },
     { label: "Slides para baixar — PowerPoint (PPTX)", url: "https://drive.google.com/file/d/1XJgjNMlxDFMIcaJY1PT6CalLnUeKgx6j/view" },

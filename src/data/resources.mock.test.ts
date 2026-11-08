@@ -12,6 +12,7 @@ describe("resources fixture", () => {
 
   it("mantém os 48 recursos do corpus atual", () => {
     expect(resources).toHaveLength(48);
+    expect(resources.every((resource) => resource.image?.src && resource.image.alt)).toBe(true);
     expect(unicampResources).toHaveLength(23);
     expect(rozelmaResources).toHaveLength(4);
     expect(
@@ -88,7 +89,7 @@ describe("resources fixture", () => {
       recommendedGrades: [4, 5],
       topic: "Cidadania digital e uso responsável da tecnologia",
     });
-    expect(aventurasDigitais?.image).toBeUndefined();
+    expect(aventurasDigitais?.image?.src).toContain("aventuras-digitais.jpg");
     expect(aventurasDigitais?.provenance.license).toBeUndefined();
     expect(
       aventurasDigitais?.curriculum.alignments.map(({ skill }) => skill.code),
@@ -105,14 +106,14 @@ describe("resources fixture", () => {
       recommendedGrades: [7],
       pedagogy: { estimatedDuration: "3 aulas" },
     });
-    expect(cyberbullying?.image).toBeUndefined();
+    expect(cyberbullying?.image?.src).toContain("cyberbullying-rozelma.png");
     expect(cyberbullying?.provenance.license).toBeUndefined();
     expect(
       cyberbullying?.curriculum.alignments.map(({ skill }) => skill.code),
     ).toEqual(["EF07CO09", "EF07CO03"]);
   });
 
-  it("registra Interland sem inventar duração, licença ou imagem", () => {
+  it("registra Interland com prévia oficial sem presumir duração ou licença", () => {
     const interland = resources.find(
       (resource) => resource.id === "google-interland",
     );
@@ -128,7 +129,7 @@ describe("resources fixture", () => {
       },
     });
     expect(interland?.pedagogy.estimatedDuration).toBeUndefined();
-    expect(interland?.image).toBeUndefined();
+    expect(interland?.image?.src).toContain("interland.png");
     expect(interland?.provenance.license).toBeUndefined();
     expect(
       interland?.curriculum.alignments.every(
@@ -149,7 +150,7 @@ describe("resources fixture", () => {
     ).toBe(false);
   });
 
-  it("registra Lightbot e Blockly Games sem inventar imagem ou licença", () => {
+  it("registra Lightbot e Blockly Games com as imagens e licenças verificadas", () => {
     const lightbot = resources.find((resource) => resource.id === "lightbot-web");
     const blocklyGames = resources.find(
       (resource) => resource.id === "google-blockly-games",
@@ -161,7 +162,10 @@ describe("resources fixture", () => {
       recommendedGrades: [4, 5],
       topic: "Sequências e repetições em algoritmos",
     });
-    expect(lightbot?.image).toBeUndefined();
+    expect(lightbot?.image).toMatchObject({
+      src: expect.stringContaining("lightbot.png"),
+      license: "MIT",
+    });
     expect(lightbot?.provenance.license).toBeUndefined();
     expect(lightbot?.curriculum.alignments.map(({ skill }) => skill.code)).toEqual([
       "EF04CO03",
@@ -176,7 +180,10 @@ describe("resources fixture", () => {
       topic: "Programação em blocos",
       provenance: { license: "Apache-2.0 (código-fonte)" },
     });
-    expect(blocklyGames?.image).toBeUndefined();
+    expect(blocklyGames?.image).toMatchObject({
+      src: expect.stringContaining("images/cards/curadoria-novembro-08/blockly-games.png"),
+      license: "Apache-2.0",
+    });
     expect(
       blocklyGames?.curriculum.alignments.every(
         ({ mapping }) => mapping.validationStatus === "pending",

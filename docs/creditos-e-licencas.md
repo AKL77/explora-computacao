@@ -54,10 +54,11 @@ preservar atribuição, uso não comercial e licença equivalente.
 | `public/images/cards/rozelma/sertao-bit.jpg` e miniatura em `public/images/cards/thumbnails/rozelma/` | *Sertão.bit*, de Rozelma França e Patrícia Tedesco, com ilustrações de Paulo Ricardo B. Silva | [Página oficial do material](https://www.falecomrozelma.com/sertaobit) | [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) | Cópia da capa da obra e versão redimensionada para identificar o recurso no catálogo acadêmico não comercial |
 
 As duas capas foram extraídas das próprias obras, que declaram CC BY-NC 4.0, e
-foram incorporadas em 29 de agosto de 2026. Não foram armazenadas imagens de
+foram incorporadas em 29 de agosto de 2026. Naquela incorporação, não foram armazenadas imagens de
 **Aventuras Digitais**, **Cyberbullying — Uma Brincadeira de Mau Gosto** ou
 **Interland**, pois as fontes consultadas não apresentam licença explícita de
-reutilização para esses ativos; esses recursos usam o placeholder do projeto.
+reutilização para esses ativos. Suas prévias de identificação foram adicionadas
+em novembro e estão registradas abaixo; não foi presumida licença aberta para elas.
 
 ## Atividades do Computacional — ampliação de outubro de 2026
 
@@ -74,8 +75,9 @@ e do rodapé da folha de Portas Lógicas. O conteúdo das folhas foi preservado,
 incluindo o crédito e a licença quando impressos na página. Uso acadêmico não
 comercial, sob a licença original dos ativos. Verificação: 26 de outubro de 2026.
 
-Autômatos da Mônica, IA para os Oceanos, Crachá e Internet com Responsa usam o
-placeholder. As licenças dos respectivos materiais e seus limites estão no
+Autômatos da Mônica, IA para os Oceanos, Crachá e Internet com Responsa
+receberam prévias em novembro, registradas abaixo.
+As licenças dos respectivos materiais e seus limites estão no
 [registro de curadoria](processo-curadoria-2026-10-26.md); não foram estendidas
 automaticamente a personagens, ativos do jogo ou imagens do site.
 
@@ -95,8 +97,8 @@ renderização, redimensionamento e compressão para identificação no catálog
 
 O uso do catálogo é acadêmico e não comercial. Os PDFs e arquivos de apoio
 continuam nas fontes originais e não são redistribuídos pela plataforma.
-**As fake news** usa o placeholder: não foi encontrada licença explícita para
-reutilizar seus ativos. A observação sobre o erro histórico do painel está
+**As fake news** recebeu em novembro a imagem de identificação disponibilizada
+na própria atividade, com a origem indicada abaixo. A observação sobre o erro histórico do painel está
 na ficha e na proposta, sem modificar o arquivo do autor. Evidências e
 limites em [processo-curadoria-2026-10-28.md](processo-curadoria-2026-10-28.md).
 
@@ -105,14 +107,53 @@ limites em [processo-curadoria-2026-10-28.md](processo-curadoria-2026-10-28.md).
 **Tecnologia e vida humana**, de Mariana Araguaia/SME Goiânia, os dois
 episódios do **Manual do Mundo**, apresentados por Iberê Thenório, e a
 playlist **Como funciona a Internet?**, do NIC.br/NICbrvideos, são acessados
-nas fontes oficiais. Os quatro registros usam o placeholder do catálogo.
-Não foram republicados vídeos, slides, anexos ou miniaturas.
+nas fontes oficiais. Em novembro, os quatro registros receberam imagens de
+identificação. Vídeos, slides e anexos continuam nas fontes originais.
 
 Não foi identificada licença aberta específica para os anexos da SME ou
 os vídeos; a licença geral do site institucional do NIC.br não foi
 estendida automaticamente ao conteúdo hospedado no YouTube. Os créditos,
 as datas e os complementos constam das fichas. Evidências e limites em
 [processo-curadoria-expositivos-2026-10-28.md](processo-curadoria-expositivos-2026-10-28.md).
+
+## Prévias incorporadas em 8 de novembro de 2026
+
+Os arquivos abaixo ficam em `public/images/cards/curadoria-novembro-08/`.
+São usados para identificar os materiais, com proporções e conteúdo preservados.
+
+| Arquivo | Fonte e crédito | Licença e uso |
+|---|---|---|
+| `blockly-games.png` | Ícone `appengine/apple-touch-icon.png` do [repositório oficial Blockly Games](https://github.com/blockly-games/blockly-games/blob/5d2ff6f39207f7ed31e3d11ba1de277c85efe4c2/appengine/apple-touch-icon.png), Blockly Games/Google e colaboradores | Apache-2.0 no repositório; cópia integral, com a licença distribuída em `blockly-games-LICENSE.txt` na mesma pasta |
+| `microbit-cracha.jpg` | Imagem de identificação do [tutorial oficial Crachá](https://www.microbit.org/pt-br/projects/make-it-code-it/name-badge/), Micro:bit Educational Foundation; [arquivo oficial](https://cdn.sanity.io/images/ajwvhvgo/production/362b25385b277908685c92989359860037fe9706-790x635.jpg?q=95) | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) declarada no próprio tutorial; cópia integral da imagem, sem alterações |
+| `internet-com-responsa.jpg` | Primeira página de [Internet com Responsa — Só para Adolescentes](https://nic.br/media/docs/publicacoes/13/pt-br/20251020185522/internet_com_responsa_adolescentes.pdf), NIC.br/CGI.br; projeto gráfico e ilustrações de Thiago Planchart, diagramação de Grappa Marketing Editorial | CC BY-ND declarada na página de créditos, sem versão indicada; renderização integral da capa, sem corte ou alteração de conteúdo, apenas redução e compressão |
+
+A revisão começou pelas três prévias acima. A pedido do usuário, foram
+incorporadas também as imagens de identificação dos 12 materiais restantes,
+completando **48 materiais com imagem específica** na versão local.
+
+| Arquivo | Fonte e crédito | Origem da prévia |
+|---|---|---|
+| `lightbot.png` | [Lightbot — Laurent Haan](https://github.com/haan/Lightbot/tree/8f26bbe6c449d7d7ea15dd5438df4189a637dcf0); interface de Zenobia Homan, robô de surt | `public/img/welcome_screen_bg.png` do repositório oficial; MIT, com aviso integral em `lightbot-LICENSE.txt` na mesma pasta |
+| `compute-it.png` | Toxicode/Compute It, [catálogo da Hora do Código](https://hourofai.org/en-US/activities?cat=hour-of-code) | Imagem de apresentação `toxicode_compute.png` fornecida no catálogo; [arquivo](https://contentful-images.code.org/hwu8vzk5v0g2/71886s5z3finU6RaIbrcyU/b283f8b9685ba46722280cd7fe53e126/toxicode_compute.png?fm=png) |
+| `interland.png` | Google, [Interland](https://beinternetawesome.withgoogle.com/pt-br_br/interland) | [Imagem de compartilhamento](https://beinternetawesome.withgoogle.com/images/interland.png) indicada pela própria página |
+| `ia-oceanos.jpg` | Code.org/CodeAI, [catálogo oficial](https://code.org/en-US/curriculum) | Imagem da atividade AI for Oceans no catálogo; [arquivo](https://contentful-images.code.org/90t6bu6vlf76/7bTWHWOnOWqbSsVWH8Nl7B/e26619eaaabcac368701fbe9fb1562f9/AIOceans-16x9-min_copy.jpg?w=900&fm=jpg) |
+| `automatos-monica-2026.jpg` | Computacional — Christian Brackmann; personagens creditados no original aos Estúdios Maurício de Sousa e ThinkFun | Primeira folha integral de `02-TM-Mapas-2026.pdf` do [pacote oficial da edição 2026](https://www.computacional.com.br/atividades_download/aut_monica_2026.zip), incluindo os créditos do rodapé |
+| `aventuras-digitais.jpg` | Lucas Silva e Rozelma França, [página oficial](https://www.falecomrozelma.com/aventurasdigitais) | Capa disponibilizada pela autora; [arquivo](https://static.wixstatic.com/media/9579c7_1d14ae87d2b44dc586a2e96ae0b18e0b~mv2.jpg/v1/fit/w_708,h_1002,q_85/9579c7_1d14ae87d2b44dc586a2e96ae0b18e0b~mv2.jpg), ajustado proporcionalmente pelo serviço da fonte |
+| `cyberbullying-rozelma.png` | Wellington Pereira e Rozelma França, [página oficial](https://www.falecomrozelma.com/cyberbullying) | Capa disponibilizada pela autora; [arquivo](https://static.wixstatic.com/media/9579c7_f6f422624c3646ad968d498dbe1dbe0e~mv2.png/v1/fit/w_900,h_900/9579c7_f6f422624c3646ad968d498dbe1dbe0e~mv2.png), ajustado proporcionalmente pelo serviço da fonte |
+| `tecnologia-vida-humana.png` | Mariana Araguaia/SME Goiânia, [atividade oficial](https://sme.goiania.go.gov.br/conexaoescola/ensino_fundamental/ciencias-da-natureza-tecnologia-e-vida-humana/); fotografia creditada na atividade a VLADIMIRSUKHACHEV/Canva | Imagem de identificação disponibilizada na atividade, versão de 1024 × 712 pixels |
+| `fake-news.jpg` | Marlon Santos/SME Goiânia, [atividade oficial](https://sme.goiania.go.gov.br/conexaoescola/ensino_fundamental/lingua-portuguesa-as-fake-news/); fotografia com origem [Pixabay](https://pixabay.com/images/id-4881488/) indicada pela atividade | Imagem de identificação disponibilizada na atividade, versão de 1024 × 683 pixels |
+| `computadores-pessoas.jpg` | Manual do Mundo, [Os computadores eram pessoas!](https://www.youtube.com/watch?v=xajcV4lwY3Q), com Iberê Thenório | [Miniatura oficial](https://i.ytimg.com/vi/xajcV4lwY3Q/maxresdefault.jpg), sem alteração de conteúdo |
+| `memoria-computador.jpg` | Manual do Mundo, [Como funciona a memória do computador?](https://www.youtube.com/watch?v=rS1SgcjYbIE), com Iberê Thenório | [Miniatura oficial](https://i.ytimg.com/vi/rS1SgcjYbIE/maxresdefault.jpg), sem alteração de conteúdo |
+| `como-funciona-internet.jpg` | NIC.br/NICbrvideos, [Como funciona a Internet? — Parte 1](https://www.youtube.com/watch?v=HNQD0qJ0TC4) | [Miniatura oficial do primeiro episódio](https://i.ytimg.com/vi/HNQD0qJ0TC4/maxresdefault.jpg), usada para identificar a playlist inteira |
+
+As novas imagens servem à identificação dos materiais e preservam as proporções
+e o conteúdo disponibilizados pelas fontes. Fora a licença MIT do ativo de
+Lightbot, não foi confirmada uma licença aberta específica para essas 11 novas
+prévias: os direitos continuam com seus respectivos titulares. O registro da
+origem não equivale a uma declaração de licença aberta. As licenças dos materiais
+permanecem independentes das imagens; não foi estendida automaticamente uma
+licença de código, plano de aula ou portal a ativos de terceiros. Nenhum vídeo,
+livro completo ou pacote de atividades foi incorporado à distribuição.
 
 ## Referências de design não distribuídas
 

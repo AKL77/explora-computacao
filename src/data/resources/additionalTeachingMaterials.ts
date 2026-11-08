@@ -133,6 +133,10 @@ const automata: Resource = {
     applicationProposal: "Apresentar os mapas e as rotas. Posicionar o personagem e a porta nos nós indicados e encontrar uma sequência que utilize todas as cores disponíveis e alcance a saída. Aplicar os testes condicionais e os contadores quando aparecerem no desafio.",
   },
   provenance: computacionalProvenance(),
+  image: {
+    src: publicAsset("images/cards/curadoria-novembro-08/automatos-monica-2026.jpg"),
+    alt: "Primeira folha de mapas de Autômatos da Mônica 2026, com estados numerados e caminhos coloridos",
+  },
   supplementaryLinks: [{ label: "Catálogo oficial e indicação de público", url: COMPUTACIONAL_URL }, { label: "Pesquisa de origem — tese de Christian Brackmann", url: THESIS_URL }],
   tags: ["autômatos", "grafos", "estados", "transições", "algoritmos", "condicionais", "contadores", "Turma da Mônica", "atividade desplugada"],
 };
@@ -199,6 +203,10 @@ const oceans: Resource = {
   requirements: { internet: true, devices: ["Computador ou notebook com navegador"], accountRequired: false, pricing: "free" },
   accessibility: { evaluationStatus: "pending", knownFeatures: [], potentialBarriers: ["Interação com imagens e vídeos", "Plano docente consultado em inglês"], alternatives: [] },
   provenance: { source: "Code.org — AI for Oceans e plano docente oficial", license: "CC BY-NC-SA 4.0 (plano docente); licença do jogo não verificada", lastVerifiedAt: LAST_VERIFIED_AT, status: "verified" },
+  image: {
+    src: publicAsset("images/cards/curadoria-novembro-08/ia-oceanos.jpg"),
+    alt: "Robô de inteligência artificial e animais marinhos na apresentação de IA para os Oceanos",
+  },
   supplementaryLinks: [
     { label: "Unidade e orientações para professores", url: "https://studio.code.org/courses/oceans/units/1?viewAs=Instructor" },
     { label: "Plano docente oficial — 45 minutos (PDF em inglês)", url: "https://lesson-plans.code.org/oceans/20250325005525/teacher-lesson-plans/AI-for-Oceans.pdf" },
@@ -241,6 +249,11 @@ const nameBadge: Resource = {
   requirements: { internet: true, devices: ["Computador ou notebook com navegador"], pricing: "free" },
   accessibility: { evaluationStatus: "pending", knownFeatures: [], potentialBarriers: ["Saída visual em LEDs e programação visual na opção MakeCode"], alternatives: [] },
   provenance: { source: "Micro:bit Educational Foundation — tutorial oficial Crachá", license: "CC BY-SA 4.0", lastVerifiedAt: LAST_VERIFIED_AT, status: "verified" },
+  image: {
+    src: publicAsset("images/cards/curadoria-novembro-08/microbit-cracha.jpg"),
+    alt: "Micro:bit exibindo um nome com texto deslizante nos LEDs, conforme o tutorial Crachá",
+    license: "CC BY-SA 4.0",
+  },
   supplementaryLinks: [{ label: "Editor e simulador MakeCode", url: "https://makecode.microbit.org/" }],
   tags: ["micro:bit", "microbit", "MakeCode", "Python", "crachá", "programação", "algoritmos", "repetições", "LED", "simulador"],
 };
@@ -281,6 +294,11 @@ const internetGuide: Resource = {
   requirements: { internet: false, accountRequired: false, pricing: "free" },
   accessibility: { evaluationStatus: "pending", knownFeatures: [], potentialBarriers: [], alternatives: [] },
   provenance: { source: "NIC.br — publicação oficial e PDF Internet com Responsa: Só para Adolescentes", license: "CC BY-ND (versão não indicada no PDF)", lastVerifiedAt: LAST_VERIFIED_AT, status: "verified" },
+  image: {
+    src: publicAsset("images/cards/curadoria-novembro-08/internet-com-responsa.jpg"),
+    alt: "Capa de Internet com Responsa — Só para Adolescentes: Proteção no Uso da Internet, do NIC.br e CGI.br",
+    license: "CC BY-ND (versão não indicada no PDF)",
+  },
   supplementaryLinks: [{ label: "Página oficial da publicação", url: "https://www.nic.br/publicacao/internet-com-responsa-so-para-adolescentes-protecao-no-uso-da-internet/" }],
   tags: ["cidadania digital", "cyberbullying", "privacidade", "segurança online", "redes sociais", "convivência", "tempo de tela", "inteligência artificial", "apostas", "guia", "adolescentes"],
 };

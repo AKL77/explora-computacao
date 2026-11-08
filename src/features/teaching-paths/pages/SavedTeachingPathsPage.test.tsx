@@ -55,7 +55,7 @@ describe("SavedTeachingPathsPage", () => {
     const user = renderPage();
     await user.click(await screen.findByRole("button", { name: /Programação com blocos/i }));
 
-    expect(screen.getByRole("heading", { name: "Programação com blocos", level: 1 })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Programação com blocos", level: 2 })).toBeInTheDocument();
     expect(screen.getAllByText("Construir uma base de programação em blocos.")).not.toHaveLength(0);
     expect(screen.queryByText("Resultado da trilha")).not.toBeInTheDocument();
     expect(screen.queryByText("Habilidades da BNCC")).not.toBeInTheDocument();

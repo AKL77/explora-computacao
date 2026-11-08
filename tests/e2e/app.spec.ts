@@ -1,5 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
+
+import { createTeachingPath, openWorkspacePage } from "./teachingPathHelpers";
 
 const basePath = process.env.PLAYWRIGHT_BASE_PATH ?? "/";
 
@@ -22,6 +24,60 @@ async function enterDemo(page: import("@playwright/test").Page) {
 
 test.beforeEach(async ({ page }) => {
   await resetDemo(page);
+});
+
+async function toggleYear(page: Page, grade: number) {
+  await page.getByRole("button", { name: "Ver opções de anos escolares", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Selecionar anos escolares", exact: true });
+  await dialog.getByRole("button", { name: `${grade}º ano`, exact: true }).click();
+  await dialog.getByRole("button", { name: "Concluir", exact: true }).click();
+}
+
+async function toggleFormat(page: Page, label: string) {
+  await page.getByRole("button", { name: "Ver opções de formatos", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Selecionar formatos", exact: true });
+  await dialog.getByRole("button", { name: label, exact: true }).click();
+  await dialog.getByRole("button", { name: "Concluir", exact: true }).click();
+}
+
+test("restaura a posição da busca pelo botão Voltar e pelo histórico do navegador", async ({ page }) => {
+  await enterDemo(page);
+  const card = page.getByRole("article").nth(22);
+  const heading = card.getByRole("heading", { level: 3 });
+  const title = await heading.innerText();
+  await heading.evaluate((element) => window.scrollTo({ top: window.scrollY + element.getBoundingClientRect().top - 160, behavior: "instant" }));
+  const previousScroll = await page.evaluate(() => window.scrollY);
+  expect(previousScroll).toBeGreaterThan(1000);
+
+  for (const returnMethod of ["button", "history"]) {
+    await heading.click();
+    await expect(page.getByRole("heading", { name: title, level: 2 })).toBeVisible();
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeLessThan(3);
+    if (returnMethod === "button") await page.getByRole("link", { name: "Voltar", exact: true }).click();
+    else await page.goBack();
+    await expect(page.getByRole("heading", { name: "Buscar Materiais", level: 1 })).toBeVisible();
+    await expect.poll(async () => Math.abs(await page.evaluate(() => window.scrollY) - previousScroll)).toBeLessThan(3);
+    await expect(heading).toBeInViewport();
+  }
+});
+
+test("preserva a pesquisa e os filtros ao retornar do detalhe de um material", async ({ page }) => {
+  await enterDemo(page);
+  await toggleYear(page, 4);
+  await toggleFormat(page, "Material plugado");
+  await page.getByRole("searchbox", { name: "Pesquisar área, assunto ou habilidade" }).fill("Blockly");
+  await expect(page.getByRole("article")).toHaveCount(1);
+  const heading = page.getByRole("heading", { name: "Blockly Games", level: 3 });
+  await heading.evaluate((element) => window.scrollTo({ top: window.scrollY + element.getBoundingClientRect().top - 160, behavior: "instant" }));
+  const previousScroll = await page.evaluate(() => window.scrollY);
+  await heading.click();
+  await expect(page.getByRole("heading", { name: "Blockly Games", level: 2 })).toBeVisible();
+  await page.getByRole("link", { name: "Voltar", exact: true }).click();
+  await expect(page.getByRole("searchbox", { name: "Pesquisar área, assunto ou habilidade" })).toHaveValue("Blockly");
+  await expect(page.getByRole("button", { name: "Ver opções de anos escolares", exact: true })).toContainText("4º ano");
+  await expect(page.getByRole("button", { name: "Ver opções de formatos", exact: true })).toContainText("Plugado");
+  await expect(page.getByRole("article")).toHaveCount(1);
+  await expect.poll(async () => Math.abs(await page.evaluate(() => window.scrollY) - previousScroll)).toBeLessThan(3);
 });
 
 test("seleciona assuntos no diálogo e combina a busca com ano escolar", async ({ page }) => {
@@ -49,7 +105,7 @@ test("seleciona assuntos no diálogo e combina a busca com ano escolar", async (
 
   await expect(page.getByText("1 assunto selecionado")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Interland" })).toBeVisible();
-  await page.getByRole("button", { name: "5º ano" }).click();
+  await toggleYear(page, 5);
   await expect(page.getByText("1 material", { exact: true })).toBeVisible();
 
   await page.getByRole("button", { name: "Ver opções de assuntos" }).click();
@@ -63,6 +119,81 @@ test("seleciona assuntos no diálogo e combina a busca com ano escolar", async (
   await expect(page.getByText("48 materiais", { exact: true }).first()).toBeVisible();
 });
 
+test("filtra pelas habilidades da BNCC e respeita o ano do vínculo curricular", async ({ page }, testInfo) => {
+  await enterDemo(page);
+  await page.screenshot({ path: testInfo.outputPath("filtros-compactos.png") });
+  await toggleYear(page, 5);
+  const trigger = page.getByRole("button", { name: "Ver opções de habilidades da BNCC", exact: true });
+  await trigger.focus();
+  await page.keyboard.press("Enter");
+  const dialog = page.getByRole("dialog", { name: "Selecionar habilidades da BNCC", exact: true });
+  const search = dialog.getByRole("searchbox", { name: "Buscar habilidade", exact: true });
+  await expect(dialog.getByRole("heading", { name: "Pensamento Computacional", exact: true })).toBeVisible();
+  await expect(dialog.getByRole("heading", { name: "Mundo Digital", exact: true })).toBeVisible();
+  await expect(dialog.getByRole("heading", { name: "Cultura Digital", exact: true })).toBeVisible();
+  const codes = await dialog.locator("button[aria-pressed] strong").allTextContents();
+  expect(codes.length).toBeGreaterThan(20);
+  expect(new Set(codes).size).toBe(codes.length);
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+  const bounds = await dialog.boundingBox();
+  expect(bounds!.width).toBeLessThanOrEqual(page.viewportSize()!.width);
+  expect(bounds!.height).toBeLessThanOrEqual(page.viewportSize()!.height);
+  await page.screenshot({ path: testInfo.outputPath("habilidades-bncc.png") });
+  await search.fill("ef04co03");
+  await expect(dialog.locator("button[aria-pressed]")).toHaveCount(1);
+  await dialog.getByRole("button", { name: /^EF04CO03 / }).click();
+  await page.keyboard.press("Escape");
+  await expect(trigger).toBeFocused();
+  // Blockly atende aos dois anos, mas a habilidade escolhida está vinculada ao 4º.
+  await expect(page.getByText("Nenhum material encontrado", { exact: true })).toBeVisible();
+  await trigger.click();
+  await expect(search).toHaveValue("");
+  await expect(dialog.getByRole("button", { name: /^EF04CO03 / })).toHaveAttribute("aria-pressed", "true");
+  await search.fill("ef05co04");
+  await dialog.getByRole("button", { name: /^EF05CO04 / }).click();
+  await dialog.getByRole("button", { name: "Concluir", exact: true }).click();
+  await expect(page.getByText("2 habilidades selecionadas", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Blockly Games", exact: true })).toBeVisible();
+  await toggleFormat(page, "Material plugado");
+  await page.getByRole("button", { name: "Ver opções de tipos de material", exact: true }).click();
+  const types = page.getByRole("dialog", { name: "Selecionar tipos de material", exact: true });
+  await types.getByRole("button", { name: "Jogos", exact: true }).click();
+  await types.getByRole("button", { name: "Concluir", exact: true }).click();
+  await page.getByRole("button", { name: "Ver opções de assuntos", exact: true }).click();
+  const subjects = page.getByRole("dialog", { name: "Selecionar assuntos", exact: true });
+  await subjects.getByRole("button", { name: "Algoritmos", exact: true }).click();
+  await subjects.getByRole("button", { name: "Concluir", exact: true }).click();
+  await page.getByRole("searchbox", { name: "Pesquisar área, assunto ou habilidade", exact: true }).fill("Blockly");
+  await expect(page.getByText("1 material", { exact: true })).toBeVisible();
+  await trigger.click();
+  await search.fill("basicas de grafos");
+  await expect(dialog.getByRole("button", { name: /^EF07CO04 / })).toBeVisible();
+  await search.fill("habilidade inexistente");
+  await expect(dialog.getByText("Nenhuma habilidade corresponde à busca.", { exact: true })).toBeVisible();
+  await dialog.getByRole("button", { name: "Limpar habilidades", exact: true }).click();
+  await dialog.getByRole("button", { name: "Concluir", exact: true }).click();
+  await expect(page.getByText("Nenhuma habilidade selecionada", { exact: true })).toBeVisible();
+  await expect(page.getByText("1 material", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Limpar filtros", exact: true }).click();
+  await expect(page.getByText("48 materiais", { exact: true }).first()).toBeVisible();
+  await page.getByRole("button", { name: "Ver opções de anos escolares", exact: true }).click();
+  const years = page.getByRole("dialog", { name: "Selecionar anos escolares", exact: true });
+  await years.getByRole("button", { name: "4º ano", exact: true }).click();
+  await years.getByRole("button", { name: "5º ano", exact: true }).click();
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+  await years.getByRole("button", { name: "Concluir", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Ver opções de anos escolares", exact: true })).toHaveText("2 anos");
+  await page.getByRole("button", { name: "Ver opções de formatos", exact: true }).click();
+  const formats = page.getByRole("dialog", { name: "Selecionar formatos", exact: true });
+  await formats.getByRole("button", { name: "Material plugado", exact: true }).click();
+  await formats.getByRole("button", { name: "Material desplugado", exact: true }).click();
+  await formats.getByRole("button", { name: "Concluir", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Ver opções de formatos", exact: true })).toHaveText("2 formatos");
+  await page.getByRole("button", { name: "Limpar filtros", exact: true }).click();
+  await expect(page.getByText("48 materiais", { exact: true }).first()).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+});
+
 test("seleciona múltiplos tipos por teclado e combina com os outros filtros", async ({ page }, testInfo) => {
   await enterDemo(page);
   const trigger = page.getByRole("button", { name: "Ver opções de tipos de material" });
@@ -70,6 +201,7 @@ test("seleciona múltiplos tipos por teclado e combina com os outros filtros", a
   await page.keyboard.press("Enter");
   const dialog = page.getByRole("dialog", { name: "Selecionar tipos de material" });
   await expect(dialog).toBeVisible();
+  await expect(dialog.getByText("Selecione um ou mais tipos. Os resultados incluem materiais de qualquer um dos tipos escolhidos.", { exact: true })).toHaveCount(0);
   await expect(dialog.getByRole("heading", { name: "Abordagem ativa" })).toBeVisible();
   await expect(dialog.getByRole("heading", { name: "Abordagem expositiva" })).toBeVisible();
   await expect(dialog.getByRole("button", { name: /Abordagem/ })).toHaveCount(0);
@@ -95,7 +227,7 @@ test("seleciona múltiplos tipos por teclado e combina com os outros filtros", a
   await expect(page.getByRole("heading", { name: "Como funciona a Internet? — Playlist do NIC.br", exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Contando os Pontos — Números Binários", exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Internet com Responsa — Só para Adolescentes", exact: true })).toHaveCount(0);
-  await expect(trigger.locator("..")).toHaveText(/^\s*Tipo de material\s*Ver opções\s*$/, { useInnerText: true });
+  await expect(trigger).toHaveText("3 tipos");
   await trigger.click();
   await expect(games).toHaveAttribute("aria-pressed", "true");
   await dialog.getByRole("button", { name: "Limpar tipos" }).click();
@@ -111,14 +243,14 @@ test("seleciona múltiplos tipos por teclado e combina com os outros filtros", a
   await dialog.getByRole("button", { name: "Concluir" }).click();
   await expect(page.getByRole("heading", { name: "Evolução da Computação", exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Crachá — micro:bit", exact: true })).toHaveCount(0);
-  await expect(trigger.locator("..")).toHaveText(/^\s*Tipo de material\s*Ver opções\s*$/, { useInnerText: true });
+  await expect(trigger).toHaveText("Textos e guias");
   await page.screenshot({ path: testInfo.outputPath("filtro-sem-resumo.png") });
   await trigger.click();
   await dialog.getByRole("button", { name: "Limpar tipos" }).click();
   await dialog.getByRole("button", { name: "Jogos", exact: true }).click();
   await dialog.getByRole("button", { name: "Concluir" }).click();
-  await page.getByRole("button", { name: "Material plugado", exact: true }).click();
-  await page.getByRole("button", { name: "5º ano" }).click();
+  await toggleFormat(page, "Material plugado");
+  await toggleYear(page, 5);
   await page.getByRole("button", { name: "Ver opções de assuntos" }).click();
   const subjects = page.getByRole("dialog", { name: "Selecionar assuntos" });
   await subjects.getByRole("button", { name: "Cyberbullying" }).click();
@@ -262,96 +394,59 @@ test("copia uma trilha nova e preserva etapas com mais de uma aula", async ({ pa
   await expect(proposal.getByRole("radio", { name: /3 aulas.*150 min/ })).toBeChecked();
 });
 
-test("busca materiais com tags e seleciona uma trilha", async ({
-  page,
-}, testInfo) => {
+test("busca materiais e adiciona somente a uma trilha existente", async ({ page }) => {
   await enterDemo(page);
-
-  if (testInfo.project.name === "mobile") {
-    await page.getByRole("button", { name: "Abrir menu" }).click();
-  }
-  await page.getByRole("link", { name: "Buscar Materiais", exact: true }).click();
-  await expect(
-    page.getByRole("heading", { name: "Buscar Materiais", level: 1 }),
-  ).toBeVisible();
-
-  await expect(page.getByText("48 materiais", { exact: true }).first()).toBeVisible();
-
-  await page.getByRole("button", { name: "Material plugado" }).click();
-  await expect(
-    page.getByRole("heading", { name: "Blockly Games", exact: true }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole("heading", {
-      name: "Sertão.bit — Livro-jogo de Pensamento Computacional",
-      exact: true,
-    }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole("heading", {
-      name: "Vinte Palpites — Teoria da Informação",
-      exact: true,
-    }),
-  ).toHaveCount(0);
+  await expect(page.getByRole("button", { name: /nova trilha|salvar trilha/i })).toHaveCount(0);
+  const card = page.getByRole("article").filter({ has: page.getByRole("heading", { name: "Blockly Games", exact: true }) });
+  await card.getByRole("button", { name: "Adicionar à trilha", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Adicionar à trilha", exact: true });
+  await expect(dialog.getByText(/Você ainda não tem trilhas/)).toBeVisible();
+  await expect(dialog.getByRole("link", { name: "Ir para Minhas Trilhas" })).toHaveAttribute("href", /minhas-trilhas$/);
+  await dialog.getByRole("button", { name: "Fechar", exact: true }).click();
+  await createTeachingPath(page, "Algoritmos no 5º ano", "Explorar algoritmos com desafios e jogos.", ["Vinte Palpites — Teoria da Informação"]);
+  await openWorkspacePage(page, "Buscar Materiais");
+  await toggleFormat(page, "Material plugado");
+  await expect(page.getByRole("heading", { name: "Blockly Games", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Vinte Palpites — Teoria da Informação", exact: true })).toHaveCount(0);
   await page.getByRole("button", { name: "Limpar filtros" }).click();
+  await card.getByRole("button", { name: "Adicionar à trilha", exact: true }).click();
+  await expect(dialog.getByRole("combobox", { name: "Escolha uma trilha" })).toContainText("Algoritmos no 5º ano");
+  await expect(dialog.getByRole("combobox", { name: "Escolha uma trilha" })).toHaveValue("");
+  await expect(dialog.getByRole("button", { name: "Adicionar material", exact: true })).toBeDisabled();
+  await dialog.getByRole("combobox", { name: "Escolha uma trilha" }).selectOption({ label: "Algoritmos no 5º ano" });
+  await dialog.getByRole("button", { name: "Adicionar material", exact: true }).click();
+  await expect(page).toHaveURL(/trilha-de-ensino$/);
+  await card.getByRole("button", { name: "Adicionar à trilha", exact: true }).click();
+  await expect(dialog.getByText("Este material já está em todas as suas trilhas.")).toBeVisible();
+  await dialog.getByRole("button", { name: "Fechar", exact: true }).click();
+  const paths = await page.evaluate(() => JSON.parse(localStorage.getItem("explora-computacao:teaching-paths:v1") ?? "{}").state.paths);
+  expect(paths).toHaveLength(1);
+  expect(paths[0].resourceIds).toEqual(["unicamp-desplugada-atividade-5", "google-blockly-games"]);
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+});
 
-  const blocklyCard = page.getByRole("article").filter({
-    has: page.getByRole("heading", { name: "Blockly Games", exact: true }),
-  });
-  const trail = page.getByRole("region", { name: "Nova trilha em criação" });
-  await expect(trail).toHaveCount(0);
-  await expect(
-    blocklyCard.getByRole("link", { name: "Abrir detalhes de Blockly Games" }),
-  ).toHaveAttribute("href", /\/app\/materiais\/blockly-games$/);
-  await blocklyCard
-    .getByRole("button", { name: "Adicionar Blockly Games a uma nova trilha" })
-    .click();
-  await expect(trail).toBeVisible();
-  await trail.getByRole("button", { name: "Remover Blockly Games da trilha" }).click();
-  await expect(trail).toHaveCount(0);
-  await blocklyCard
-    .getByRole("button", { name: "Adicionar Blockly Games a uma nova trilha" })
-    .click();
-
-  const vinteCard = page.getByRole("article").filter({
-    has: page.getByRole("heading", {
-      name: "Vinte Palpites — Teoria da Informação",
-      exact: true,
-    }),
-  });
-  await vinteCard
-    .getByRole("button", {
-      name: "Adicionar Vinte Palpites — Teoria da Informação a uma nova trilha",
-    })
-    .click();
-
-  await expect(trail.getByText("2 materiais selecionados.")).toBeVisible();
-  await expect(trail.getByText("Blockly Games")).toBeVisible();
-  await expect(trail.getByText("Vinte Palpites — Teoria da Informação")).toBeVisible();
-  await expect(trail.getByRole("button", { name: "Salvar trilha" })).toBeEnabled();
-  await expect(trail.getByRole("button", { name: "Salvar trilha" })).toHaveCSS(
-    "cursor",
-    "pointer",
-  );
-  await expect(page.getByRole("button", { name: /mover .* para cima/i })).toHaveCount(0);
-
-  await trail.getByRole("button", { name: "Salvar trilha" }).click();
-  const saveDialog = page.getByRole("dialog", { name: "Salvar trilha" });
-  await saveDialog.getByRole("textbox", { name: "Nome da trilha" }).fill("Algoritmos no 5º ano");
-  await saveDialog
-    .getByRole("textbox", { name: "Objetivo da trilha" })
-    .fill("Explorar algoritmos com desafios e jogos.");
-  await saveDialog.getByRole("button", { name: "Salvar trilha" }).click();
-  await expect(page.getByRole("heading", { name: "Minhas Trilhas", level: 1 })).toBeVisible();
-  await expect(page.getByRole("button", { name: /Algoritmos no 5º ano/i })).toBeVisible();
-
-  const accessibilityResults = await new AxeBuilder({ page }).analyze();
-  expect(accessibilityResults.violations).toEqual([]);
-  expect(
-    await page.evaluate(
-      () => document.documentElement.scrollWidth <= document.documentElement.clientWidth,
-    ),
-  ).toBe(true);
+test("adiciona um material da busca diretamente a uma turma", async ({ page }) => {
+  await enterDemo(page);
+  await openWorkspacePage(page, "Minhas Turmas");
+  await page.getByRole("button", { name: "Criar turma", exact: true }).click();
+  const form = page.getByRole("dialog", { name: "Criar turma", exact: true });
+  await form.getByRole("textbox", { name: "Nome da turma", exact: true }).fill("Turma da busca");
+  await form.getByRole("combobox", { name: "Ano/série", exact: true }).selectOption("5");
+  await form.getByRole("button", { name: "Criar turma", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Turma da busca", level: 1 })).toBeVisible();
+  await openWorkspacePage(page, "Buscar Materiais");
+  await page.getByRole("searchbox", { name: "Pesquisar área, assunto ou habilidade" }).fill("Blockly");
+  const card = page.getByRole("article");
+  await card.getByRole("button", { name: "Adicionar à turma", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Adicionar à turma", exact: true });
+  await dialog.getByRole("radio", { name: /Turma da busca/ }).check();
+  await dialog.getByRole("button", { name: "Adicionar material", exact: true }).click();
+  await expect(dialog).toHaveCount(0);
+  await card.getByRole("button", { name: "Adicionar à turma", exact: true }).click();
+  await expect(dialog.getByRole("radio", { name: /Turma da busca/ })).toBeDisabled();
+  await dialog.getByRole("button", { name: "Cancelar", exact: true }).click();
+  const classrooms = await page.evaluate(() => JSON.parse(localStorage.getItem("explora-computacao:classrooms:v1") ?? "{}").state.classrooms);
+  expect(classrooms[0].materials).toEqual([{ resourceId: "google-blockly-games", visible: true, instruction: "" }]);
 });
 
 test("apresenta os sete novos materiais com fontes, licenças e durações corretas", async ({ page }, testInfo) => {
@@ -367,7 +462,7 @@ test("apresenta os sete novos materiais com fontes, licenças e durações corre
   ];
   for (const [slug, title, license] of additions) {
     await page.goto(routeUrl(`/app/materiais/${slug}`));
-    await expect(page.getByRole("heading", { name: title, level: 1 })).toBeVisible();
+    await expect(page.getByRole("heading", { name: title, level: 2 })).toBeVisible();
     await expect(page.getByRole("region", { name: "Preparação necessária" })).toBeVisible();
     await expect(page.getByRole("link", { name: "Acessar recurso" })).toHaveAttribute("href", /^https:/);
     await page.getByRole("tab", { name: "Informações adicionais" }).click();
@@ -398,17 +493,11 @@ test("filtra novos assuntos e conserva os novos materiais nas propostas de uma t
   const search = page.getByRole("searchbox", { name: "Pesquisar área, assunto ou habilidade" });
   await search.fill("microbit");
   await expect(page.getByRole("heading", { name: "Crachá — micro:bit", exact: true })).toBeVisible();
-  await page.getByRole("button", { name: "Material desplugado", exact: true }).click();
+  await toggleFormat(page, "Material desplugado");
   await expect(page.getByText("Nenhum material encontrado")).toBeVisible();
   await page.getByRole("button", { name: "Limpar filtros" }).click();
 
-  await page.getByRole("button", { name: "Adicionar Bugs a uma nova trilha", exact: true }).click();
-  await page.getByRole("button", { name: "Adicionar IA para os Oceanos a uma nova trilha", exact: true }).click();
-  await page.getByRole("region", { name: "Nova trilha em criação" }).getByRole("button", { name: "Salvar trilha" }).click();
-  const saveDialog = page.getByRole("dialog", { name: "Salvar trilha" });
-  await saveDialog.getByRole("textbox", { name: "Nome da trilha" }).fill("Novos materiais — teste local");
-  await saveDialog.getByRole("textbox", { name: "Objetivo da trilha" }).fill("Explorar algoritmos e dados de treinamento.");
-  await saveDialog.getByRole("button", { name: "Salvar trilha" }).click();
+  await createTeachingPath(page, "Novos materiais — teste local", "Explorar algoritmos e dados de treinamento.", ["Bugs", "IA para os Oceanos"]);
   await page.reload();
   await page.getByRole("button", { name: /Novos materiais — teste local/ }).click();
   await page.getByRole("button", { name: "Abrir proposta de atividade de IA para os Oceanos", exact: true }).click();
@@ -421,7 +510,7 @@ test("filtra novos assuntos e conserva os novos materiais nas propostas de uma t
   await expect(materialLink).toHaveAttribute("href", /\/app\/materiais\/ia-para-os-oceanos$/);
   await page.screenshot({ path: testInfo.outputPath("nova-trilha.png") });
   await materialLink.click();
-  await expect(page.getByRole("heading", { name: "IA para os Oceanos", level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "IA para os Oceanos", level: 2 })).toBeVisible();
   await expect(page.getByRole("link", { name: "Acessar recurso" })).toHaveAttribute("href", /studio\.code\.org\/courses\/oceans/);
 });
 
@@ -436,7 +525,7 @@ test("integra os cinco materiais aprovados às fichas e à trilha local", async 
   ];
   for (const [slug, title] of additions) {
     await page.goto(routeUrl(`/app/materiais/${slug}`));
-    await expect(page.getByRole("heading", { name: title, level: 1 })).toBeVisible();
+    await expect(page.getByRole("heading", { name: title, level: 2 })).toBeVisible();
     await expect(page.getByRole("region", { name: "Preparação necessária" })).toBeVisible();
     await page.getByRole("tab", { name: "Informações adicionais" }).click();
     await expect(page.getByRole("tabpanel")).toContainText("Não informado");
@@ -453,12 +542,7 @@ test("integra os cinco materiais aprovados às fichas e à trilha local", async 
   await page.getByRole("searchbox", { name: "Pesquisar área, assunto ou habilidade" }).fill("SplashCode");
   await expect(page.getByText("1 material", { exact: true })).toBeVisible();
   await expect(page.getByRole("article")).toContainText("Material desplugado");
-  await page.getByRole("button", { name: "Adicionar SplashCode a uma nova trilha", exact: true }).click();
-  await page.getByRole("region", { name: "Nova trilha em criação" }).getByRole("button", { name: "Salvar trilha" }).click();
-  const dialog = page.getByRole("dialog", { name: "Salvar trilha" });
-  await dialog.getByRole("textbox", { name: "Nome da trilha" }).fill("Materiais aprovados");
-  await dialog.getByRole("textbox", { name: "Objetivo da trilha" }).fill("Planejar percursos com cartas de programação.");
-  await dialog.getByRole("button", { name: "Salvar trilha" }).click();
+  await createTeachingPath(page, "Materiais aprovados", "Planejar percursos com cartas de programação.", ["SplashCode"]);
   await page.reload();
   await page.getByRole("button", { name: /Materiais aprovados/ }).click();
   await page.getByRole("button", { name: "Abrir proposta de atividade de SplashCode", exact: true }).click();
@@ -482,19 +566,14 @@ test("preserva o português do Compute It na ficha e no acesso pela trilha", asy
   await expect(page.getByRole("link", { name: "Jogo com comandos em português — acesso direto", exact: true })).toHaveAttribute("href", "https://compute-it.toxicode.fr/?lang=pt");
   await page.screenshot({ path: testInfo.outputPath("compute-it-portugues.png"), fullPage: true });
   await page.getByRole("link", { name: "Voltar", exact: true }).click();
-  await page.getByRole("button", { name: "Adicionar Compute It a uma nova trilha", exact: true }).click();
-  await page.getByRole("region", { name: "Nova trilha em criação" }).getByRole("button", { name: "Salvar trilha" }).click();
-  const dialog = page.getByRole("dialog", { name: "Salvar trilha" });
-  await dialog.getByRole("textbox", { name: "Nome da trilha" }).fill("Interpretando programas");
-  await dialog.getByRole("textbox", { name: "Objetivo da trilha" }).fill("Simular programas com comandos em português.");
-  await dialog.getByRole("button", { name: "Salvar trilha" }).click();
+  await createTeachingPath(page, "Interpretando programas", "Ler programas e seguir seus comandos.", ["Compute It"]);
   await page.reload();
   await page.getByRole("button", { name: /Interpretando programas/ }).click();
   await page.getByRole("button", { name: "Abrir proposta de atividade de Compute It", exact: true }).click();
   const proposal = page.getByRole("article", { name: "Proposta de atividade da etapa" });
   await expect(proposal).toContainText("executam os comandos em português");
   await proposal.getByRole("link", { name: /Ver material completo/ }).click();
-  await expect(page.getByRole("heading", { name: "Compute It", level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Compute It", level: 2 })).toBeVisible();
   await expect(page.getByRole("link", { name: "Acessar recurso", exact: true })).toHaveAttribute("href", "https://compute-it.toxicode.fr/?lang=pt");
 });
 
@@ -510,13 +589,8 @@ test("integra os expositivos às fichas e à trilha com a playlist e seus comple
   for (const title of titles) {
     await search.fill(title);
     await expect(page.getByText("1 material", { exact: true })).toBeVisible();
-    await page.getByRole("button", { name: `Adicionar ${title} a uma nova trilha`, exact: true }).click();
   }
-  await page.getByRole("region", { name: "Nova trilha em criação" }).getByRole("button", { name: "Salvar trilha" }).click();
-  const dialog = page.getByRole("dialog", { name: "Salvar trilha" });
-  await dialog.getByRole("textbox", { name: "Nome da trilha" }).fill("Computadores e Internet — exposição");
-  await dialog.getByRole("textbox", { name: "Objetivo da trilha" }).fill("Relacionar tecnologias, armazenamento e comunicação em rede.");
-  await dialog.getByRole("button", { name: "Salvar trilha" }).click();
+  await createTeachingPath(page, "Computadores e Internet — exposição", "Relacionar tecnologias, armazenamento e comunicação em rede.", titles);
   await page.reload();
   await page.getByRole("button", { name: /Computadores e Internet — exposição/ }).click();
   const proposal = page.getByRole("article", { name: "Proposta de atividade da etapa" });
@@ -576,9 +650,9 @@ test("mantém o detalhe responsivo e a navegação móvel operável por teclado"
   await enterDemo(page);
   await page.goto(routeUrl("/app/materiais/altinovare-cyberbullying"));
   await expect(
-    page.getByRole("heading", { name: "Cyberbullying — Jogo Educativo", level: 1 }),
+    page.getByRole("heading", { name: "Cyberbullying — Jogo Educativo", level: 2 }),
   ).toBeVisible();
-  await expect(page.getByText("Fornecedor: ALT+INOVARE")).toBeVisible();
+  await expect(page.getByText("Fornecedor: ALT+INOVARE")).toHaveCount(0);
   await expect(page.getByText("Habilidade", { exact: true })).toHaveCount(0);
   await expect(page.getByText("Assunto", { exact: true })).toBeVisible();
   await expect(page.getByText("Cyberbullying", { exact: true })).toBeVisible();
@@ -618,7 +692,7 @@ test("apresenta Lightbot e Blockly Games com os metadados verificados", async ({
 }) => {
   await enterDemo(page);
   await page.goto(routeUrl("/app/materiais/lightbot"));
-  await expect(page.getByRole("heading", { name: "Lightbot", level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Lightbot", level: 2 })).toBeVisible();
   await expect(page.getByText("4º e 5º anos", { exact: true })).toBeVisible();
   await expect(
     page.getByText("Sequências e repetições em algoritmos", { exact: true }),
@@ -634,7 +708,7 @@ test("apresenta Lightbot e Blockly Games com os metadados verificados", async ({
 
   await page.goto(routeUrl("/app/materiais/blockly-games"));
   await expect(
-    page.getByRole("heading", { name: "Blockly Games", level: 1 }),
+    page.getByRole("heading", { name: "Blockly Games", level: 2 }),
   ).toBeVisible();
   await expect(page.getByText("Programação em blocos", { exact: true })).toBeVisible();
   await expect(page.getByText("Habilidades da BNCC", { exact: true })).toBeVisible();
@@ -662,7 +736,7 @@ test("apresenta a coleção de Rozelma e o Interland com os dados verificados", 
   await expect(
     page.getByRole("heading", {
       name: "Lua & Bit-Bit — Programando com Variáveis",
-      level: 1,
+      level: 2,
     }),
   ).toBeVisible();
   await expect(page.getByText("6º ano", { exact: true })).toBeVisible();
@@ -674,7 +748,7 @@ test("apresenta a coleção de Rozelma e o Interland com os dados verificados", 
 
   await page.goto(routeUrl("/app/materiais/interland"));
   await expect(
-    page.getByRole("heading", { name: "Interland", level: 1 }),
+    page.getByRole("heading", { name: "Interland", level: 2 }),
   ).toBeVisible();
   await expect(page.getByText("4º, 5º e 6º anos", { exact: true })).toBeVisible();
   await expect(

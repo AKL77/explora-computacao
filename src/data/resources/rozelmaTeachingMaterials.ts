@@ -281,6 +281,10 @@ const aventurasDigitaisResource: Resource = {
     lastVerifiedAt: LAST_VERIFIED_AT,
     status: "verified",
   },
+  image: {
+    src: publicAsset("images/cards/curadoria-novembro-08/aventuras-digitais.jpg"),
+    alt: "Capa de Aventuras Digitais — Tornando-se um Cidadão Digital, de Lucas Silva e Rozelma França",
+  },
   supplementaryLinks: [
     {
       label: "Guia de apoio ao docente",
@@ -370,6 +374,10 @@ const rozelmaCyberbullyingResource: Resource = {
     source: "Cyberbullying: Uma Brincadeira de Mau Gosto e sequência didática",
     lastVerifiedAt: LAST_VERIFIED_AT,
     status: "verified",
+  },
+  image: {
+    src: publicAsset("images/cards/curadoria-novembro-08/cyberbullying-rozelma.png"),
+    alt: "Capa de Cyberbullying — Uma Brincadeira de Mau Gosto, de Wellington Pereira e Rozelma França",
   },
   supplementaryLinks: [
     {

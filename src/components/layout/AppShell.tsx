@@ -18,6 +18,7 @@ import { Brand } from "@/components/Brand";
 import { useSessionStore } from "@/store/useSessionStore";
 import { requestWorkspaceExit } from "@/lib/workspaceNavigation";
 import { WorkspaceContent } from "@/features/auth/WorkspaceContent";
+import { MaterialSearchNavigationContext, type MaterialSearchSnapshot } from "@/features/teaching-paths/materialSearchNavigation";
 import { AccountMenu } from "./AccountMenu";
 import styles from "./AppShell.module.css";
 
@@ -39,7 +40,7 @@ const navigationItems = [
 
 function getPageTitle(pathname: string) {
   if (pathname.startsWith("/app/materiais/")) {
-    return "Detalhe do material";
+    return "Detalhes do material";
   }
   if (pathname === "/app/trilha-de-ensino") return "Buscar Materiais";
   if (pathname === "/app/trilhas-prontas") return "Trilhas Prontas";
@@ -50,6 +51,7 @@ function getPageTitle(pathname: string) {
 }
 
 export function AppShell() {
+  const [materialSearchHistory] = useState(() => new Map<string, MaterialSearchSnapshot>());
   const [menuOpen, setMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const sidebarRef = useRef<HTMLElement>(null);
@@ -189,7 +191,9 @@ export function AppShell() {
           tabIndex={-1}
           aria-label={pageTitle}
         >
-          <WorkspaceContent><Outlet /></WorkspaceContent>
+          <MaterialSearchNavigationContext.Provider value={materialSearchHistory}>
+            <WorkspaceContent><Outlet /></WorkspaceContent>
+          </MaterialSearchNavigationContext.Provider>
         </main>
       </div>
     </div>

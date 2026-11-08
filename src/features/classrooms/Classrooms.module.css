@@ -94,6 +94,8 @@
 .field small { color: var(--text-muted); font-size: .77rem; font-weight: 450; }
 .formColumns { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 .formFooter { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .6rem; padding-top: 1rem; border-top: 1px solid var(--border-soft); }
+.classroomPickerFooter { align-items: center; justify-content: space-between; }
+.classroomPickerFooter > .actions { margin-left: auto; }
 .colorField { min-width: 0; margin: 0; padding: 0; border: 0; }
 .colorField legend { margin-bottom: .6rem; color: var(--brand-navy); font-size: .87rem; font-weight: 700; }
 .colors { display: flex; gap: .6rem; flex-wrap: wrap; }
@@ -123,6 +125,9 @@
 .entry h1 { margin: 0 0 .65rem; color: var(--brand-navy); font-family: var(--font-serif); font-size: 2rem; }
 .entry p { margin: 0; color: var(--text-muted); }
 .entry .error { color: var(--state-error); }
+.rememberDevice { display: flex; min-height: 44px; align-items: center; gap: .65rem; color: var(--brand-navy); font-size: .88rem; line-height: 1.45; cursor: pointer; }
+.rememberDevice input { width: 1.15rem; height: 1.15rem; flex-shrink: 0; accent-color: var(--brand-blue); }
+.rememberDevice input:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 3px; }
 .codeInput { text-align: center; font-size: 1.8rem; font-weight: 750; letter-spacing: .18em; font-variant-numeric: tabular-nums; }
 .studentList { display: grid; gap: .85rem; list-style: none; margin: 1.75rem 0 0; padding: 0; }
 .studentCard { display: flex; align-items: center; gap: 1rem; justify-content: space-between; padding: 1.4rem; border: 1px solid var(--border-soft); border-left: 4px solid var(--classroom-accent); border-radius: var(--radius-md); background: white; color: var(--text-primary); text-decoration: none; box-shadow: var(--shadow-sm); }

@@ -6,6 +6,7 @@ import {
   type MaterialType,
 } from "@/domain/materialType";
 import { AccessibleDialog } from "@/features/catalog/components/AccessibleDialog";
+import { MaterialFilterField } from "./MaterialFilterField";
 import styles from "../pages/TeachingPathPage.module.css";
 
 interface MaterialTypeFilterProps {
@@ -16,26 +17,24 @@ interface MaterialTypeFilterProps {
 export function MaterialTypeFilter({ selected, onChange }: MaterialTypeFilterProps) {
   const [open, setOpen] = useState(false);
   const groupId = useId();
+  const selectedLabels = selected.map((type) => materialTypeOptions.find((option) => option.id === type)!.label);
 
   return (
     <div className={styles.tagGroup}>
-      <span className={styles.tagLabel}>Tipo de material</span>
-      <button
-        className={`${styles.filterTag} ${styles.keywordTrigger} ${selected.length > 0 ? styles.keywordTriggerActive : ""}`}
-        type="button"
-        aria-label="Ver opções de tipos de material"
-        aria-haspopup="dialog"
+      <MaterialFilterField
+        label="Tipo de material"
+        ariaLabel="Ver opções de tipos de material"
+        value={selected.length === 0 ? "Todos" : selected.length === 1 ? selectedLabels[0] : `${selected.length} tipos`}
+        description={selectedLabels.join(", ") || "Todos"}
+        active={selected.length > 0}
         onClick={() => setOpen(true)}
-      >
-        Ver opções
-      </button>
+      />
       <AccessibleDialog
         open={open}
         title="Selecionar tipos de material"
-        description="Selecione um ou mais tipos. Os resultados incluem materiais de qualquer um dos tipos escolhidos."
         onClose={() => setOpen(false)}
       >
-        <div className={styles.typeDialogContent}>
+        {open && <div className={styles.typeDialogContent}>
           <div className={styles.keywordGroups}>
             {materialTypeGroups.map((group, index) => (
               <section
@@ -68,7 +67,7 @@ export function MaterialTypeFilter({ selected, onChange }: MaterialTypeFilterPro
             </button>
             <button type="button" onClick={() => setOpen(false)}>Concluir</button>
           </div>
-        </div>
+        </div>}
       </AccessibleDialog>
     </div>
   );

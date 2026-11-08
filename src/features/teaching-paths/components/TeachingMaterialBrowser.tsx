@@ -1,6 +1,6 @@
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Search, X } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, type LinkProps } from "react-router-dom";
 import { SUPPORTED_GRADES, type Grade } from "@/domain/curriculum";
 import type { Resource } from "@/domain/resource";
 import { getResourceMaterialTypes, type MaterialType } from "@/domain/materialType";
@@ -10,6 +10,10 @@ import { RequiredFamiliarity } from "@/features/catalog/components/RequiredFamil
 import { RESOURCE_PLACEHOLDER, getResourceTypeLabels } from "@/features/catalog/components/resourcePresentation";
 import { getTeachingResourceMetadata, type ActivityMode, type PilotTeachingResource, type TeachingApproach } from "../data/pilotTeachingResources";
 import { MaterialTypeFilter } from "./MaterialTypeFilter";
+import { BnccSkillFilter } from "./BnccSkillFilter";
+import { MaterialFilterField } from "./MaterialFilterField";
+import { MaterialChoiceFilter } from "./MaterialChoiceFilter";
+import type { MaterialSearchFilters } from "../materialSearchNavigation";
 import styles from "../pages/TeachingPathPage.module.css";
 
 export interface TeachingResourceView {
@@ -63,7 +67,16 @@ function toggleFilter<T extends string | number>(values: readonly T[], value: T)
     : [...values, value];
 }
 
-function TeachingResourcePreview({ resource, teaching }: TeachingResourceView) {
+function TeachingResourcePreview({ resource, teaching, actions, detailLinkProps }: TeachingResourceView & {
+  actions?: ReactNode;
+  detailLinkProps?: Pick<LinkProps, "to" | "state" | "onClick">;
+}) {
+  const familiarity = resource.requiredFamiliarity ? (
+    <div className={styles.cardFamiliarity}>
+      <span>Preparação necessária</span>
+      <RequiredFamiliarity levels={resource.requiredFamiliarity} compact />
+    </div>
+  ) : null;
   return <>
     <div className={styles.resourceImage}>
       <img
@@ -78,7 +91,9 @@ function TeachingResourcePreview({ resource, teaching }: TeachingResourceView) {
           <span>{activityModeLabels[teaching.activityMode]}</span>
           <span>{teachingApproachLabels[teaching.teachingApproach]}</span>
         </div>
-        <h3>{resource.title}</h3>
+        <h3 aria-label={resource.title}>{detailLinkProps
+          ? <Link className={styles.inlineDetailsLink} {...detailLinkProps} aria-label={`Abrir detalhes de ${resource.title}`}>{resource.title}</Link>
+          : resource.title}</h3>
         <p className={styles.objective}>
           <strong>Objetivo</strong>
           {teaching.objective}
@@ -93,30 +108,34 @@ function TeachingResourcePreview({ resource, teaching }: TeachingResourceView) {
           <strong>Materiais</strong>
           {teaching.materials.join(" · ")}
         </p>
-        {resource.requiredFamiliarity ? (
-          <div className={styles.cardFamiliarity}>
-            <span>Preparação necessária</span>
-            <RequiredFamiliarity levels={resource.requiredFamiliarity} compact />
-          </div>
-        ) : null}
+        {actions ? <div className={styles.resourceMetaRow}>{familiarity}{actions}</div> : familiarity}
       </div>
     </div>
   </>;
 }
 
-export function TeachingMaterialBrowser({ resources, renderActions, children, linkToDetails = true }: {
+export function TeachingMaterialBrowser({ resources, renderActions, children, linkToDetails = true, initialFilters, onFiltersChange, onOpenDetails, searchEntryKey, actionsPlacement = "side" }: {
   resources: Resource[];
   renderActions: (item: TeachingResourceView) => ReactNode;
   children?: ReactNode;
   linkToDetails?: boolean;
+  initialFilters?: MaterialSearchFilters;
+  onFiltersChange?: (filters: MaterialSearchFilters) => void;
+  onOpenDetails?: () => void;
+  searchEntryKey?: string;
+  actionsPlacement?: "side" | "inline";
 }) {
-  const [query, setQuery] = useState("");
-  const [selectedGrades, setSelectedGrades] = useState<Grade[]>([]);
-  const [selectedActivityModes, setSelectedActivityModes] = useState<ActivityFilter[]>([]);
-  const [selectedMaterialTypes, setSelectedMaterialTypes] = useState<MaterialType[]>([]);
-  const [selectedKeywordIds, setSelectedKeywordIds] = useState<MaterialKeywordId[]>([]);
+  const [query, setQuery] = useState(initialFilters?.query ?? "");
+  const [selectedGrades, setSelectedGrades] = useState<Grade[]>(initialFilters?.selectedGrades ?? []);
+  const [selectedActivityModes, setSelectedActivityModes] = useState<ActivityFilter[]>(initialFilters?.selectedActivityModes ?? []);
+  const [selectedMaterialTypes, setSelectedMaterialTypes] = useState<MaterialType[]>(initialFilters?.selectedMaterialTypes ?? []);
+  const [selectedKeywordIds, setSelectedKeywordIds] = useState<MaterialKeywordId[]>(initialFilters?.selectedKeywordIds ?? []);
+  const [selectedSkillCodes, setSelectedSkillCodes] = useState<string[]>(initialFilters?.selectedSkillCodes ?? []);
   const [isKeywordDialogOpen, setIsKeywordDialogOpen] = useState(false);
   const [keywordQuery, setKeywordQuery] = useState("");
+  useEffect(() => {
+    onFiltersChange?.({ query, selectedGrades, selectedActivityModes, selectedMaterialTypes, selectedKeywordIds, selectedSkillCodes });
+  }, [onFiltersChange, query, selectedGrades, selectedActivityModes, selectedMaterialTypes, selectedKeywordIds, selectedSkillCodes]);
   const teachingResources = useMemo(() => getTeachingResources(resources), [resources]);
   const filteredResources = useMemo(
     () =>
@@ -134,16 +153,20 @@ export function TeachingMaterialBrowser({ resources, renderActions, children, li
         const matchesKeyword =
           selectedKeywordIds.length === 0 ||
           selectedKeywordIds.some((id) => getMaterialKeywordIds(item.resource.id).includes(id));
+        const matchesSkill = selectedSkillCodes.length === 0 || item.resource.curriculum.alignments.some((alignment) =>
+          selectedSkillCodes.includes(alignment.skill.code)
+          && (selectedGrades.length === 0 || selectedGrades.includes(alignment.grade)));
 
         return (
           matchesGrade &&
           matchesActivityMode &&
           matchesMaterialType &&
           matchesKeyword &&
+          matchesSkill &&
           matchesSearch(item, query)
         );
       }),
-    [teachingResources, query, selectedActivityModes, selectedMaterialTypes, selectedGrades, selectedKeywordIds],
+    [teachingResources, query, selectedActivityModes, selectedMaterialTypes, selectedGrades, selectedKeywordIds, selectedSkillCodes],
   );
 
   const hasActiveFilters =
@@ -151,8 +174,11 @@ export function TeachingMaterialBrowser({ resources, renderActions, children, li
     selectedGrades.length > 0 ||
     selectedActivityModes.length > 0 ||
     selectedMaterialTypes.length > 0 ||
-    selectedKeywordIds.length > 0;
+    selectedKeywordIds.length > 0 ||
+    selectedSkillCodes.length > 0;
   const normalizedKeywordQuery = normalizeSearchTerm(keywordQuery);
+  const selectedKeywordLabels = materialKeywordGroups.flatMap((group) => group.options
+    .filter((option) => selectedKeywordIds.includes(option.id)).map((option) => option.label));
   const visibleKeywordGroups = materialKeywordGroups
     .map((group) => ({
       axis: group.axis,
@@ -168,20 +194,18 @@ export function TeachingMaterialBrowser({ resources, renderActions, children, li
     setSelectedActivityModes([]);
     setSelectedMaterialTypes([]);
     setSelectedKeywordIds([]);
+    setSelectedSkillCodes([]);
   };
 
   return <>
-      <section className={styles.searchSurface} aria-labelledby="discovery-title">
+      <section className={styles.searchSurface} aria-label="Buscar e filtrar materiais">
         <div className={styles.sectionHeading}>
-          <span className={styles.sectionIcon} aria-hidden="true">
-            <Search size={21} />
-          </span>
+          <span className={styles.sectionIcon} aria-hidden="true"><Search size={21} /></span>
           <div>
             <p>Encontre materiais</p>
-            <h2 id="discovery-title">Por onde você quer começar?</h2>
+            <h2>Por onde você quer começar?</h2>
           </div>
         </div>
-
         <label className="sr-only" htmlFor="teaching-path-query">
           Pesquisar área, assunto ou habilidade
         </label>
@@ -197,45 +221,22 @@ export function TeachingMaterialBrowser({ resources, renderActions, children, li
         </div>
 
         <div className={styles.tagGroups} aria-label="Filtros da busca">
+          <MaterialChoiceFilter<Grade>
+            label="Ano escolar" ariaLabel="Ver opções de anos escolares" title="Selecionar anos escolares"
+            countLabel="anos" clearLabel="Limpar anos" selected={selectedGrades} onChange={setSelectedGrades}
+            options={SUPPORTED_GRADES.map((grade) => ({ value: grade, label: `${grade}º ano` }))}
+          />
           <div className={styles.tagGroup}>
-            <span className={styles.tagLabel}>Ano escolar</span>
-            <div className={styles.tagList}>
-              <button
-                className={styles.filterTag}
-                type="button"
-                aria-pressed={selectedGrades.length === 0}
-                onClick={() => setSelectedGrades([])}
-              >
-                Todos os anos
-              </button>
-              {SUPPORTED_GRADES.map((grade) => (
-                <button
-                  className={styles.filterTag}
-                  type="button"
-                  aria-pressed={selectedGrades.includes(grade)}
-                  key={grade}
-                  onClick={() => setSelectedGrades((current) => toggleFilter(current, grade))}
-                >
-                  {grade}º ano
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className={styles.tagGroup}>
-            <span className={styles.tagLabel}>Assuntos</span>
-            <button
-              className={`${styles.filterTag} ${styles.keywordTrigger} ${selectedKeywordIds.length > 0 ? styles.keywordTriggerActive : ""}`}
-              type="button"
-              aria-label="Ver opções de assuntos"
-              aria-haspopup="dialog"
+            <MaterialFilterField
+              label="Assuntos" ariaLabel="Ver opções de assuntos"
+              value={selectedKeywordIds.length === 0 ? "Todos" : selectedKeywordIds.length === 1 ? selectedKeywordLabels[0] : `${selectedKeywordIds.length} assuntos`}
+              description={selectedKeywordLabels.join(", ") || "Todos"}
+              active={selectedKeywordIds.length > 0}
               onClick={() => {
                 setKeywordQuery("");
                 setIsKeywordDialogOpen(true);
               }}
-            >
-              Ver opções
-            </button>
+            />
             <span className="sr-only" aria-live="polite">
               {selectedKeywordIds.length === 0
                 ? "Nenhum assunto selecionado"
@@ -243,29 +244,16 @@ export function TeachingMaterialBrowser({ resources, renderActions, children, li
             </span>
           </div>
 
-          <div className={styles.tagGroup}>
-            <span className={styles.tagLabel}>Formato</span>
-            <div className={styles.tagList}>
-              {([
-                ["plugged", "Material plugado"],
-                ["unplugged", "Material desplugado"],
-              ] as const).map(([value, label]) => (
-                <button
-                  className={styles.filterTag}
-                  type="button"
-                  aria-pressed={selectedActivityModes.includes(value)}
-                  key={value}
-                  onClick={() =>
-                    setSelectedActivityModes((current) => toggleFilter(current, value))
-                  }
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-          </div>
-
+          <BnccSkillFilter resources={resources} selected={selectedSkillCodes} onChange={setSelectedSkillCodes} />
           <MaterialTypeFilter selected={selectedMaterialTypes} onChange={setSelectedMaterialTypes} />
+          <MaterialChoiceFilter<ActivityFilter>
+            label="Formato" ariaLabel="Ver opções de formatos" title="Selecionar formatos"
+            countLabel="formatos" clearLabel="Limpar formatos" selected={selectedActivityModes} onChange={setSelectedActivityModes}
+            options={[
+              { value: "plugged", label: "Material plugado", summaryLabel: "Plugado" },
+              { value: "unplugged", label: "Material desplugado", summaryLabel: "Desplugado" },
+            ]}
+          />
         </div>
 
         {hasActiveFilters ? (
@@ -300,15 +288,21 @@ export function TeachingMaterialBrowser({ resources, renderActions, children, li
               const { resource, teaching } = item;
 
               return (
-                <article className={styles.resourceCard} key={resource.id}>
-                  {linkToDetails ? (
-                    <Link className={styles.resourcePreview} to={`/app/materiais/${resource.slug}`} state={{ from: "/app/trilha-de-ensino" }} aria-label={`Abrir detalhes de ${resource.title}`}>
+                <article className={`${styles.resourceCard} ${actionsPlacement === "inline" ? styles.resourceCardInline : ""}`} key={resource.id}>
+                  {actionsPlacement === "inline" ? (
+                    <div className={styles.resourcePreview}>
+                      <TeachingResourcePreview resource={resource} teaching={teaching}
+                        detailLinkProps={linkToDetails ? { to: `/app/materiais/${resource.slug}`, state: { from: "/app/trilha-de-ensino", searchEntryKey }, onClick: onOpenDetails } : undefined}
+                        actions={<div className={styles.inlineActions}>{renderActions(item)}</div>} />
+                    </div>
+                  ) : linkToDetails ? (
+                    <Link className={styles.resourcePreview} to={`/app/materiais/${resource.slug}`} state={{ from: "/app/trilha-de-ensino", searchEntryKey }} onClick={onOpenDetails} aria-label={`Abrir detalhes de ${resource.title}`}>
                       <TeachingResourcePreview resource={resource} teaching={teaching} />
                     </Link>
                   ) : (
                     <div className={styles.resourcePreview}><TeachingResourcePreview resource={resource} teaching={teaching} /></div>
                   )}
-                  <div className={styles.cardAction}>{renderActions(item)}</div>
+                  {actionsPlacement === "side" && <div className={styles.cardAction}>{renderActions(item)}</div>}
                 </article>
               );
             })}
@@ -322,7 +316,7 @@ export function TeachingMaterialBrowser({ resources, renderActions, children, li
         onClose={() => setIsKeywordDialogOpen(false)}
         size="wide"
       >
-        <div className={styles.keywordDialogContent}>
+        {isKeywordDialogOpen && <div className={styles.keywordDialogContent}>
           <div className={styles.keywordSearchControl}>
             <label className={styles.keywordSearchLabel} htmlFor="material-keyword-query">
               Buscar palavras-chave
@@ -379,7 +373,7 @@ export function TeachingMaterialBrowser({ resources, renderActions, children, li
               Concluir
             </button>
           </div>
-        </div>
+        </div>}
       </AccessibleDialog>
 
   </>;

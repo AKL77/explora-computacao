@@ -3,6 +3,7 @@ import { Link, Navigate } from "react-router-dom";
 import { Brand } from "@/components/Brand";
 import { supabase } from "@/lib/backend/client";
 import { backendConfig } from "@/lib/backend/config";
+import { teacherAuthStorage } from "@/lib/backend/authStorage";
 import { useSessionStore } from "@/store/useSessionStore";
 import styles from "@/features/classrooms/Classrooms.module.css";
 
@@ -11,6 +12,7 @@ export function LoginPage() {
   const authError = useSessionStore((state) => state.error);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [rememberDevice, setRememberDevice] = useState(() => teacherAuthStorage.remembersDevice());
   const signInDemo = useSessionStore((state) => state.signIn);
   useEffect(() => { document.title = "Entrar | Explora Computação"; }, []);
   if (authenticated) return <Navigate to="/app/trilha-de-ensino" replace />;
@@ -20,6 +22,7 @@ export function LoginPage() {
     setBusy(true); setError("");
     const redirectTo = new URL(import.meta.env.BASE_URL, window.location.origin).toString();
     try {
+      teacherAuthStorage.setRememberDevice(rememberDevice);
       const { error: failure } = await supabase.auth.signInWithOAuth({ provider: "google", options: { redirectTo, queryParams: { prompt: "select_account" } } });
       if (failure) throw failure;
     } catch { setError("Não foi possível abrir a entrada com Google. Tente novamente."); setBusy(false); }
@@ -29,6 +32,10 @@ export function LoginPage() {
     <main className={styles.publicMain}>
       <section className={styles.entry} aria-labelledby="teacher-login-title">
         <div><span className={styles.eyebrow}>Área do professor</span><h1 id="teacher-login-title">Seu espaço de ensino</h1><p>Entre para organizar suas turmas e encontrar suas trilhas em qualquer computador.</p></div>
+        {backendConfig.mode === "supabase" && <label className={styles.rememberDevice}>
+          <input type="checkbox" checked={rememberDevice} disabled={busy} onChange={(event) => setRememberDevice(event.target.checked)} />
+          <span>Manter conectado neste dispositivo</span>
+        </label>}
         <button className={styles.primary} type="button" disabled={busy || backendConfig.mode === "invalid"} onClick={() => void enter()}>{busy ? "Abrindo Google…" : backendConfig.mode === "demo" ? "Continuar na demonstração" : "Entrar com Google"}</button>
         {(error || authError) && <p className={styles.error} role="alert">{error || authError}</p>}
         <Link className={styles.textButton} to="/alunos">Sou aluno: acessar com código</Link>

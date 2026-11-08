@@ -54,10 +54,14 @@ Microsoft Clarity com escolha de análise de uso.
 
 - página inicial pública com contexto e objetivos do projeto;
 - entrada docente com Google via Supabase e demonstração local opcional;
-- **Buscar Materiais** com pesquisa e filtros por ano, assunto, formato e tipo de material;
+- opção **Manter conectado neste dispositivo** para lembrar o login docente;
+- **Buscar Materiais** com pesquisa e filtros por ano, assunto, habilidade da BNCC,
+  formato e tipo de material;
 - seleção de vários tipos em **Ver opções**, agrupados por abordagem ativa e
   expositiva; materiais com mais de um tipo aparecem uma única vez nos resultados;
 - cartões de descoberta com informações pedagógicas concisas;
+- imagens para os 48 materiais, com proporções preservadas na busca e nas trilhas;
+- retorno à busca preservando a rolagem e os filtros usados;
 - níveis de familiaridade para aluno e professor em cada material, explicados
   na página **Sobre**;
 - detalhe de cada material com assunto, habilidades da BNCC, descrição, condições de uso,
@@ -185,8 +189,9 @@ No GitHub Pages, as rotas aparecem depois de `#`, por exemplo
 ## Persistência e privacidade
 
 No modo online, turmas e trilhas ficam vinculadas à conta docente no Supabase,
-com isolamento por professor. A sessão usa `sessionStorage` da aba; Sair limpa
-os dados em memória. A demonstração mantém dados apenas no `localStorage` e não
+com isolamento por professor. A sessão usa `sessionStorage` da aba ou, ao marcar
+**Manter conectado neste dispositivo**, `localStorage` para lembrar o login.
+Sair encerra a sessão e limpa os dados em memória. A demonstração mantém dados apenas no `localStorage` e não
 os importa para contas reais. A plataforma não solicita dados de estudantes.
 
 Em produção, o Microsoft Clarity analisa a navegação somente depois de o

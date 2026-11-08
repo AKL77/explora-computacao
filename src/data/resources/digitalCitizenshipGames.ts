@@ -1,4 +1,5 @@
 import type { Resource } from "@/domain/resource";
+import { publicAsset } from "@/lib/publicAsset";
 
 import { createCurriculumAlignment } from "../bnccComputing";
 
@@ -90,6 +91,10 @@ const interlandResource: Resource = {
     source: "Google — Seja Incrível na Internet: Interland",
     lastVerifiedAt: LAST_VERIFIED_AT,
     status: "verified",
+  },
+  image: {
+    src: publicAsset("images/cards/curadoria-novembro-08/interland.png"),
+    alt: "Personagem azul de Interland na imagem de apresentação oficial do jogo",
   },
   supplementaryLinks: [
     {

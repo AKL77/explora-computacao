@@ -30,10 +30,10 @@ async function enterStudent(page: Page) {
 }
 
 test("compartilha uma cópia, mantém etapas em ordem e controla sua visibilidade para os alunos", async ({ page, context }, testInfo) => {
-  await page.getByRole("button", { name: "Compartilhar trilha", exact: true }).click();
-  const picker = page.getByRole("dialog", { name: "Compartilhar trilha", exact: true });
+  await page.getByRole("button", { name: "Adicionar trilha", exact: true }).click();
+  const picker = page.getByRole("dialog", { name: "Adicionar trilha", exact: true });
   await picker.getByRole("radio", { name: /Algoritmos em ação/ }).check();
-  await picker.getByRole("button", { name: "Compartilhar trilha", exact: true }).click();
+  await picker.getByRole("button", { name: "Adicionar trilha", exact: true }).click();
   const card = page.getByRole("article", { name: "Trilha Algoritmos em ação", exact: true });
   await expect(card).toBeVisible();
   await card.getByRole("button", { name: "Ver etapas", exact: true }).click();
@@ -41,7 +41,7 @@ test("compartilha uma cópia, mantém etapas em ordem e controla sua visibilidad
   await expect(card.getByRole("listitem").nth(1)).toContainText("Blockly Games");
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
   await page.screenshot({ path: testInfo.outputPath("trilha-compartilhada-professor.png"), fullPage: true, animations: "disabled" });
-  await page.getByRole("button", { name: "Compartilhar trilha", exact: true }).click();
+  await page.getByRole("button", { name: "Adicionar trilha", exact: true }).click();
   await expect(picker.getByRole("radio", { name: /Algoritmos em ação/ })).toBeDisabled();
   await picker.getByRole("button", { name: "Cancelar", exact: true }).click();
 
@@ -76,7 +76,7 @@ test("compartilha uma cópia, mantém etapas em ordem e controla sua visibilidad
   const settings = page.getByRole("dialog", { name: "Editar trilha", exact: true });
   await settings.getByRole("textbox", { name: "Nome da trilha", exact: true }).fill("Algoritmos revisados");
   await settings.getByRole("button", { name: "Aplicar ao rascunho", exact: true }).click();
-  await expect(page.getByRole("button", { name: "Compartilhar com turma", exact: true })).toBeDisabled();
+  await expect(page.getByRole("button", { name: "Adicionar à turma", exact: true })).toBeDisabled();
   await page.getByRole("button", { name: "Salvar alterações", exact: true }).click();
   await expect(publicCard).toBeVisible();
   await page.goto(route("/app/minhas-turmas/11111111-1111-4111-8111-111111111111"));
@@ -88,10 +88,10 @@ test("compartilha uma cópia, mantém etapas em ordem e controla sua visibilidad
 test("compartilha por Minhas Trilhas e preserva a cópia após excluir a original e reabrir a turma", async ({ page, context }) => {
   await page.goto(route("/app/minhas-trilhas"));
   await page.getByRole("button", { name: /Algoritmos em ação/ }).click();
-  await page.getByRole("button", { name: "Compartilhar com turma", exact: true }).click();
-  const share = page.getByRole("dialog", { name: "Compartilhar com turma", exact: true });
+  await page.getByRole("button", { name: "Adicionar à turma", exact: true }).click();
+  const share = page.getByRole("dialog", { name: "Adicionar à turma", exact: true });
   await share.getByRole("radio", { name: /6º B/ }).check();
-  await share.getByRole("button", { name: "Compartilhar trilha", exact: true }).click();
+  await share.getByRole("button", { name: "Adicionar trilha", exact: true }).click();
   await expect(share).not.toBeVisible();
   await page.getByRole("button", { name: "Excluir trilha", exact: true }).click();
   await page.getByRole("dialog", { name: "Excluir trilha", exact: true }).getByRole("button", { name: "Excluir trilha", exact: true }).click();

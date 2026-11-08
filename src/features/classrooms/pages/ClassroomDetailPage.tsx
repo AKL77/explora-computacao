@@ -1,5 +1,5 @@
 import { useState, type CSSProperties, type FormEvent } from "react";
-import { Archive, ArchiveRestore, ArrowDown, ArrowLeft, ArrowUp, Copy, Eye, EyeOff, MessageSquare, Pencil, Plus, Share2, Trash2, UsersRound, X } from "lucide-react";
+import { Archive, ArchiveRestore, ArrowDown, ArrowLeft, ArrowUp, Copy, Eye, EyeOff, MessageSquare, Pencil, Plus, Waypoints, Trash2, UsersRound, X } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { WorkspacePage } from "@/components/layout/WorkspacePage";
 import { classroomColor, formatClassroomCode } from "@/domain/classroom";
@@ -91,7 +91,7 @@ export function ClassroomDetailPage() {
         <div className={styles.sectionHeading}>
           <h2 id="classroom-materials-title">Materiais da turma</h2>
           {!classroom.archived && <div className={styles.actions}>
-            {(!isOnlineMode || classroom.sharedPaths !== undefined) && <button className={styles.secondary} type="button" disabled={status !== "success"} onClick={() => setDialog("share")}><Share2 size={17} aria-hidden="true" /> Compartilhar trilha</button>}
+            {(!isOnlineMode || classroom.sharedPaths !== undefined) && <button className={styles.secondary} type="button" disabled={status !== "success"} onClick={() => setDialog("share")}><Waypoints size={17} aria-hidden="true" /> Adicionar trilha</button>}
             <button className={styles.primary} type="button" disabled={status !== "success"} onClick={() => setDialog("add")}><Plus size={18} aria-hidden="true" /> Adicionar material</button>
           </div>}
         </div>
@@ -149,7 +149,7 @@ export function ClassroomDetailPage() {
         </div>
       </AccessibleDialog>}
       {dialog === "edit" && !classroom.archived && <ClassroomFormDialog classroom={classroom} onClose={() => setDialog(null)} onSaved={() => { setDialog(null); setAnnouncement("Informações da turma atualizadas."); }} />}
-      {dialog === "share" && !classroom.archived && <ShareTeachingPathDialog classroom={classroom} onClose={() => setDialog(null)} onShared={(_target, path) => { setDialog(null); setAnnouncement(`A trilha “${path.name}” foi compartilhada com a turma.`); }} />}
+      {dialog === "share" && !classroom.archived && <ShareTeachingPathDialog classroom={classroom} onClose={() => setDialog(null)} onShared={(_target, path) => { setDialog(null); setAnnouncement(`A trilha “${path.name}” foi adicionada à turma.`); }} />}
       {dialog === "add" && !classroom.archived && <ClassroomMaterialPicker classroom={classroom} resources={resources} onClose={() => setDialog(null)} onAdded={(count) => { setDialog(null); setAnnouncement(`${count} ${count === 1 ? "material adicionado e visível" : "materiais adicionados e visíveis"} para os alunos.`); }} />}
       {dialog === "code" && !classroom.archived && <AccessibleDialog open title={`Código de ${classroom.name}`} onClose={() => setDialog(null)}>
         <div className={styles.projection}>
