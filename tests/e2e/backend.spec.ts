@@ -61,13 +61,17 @@ for (const remember of [false, true]) {
     await page.screenshot({ path: testInfo.outputPath("manter-conectado-login.png"), fullPage: true });
     const independent = await context.newPage();
     await independent.goto("/#/entrar");
+    await expect(independent.getByRole("button", { name: "Entrar com Google", exact: true })).toBeVisible();
+    await page.bringToFront();
     await page.getByRole("button", { name: "Entrar com Google", exact: true }).click();
     await expect(page.getByRole("heading", { name: "Buscar Materiais", exact: true })).toBeVisible();
     expect(exchanges).toBe(1);
     expect(await page.evaluate((key) => Boolean(localStorage.getItem(key)), authKey)).toBe(remember);
     expect(await page.evaluate((key) => Boolean(sessionStorage.getItem(key)), authKey)).toBe(!remember);
+    await independent.bringToFront();
     if (!remember) await expect(independent.getByRole("button", { name: "Entrar com Google", exact: true })).toBeVisible();
     else await expect(independent.getByRole("heading", { name: "Buscar Materiais", exact: true })).toBeVisible();
+    await page.bringToFront();
     await page.reload();
     await expect(page.getByRole("heading", { name: "Buscar Materiais", exact: true })).toBeVisible();
     const state = await context.storageState();
