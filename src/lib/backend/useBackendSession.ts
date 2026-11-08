@@ -4,7 +4,7 @@ import { useSessionStore } from "@/store/useSessionStore";
 import { useClassroomsStore } from "@/store/useClassroomsStore";
 import { useTeachingPathsStore } from "@/store/useTeachingPathsStore";
 import { teacherWorkspaceRepository } from "@/repositories/TeacherWorkspaceRepository";
-import { backendConfig, isOnlineMode } from "./config";
+import { AUTH_STORAGE_KEY, backendConfig, isOnlineMode } from "./config";
 import { supabase } from "./client";
 import { teacherAuthStorage } from "./authStorage";
 import { resetWorkspace } from "./resetWorkspace";
@@ -67,12 +67,22 @@ export function useBackendSession() {
       // Eventos de outra aba só se aplicam quando ela compartilha a mesma sessão.
       if (active && teacherAuthStorage.matchesSession(session?.access_token)) applyUser(session?.user ?? null);
     });
+    const syncStoredSession = async () => {
+      const { data, error } = await client.auth.getSession();
+      if (error) throw error;
+      if (active && teacherAuthStorage.matchesSession(data.session?.access_token)) applyUser(data.session?.user ?? null);
+    };
+    const handleStorage = (event: StorageEvent) => {
+      if (event.storageArea !== window.localStorage || (event.key !== AUTH_STORAGE_KEY && event.key !== null)) return;
+      // O aviso do SDK pode chegar antes da atualização do armazenamento desta aba.
+      // Releia a sessão escolhida; sessões restritas à aba continuam independentes.
+      void syncStoredSession().catch(() => undefined);
+    };
+    window.addEventListener("storage", handleStorage);
     const start = async () => {
       try {
         await completeAuthCallback();
-        const { data, error } = await client.auth.getSession();
-        if (error) throw error;
-        if (active) applyUser(data.session?.user ?? null);
+        await syncStoredSession();
       } catch {
         if (active) {
           applyUser(null);
@@ -86,6 +96,6 @@ export function useBackendSession() {
       if (next.ownerId && next.generation !== previous.generation) queueMicrotask(() => { if (active) void reloadWorkspace(); });
     });
     if (useWorkspaceState.getState().ownerId) void reloadWorkspace();
-    return () => { active = false; subscription.subscription.unsubscribe(); unsubscribe(); };
+    return () => { active = false; window.removeEventListener("storage", handleStorage); subscription.subscription.unsubscribe(); unsubscribe(); };
   }, []);
 }

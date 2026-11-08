@@ -60,6 +60,8 @@ for (const remember of [false, true]) {
     await checkbox.setChecked(remember);
     await page.screenshot({ path: testInfo.outputPath("manter-conectado-login.png"), fullPage: true });
     const independent = await context.newPage();
+    // A sessão persistente também deve se propagar pelo armazenamento do navegador.
+    await independent.addInitScript(() => Object.defineProperty(window, "BroadcastChannel", { value: undefined }));
     await independent.goto("/#/entrar");
     await expect(independent.getByRole("button", { name: "Entrar com Google", exact: true })).toBeVisible();
     await page.bringToFront();
