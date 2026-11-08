@@ -16,6 +16,7 @@ import {
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Brand } from "@/components/Brand";
 import { useSessionStore } from "@/store/useSessionStore";
+import { requestWorkspaceExit } from "@/lib/workspaceNavigation";
 import { WorkspaceContent } from "@/features/auth/WorkspaceContent";
 import { AccountMenu } from "./AccountMenu";
 import styles from "./AppShell.module.css";
@@ -113,8 +114,10 @@ export function AppShell() {
   };
 
   const leave = () => {
-    void signOut();
-    navigate("/", { replace: true });
+    requestWorkspaceExit(() => {
+      void signOut();
+      navigate("/", { replace: true });
+    });
   };
 
   return (

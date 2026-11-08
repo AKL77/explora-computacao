@@ -1,6 +1,6 @@
 import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MemoryRouter } from "react-router-dom";
+import { createMemoryRouter, RouterProvider, Link } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { TEACHING_PATHS_SCHEMA_VERSION, useTeachingPathsStore } from "@/store/useTeachingPathsStore";
@@ -18,11 +18,11 @@ afterEach(() => {
 
 function renderPage() {
   const user = userEvent.setup();
-  render(
-    <MemoryRouter>
-      <SavedTeachingPathsPage />
-    </MemoryRouter>,
-  );
+  const router = createMemoryRouter([
+    { path: "/", element: <><Link to="/outra-pagina">Outra página</Link><SavedTeachingPathsPage /></> },
+    { path: "/outra-pagina", element: <h1>Outra página</h1> },
+  ]);
+  render(<RouterProvider router={router} />);
   return user;
 }
 

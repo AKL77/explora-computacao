@@ -3,6 +3,68 @@ import type { Classroom } from "../../src/domain/classroom";
 import type { SavedTeachingPath } from "../../src/domain/savedTeachingPath";
 
 const authKey = "explora:teacher-auth:v1";
+
+test("confirma o compartilhamento de uma trilha somente após o servidor e entrega uma cópia pública", async ({ page, context }) => {
+  await teacherSession(context);
+  const path: SavedTeachingPath = { id: "33333333-3333-4333-8333-333333333333", revision: 3, name: "Algoritmos online", objective: "Objetivo reservado ao professor", backgroundColor: "amber", icon: "puzzle", resourceIds: ["lightbot-web", "google-blockly-games"], lessonCountsByResourceId: { "lightbot-web": 2 }, createdAt: "2026-11-08T12:00:00Z", updatedAt: "2026-11-08T12:30:00Z" };
+  let classroom: Classroom = { id: "11111111-1111-4111-8111-111111111111", name: "6º Online", grade: 6, school: "", schoolYear: 2026, color: "blue", code: "123456", archived: false, materials: [], sharedPaths: [], revision: 1, createdAt: "2026-11-08T12:00:00Z" };
+  let attempts = 0;
+  let releaseFirst = () => {};
+  const firstReply = new Promise<void>((resolve) => { releaseFirst = resolve; });
+  await context.route("https://backend-test.supabase.co/**", async (route) => {
+    const name = new URL(route.request().url()).pathname.split("/").pop();
+    if (name === "teacher_workspace") return route.fulfill({ json: { classrooms: [classroom], paths: [path] } });
+    if (name === "change_classroom_teaching_path") {
+      const args = route.request().postDataJSON();
+      expect(args.p_classroom_id).toBe(classroom.id);
+      expect(args.p_path_id).toBe(path.id);
+      expect(args.p_revision).toBe(classroom.revision);
+      if (args.p_action === "share") {
+        expect(args.p_path_revision).toBe(3);
+        attempts++;
+        if (attempts === 1) { await firstReply; return route.fulfill({ status: 503, json: { message: "unavailable" } }); }
+        classroom = { ...classroom, revision: 2, sharedPaths: [{ id: path.id, name: path.name, objective: path.objective, backgroundColor: path.backgroundColor, icon: path.icon, resourceIds: [...path.resourceIds], lessonCountsByResourceId: { ...path.lessonCountsByResourceId }, visible: true, sourceRevision: 3, sourceUpdatedAt: path.updatedAt, sharedAt: "2026-11-08T13:00:00Z" }] };
+      } else if (args.p_action === "visibility") {
+        classroom = { ...classroom, revision: classroom.revision! + 1, sharedPaths: classroom.sharedPaths!.map((copy) => ({ ...copy, visible: args.p_visible })) };
+      } else throw new Error(`Ação inesperada: ${args.p_action}`);
+      return route.fulfill({ json: classroom });
+    }
+    if (name === "student-classroom") return route.fulfill({ json: {
+      ...classroom, revision: undefined,
+      sharedPaths: classroom.sharedPaths!.filter((copy) => copy.visible).map(({ id, name, icon, backgroundColor, resourceIds, visible }) => ({ id, name, icon, backgroundColor, resourceIds, visible })),
+    } });
+    throw new Error(`Consulta inesperada: ${name}`);
+  });
+  await page.goto(`/#/app/minhas-turmas/${classroom.id}`);
+  await page.getByRole("button", { name: "Compartilhar trilha", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Compartilhar trilha", exact: true });
+  await dialog.getByRole("radio", { name: /Algoritmos online/ }).check();
+  const request = page.waitForRequest((request) => request.url().endsWith("change_classroom_teaching_path"));
+  try {
+    await dialog.getByRole("button", { name: "Compartilhar trilha", exact: true }).click();
+    await request;
+    await expect(page.getByRole("article", { name: "Trilha Algoritmos online", exact: true })).toHaveCount(0);
+    expect(classroom.sharedPaths).toHaveLength(0);
+  } finally { releaseFirst(); }
+  await expect(dialog.getByRole("alert").filter({ hasText: "Não foi possível confirmar a ação online" })).toBeVisible();
+  await dialog.getByRole("button", { name: "Compartilhar trilha", exact: true }).click();
+  await expect(page.getByRole("article", { name: "Trilha Algoritmos online", exact: true })).toBeVisible();
+  const student = await context.newPage();
+  await student.goto("/#/alunos");
+  await student.getByLabel("Código da turma", { exact: true }).fill("123456");
+  await student.getByRole("button", { name: "Acessar turma", exact: true }).click();
+  const publicCard = student.getByRole("article", { name: "Trilha Algoritmos online", exact: true });
+  await expect(publicCard).toBeVisible();
+  await publicCard.getByRole("button", { name: "Ver etapas", exact: true }).click();
+  await expect(publicCard.getByRole("link").first()).toHaveAttribute("href", "https://www.lightbot.lu/#/welcome");
+  await expect(student.getByText(path.objective, { exact: true })).toHaveCount(0);
+  await page.getByRole("switch", { name: "Visível para alunos: trilha Algoritmos online", exact: true }).click();
+  await student.evaluate(() => window.dispatchEvent(new Event("focus")));
+  await expect(publicCard).toHaveCount(0);
+  await expect(student.getByRole("heading", { name: "Os materiais vão aparecer aqui", exact: true })).toBeVisible();
+  expect(attempts).toBe(2);
+});
+
 async function teacherSession(context: BrowserContext) {
   await context.addInitScript(({ authKey }) => {
     const user = { id: "00000000-0000-4000-8000-000000000001", email: "professor@example.com", aud: "authenticated", role: "authenticated", app_metadata: { provider: "google" }, user_metadata: { full_name: "Professor de Teste" }, created_at: new Date().toISOString() };
@@ -84,7 +146,7 @@ test("salva online e compartilha com outro computador sem autenticar o aluno", a
   await expect(student.getByLabel("Código da turma", { exact: true })).toHaveValue("");
   await page.getByRole("button", { name: "Arquivar", exact: true }).click();
   await page.getByRole("dialog", { name: "Arquivar turma?", exact: true }).getByRole("button", { name: "Arquivar turma", exact: true }).click();
-  await expect(page.getByText("Turma arquivada.", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Desarquivar turma", exact: true })).toBeVisible();
   await student.getByLabel("Código da turma", { exact: true }).fill("123456");
   await student.getByRole("button", { name: "Acessar turma", exact: true }).click();
   await expect(student.getByRole("alert")).toContainText("Turma indisponível");
@@ -125,7 +187,7 @@ test("mantém a turma arquivada quando o servidor recusa o desarquivamento", asy
   await page.goto(`/#/app/minhas-turmas/${classroom.id}`);
   await page.getByRole("button", { name: "Desarquivar turma", exact: true }).click();
   await expect(page.getByRole("alert")).toContainText("Não foi possível confirmar a ação online");
-  await expect(page.getByText("Turma arquivada.", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Mostrar código", exact: true })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Desarquivar turma", exact: true })).toBeEnabled();
   await expect(page.getByRole("button", { name: "Editar turma", exact: true })).toHaveCount(0);
   await expect(page.getByText("Turma desarquivada.", { exact: true })).toHaveCount(0);

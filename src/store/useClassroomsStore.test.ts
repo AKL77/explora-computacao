@@ -1,15 +1,60 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import type { ClassroomInput } from "@/domain/classroom";
 import { CLASSROOMS_STORAGE_KEY, useClassroomsStore } from "./useClassroomsStore";
+import { useTeachingPathsStore } from "./useTeachingPathsStore";
 
 const input: ClassroomInput = { name: "6º B", grade: 6, school: "Escola Exemplo", schoolYear: 2026, color: "blue" };
 
 beforeEach(() => {
   localStorage.clear();
   useClassroomsStore.setState({ classrooms: [], retiredCodes: [] });
+  useTeachingPathsStore.setState({ paths: [] });
 });
 
 describe("turmas locais", () => {
+  it("compartilha uma cópia independente e só aplica alterações da original ao atualizar", async () => {
+    const store = useClassroomsStore.getState();
+    const classroom = (await store.createClassroom(input))!;
+    const source = (await useTeachingPathsStore.getState().createPath("Algoritmos", ["lightbot-web", "google-blockly-games"], { objective: "Explorar decisões.", lessonCountsByResourceId: { "lightbot-web": 2 }, icon: "puzzle", backgroundColor: "amber" }))!;
+    expect(await store.shareTeachingPath(classroom.id, source.id)).toBe(true);
+    const initial = structuredClone(store.findByCode(classroom.code)!.sharedPaths![0]);
+    expect(initial).toMatchObject({ name: source.name, icon: "puzzle", backgroundColor: "amber", resourceIds: source.resourceIds, visible: true, lessonCountsByResourceId: { "lightbot-web": 2 } });
+    expect(await store.shareTeachingPath(classroom.id, source.id)).toBe(true);
+    expect(store.findByCode(classroom.code)!.sharedPaths).toHaveLength(1);
+    await useTeachingPathsStore.getState().updatePath(source.id, { ...source, name: "Algoritmos revisados", resourceIds: ["google-blockly-games", "lightbot-web"] });
+    expect(store.findByCode(classroom.code)!.sharedPaths![0]).toEqual(initial);
+    await store.setTeachingPathVisibility(classroom.id, source.id, false);
+    expect(await store.updateSharedTeachingPath(classroom.id, source.id)).toBe(true);
+    expect(store.findByCode(classroom.code)!.sharedPaths![0]).toMatchObject({ name: "Algoritmos revisados", resourceIds: ["google-blockly-games", "lightbot-web"], visible: false, sharedAt: initial.sharedAt });
+    await useTeachingPathsStore.getState().deletePath(source.id);
+    expect(store.findByCode(classroom.code)!.sharedPaths).toHaveLength(1);
+    expect(await store.updateSharedTeachingPath(classroom.id, source.id)).toBe(false);
+  });
+
+  it("mantém ordem e visibilidade por turma e preserva as cópias ao arquivar, reabrir e remover", async () => {
+    const store = useClassroomsStore.getState();
+    const first = (await store.createClassroom(input))!;
+    const second = (await store.createClassroom({ ...input, name: "Outra turma" }))!;
+    const a = (await useTeachingPathsStore.getState().createPath("A", ["google-interland"]))!;
+    const b = (await useTeachingPathsStore.getState().createPath("B", ["lightbot-web"]))!;
+    await store.shareTeachingPath(first.id, a.id); await store.shareTeachingPath(first.id, b.id);
+    await store.shareTeachingPath(second.id, a.id);
+    await store.setTeachingPathVisibility(first.id, a.id, false);
+    await store.moveTeachingPath(first.id, b.id, -1);
+    expect(store.findByCode(first.code)!.sharedPaths!.map((path) => path.id)).toEqual([b.id, a.id]);
+    expect(store.findByCode(second.code)!.sharedPaths![0].visible).toBe(true);
+    await store.archiveClassroom(first.id);
+    expect(await store.removeTeachingPath(first.id, a.id)).toBe(false);
+    expect(await store.setTeachingPathVisibility(first.id, a.id, true)).toBe(false);
+    await useClassroomsStore.persist.rehydrate();
+    await store.unarchiveClassroom(first.id);
+    expect(store.findByCode(first.code)!.sharedPaths![1].visible).toBe(false);
+    await store.removeTeachingPath(first.id, a.id);
+    expect(store.findByCode(first.code)!.sharedPaths).toHaveLength(1);
+    expect(useTeachingPathsStore.getState().getPath(a.id)).toBeDefined();
+    expect(store.findByCode(second.code)!.sharedPaths).toHaveLength(1);
+  });
+
   it("gera códigos distintos e mantém o código ao editar a turma", async () => {
     const first = (await useClassroomsStore.getState().createClassroom(input))!;
     const second = (await useClassroomsStore.getState().createClassroom({ ...input, name: "6º A" }))!;

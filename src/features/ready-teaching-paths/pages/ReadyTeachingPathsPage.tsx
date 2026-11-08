@@ -211,7 +211,6 @@ export function ReadyTeachingPathsPage() {
         >
           <header className={styles.pathHeader}>
             <div className={styles.pathTitleBlock}>
-              <span className={styles.featuredLabel}>Disponível agora</span>
               <h2 id="ready-path-title">{selectedReadyPath.name}</h2>
               <p>{selectedReadyPath.objective}</p>
               <div className={styles.metadata} aria-label="Informações da trilha">

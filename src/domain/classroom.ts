@@ -1,4 +1,5 @@
 import { SUPPORTED_GRADES, type Grade } from "./curriculum";
+import { isClassroomTeachingPath, isStudentTeachingPath, type ClassroomTeachingPath, type StudentTeachingPath } from "./classroomTeachingPath";
 
 export const CLASSROOM_COLORS = [
   { value: "blue", label: "Azul", hex: "#005c8b" },
@@ -30,8 +31,11 @@ export interface Classroom extends ClassroomInput {
   code: string;
   archived: boolean;
   materials: ClassroomMaterial[];
+  sharedPaths?: ClassroomTeachingPath[];
   createdAt: string;
 }
+
+export type StudentClassroom = Omit<Classroom, "revision" | "sharedPaths"> & { sharedPaths?: StudentTeachingPath[] };
 
 export function normalizeClassroomCode(value: string): string {
   return value.replace(/\s/g, "");
@@ -57,7 +61,7 @@ export function isClassroomInput(value: unknown): value is ClassroomInput {
   );
 }
 
-export function isClassroom(value: unknown): value is Classroom {
+function hasValidClassroomFields(value: unknown): boolean {
   if (!isClassroomInput(value)) return false;
   const classroom = value as unknown as Record<string, unknown>;
   if (
@@ -79,4 +83,18 @@ export function isClassroom(value: unknown): value is Classroom {
     ids.add(material.resourceId);
     return true;
   });
+}
+
+function validSharedPaths(value: unknown, validate: (path: unknown) => boolean): boolean {
+  if (value === undefined) return true; // Compatibilidade com turmas anteriores ao compartilhamento.
+  return Array.isArray(value) && value.length <= 50 && value.every(validate) &&
+    new Set(value.map((path) => (path as StudentTeachingPath).id)).size === value.length;
+}
+
+export function isClassroom(value: unknown): value is Classroom {
+  return hasValidClassroomFields(value) && validSharedPaths((value as Classroom).sharedPaths, isClassroomTeachingPath);
+}
+
+export function isStudentClassroom(value: unknown): value is StudentClassroom {
+  return hasValidClassroomFields(value) && validSharedPaths((value as StudentClassroom).sharedPaths, isStudentTeachingPath);
 }

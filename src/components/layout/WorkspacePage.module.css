@@ -33,6 +33,28 @@
   text-transform: uppercase;
 }
 
+.headerTitle {
+  display: grid;
+  min-width: 0;
+  gap: 0.2rem;
+}
+
+.withActions {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 44rem) {
+  .withActions { grid-template-columns: minmax(0, 1fr); }
+  .headerActions, .headerActions > * { width: 100%; }
+}
+
 .header h1 {
   margin: 0;
   color: var(--brand-navy);

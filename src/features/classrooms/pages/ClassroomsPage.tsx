@@ -1,5 +1,5 @@
-import { useState, type CSSProperties } from "react";
-import { ArrowRight, Plus, Search, UsersRound } from "lucide-react";
+import { useId, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
+import { ArrowRight, Plus, UsersRound } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { WorkspacePage } from "@/components/layout/WorkspacePage";
 import { classroomColor, formatClassroomCode } from "@/domain/classroom";
@@ -11,43 +11,51 @@ export function ClassroomsPage() {
   const classrooms = useClassroomsStore((state) => state.classrooms);
   const navigate = useNavigate();
   const [archived, setArchived] = useState(false);
-  const [query, setQuery] = useState("");
   const [creating, setCreating] = useState(false);
-  const normalize = (value: string) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR");
-  const visible = classrooms.filter((classroom) => classroom.archived === archived && normalize(`${classroom.name} ${classroom.school} ${classroom.schoolYear} ${classroom.grade}º ano`).includes(normalize(query.trim())));
+  const tabsId = useId();
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const visible = classrooms.filter((classroom) => classroom.archived === archived);
   const activeCount = classrooms.filter((classroom) => !classroom.archived).length;
+  const handleTabKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    let nextArchived: boolean;
+    if (event.key === "ArrowRight" || event.key === "ArrowLeft") nextArchived = !archived;
+    else if (event.key === "Home") nextArchived = false;
+    else if (event.key === "End") nextArchived = true;
+    else return;
+    event.preventDefault();
+    setArchived(nextArchived);
+    tabRefs.current[nextArchived ? 1 : 0]?.focus();
+  };
 
   return (
-    <WorkspacePage title="Minhas Turmas" eyebrow="Organize e compartilhe" contentClassName={styles.page} masked>
-      <header className={styles.heading}>
-        <p>Escolha os materiais de cada turma e compartilhe o código com os alunos.</p>
+    <WorkspacePage title="Minhas Turmas" eyebrow="Organize e compartilhe" contentClassName={styles.page} masked headerActions={
         <button className={styles.primary} type="button" onClick={() => setCreating(true)}><Plus size={19} aria-hidden="true" /> Criar turma</button>
-      </header>
-      <div className={styles.toolbar}>
-        <div className={styles.tabs} role="group" aria-label="Situação das turmas">
-          <button className={styles.tab} type="button" aria-pressed={!archived} onClick={() => setArchived(false)}>Ativas ({activeCount})</button>
-          <button className={styles.tab} type="button" aria-pressed={archived} onClick={() => setArchived(true)}>Arquivadas ({classrooms.length - activeCount})</button>
-        </div>
-        <label className={styles.search}><Search size={18} aria-hidden="true" /><span className="sr-only">Buscar turmas</span><input className={styles.input} type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar por turma ou escola" /></label>
+      }>
+      <div className={styles.tabs} role="tablist" aria-label="Situação das turmas" onKeyDown={handleTabKeyDown}>
+        <button ref={(node) => { tabRefs.current[0] = node; }} id={`${tabsId}-active`} className={styles.tab} type="button" role="tab" aria-selected={!archived} aria-controls={`${tabsId}-panel`} tabIndex={archived ? -1 : 0} aria-label={`Ativas (${activeCount})`} onClick={() => setArchived(false)}>Ativas <span className={styles.tabCount}>{activeCount}</span></button>
+        <button ref={(node) => { tabRefs.current[1] = node; }} id={`${tabsId}-archived`} className={styles.tab} type="button" role="tab" aria-selected={archived} aria-controls={`${tabsId}-panel`} tabIndex={archived ? 0 : -1} aria-label={`Arquivadas (${classrooms.length - activeCount})`} onClick={() => setArchived(true)}>Arquivadas <span className={styles.tabCount}>{classrooms.length - activeCount}</span></button>
       </div>
+      <div role="tabpanel" id={`${tabsId}-panel`} aria-labelledby={`${tabsId}-${archived ? "archived" : "active"}`} tabIndex={0}>
       {visible.length > 0 ? <div className={styles.grid}>
         {visible.map((classroom) => {
-          const visibleCount = classroom.materials.filter((material) => material.visible).length;
           return (
             <Link key={classroom.id} className={styles.classCard} to={`/app/minhas-turmas/${classroom.id}`} style={{ "--classroom-accent": classroomColor(classroom.color) } as CSSProperties}>
               <div className={styles.cardTop}><span className={styles.classIcon}><UsersRound size={23} aria-hidden="true" /></span><span className={styles.badge}>{classroom.archived ? "Arquivada" : classroom.schoolYear}</span></div>
               <div><h2>{classroom.name}</h2><p>{classroom.grade}º ano{classroom.school ? ` · ${classroom.school}` : ""}</p></div>
-              <p>{classroom.materials.length} {classroom.materials.length === 1 ? "material" : "materiais"}{!classroom.archived && ` · ${visibleCount} ${visibleCount === 1 ? "visível" : "visíveis"}`}</p>
-              <div className={styles.cardFooter}><span>{classroom.archived ? `Ano letivo ${classroom.schoolYear}` : `Código ${formatClassroomCode(classroom.code)}`}</span><ArrowRight size={18} aria-hidden="true" /></div>
+              <div className={styles.cardFooter}>
+                {classroom.archived ? <span>Ano letivo {classroom.schoolYear}</span> : <span className={styles.cardCode}>Código <strong>{formatClassroomCode(classroom.code)}</strong></span>}
+                <ArrowRight size={18} aria-hidden="true" />
+              </div>
             </Link>
           );
         })}
       </div> : <section className={styles.empty}>
         <UsersRound size={42} aria-hidden="true" />
-        <h2>{query ? "Nenhuma turma encontrada" : archived ? "Nenhuma turma arquivada" : "Sua próxima aula começa aqui"}</h2>
-        <p>{query ? "Tente outro nome de turma ou escola." : archived ? "As turmas arquivadas ficam guardadas aqui, sem acesso para os alunos." : "Crie uma turma, adicione os materiais e entregue um único código aos alunos."}</p>
-        {!archived && !query && <button className={styles.primary} type="button" onClick={() => setCreating(true)}><Plus size={18} aria-hidden="true" /> Criar minha primeira turma</button>}
+        <h2>{archived ? "Nenhuma turma arquivada" : "Sua próxima aula começa aqui"}</h2>
+        <p>{archived ? "As turmas arquivadas ficam guardadas aqui, sem acesso para os alunos." : "Crie uma turma, adicione os materiais e entregue um único código aos alunos."}</p>
+        {!archived && <button className={styles.primary} type="button" onClick={() => setCreating(true)}><Plus size={18} aria-hidden="true" /> Criar minha primeira turma</button>}
       </section>}
+      </div>
       {creating && <ClassroomFormDialog onClose={() => setCreating(false)} onSaved={(classroom) => navigate(`/app/minhas-turmas/${classroom.id}`)} />}
     </WorkspacePage>
   );

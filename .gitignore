@@ -5,6 +5,9 @@ coverage/
 playwright-report/
 test-results/
 .private-references/
+/tmp/
+/output/
+/supabase/.temp/
 
 # Variáveis locais e credenciais
 .env

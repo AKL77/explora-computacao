@@ -100,6 +100,37 @@ e arquivamentos passam a valer na próxima consulta.
 
 ## Atualizar ou recriar
 
+### Compartilhamento de trilhas — implementação local
+
+A migração `20261108163233_classroom_teaching_paths.sql` está preparada, mas
+**ainda não foi aplicada ao projeto online**. A prévia isolada usa demonstração
+em `http://127.0.0.1:4176/`, sem alterar `.env.local` nem os dados da conta Google.
+
+`classrooms.shared_paths` guarda até 50 cópias de trilhas por turma. A RPC
+`change_classroom_teaching_path` permite compartilhar, atualizar a cópia,
+alterar visibilidade, remover e reordenar. O corpo privilegiado fica em
+`private`; o ponto público é `SECURITY INVOKER`. Cada ação verifica sessão,
+propriedade, arquivamento e revisão da turma. Compartilhar e atualizar também
+verificam dono e revisão da trilha de origem, bloqueada durante a cópia.
+
+Uma cópia mantém etapas, durações, nome, objetivo e aparência mesmo após editar
+ou excluir a original. Atualizar preserva sua visibilidade e data inicial de
+compartilhamento. A gravação genérica de turmas não altera as cópias, inclusive
+em clientes antigos. A consulta dos alunos remove cópias ocultas e só entrega
+nome, aparência e etapas das visíveis, sem objetivo, duração ou revisão docente.
+Não é necessário alterar a Edge Function: ela continua consultando a mesma RPC.
+
+As migrações e os três testes transacionais foram executados em PostgreSQL
+local via PGlite. `supabase/tests/classroom_teaching_paths_security.sql`
+verifica cópias independentes, revisões, ordem, ocultação no servidor,
+isolamento entre professores, bloqueio anônimo, arquivamento e preservação
+após excluir a original. Todos os dados de teste são revertidos.
+
+Para ativar o compartilhamento online, aplicar a migração após autorização
+específica para atualizar o banco de produção. As turmas passarão a
+retornar `sharedPaths`; o frontend habilita o compartilhamento apenas quando
+esse campo está presente, mantendo compatibilidade com o backend anterior.
+
 ### Exclusão de trilhas próprias
 
 A migração `20261104010151_delete_teaching_path.sql` adiciona a RPC
@@ -155,8 +186,8 @@ Ao cadastrar material novo no código:
 ## Verificação
 
 - `pnpm typecheck`, `pnpm lint`, `pnpm test` e `pnpm build`.
-  Verificações realizadas: 125 testes unitários, 52 E2E no build de produção
-  demonstrativo e seis E2E da integração online com respostas controladas.
+  Verificações realizadas em 8 de novembro: 130 testes unitários, 62 E2E no build
+  de produção demonstrativo e dez E2E da integração online com respostas controladas.
 - `pnpm test:e2e`: fluxos demonstrativos em desktop e celular.
 - `pnpm test:e2e:backend`: gravações confirmadas, falha do servidor e acesso em
   navegadores separados, usando respostas controladas sem depender do Google.

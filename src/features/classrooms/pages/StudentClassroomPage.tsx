@@ -2,7 +2,8 @@ import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from 
 import { ArrowRight, ArrowUpRight, UsersRound } from "lucide-react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { Brand } from "@/components/Brand";
-import { classroomColor, normalizeClassroomCode, type Classroom } from "@/domain/classroom";
+import { classroomColor, normalizeClassroomCode, type StudentClassroom } from "@/domain/classroom";
+import { SharedTeachingPathCard } from "../components/SharedTeachingPathCard";
 import { isOnlineMode } from "@/lib/backend/config";
 import { fetchStudentClassroom, StudentAccessError } from "@/repositories/StudentClassroomRepository";
 import { CatalogStatus } from "@/features/catalog/components/CatalogStatus";
@@ -21,7 +22,7 @@ export function StudentClassroomPage() {
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [previousPath, setPreviousPath] = useState(location.pathname);
-  const [remoteClassroom, setRemoteClassroom] = useState<Classroom | null>(null);
+  const [remoteClassroom, setRemoteClassroom] = useState<StudentClassroom | null>(null);
   const [accessCode, setAccessCode] = useState("");
   const [fetching, setFetching] = useState(false);
   const [refreshError, setRefreshError] = useState("");
@@ -33,6 +34,7 @@ export function StudentClassroomPage() {
   const classroom = isOnlineMode ? remoteClassroom : classrooms.find((item) => item.id === activeId && !item.archived);
   const byId = new Map(resources.map((resource) => [resource.id, resource]));
   const visibleMaterials = classroom?.materials.filter((material) => material.visible && byId.has(material.resourceId)) ?? [];
+  const visiblePaths = classroom?.sharedPaths?.filter((path) => path.visible) ?? [];
 
   useEffect(() => {
     document.title = `${classroom ? classroom.name : "Acessar turma"} | Explora Computação`;
@@ -130,8 +132,8 @@ export function StudentClassroomPage() {
           <header className={styles.heading}>
             <div className={styles.classHeader}><span className={styles.classIcon}><UsersRound size={25} aria-hidden="true" /></span><div><span className={styles.eyebrow}>{classroom.grade}º ano · {classroom.schoolYear}</span><h1 id="student-classroom-title">{classroom.name}</h1>{classroom.school && <p>{classroom.school}</p>}</div></div>
           </header>
-          <p className={styles.muted}>Escolha um material para começar. Ele abrirá em outra aba.</p>
-          {status === "loading" ? <CatalogStatus busy title="Carregando materiais" message="Estamos preparando as atividades da turma." /> : status === "error" ? <CatalogStatus title="Não foi possível carregar os materiais" message="Recarregue a página e entre novamente com o código." /> : visibleMaterials.length ? <ul className={styles.studentList}>
+          {status === "loading" ? <CatalogStatus busy title="Carregando materiais" message="Estamos preparando as atividades da turma." /> : status === "error" ? <CatalogStatus title="Não foi possível carregar os materiais" message="Recarregue a página e entre novamente com o código." /> : visibleMaterials.length || visiblePaths.length ? <ul className={styles.studentList}>
+            {visiblePaths.map((path) => <li key={`path-${path.id}`}><SharedTeachingPathCard path={path} resources={resources} /></li>)}
             {visibleMaterials.map((material) => {
               const resource = byId.get(material.resourceId)!;
               return <li key={resource.id}>

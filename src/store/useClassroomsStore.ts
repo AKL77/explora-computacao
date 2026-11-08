@@ -4,6 +4,8 @@ import { isClassroom, isClassroomInput, normalizeClassroomCode, type Classroom, 
 import { isOnlineMode, onlineMemoryStorage } from "@/lib/backend/config";
 import { remoteMutation, type MaybePromise } from "@/lib/backend/workspaceState";
 import { teacherWorkspaceRepository } from "@/repositories/TeacherWorkspaceRepository";
+import { snapshotTeachingPath, type ClassroomPathAction, type ClassroomTeachingPath } from "@/domain/classroomTeachingPath";
+import { useTeachingPathsStore } from "./useTeachingPathsStore";
 
 export const CLASSROOMS_STORAGE_KEY = "explora-computacao:classrooms:v1";
 
@@ -18,6 +20,11 @@ interface ClassroomsStore extends ClassroomsState {
   updateMaterial: (id: string, resourceId: string, update: Partial<Pick<ClassroomMaterial, "visible" | "instruction">>) => MaybePromise<boolean>;
   removeMaterial: (id: string, resourceId: string) => MaybePromise<boolean>;
   moveMaterial: (id: string, resourceId: string, direction: -1 | 1) => MaybePromise<boolean>;
+  shareTeachingPath: (id: string, pathId: string) => MaybePromise<boolean>;
+  updateSharedTeachingPath: (id: string, pathId: string) => MaybePromise<boolean>;
+  setTeachingPathVisibility: (id: string, pathId: string, visible: boolean) => MaybePromise<boolean>;
+  removeTeachingPath: (id: string, pathId: string) => MaybePromise<boolean>;
+  moveTeachingPath: (id: string, pathId: string, direction: -1 | 1) => MaybePromise<boolean>;
   findByCode: (code: string) => Classroom | undefined;
 }
 
@@ -59,15 +66,45 @@ export const useClassroomsStore = create<ClassroomsStore>()(persist((set, get) =
     const classroom = get().classrooms.find((item) => item.id === id && !item.archived);
     return classroom ? save({ ...classroom, materials: change(classroom.materials) }) : false;
   };
+  const changePath = (id: string, pathId: string, action: ClassroomPathAction, options: { visible?: boolean; direction?: -1 | 1 } = {}): MaybePromise<boolean> => {
+    const classroom = get().classrooms.find((item) => item.id === id && !item.archived);
+    if (!classroom) return false;
+    const paths = classroom.sharedPaths ?? [];
+    const index = paths.findIndex((path) => path.id === pathId);
+    const source = useTeachingPathsStore.getState().getPath(pathId);
+    if ((action === "share" || action === "update") && !source) return false;
+    if (action === "share" && index >= 0) return true;
+    if (action !== "share" && index < 0) return false;
+    if (action === "share" && paths.length >= 50) return false;
+    if (isOnlineMode) return remoteMutation<Classroom | null>(
+      () => teacherWorkspaceRepository.changeClassroomPath(classroom, pathId, action, { ...options, sourceRevision: source?.revision }), replace, null,
+    ).then(Boolean);
+    const next: ClassroomTeachingPath[] = [...paths];
+    if (action === "share") next.push(snapshotTeachingPath(source!));
+    else if (action === "update") next[index] = snapshotTeachingPath(source!, paths[index]);
+    else if (action === "visibility") next[index] = { ...paths[index], visible: options.visible! };
+    else if (action === "remove") next.splice(index, 1);
+    else if (action === "move") {
+      const target = index + options.direction!;
+      if (target < 0 || target >= next.length) return false;
+      [next[index], next[target]] = [next[target], next[index]];
+    }
+    return save({ ...classroom, sharedPaths: next });
+  };
   return {
     classrooms: [], retiredCodes: [],
+    shareTeachingPath: (id, pathId) => changePath(id, pathId, "share"),
+    updateSharedTeachingPath: (id, pathId) => changePath(id, pathId, "update"),
+    setTeachingPathVisibility: (id, pathId, visible) => changePath(id, pathId, "visibility", { visible }),
+    removeTeachingPath: (id, pathId) => changePath(id, pathId, "remove"),
+    moveTeachingPath: (id, pathId, direction) => changePath(id, pathId, "move", { direction }),
     createClassroom: (input) => {
       if (!isClassroomInput(input)) return null;
       const normalized = { ...input, name: input.name.trim(), school: input.school.trim() };
       if (isOnlineMode) return remoteMutation<Classroom | null>(() => teacherWorkspaceRepository.saveClassroom(normalized), replace, null);
       const code = generateDemoCode(get());
       if (!code) return null;
-      const classroom: Classroom = { ...normalized, id: crypto.randomUUID(), code, archived: false, materials: [], createdAt: new Date().toISOString() };
+      const classroom: Classroom = { ...normalized, id: crypto.randomUUID(), code, archived: false, materials: [], sharedPaths: [], createdAt: new Date().toISOString() };
       replace(classroom); return classroom;
     },
     updateClassroom: (id, input) => {

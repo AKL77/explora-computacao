@@ -1,4 +1,4 @@
-import { type DragEvent, useMemo, useState } from "react";
+import { type DragEvent, useCallback, useEffect, useMemo, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -8,11 +8,13 @@ import {
   Pencil,
   Plus,
   Save,
+  Share2,
   Trash2,
   Undo2,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useBeforeUnload, useBlocker } from "react-router-dom";
 import { trackClarityEvent } from "@/lib/clarity";
+import { WORKSPACE_EXIT_EVENT } from "@/lib/workspaceNavigation";
 import { WorkspacePage } from "@/components/layout/WorkspacePage";
 
 import { AccessibleDialog } from "@/features/catalog/components/AccessibleDialog";
@@ -21,6 +23,8 @@ import { CatalogStatus } from "@/features/catalog/components/CatalogStatus";
 import { formatRecommendedGrades, RESOURCE_PLACEHOLDER, formatResourceTypes } from "@/features/catalog/components/resourcePresentation";
 import { useCatalogResources } from "@/features/catalog/hooks/useCatalog";
 import {
+  DEFAULT_TEACHING_PATH_BACKGROUND_COLOR,
+  DEFAULT_TEACHING_PATH_ICON,
   TEACHING_PATH_BACKGROUND_COLORS,
   TEACHING_PATH_ICONS,
   TEACHING_PATH_LESSON_DURATION_MINUTES,
@@ -30,6 +34,9 @@ import {
   type TeachingPathLessonCount,
 } from "@/domain/savedTeachingPath";
 import { useTeachingPathsStore } from "@/store/useTeachingPathsStore";
+import { useClassroomsStore } from "@/store/useClassroomsStore";
+import { isOnlineMode } from "@/lib/backend/config";
+import { ShareTeachingPathDialog } from "@/features/classrooms/components/ShareTeachingPathDialog";
 import {
   TeachingPathIconGlyph,
 } from "../components/TeachingPathAppearance";
@@ -38,6 +45,7 @@ import {
   teachingPathIconLabels,
 } from "../components/teachingPathAppearanceOptions";
 import { getTeachingResourceMetadata, type PilotTeachingResource } from "../data/pilotTeachingResources";
+import { TeachingPathMaterialPicker } from "../components/TeachingPathMaterialPicker";
 import styles from "./SavedTeachingPathsPage.module.css";
 
 const lessonCounts: readonly TeachingPathLessonCount[] = [1, 2, 3];
@@ -180,6 +188,7 @@ function getLessonCountsForResources(
 export function SavedTeachingPathsPage() {
   const { resources, status } = useCatalogResources();
   const paths = useTeachingPathsStore((state) => state.paths);
+  const createPath = useTeachingPathsStore((state) => state.createPath);
   const updatePath = useTeachingPathsStore((state) => state.updatePath);
   const deletePath = useTeachingPathsStore((state) => state.deletePath);
   const [selectedPathId, setSelectedPathId] = useState<string | null>(null);
@@ -192,6 +201,13 @@ export function SavedTeachingPathsPage() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [settingsDraft, setSettingsDraft] = useState<PathSettingsDraft | null>(null);
   const [announcement, setAnnouncement] = useState("");
+  const [isMaterialPickerOpen, setIsMaterialPickerOpen] = useState(false);
+  const [isPickerDirty, setIsPickerDirty] = useState(false);
+  const [creationResourceIds, setCreationResourceIds] = useState<string[] | null>(null);
+  const [pendingAction, setPendingAction] = useState<(() => void) | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
+  const classrooms = useClassroomsStore((state) => state.classrooms);
 
   const selectedPath = paths.find((path) => path.id === selectedPathId) ?? null;
 
@@ -215,6 +231,46 @@ export function SavedTeachingPathsPage() {
         .length
     : 0;
   const hasUnsavedChanges = selectedPath !== null && draft !== null && isDraftDirty(selectedPath, draft);
+  const hasUnsavedSettings = settingsDraft !== null && (
+    settingsDraft.name !== (draft?.name ?? "") ||
+    settingsDraft.objective !== (draft?.objective ?? "") ||
+    settingsDraft.backgroundColor !== (draft?.backgroundColor ?? DEFAULT_TEACHING_PATH_BACKGROUND_COLOR) ||
+    settingsDraft.icon !== (draft?.icon ?? DEFAULT_TEACHING_PATH_ICON)
+  );
+  const shouldProtectChanges = hasUnsavedChanges || hasUnsavedSettings || isPickerDirty || creationResourceIds !== null;
+  const blocker = useBlocker(shouldProtectChanges);
+  useEffect(() => {
+    if (!shouldProtectChanges) return;
+    const deferExit = (event: Event) => {
+      const action = (event as CustomEvent<() => void>).detail;
+      if (typeof action !== "function") return;
+      event.preventDefault();
+      setPendingAction(() => action);
+    };
+    window.addEventListener(WORKSPACE_EXIT_EVENT, deferExit);
+    return () => window.removeEventListener(WORKSPACE_EXIT_EVENT, deferExit);
+  }, [shouldProtectChanges]);
+  useBeforeUnload(useCallback((event) => {
+    if (!shouldProtectChanges) return;
+    event.preventDefault();
+    event.returnValue = "";
+  }, [shouldProtectChanges]));
+
+  const requestLeave = (action: () => void, dirty = shouldProtectChanges) => {
+    if (dirty) setPendingAction(() => action);
+    else action();
+  };
+
+  const closeSettings = () => {
+    setIsSettingsDialogOpen(false);
+    setSettingsDraft(null);
+    setCreationResourceIds(null);
+  };
+
+  const closePicker = () => {
+    setIsMaterialPickerOpen(false);
+    setIsPickerDirty(false);
+  };
 
   const updateDraft = (updater: (current: TeachingPathDraft) => TeachingPathDraft) => {
     setDraft((current) => (current ? updater(current) : current));
@@ -271,9 +327,10 @@ export function SavedTeachingPathsPage() {
   };
 
   const handleSaveChanges = async () => {
-    if (!selectedPath || !draft) return;
+    if (!selectedPath || !draft || isSaving) return;
 
     const resourceIds = activeResourceIds(draft);
+    setIsSaving(true);
     const saved = await updatePath(selectedPath.id, {
       name: draft.name,
       objective: draft.objective,
@@ -285,6 +342,7 @@ export function SavedTeachingPathsPage() {
         draft.lessonCountsByResourceId,
       ),
     });
+    setIsSaving(false);
 
     setAnnouncement(
       saved
@@ -322,8 +380,20 @@ export function SavedTeachingPathsPage() {
     setIsSettingsDialogOpen(true);
   };
 
-  const applySettings = () => {
-    if (!settingsDraft) return;
+  const applySettings = async () => {
+    if (!settingsDraft || isSaving) return;
+    if (creationResourceIds) {
+      setIsSaving(true);
+      const saved = await createPath(settingsDraft.name, creationResourceIds, settingsDraft);
+      setIsSaving(false);
+      if (!saved) return;
+      setSelectedPathId(saved.id);
+      setDraft(createDraft(saved));
+      closeSettings();
+      trackClarityEvent("trilha_criada");
+      setAnnouncement(`A trilha “${saved.name}” foi criada.`);
+      return;
+    }
     updateDraft((current) => ({ ...current, ...settingsDraft }));
     setSettingsDraft(null);
     setIsSettingsDialogOpen(false);
@@ -349,6 +419,130 @@ export function SavedTeachingPathsPage() {
     }
   };
 
+  const settingsDialog = (
+    <AccessibleDialog
+        open={isSettingsDialogOpen}
+        title={creationResourceIds ? "Criar trilha" : "Editar trilha"}
+        onClose={() => { if (!isSaving) requestLeave(closeSettings, (hasUnsavedSettings || creationResourceIds !== null) && isSettingsDialogOpen); }}
+        size="medium"
+      >
+        {settingsDraft ? (
+          <form
+            className={styles.settingsForm}
+            onSubmit={(event) => {
+              event.preventDefault();
+              applySettings();
+            }}
+          >
+            <label htmlFor="edit-teaching-path-name">Nome da trilha</label>
+            <input
+              id="edit-teaching-path-name"
+              value={settingsDraft.name}
+              onChange={(event) => setSettingsDraft((current) => current ? { ...current, name: event.target.value } : current)}
+              required
+            />
+            <label htmlFor="edit-teaching-path-objective">Objetivo da trilha</label>
+            <textarea
+              id="edit-teaching-path-objective"
+              value={settingsDraft.objective}
+              onChange={(event) => setSettingsDraft((current) => current ? { ...current, objective: event.target.value } : current)}
+              maxLength={500}
+              required
+            />
+            <fieldset className={styles.appearanceFieldset}>
+              <legend>Cor de fundo</legend>
+              <div className={styles.colorOptions}>
+                {TEACHING_PATH_BACKGROUND_COLORS.map((color) => (
+                  <button
+                    className={`${styles.colorOption} ${styles[colorOptionClassNames[color]]}`}
+                    type="button"
+                    key={color}
+                    aria-pressed={settingsDraft.backgroundColor === color}
+                    onClick={() => setSettingsDraft((current) => current ? { ...current, backgroundColor: color } : current)}
+                  >
+                    <span aria-hidden="true" />
+                    {teachingPathColorLabels[color]}
+                  </button>
+                ))}
+              </div>
+            </fieldset>
+            <fieldset className={styles.appearanceFieldset}>
+              <legend>Ícone da trilha</legend>
+              <div className={styles.iconOptions}>
+                {TEACHING_PATH_ICONS.map((icon) => (
+                  <button
+                    className={styles.iconOption}
+                    type="button"
+                    key={icon}
+                    aria-pressed={settingsDraft.icon === icon}
+                    aria-label={`Usar ícone ${teachingPathIconLabels[icon]}`}
+                    title={teachingPathIconLabels[icon]}
+                    onClick={() => setSettingsDraft((current) => current ? { ...current, icon } : current)}
+                  >
+                    <TeachingPathIconGlyph icon={icon} size={20} aria-hidden="true" />
+                  </button>
+                ))}
+              </div>
+            </fieldset>
+            <div className={styles.dialogActions}>
+              <button type="button" disabled={isSaving} onClick={() => requestLeave(closeSettings, hasUnsavedSettings || creationResourceIds !== null)}>Cancelar</button>
+              <button type="submit" disabled={isSaving || !settingsDraft.name.trim() || !settingsDraft.objective.trim()}>{isSaving ? "Salvando…" : creationResourceIds ? "Criar trilha" : "Aplicar ao rascunho"}</button>
+            </div>
+          </form>
+        ) : null}
+      </AccessibleDialog>
+  );
+
+  const pickerDialog = isMaterialPickerOpen ? (
+    <TeachingPathMaterialPicker
+      resources={resources}
+      existingIds={currentResourceIds}
+      creating={!selectedPath}
+      onSelectionChange={setIsPickerDirty}
+      onClose={() => requestLeave(closePicker, isPickerDirty && isMaterialPickerOpen)}
+      onConfirm={(ids) => {
+        closePicker();
+        if (!selectedPath) {
+          setCreationResourceIds(ids);
+          setSettingsDraft({ name: "", objective: "", backgroundColor: DEFAULT_TEACHING_PATH_BACKGROUND_COLOR, icon: DEFAULT_TEACHING_PATH_ICON });
+          setIsSettingsDialogOpen(true);
+          return;
+        }
+        updateDraft((current) => ({
+          ...current,
+          resourceIds: [...current.resourceIds, ...ids.filter((id) => !current.resourceIds.includes(id))],
+          removedResourceIds: current.removedResourceIds.filter((id) => !ids.includes(id)),
+        }));
+        setAnnouncement(`${ids.length} ${ids.length === 1 ? "material adicionado" : "materiais adicionados"} ao rascunho. Salve as alterações para confirmar.`);
+      }}
+    />
+  ) : null;
+
+  const leaveDialog = (
+    <AccessibleDialog
+      open={pendingAction !== null || blocker.state === "blocked"}
+      title="Sair sem salvar?"
+      description="Você tem alterações não salvas. Se sair agora, elas serão perdidas."
+      size="small"
+      onClose={() => {
+        setPendingAction(null);
+        if (blocker.state === "blocked") blocker.reset();
+      }}
+    >
+      <div className={styles.dialogActions}>
+        <button type="button" onClick={() => {
+          setPendingAction(null);
+          if (blocker.state === "blocked") blocker.reset();
+        }}>Continuar editando</button>
+        <button className={styles.confirmDeleteButton} type="button" onClick={() => {
+          if (blocker.state === "blocked") blocker.proceed();
+          else pendingAction?.();
+          setPendingAction(null);
+        }}>Sair sem salvar</button>
+      </div>
+    </AccessibleDialog>
+  );
+
   if (status === "loading") {
     return <CatalogStatus busy title="Preparando suas trilhas" message="Estamos reunindo os materiais salvos." />;
   }
@@ -359,24 +553,25 @@ export function SavedTeachingPathsPage() {
 
   if (!selectedPath || !draft) {
     return (
-      <WorkspacePage title="Minhas Trilhas" eyebrow="Planejamento por materiais" titleId="saved-paths-title" contentClassName={styles.page}>
-        <header className={styles.listHeader}>
-          <div>
-            <p>Abra uma sequência para ajustar as etapas, a duração e o tempo total.</p>
-          </div>
-          <Link className={styles.createLink} to="/app/trilha-de-ensino">
+      <WorkspacePage
+        title="Minhas Trilhas"
+        eyebrow="Planejamento por materiais"
+        titleId="saved-paths-title"
+        contentClassName={styles.page}
+        headerActions={
+          <button className={styles.createLink} type="button" onClick={() => setIsMaterialPickerOpen(true)}>
             <Plus aria-hidden="true" size={19} />
             Criar trilha
-          </Link>
-        </header>
-
+          </button>
+        }
+      >
         <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">{announcement}</p>
         {paths.length === 0 ? (
           <div className={styles.emptyState}>
             <ListChecks aria-hidden="true" size={40} strokeWidth={1.6} />
             <h2>Nenhuma trilha salva</h2>
-            <p>Selecione materiais em Buscar Materiais e salve uma sequência com objetivo próprio.</p>
-            <Link to="/app/trilha-de-ensino">Criar minha primeira trilha</Link>
+            <p>Reúna materiais e organize uma sequência com objetivo próprio.</p>
+            <button className={styles.createLink} type="button" onClick={() => setIsMaterialPickerOpen(true)}>Criar minha primeira trilha</button>
           </div>
         ) : (
           <div className={styles.pathList}>
@@ -404,19 +599,23 @@ export function SavedTeachingPathsPage() {
                     <TeachingPathIconGlyph icon={path.icon} size={22} />
                   </span>
                   <span className={styles.pathCardContent}>
-                    <span className={styles.cardLabel}>Trilha de ensino</span>
                     <strong data-clarity-mask="true">{path.name}</strong>
                     <span data-clarity-mask="true">{path.objective}</span>
+                  </span>
+                  <span className={styles.pathCardFooter}>
                     <small>
                       {resourceCount} {resourceCount === 1 ? "material" : "materiais"} · {definedDurations}/{resourceCount} durações definidas · atualizada em {updatedAtLabel(path.updatedAt)}
                     </small>
+                    <span className={styles.openPath}>Abrir trilha <ArrowRight aria-hidden="true" size={17} /></span>
                   </span>
-                  <span className={styles.openPath}>Abrir trilha</span>
                 </button>
               );
             })}
           </div>
         )}
+        {settingsDialog}
+        {pickerDialog}
+        {leaveDialog}
       </WorkspacePage>
     );
   }
@@ -434,13 +633,13 @@ export function SavedTeachingPathsPage() {
         <button
           className={styles.backButton}
           type="button"
-          onClick={() => {
+          onClick={() => requestLeave(() => {
             setSelectedPathId(null);
             setDraft(null);
             setPreviewResourceId(null);
             setIsSettingsDialogOpen(false);
             setSettingsDraft(null);
-          }}
+          })}
         >
           <ArrowLeft aria-hidden="true" size={18} />
           Minhas Trilhas
@@ -471,6 +670,15 @@ export function SavedTeachingPathsPage() {
           {hasUnsavedChanges ? <p className={styles.unsavedNotice}>Alterações não salvas</p> : null}
         </div>
         <div className={styles.pathHeaderActions}>
+          {(!isOnlineMode || classrooms.some((classroom) => classroom.sharedPaths !== undefined)) && <button
+            className={styles.editPathButton}
+            type="button"
+            disabled={hasUnsavedChanges || isSaving}
+            title={hasUnsavedChanges ? "Salve as alterações da trilha antes de compartilhar." : undefined}
+            onClick={() => setIsShareDialogOpen(true)}
+          >
+            <Share2 aria-hidden="true" size={17} /> Compartilhar com turma
+          </button>}
           <button className={styles.editPathButton} type="button" onClick={openSettings}>
             <Pencil aria-hidden="true" size={17} />
             Editar trilha
@@ -480,12 +688,12 @@ export function SavedTeachingPathsPage() {
             Excluir trilha
           </button>
           {hasUnsavedChanges ? (
-            <button className={styles.discardButton} type="button" onClick={handleDiscardChanges}>
+            <button className={styles.discardButton} type="button" onClick={() => requestLeave(handleDiscardChanges)}>
               <Undo2 aria-hidden="true" size={17} />
               Descartar
             </button>
           ) : null}
-          <button className={styles.saveChangesButton} type="button" disabled={!hasUnsavedChanges} onClick={handleSaveChanges}>
+          <button className={styles.saveChangesButton} type="button" disabled={!hasUnsavedChanges || isSaving} onClick={handleSaveChanges}>
             <Save aria-hidden="true" size={17} />
             Salvar alterações
           </button>
@@ -493,11 +701,13 @@ export function SavedTeachingPathsPage() {
       </header>
 
       <div className={styles.sequenceHeader}>
-        <div>
-          <p className={styles.eyebrow}>Percurso de aprendizagem</p>
-          <strong>Da seleção à aplicação em sala de aula</strong>
+        <div className={styles.sequenceHelp}>
+          <GripVertical aria-hidden="true" size={20} />
           <p>Arraste uma etapa pelo marcador para reorganizar a trilha.</p>
         </div>
+        <button className={styles.addMaterialsButton} type="button" onClick={() => setIsMaterialPickerOpen(true)}>
+          <Plus aria-hidden="true" size={18} /> Adicionar materiais
+        </button>
         {allLessonCountsDefined ? (
           <span className={styles.totalDuration}>
             <Clock3 aria-hidden="true" size={17} />
@@ -619,6 +829,14 @@ export function SavedTeachingPathsPage() {
               </div>
             </header>
             <div className={styles.blockGrid}>
+              <Link
+                className={`${styles.planBlock} ${styles.fullMaterialBlock}`}
+                to={`/app/materiais/${preview.resource.slug}`}
+                state={{ from: "/app/minhas-trilhas" }}
+              >
+                <h3>Ver material completo <ArrowRight aria-hidden="true" size={19} /></h3>
+                <p>Abra a ficha do material na plataforma para consultar os detalhes e acessar o recurso.</p>
+              </Link>
               <section className={`${styles.planBlock} ${styles.bnccBlock}`}>
                 <h3>Habilidades da BNCC</h3>
                 <p className={styles.bnccReference}>
@@ -689,95 +907,14 @@ export function SavedTeachingPathsPage() {
               <span />
               <span />
             </footer>
-            <Link
-              className={styles.catalogLink}
-              to={`/app/materiais/${preview.resource.slug}`}
-              state={{ from: "/app/minhas-trilhas" }}
-            >
-              Ver material completo <ArrowRight aria-hidden="true" size={17} />
-            </Link>
           </article>
         ) : null}
       </AccessibleDialog>
 
-      <AccessibleDialog
-        open={isSettingsDialogOpen}
-        title="Editar trilha"
-        description="Altere o nome, o objetivo, a cor de fundo ou o ícone. Depois, salve as alterações da trilha."
-        onClose={() => {
-          setIsSettingsDialogOpen(false);
-          setSettingsDraft(null);
-        }}
-        size="medium"
-      >
-        {settingsDraft ? (
-          <form
-            className={styles.settingsForm}
-            onSubmit={(event) => {
-              event.preventDefault();
-              applySettings();
-            }}
-          >
-            <label htmlFor="edit-teaching-path-name">Nome da trilha</label>
-            <input
-              id="edit-teaching-path-name"
-              value={settingsDraft.name}
-              onChange={(event) => setSettingsDraft((current) => current ? { ...current, name: event.target.value } : current)}
-              required
-            />
-            <label htmlFor="edit-teaching-path-objective">Objetivo da trilha</label>
-            <textarea
-              id="edit-teaching-path-objective"
-              value={settingsDraft.objective}
-              onChange={(event) => setSettingsDraft((current) => current ? { ...current, objective: event.target.value } : current)}
-              maxLength={500}
-              required
-            />
-            <fieldset className={styles.appearanceFieldset}>
-              <legend>Cor de fundo</legend>
-              <div className={styles.colorOptions}>
-                {TEACHING_PATH_BACKGROUND_COLORS.map((color) => (
-                  <button
-                    className={`${styles.colorOption} ${styles[colorOptionClassNames[color]]}`}
-                    type="button"
-                    key={color}
-                    aria-pressed={settingsDraft.backgroundColor === color}
-                    onClick={() => setSettingsDraft((current) => current ? { ...current, backgroundColor: color } : current)}
-                  >
-                    <span aria-hidden="true" />
-                    {teachingPathColorLabels[color]}
-                  </button>
-                ))}
-              </div>
-            </fieldset>
-            <fieldset className={styles.appearanceFieldset}>
-              <legend>Ícone da trilha</legend>
-              <div className={styles.iconOptions}>
-                {TEACHING_PATH_ICONS.map((icon) => (
-                  <button
-                    className={styles.iconOption}
-                    type="button"
-                    key={icon}
-                    aria-pressed={settingsDraft.icon === icon}
-                    aria-label={`Usar ícone ${teachingPathIconLabels[icon]}`}
-                    title={teachingPathIconLabels[icon]}
-                    onClick={() => setSettingsDraft((current) => current ? { ...current, icon } : current)}
-                  >
-                    <TeachingPathIconGlyph icon={icon} size={20} aria-hidden="true" />
-                  </button>
-                ))}
-              </div>
-            </fieldset>
-            <div className={styles.dialogActions}>
-              <button type="button" onClick={() => {
-                setIsSettingsDialogOpen(false);
-                setSettingsDraft(null);
-              }}>Cancelar</button>
-              <button type="submit" disabled={!settingsDraft.name.trim() || !settingsDraft.objective.trim()}>Aplicar ao rascunho</button>
-            </div>
-          </form>
-        ) : null}
-      </AccessibleDialog>
+      {settingsDialog}
+      {pickerDialog}
+      {leaveDialog}
+      {isShareDialogOpen && <ShareTeachingPathDialog path={selectedPath} onClose={() => setIsShareDialogOpen(false)} onShared={(classroom) => { setIsShareDialogOpen(false); setAnnouncement(`Trilha compartilhada com a turma ${classroom.name}.`); }} />}
       <AccessibleDialog
         open={isDeleteDialogOpen}
         title="Excluir trilha"

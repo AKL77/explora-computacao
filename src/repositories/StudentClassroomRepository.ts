@@ -1,4 +1,4 @@
-import { isClassroom, type Classroom } from "@/domain/classroom";
+import { isStudentClassroom, type StudentClassroom } from "@/domain/classroom";
 import { backendConfig } from "@/lib/backend/config";
 
 export class StudentAccessError extends Error {
@@ -7,7 +7,7 @@ export class StudentAccessError extends Error {
   }
 }
 
-export async function fetchStudentClassroom(code: string, signal?: AbortSignal): Promise<Classroom> {
+export async function fetchStudentClassroom(code: string, signal?: AbortSignal): Promise<StudentClassroom> {
   let response: Response;
   try {
     response = await fetch(`${backendConfig.url}/functions/v1/student-classroom`, {
@@ -17,6 +17,6 @@ export async function fetchStudentClassroom(code: string, signal?: AbortSignal):
   } catch { throw new StudentAccessError("network"); }
   if (!response.ok) throw new StudentAccessError(response.status === 404 ? "unavailable" : response.status === 429 ? "rate_limited" : "network");
   const data: unknown = await response.json();
-  if (!isClassroom(data) || data.archived || data.materials.some((material) => !material.visible)) throw new StudentAccessError("network");
+  if (!isStudentClassroom(data) || data.archived || data.materials.some((material) => !material.visible) || data.sharedPaths?.some((path) => !path.visible)) throw new StudentAccessError("network");
   return data;
 }

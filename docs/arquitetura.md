@@ -58,14 +58,24 @@ Minhas Trilhas.
 
 ### Rotas por hash
 
-O `HashRouter` mantém a rota depois de `#`. Como o fragmento não é enviado ao
-servidor, atualizar uma tela interna não depende de regras de reescrita no
+O `createHashRouter`, com `RouterProvider`, mantém a rota depois de `#` e permite
+interromper a navegação com `useBlocker` quando uma trilha tem alterações pendentes.
+O fechamento ou recarregamento da aba usa `beforeunload`. Como o fragmento não
+é enviado ao servidor, atualizar uma tela interna não depende de regras de reescrita no
 GitHub Pages.
 
 As rotas atuais são Buscar Materiais, detalhe do material, Trilhas Prontas,
 Minhas Trilhas, Minhas Turmas, Sobre e as páginas públicas Privacidade e
 Acessar turma. URLs antigas de acervo, pastas e planos apenas
 redirecionam para um fluxo atual e não carregam módulos legados.
+
+`TeachingMaterialBrowser` compartilha os filtros e as prévias entre **Buscar
+Materiais** e a janela `TeachingPathMaterialPicker` de **Minhas Trilhas**. Na
+janela, os cartões permitem seleção múltipla; na busca, mantêm os links e as
+ações de criação/adição existentes. A seleção da janela altera somente o
+rascunho da trilha aberta. A criação solicita nome, objetivo, cor e ícone antes
+de persistir. A saída da conta também permite que o editor confirme o descarte
+antes de limpar a sessão, por `requestWorkspaceExit`.
 
 **Minha conta** é um painel compacto no nome/avatar do professor, fora da
 navegação principal. Apresenta identificação, o link público de privacidade e
@@ -88,6 +98,19 @@ A visibilidade começa ativa e pertence à associação material/turma. Adiciona
 novamente um material existente não o duplica nem altera uma ocultação anterior.
 O código permanece ao editar ou arquivar. Excluir reserva o código antigo para
 não associá-lo acidentalmente a outra turma.
+
+`sharedPaths` guarda cópias independentes de trilhas em cada turma, separadas
+dos materiais avulsos. Cada cópia contém a ordem das etapas, duração, identidade
+visual e referência à versão de origem. A ausência desse campo mantém
+compatibilidade com registros antigos. No modo online, sua presença também
+identifica que o backend já aceita o compartilhamento. Na demonstração,
+registros antigos recebem a lista ao compartilhar a primeira trilha.
+
+O professor pode compartilhar, atualizar a cópia, alterar sua visibilidade,
+remover ou ordenar as trilhas da turma. São apresentadas antes dos materiais
+avulsos; cada grupo mantém sua ordem própria. A edição e a exclusão da original
+não alteram as cópias. `StudentClassroom` e `StudentTeachingPath` descrevem a
+projeção pública, com nome, aparência e IDs das etapas, sem metadados docentes.
 
 As rotas docentes `/app/minhas-turmas` e `/app/minhas-turmas/:classroomId` usam a
 conta do professor no modo online. `/alunos` é pública e não usa `signIn`, não pede dados

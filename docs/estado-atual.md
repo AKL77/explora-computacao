@@ -1,6 +1,7 @@
 # Estado atual do protótipo
 
-**Referência:** 2 de novembro de 2026
+**Referência:** 8 de novembro de 2026 (atualização de interface para o GitHub Pages;
+compartilhamento de trilhas aguardando ativação no banco online)
 
 **Versão do protótipo:** 0.3.0
 
@@ -64,14 +65,25 @@ documentos em `docs/historico` preservam decisões de etapas anteriores do TCC.
 - salvamento de trilhas com nome, objetivo, cor e ícone, online por professor
   ou local no modo demonstrativo;
 - área docente sem faixa permanente de status online ou botão de atualização
-  manual; avisos aparecem somente durante o salvamento ou em caso de erro,
+  manual; o salvamento não exibe uma faixa no topo e avisos aparecem em caso de erro,
   com nova tentativa disponível quando o carregamento falha;
 - **Minhas Trilhas** com sequência visual conectada, reordenação por arrastar e
   soltar, duração de uma a três aulas por etapa e tempo total calculado;
+- criação de trilhas e adição de materiais pela própria área **Minhas Trilhas**,
+  em janela com os mesmos filtros e prévias de **Buscar Materiais**. Materiais
+  já presentes não são duplicados; novas etapas de uma trilha existente entram
+  no rascunho e só são gravadas com **Salvar alterações**;
+- cartões pessoais sem o rótulo repetido **Trilha de ensino**, com **Abrir trilha**
+  junto à quantidade de materiais, durações e data de atualização no rodapé do
+  cartão. **Criar trilha** integra o cabeçalho da página; orientação de arrastar
+  integrada aos controles das etapas;
 - edição em rascunho, com descarte ou confirmação explícita de alterações;
+- aviso de alterações pendentes ao voltar à lista, navegar para outra tela,
+  fechar a edição de informações ou sair da conta. Recarregar ou fechar a aba
+  usa o aviso nativo do navegador; continuar editando preserva o rascunho;
 - proposta de atividade ao abrir uma etapa, com referência curricular,
   objetivo, materiais, descrição da atividade, duração ajustável e acesso
-  destacado ao material completo;
+  ao material completo no primeiro bloco, que abre a ficha na plataforma;
 - **Trilhas Prontas** com filtros por eixo e nove percursos locais, três por
   eixo. As três sequências iniciais foram preservadas; as seis novas abordam
   execução e correção de programas (6º), busca e ordenação (8º), representação
@@ -85,10 +97,28 @@ documentos em `docs/historico` preservam decisões de etapas anteriores do TCC.
 - página **Sobre**; endereço antigo de perfil redireciona para **Buscar Materiais**;
 - **Minhas Turmas**, com cadastro e edição de nome, ano/série, escola
   opcional, ano letivo e cor, sem campo de turno ou lista de alunos;
+- **Criar turma** no cabeçalho; lista sem busca, organizada em abas **Ativas**
+  e **Arquivadas**, com contadores e navegação por teclado. Detalhes sem os
+  textos instrutivos removidos, botão **Arquivar** com borda e endereço de
+  acesso com fonte ampliada na janela do código;
 - adição de materiais pela turma ou pelo atalho **Adicionar à turma** na ficha;
   materiais ficam visíveis por padrão, com visibilidade independente por turma,
   ordenação e orientação opcional aos alunos;
-- código fixo de seis números por turma, exibido para projeção e cópia;
+- confirmação ao remover um material ou uma trilha pelo **X** da turma;
+  cancelar preserva o item e confirmar retira apenas o compartilhamento nessa turma;
+- compartilhamento de uma cópia de trilha por **Compartilhar trilha**, na turma,
+  ou **Compartilhar com turma**, em Minhas Trilhas. Cada cópia preserva nome,
+  objetivo, aparência, etapas e durações; aceita visibilidade, reordenação e
+  remoção independentes por turma. Editar ou excluir a original não modifica
+  a cópia; **Atualizar cópia** aplica uma versão nova por escolha do professor;
+- alunos veem as trilhas visíveis como cartões expansíveis, com etapas numeradas
+  e links diretos aos recursos, junto aos materiais avulsos. Não recebem o
+  objetivo docente nem os campos internos de revisão. O fluxo está disponível
+  localmente em demonstração; a migração online foi preparada e testada localmente,
+  ainda sem aplicação ao projeto publicado. O frontend mantém o recurso oculto
+  enquanto o banco online não fornece suporte;
+- código fixo de seis números por turma, junto de **Mostrar código** no
+  cabeçalho da turma ativa, com janela para projeção e cópia;
 - entrada pública em `/alunos`, sem login, com turma escolhida apenas em memória;
   reabrir a página pede o código, mesmo com sessão docente no navegador;
 - página dos alunos com materiais visíveis e links diretos para a fonte externa;
@@ -143,7 +173,10 @@ telas órfãs e links quebrados.
 1. O docente entra com Google (ou usa a demonstração local) e chega a **Buscar Materiais**.
 2. Pode pesquisar e filtrar os materiais disponíveis.
 3. Seleciona recursos, informa a identidade visual da trilha e salva.
+   Também pode começar diretamente em **Minhas Trilhas**, pelo botão
+   **Criar trilha**, escolhendo os materiais na janela de seleção.
 4. Em **Minhas Trilhas**, reorganiza etapas e define suas durações.
+   Pode adicionar materiais na própria tela e salvar o conjunto de alterações.
 5. Como alternativa, escolhe uma sequência em **Trilhas Prontas** e a adiciona
    ao espaço pessoal.
 

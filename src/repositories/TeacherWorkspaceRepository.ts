@@ -1,5 +1,6 @@
 import { isClassroom, type Classroom, type ClassroomInput } from "@/domain/classroom";
 import { isSavedTeachingPath, type SavedTeachingPath } from "@/domain/savedTeachingPath";
+import type { ClassroomPathAction } from "@/domain/classroomTeachingPath";
 import { supabase } from "@/lib/backend/client";
 
 async function rpc(name: string, args?: Record<string, unknown>): Promise<unknown> {
@@ -10,6 +11,15 @@ async function rpc(name: string, args?: Record<string, unknown>): Promise<unknow
 }
 
 export const teacherWorkspaceRepository = {
+  async changeClassroomPath(classroom: Classroom, pathId: string, action: ClassroomPathAction, options: { sourceRevision?: number; visible?: boolean; direction?: -1 | 1 } = {}): Promise<Classroom> {
+    const data = await rpc("change_classroom_teaching_path", {
+      p_classroom_id: classroom.id, p_path_id: pathId, p_revision: classroom.revision,
+      p_action: action, p_path_revision: options.sourceRevision ?? null,
+      p_visible: options.visible ?? null, p_direction: options.direction ?? null,
+    });
+    if (!isClassroom(data)) throw new Error("Turma inválida");
+    return data;
+  },
   async load(): Promise<{ classrooms: Classroom[]; paths: SavedTeachingPath[] }> {
     const data = await rpc("teacher_workspace") as { classrooms?: unknown; paths?: unknown };
     if (!data || !Array.isArray(data.classrooms) || !data.classrooms.every(isClassroom) || !Array.isArray(data.paths) || !data.paths.every(isSavedTeachingPath)) throw new Error("Dados online inválidos");

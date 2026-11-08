@@ -26,12 +26,13 @@ async function createClassroom(page: Page, name = "6º B") {
   await expect(page.getByRole("heading", { name, exact: true, level: 1 })).toBeVisible();
 }
 
-async function getCode(page: Page) {
+async function getCode(page: Page, screenshotPath?: string) {
   await page.getByRole("button", { name: "Mostrar código", exact: true }).click();
   const dialog = page.getByRole("dialog", { name: /^Código de/ });
   const code = (await dialog.getByLabel("Código da turma", { exact: true }).textContent())!.replace(/\s/g, "");
   expect(code).toMatch(/^\d{6}$/);
-  await expect(dialog.getByLabel("Endereço para favoritar nos computadores")).toHaveValue(/#\/alunos$/);
+  await expect(dialog.getByLabel("Endereço de acesso dos alunos")).toHaveValue(/#\/alunos$/);
+  if (screenshotPath) await page.screenshot({ path: screenshotPath });
   await dialog.getByRole("button", { name: "Fechar diálogo" }).click();
   return code;
 }
@@ -46,7 +47,7 @@ test("professor publica e organiza materiais; aluno acessa sem login e acompanha
   await enterTeacher(page);
   await createClassroom(page);
   const classroomUrl = page.url();
-  const code = await getCode(page);
+  const code = await getCode(page, testInfo.outputPath("codigo-turma.png"));
   await page.getByRole("button", { name: "Adicionar material", exact: true }).click();
   const picker = page.getByRole("dialog", { name: "Adicionar materiais", exact: true });
   await picker.getByRole("checkbox", { name: /^Interland/ }).check();
@@ -93,15 +94,24 @@ test("professor publica e organiza materiais; aluno acessa sem login e acompanha
   await page.goto(classroomUrl);
   await page.getByRole("button", { name: "Arquivar", exact: true }).click();
   await page.getByRole("dialog", { name: "Arquivar turma?", exact: true }).getByRole("button", { name: "Arquivar turma", exact: true }).click();
-  await expect(page.getByText("Turma arquivada.", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Desarquivar turma", exact: true })).toBeVisible();
   await expect(student.getByRole("heading", { name: "Turma indisponível", exact: true })).toBeVisible();
   await studentEnter(student, code);
   await expect(student.getByRole("alert")).toContainText("Turma indisponível");
   await page.goto(route("/app/minhas-turmas"));
-  await page.getByRole("button", { name: "Arquivadas (1)", exact: true }).click();
+  const archivedTab = page.getByRole("tab", { name: "Arquivadas (1)", exact: true });
+  await archivedTab.click();
+  await page.keyboard.press("ArrowLeft");
+  await expect(page.getByRole("tab", { name: "Ativas (0)", exact: true })).toHaveAttribute("aria-selected", "true");
+  await page.keyboard.press("ArrowRight");
+  await expect(archivedTab).toHaveAttribute("aria-selected", "true");
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+  await page.evaluate(() => { (document.activeElement as HTMLElement)?.blur(); window.scrollTo({ top: 0, behavior: "instant" }); });
+  await page.screenshot({ path: testInfo.outputPath("minhas-turmas-lista.png"), fullPage: true, animations: "disabled" });
   await page.getByRole("link", { name: /6º B/ }).click();
   await expect(page.getByRole("button", { name: "Editar turma", exact: true })).toHaveCount(0);
-  await page.screenshot({ path: testInfo.outputPath("turma-arquivada.png"), fullPage: true });
+  await page.evaluate(() => { (document.activeElement as HTMLElement)?.blur(); window.scrollTo({ top: 0, behavior: "instant" }); });
+  await page.screenshot({ path: testInfo.outputPath("turma-arquivada.png"), fullPage: true, animations: "disabled" });
   const restore = page.getByRole("button", { name: "Desarquivar turma", exact: true });
   await restore.focus();
   await page.keyboard.press("Enter");
@@ -119,8 +129,8 @@ test("professor publica e organiza materiais; aluno acessa sem login e acompanha
   await page.getByRole("switch", { name: "Visível para alunos: Compute It", exact: true }).click();
   await expect(student.getByRole("link", { name: /Compute It/ })).toBeVisible();
   await page.goto(route("/app/minhas-turmas"));
-  await expect(page.getByRole("button", { name: "Ativas (1)", exact: true })).toHaveAttribute("aria-pressed", "true");
-  await expect(page.getByRole("button", { name: "Arquivadas (0)", exact: true })).toBeVisible();
+  await expect(page.getByRole("tab", { name: "Ativas (1)", exact: true })).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("tab", { name: "Arquivadas (0)", exact: true })).toBeVisible();
   await page.getByRole("link", { name: /6º B/ }).click();
   await page.getByRole("button", { name: "Excluir turma", exact: true }).click();
   await page.getByRole("dialog", { name: "Excluir turma?", exact: true }).getByRole("button", { name: "Excluir turma", exact: true }).click();
@@ -141,6 +151,7 @@ test("adiciona pela ficha do material, permite criar a primeira turma e evita du
   await expect(page.getByRole("status")).toContainText("O material já está visível");
   await page.goto(route("/app/minhas-turmas"));
   await page.getByRole("link", { name: /6º A/ }).click();
+  const classroomUrl = page.url();
   await expect(page.getByRole("switch", { name: "Visível para alunos: Interland", exact: true })).toHaveAttribute("aria-checked", "true");
   await page.getByRole("switch", { name: "Visível para alunos: Interland", exact: true }).click();
   const code = await getCode(page);
@@ -157,6 +168,21 @@ test("adiciona pela ficha do material, permite criar a primeira turma e evita du
   await expect(page.getByRole("status")).toContainText("Material adicionado à turma 6º A");
   await studentEnter(page, code);
   await expect(page.getByRole("link", { name: /Compute It/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Interland/ })).toHaveCount(0);
+  await page.goto(classroomUrl);
+  const remove = page.getByRole("button", { name: "Remover Compute It da turma", exact: true });
+  await remove.click();
+  const confirmation = page.getByRole("dialog", { name: "Remover material da turma?", exact: true });
+  await expect(confirmation).toContainText("Compute It");
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+  await confirmation.getByRole("button", { name: "Cancelar", exact: true }).click();
+  await expect(remove).toBeFocused();
+  await remove.click();
+  await confirmation.getByRole("button", { name: "Remover material", exact: true }).click();
+  await expect(confirmation).toHaveCount(0);
+  await expect(remove).toHaveCount(0);
+  await studentEnter(page, code);
+  await expect(page.getByRole("link", { name: /Compute It/ })).toHaveCount(0);
   await expect(page.getByRole("link", { name: /Interland/ })).toHaveCount(0);
 });
 

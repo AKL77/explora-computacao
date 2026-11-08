@@ -27,4 +27,14 @@ describe("acesso dos alunos", () => {
     await expect(fetchStudentClassroom("123456")).rejects.toMatchObject({ reason: "network" });
     await expect(fetchStudentClassroom("123456")).rejects.toMatchObject({ reason: "network" });
   });
+  it("aceita etapas públicas e rejeita cópias ocultas ou inválidas na resposta", async () => {
+    const path = { id: "trilha", name: "Algoritmos", icon: "route", backgroundColor: "blue", resourceIds: ["lightbot-web", "google-blockly-games"], visible: true };
+    vi.stubGlobal("fetch", vi.fn()
+      .mockResolvedValueOnce(Response.json({ ...classroom, sharedPaths: [path] }))
+      .mockResolvedValueOnce(Response.json({ ...classroom, sharedPaths: [{ ...path, visible: false }] }))
+      .mockResolvedValueOnce(Response.json({ ...classroom, sharedPaths: [{ ...path, resourceIds: ["lightbot-web", "lightbot-web"] }] })));
+    expect((await fetchStudentClassroom("123456")).sharedPaths![0]).toEqual(path);
+    await expect(fetchStudentClassroom("123456")).rejects.toMatchObject({ reason: "network" });
+    await expect(fetchStudentClassroom("123456")).rejects.toMatchObject({ reason: "network" });
+  });
 });

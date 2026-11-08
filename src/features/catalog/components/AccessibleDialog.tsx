@@ -89,7 +89,6 @@ export function AccessibleDialog({
         event.preventDefault();
         onClose();
       }}
-      onClose={onClose}
       onClick={handleBackdropClick}
     >
       <div className={styles.panel}>
