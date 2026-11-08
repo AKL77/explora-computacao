@@ -9,8 +9,8 @@ Não há importação de dados da demonstração nem contas de estudantes.
 - Nome: Explora Computação; plano Free; região São Paulo (`sa-east-1`).
 - Referência: `cxxerjudbcbcpglzllrz`.
 - [Painel](https://supabase.com/dashboard/project/cxxerjudbcbcpglzllrz).
-- Migrações `teacher_workspace`, `catalog_resource_ids`, `unarchive_classroom`
-  e `delete_teaching_path` aplicadas.
+- Migrações `teacher_workspace`, `catalog_resource_ids`, `unarchive_classroom`,
+  `delete_teaching_path` e `classroom_teaching_paths` aplicadas.
 - Edge Function `student-classroom` publicada e respondendo.
 - Google OAuth habilitado, com retorno para o site e `http://127.0.0.1:4173/`.
 - Projeto Google `Explora Computacao`, ID `psyched-oxide-513519-s0`, criado sem
@@ -100,11 +100,12 @@ e arquivamentos passam a valer na próxima consulta.
 
 ## Atualizar ou recriar
 
-### Compartilhamento de trilhas — implementação local
+### Compartilhamento de trilhas
 
-A migração `20261108163233_classroom_teaching_paths.sql` está preparada, mas
-**ainda não foi aplicada ao projeto online**. A prévia isolada usa demonstração
-em `http://127.0.0.1:4176/`, sem alterar `.env.local` nem os dados da conta Google.
+A migração `20261108173055_classroom_teaching_paths.sql` foi aplicada ao projeto
+online em 8 de novembro de 2026, após autorização do responsável. O arquivo local
+usa a versão registrada pelo Supabase. A prévia isolada em demonstração continua
+em `http://127.0.0.1:4176/`, sem transferir dados para a conta Google.
 
 `classrooms.shared_paths` guarda até 50 cópias de trilhas por turma. A RPC
 `change_classroom_teaching_path` permite compartilhar, atualizar a cópia,
@@ -126,10 +127,15 @@ verifica cópias independentes, revisões, ordem, ocultação no servidor,
 isolamento entre professores, bloqueio anônimo, arquivamento e preservação
 após excluir a original. Todos os dados de teste são revertidos.
 
-Para ativar o compartilhamento online, aplicar a migração após autorização
-específica para atualizar o banco de produção. As turmas passarão a
-retornar `sharedPaths`; o frontend habilita o compartilhamento apenas quando
-esse campo está presente, mantendo compatibilidade com o backend anterior.
+O mesmo teste transacional de compartilhamento passou no banco online, revertendo
+todos os dados temporários. A comparação antes/depois confirmou a preservação
+integral das quatro turmas, oito trilhas e dos códigos e usuários existentes.
+RLS continua ativa, chamadas anônimas e escrita direta permanecem bloqueadas.
+O Advisor não apresentou novos avisos de segurança.
+
+As turmas online agora retornam `sharedPaths`, habilitando os controles no
+frontend já publicado. O site mantém compatibilidade com o backend anterior
+e só exibe o compartilhamento quando esse campo está presente.
 
 ### Exclusão de trilhas próprias
 

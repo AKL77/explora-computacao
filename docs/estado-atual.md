@@ -1,7 +1,7 @@
 # Estado atual do protótipo
 
-**Referência:** 8 de novembro de 2026 (atualização de interface para o GitHub Pages;
-compartilhamento de trilhas aguardando ativação no banco online)
+**Referência:** 8 de novembro de 2026 (interface publicada no GitHub Pages e
+compartilhamento de trilhas ativo no banco online)
 
 **Versão do protótipo:** 0.3.0
 
@@ -114,9 +114,9 @@ documentos em `docs/historico` preservam decisões de etapas anteriores do TCC.
 - alunos veem as trilhas visíveis como cartões expansíveis, com etapas numeradas
   e links diretos aos recursos, junto aos materiais avulsos. Não recebem o
   objetivo docente nem os campos internos de revisão. O fluxo está disponível
-  localmente em demonstração; a migração online foi preparada e testada localmente,
-  ainda sem aplicação ao projeto publicado. O frontend mantém o recurso oculto
-  enquanto o banco online não fornece suporte;
+  em demonstração e no projeto online. A migração foi aplicada ao Supabase após
+  autorização do responsável, com testes transacionais de compartilhamento e
+  segurança aprovados e os dados existentes preservados;
 - código fixo de seis números por turma, junto de **Mostrar código** no
   cabeçalho da turma ativa, com janela para projeção e cópia;
 - entrada pública em `/alunos`, sem login, com turma escolhida apenas em memória;
