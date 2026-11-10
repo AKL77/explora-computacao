@@ -80,6 +80,54 @@ test("preserva a pesquisa e os filtros ao retornar do detalhe de um material", a
   await expect.poll(async () => Math.abs(await page.evaluate(() => window.scrollY) - previousScroll)).toBeLessThan(3);
 });
 
+test("alterna entre lista e capas, abre a prévia e preserva a busca ao voltar", async ({ page, isMobile }) => {
+  await enterDemo(page);
+  const views = page.getByRole("group", { name: "Visualização dos materiais" });
+  const list = views.getByRole("button", { name: "Lista" });
+  const covers = views.getByRole("button", { name: "Capas" });
+  const search = page.getByRole("searchbox", { name: "Pesquisar área, assunto ou habilidade" });
+  await expect(list).toHaveAttribute("aria-pressed", "true");
+  await search.fill("Blockly");
+  await toggleYear(page, 4);
+  await covers.click();
+
+  const card = page.getByRole("article");
+  const cover = card.getByRole("link", { name: "Abrir detalhes de Blockly Games", exact: true });
+  const title = card.getByRole("heading", { name: "Blockly Games", level: 3 });
+  await expect(card).toHaveCount(1);
+  await expect(card).not.toContainText(/Ver ficha|Adicionar à trilha|Adicionar à turma|º ano/);
+  await expect(cover).toHaveAttribute("aria-expanded", "false");
+  await expect(title).toBeHidden();
+
+  if (isMobile) {
+    await cover.tap();
+    await expect(title).toBeVisible();
+    await cover.tap();
+  } else {
+    await cover.hover();
+    await expect(title).toBeVisible();
+    await covers.hover();
+    await expect(title).toBeHidden();
+    await covers.focus();
+    await page.keyboard.press("Tab");
+    await expect(cover).toBeFocused();
+    await expect(title).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(title).toBeHidden();
+    await page.keyboard.press("Enter");
+  }
+
+  await expect(page.getByRole("heading", { name: "Blockly Games", level: 2 })).toBeVisible();
+  await page.getByRole("link", { name: "Voltar", exact: true }).click();
+
+  await expect(covers).toHaveAttribute("aria-pressed", "true");
+  await expect(search).toHaveValue("Blockly");
+  await expect(page.getByRole("button", { name: "Ver opções de anos escolares" })).toContainText("4º ano");
+  await expect(cover).toBeVisible();
+  await list.click();
+  await expect(page.getByRole("heading", { name: "Blockly Games", level: 3 })).toBeVisible();
+});
+
 test("seleciona assuntos no diálogo e combina a busca com ano escolar", async ({ page }) => {
   await enterDemo(page);
 
@@ -271,8 +319,10 @@ test("apresenta a proposta e entra em Buscar Materiais", async ({ page }) => {
   ).toBeVisible();
   await expect(page.getByRole("img", { name: /Vista do campus da UFSM/ })).toBeVisible();
 
-  await page.getByRole("link", { name: "O projeto", exact: true }).first().click();
-  await expect(page.getByRole("heading", { name: "Direcionamento e praticidade" })).toBeVisible();
+  const mobileNav = page.getByRole("button", { name: "Abrir navegação", exact: true });
+  if (await mobileNav.isVisible()) await mobileNav.click();
+  await page.getByRole("link", { name: "O projeto", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Materiais e trilhas para o seu planejamento" })).toBeInViewport();
   await expect(page).toHaveURL(new RegExp(`${basePath.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`));
 
   await enterDemo(page);
@@ -394,7 +444,7 @@ test("copia uma trilha nova e preserva etapas com mais de uma aula", async ({ pa
   await expect(proposal.getByRole("radio", { name: /3 aulas.*150 min/ })).toBeChecked();
 });
 
-test("busca materiais e adiciona somente a uma trilha existente", async ({ page }) => {
+test("adiciona materiais da busca e da ficha a uma trilha existente", async ({ page }) => {
   await enterDemo(page);
   await expect(page.getByRole("button", { name: /nova trilha|salvar trilha/i })).toHaveCount(0);
   const card = page.getByRole("article").filter({ has: page.getByRole("heading", { name: "Blockly Games", exact: true }) });
@@ -419,9 +469,18 @@ test("busca materiais e adiciona somente a uma trilha existente", async ({ page 
   await card.getByRole("button", { name: "Adicionar à trilha", exact: true }).click();
   await expect(dialog.getByText("Este material já está em todas as suas trilhas.")).toBeVisible();
   await dialog.getByRole("button", { name: "Fechar", exact: true }).click();
+  await page.getByRole("link", { name: "Abrir detalhes de Compute It", exact: true }).click();
+  const materialTitle = page.getByRole("heading", { name: "Compute It", exact: true, level: 2 });
+  await expect(materialTitle).toBeVisible();
+  await page.getByRole("button", { name: "Adicionar à trilha", exact: true }).click();
+  await expect(dialog).toContainText("Compute It");
+  await dialog.getByRole("combobox", { name: "Escolha uma trilha" }).selectOption({ label: "Algoritmos no 5º ano" });
+  await dialog.getByRole("button", { name: "Adicionar material", exact: true }).click();
+  await expect(dialog).toBeHidden();
+  await expect(materialTitle).toBeVisible();
   const paths = await page.evaluate(() => JSON.parse(localStorage.getItem("explora-computacao:teaching-paths:v1") ?? "{}").state.paths);
   expect(paths).toHaveLength(1);
-  expect(paths[0].resourceIds).toEqual(["unicamp-desplugada-atividade-5", "google-blockly-games"]);
+  expect(paths[0].resourceIds).toEqual(["unicamp-desplugada-atividade-5", "google-blockly-games", "toxicode-compute-it"]);
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
 });
 

@@ -112,7 +112,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: clamp(18px, 3vw, 38px);
+  gap: clamp(14px, 2vw, 30px);
 }
 
 .siteNav a,
@@ -261,7 +261,7 @@
 .problemContent h2,
 .catalogCopy h2,
 .pillarsHeading h2,
-.futureCopy h2 {
+.showcaseCopy h2 {
   margin: 0;
   font-family: var(--font-serif, "Source Serif 4 Variable", "Source Serif 4", Georgia, serif);
   font-weight: 680;
@@ -312,14 +312,25 @@
 }
 
 .problemSection,
-.pillarsSection,
-.futureSection {
+.pillarsSection {
   padding-block: clamp(76px, 10vw, 120px);
 }
 
-.problemSection,
-.futureSection {
+.problemSection {
   background: var(--landing-page);
+}
+
+.showcaseSection {
+  padding-block: clamp(44px, 5vw, 72px);
+}
+
+.trailsSection {
+  background: linear-gradient(135deg, #f8edcf, #efd098);
+}
+
+.classroomsSection {
+  background: #e4eff4;
+  border-top: 1px solid #d8e7eb;
 }
 
 .problemContent {
@@ -333,7 +344,7 @@
 
 .problemContent h2,
 .pillarsHeading h2,
-.futureCopy h2 {
+.showcaseCopy h2 {
   color: var(--landing-navy);
   font-size: clamp(2.15rem, 4.2vw, 3.65rem);
   line-height: 1.08;
@@ -356,7 +367,7 @@
 }
 
 .splitLayout,
-.futureLayout {
+.showcaseLayout {
   display: grid;
   grid-template-columns: minmax(0, 1.04fr) minmax(0, 0.96fr);
   align-items: center;
@@ -520,11 +531,12 @@
   line-height: 1.65;
 }
 
-.futureLayout {
+.showcaseLayout {
   grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(28px, 4vw, 58px);
 }
 
-.futureVisual {
+.showcaseVisual {
   position: relative;
   margin: 0;
   overflow: hidden;
@@ -536,7 +548,7 @@
   transform: perspective(1200px) rotateY(-2deg) rotateX(1deg);
 }
 
-.futureVisual::after {
+.showcaseVisual::after {
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -561,11 +573,15 @@
   text-transform: uppercase;
 }
 
-.futureCopy > p {
-  margin: 26px 0 0;
-  color: var(--landing-muted);
+.showcaseCopy > p {
+  margin: 20px 0 0;
+  color: #384751;
   font-size: 1.07rem;
   line-height: 1.78;
+}
+
+.showcaseCopy > p + p {
+  margin-top: 12px;
 }
 
 .futureNote {
@@ -650,8 +666,6 @@
 
 .footerMeta p:first-child {
   margin-top: 0;
-  color: #ffffff;
-  font-weight: 700;
 }
 
 .photoCredit a {
@@ -672,7 +686,7 @@
 
 .problemSection,
 .catalogSection,
-.futureSection {
+.showcaseSection {
   scroll-margin-top: 86px;
 }
 
@@ -726,12 +740,12 @@
   }
 
   .splitLayout,
-  .futureLayout {
+  .showcaseLayout {
     grid-template-columns: 1fr;
   }
 
   .catalogMockup,
-  .futureVisual {
+  .showcaseVisual {
     width: min(100%, 690px);
     margin-inline: auto;
   }
@@ -741,12 +755,12 @@
   }
 
   .catalogCopy,
-  .futureCopy {
+  .showcaseCopy {
     max-width: 740px;
     margin-inline: auto;
   }
 
-  .futureCopy {
+  .showcaseCopy {
     order: -1;
   }
 
@@ -885,7 +899,7 @@
   }
 
   .catalogMockup,
-  .futureVisual {
+  .showcaseVisual {
     transform: none;
   }
 

@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -50,12 +50,15 @@ describe("LandingPage", () => {
 
     await user.click(screen.getAllByRole("link", { name: "O projeto" })[0]);
 
-    expect(screen.getByRole("heading", { name: "Direcionamento e praticidade" })).toBeVisible();
+    expect(screen.getByRole("heading", { name: "Materiais e trilhas para o seu planejamento" })).toBeVisible();
     expect(screen.queryByRole("heading", { name: "Buscar Materiais carregado" })).not.toBeInTheDocument();
   });
 
-  it("apresenta prévias reais de Buscar Materiais e Trilhas Prontas", () => {
+  it("apresenta prévias de materiais, trilhas e turmas nas respectivas seções", () => {
     renderLanding();
+
+    const trails = screen.getByRole("region", { name: "Trilhas de ensino" });
+    const classrooms = screen.getByRole("region", { name: "Turmas" });
 
     expect(
       screen.getByRole("img", {
@@ -63,9 +66,14 @@ describe("LandingPage", () => {
       }),
     ).toHaveAttribute("src", "/images/interface/buscar-materiais.png");
     expect(
-      screen.getByRole("img", {
-        name: "Prévia da tela Trilhas Prontas, com o percurso Algoritmos: decisões, blocos e desafios.",
+      within(trails).getByRole("img", {
+        name: "Prévia da tela Trilhas Prontas, com filtros por eixo e percursos disponíveis.",
       }),
     ).toHaveAttribute("src", "/images/interface/trilhas-prontas.png");
+    expect(
+      within(classrooms).getByRole("img", {
+        name: "Prévia de uma turma de demonstração, com código de acesso e materiais da aula.",
+      }),
+    ).toHaveAttribute("src", "/images/interface/minhas-turmas.png");
   });
 });

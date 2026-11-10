@@ -6,10 +6,12 @@ import {
   useContext,
   useLayoutEffect,
 } from "react";
+import { Waypoints } from "lucide-react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { trackClarityEvent } from "@/lib/clarity";
 import { WorkspacePage } from "@/components/layout/WorkspacePage";
 import { MaterialSearchNavigationContext } from "@/features/teaching-paths/materialSearchNavigation";
+import { AddToTeachingPathDialog } from "@/features/teaching-paths/components/AddToTeachingPathDialog";
 
 import type {
   ParticipationMode,
@@ -121,6 +123,7 @@ export function ResourceDetailPage() {
   const canReturnToSearch = backPath === "/app/trilha-de-ensino"
     && typeof searchEntryKey === "string" && searchHistory?.has(searchEntryKey);
   const [activeTab, setActiveTab] = useState<DetailTabId>("description");
+  const [resourceToAdd, setResourceToAdd] = useState<string | null>(null);
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
   useLayoutEffect(() => {
     if (searchHistory) window.scrollTo({ top: 0, left: 0, behavior: "instant" });
@@ -238,10 +241,19 @@ export function ResourceDetailPage() {
             >
               Acessar recurso <span aria-hidden="true">↗</span>
             </a>
-            <AddToClassroomButton key={resource.id} resource={resource} />
+            <button className={styles.secondaryAction} type="button" onClick={() => setResourceToAdd(resource.id)}>
+              <Waypoints size={18} aria-hidden="true" /> Adicionar à trilha
+            </button>
+            <AddToClassroomButton key={resource.id} resource={resource} className={styles.secondaryAction} />
           </div>
         </div>
       </div>
+
+      <AddToTeachingPathDialog
+        key={resource.id}
+        resource={resourceToAdd === resource.id ? resource : null}
+        onClose={() => setResourceToAdd(null)}
+      />
 
       {resource.requiredFamiliarity ? (
         <section className={styles.familiaritySection} aria-labelledby="required-familiarity-title">

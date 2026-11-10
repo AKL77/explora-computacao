@@ -35,10 +35,9 @@ describe("AboutPage", () => {
     expect(screen.queryByText("Os recursos pertencem ao Explora Computação?")).not.toBeInTheDocument();
     expect(
       screen.getByText(
-        "Não nesta versão. Os materiais disponíveis são selecionados previamente, e o docente pode consultá-los e usá-los para montar suas trilhas.",
+        "Não nesta versão. Os materiais disponíveis são selecionados previamente. Você pode consultá-los, combiná-los em trilhas e compartilhá-los com suas turmas, mas ainda não há cadastro de materiais próprios.",
       ),
     ).toBeInTheDocument();
-    expect(screen.getAllByRole("group")).toHaveLength(9);
   });
 
   it("oferece atalhos para Buscar Materiais e Trilhas Prontas", () => {

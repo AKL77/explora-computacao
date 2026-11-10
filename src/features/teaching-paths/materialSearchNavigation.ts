@@ -13,9 +13,12 @@ export interface MaterialSearchFilters {
   selectedSkillCodes: string[];
 }
 
+export type MaterialSearchView = "list" | "covers";
+
 export interface MaterialSearchSnapshot {
   filters: MaterialSearchFilters;
   scrollY: number;
+  view: MaterialSearchView;
 }
 
 export const MaterialSearchNavigationContext = createContext<Map<string, MaterialSearchSnapshot> | null>(null);
@@ -24,12 +27,13 @@ export function useMaterialSearchNavigation(ready: boolean) {
   const cache = useContext(MaterialSearchNavigationContext);
   const { key } = useLocation();
   const [initialSnapshot] = useState(() => cache?.get(key));
+  const [view, setView] = useState<MaterialSearchView>(initialSnapshot?.view ?? "list");
 
   const rememberFilters = useCallback((filters: MaterialSearchFilters) => {
     if (!cache) return;
-    cache.set(key, { filters, scrollY: cache.get(key)?.scrollY ?? 0 });
+    cache.set(key, { filters, scrollY: cache.get(key)?.scrollY ?? 0, view });
     if (cache.size > 20) cache.delete(cache.keys().next().value!);
-  }, [cache, key]);
+  }, [cache, key, view]);
 
   const rememberPosition = useCallback(() => {
     if (!cache) return;
@@ -45,5 +49,5 @@ export function useMaterialSearchNavigation(ready: boolean) {
     return () => window.cancelAnimationFrame(frame);
   }, [cache, initialSnapshot, ready]);
 
-  return { initialFilters: initialSnapshot?.filters, rememberFilters, rememberPosition, entryKey: key };
+  return { initialFilters: initialSnapshot?.filters, rememberFilters, rememberPosition, entryKey: key, view, setView };
 }

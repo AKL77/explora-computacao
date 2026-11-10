@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { Search, X } from "lucide-react";
+import { LayoutGrid, List, Search, X } from "lucide-react";
 import { Link, type LinkProps } from "react-router-dom";
 import { SUPPORTED_GRADES, type Grade } from "@/domain/curriculum";
 import type { Resource } from "@/domain/resource";
@@ -13,7 +13,8 @@ import { MaterialTypeFilter } from "./MaterialTypeFilter";
 import { BnccSkillFilter } from "./BnccSkillFilter";
 import { MaterialFilterField } from "./MaterialFilterField";
 import { MaterialChoiceFilter } from "./MaterialChoiceFilter";
-import type { MaterialSearchFilters } from "../materialSearchNavigation";
+import { MaterialCoverGrid } from "./MaterialCoverGrid";
+import type { MaterialSearchFilters, MaterialSearchView } from "../materialSearchNavigation";
 import styles from "../pages/TeachingPathPage.module.css";
 
 export interface TeachingResourceView {
@@ -114,7 +115,7 @@ function TeachingResourcePreview({ resource, teaching, actions, detailLinkProps 
   </>;
 }
 
-export function TeachingMaterialBrowser({ resources, renderActions, children, linkToDetails = true, initialFilters, onFiltersChange, onOpenDetails, searchEntryKey, actionsPlacement = "side" }: {
+export function TeachingMaterialBrowser({ resources, renderActions, children, linkToDetails = true, initialFilters, onFiltersChange, onOpenDetails, searchEntryKey, actionsPlacement = "side", view }: {
   resources: Resource[];
   renderActions: (item: TeachingResourceView) => ReactNode;
   children?: ReactNode;
@@ -124,6 +125,7 @@ export function TeachingMaterialBrowser({ resources, renderActions, children, li
   onOpenDetails?: () => void;
   searchEntryKey?: string;
   actionsPlacement?: "side" | "inline";
+  view?: { mode: MaterialSearchView; onChange: (mode: MaterialSearchView) => void };
 }) {
   const [query, setQuery] = useState(initialFilters?.query ?? "");
   const [selectedGrades, setSelectedGrades] = useState<Grade[]>(initialFilters?.selectedGrades ?? []);
@@ -196,6 +198,12 @@ export function TeachingMaterialBrowser({ resources, renderActions, children, li
     setSelectedKeywordIds([]);
     setSelectedSkillCodes([]);
   };
+
+  const getDetailLinkProps = (resource: Resource) => ({
+    to: `/app/materiais/${resource.slug}`,
+    state: { from: "/app/trilha-de-ensino", searchEntryKey },
+    onClick: onOpenDetails,
+  });
 
   return <>
       <section className={styles.searchSurface} aria-label="Buscar e filtrar materiais">
@@ -271,9 +279,21 @@ export function TeachingMaterialBrowser({ resources, renderActions, children, li
             <p>Materiais disponíveis</p>
             <h2 id="results-title">Materiais encontrados</h2>
           </div>
-          <span aria-live="polite">
-            {filteredResources.length} {filteredResources.length === 1 ? "material" : "materiais"}
-          </span>
+          <div className={styles.resultsTools}>
+            <span className={styles.resultCount} aria-live="polite">
+              {filteredResources.length} {filteredResources.length === 1 ? "material" : "materiais"}
+            </span>
+            {view && (
+              <div className={styles.viewOptions} role="group" aria-label="Visualização dos materiais">
+                <button type="button" aria-label="Lista" aria-pressed={view.mode === "list"} onClick={() => view.onChange("list")}>
+                  <List size={18} aria-hidden="true" />
+                </button>
+                <button type="button" aria-label="Capas" aria-pressed={view.mode === "covers"} onClick={() => view.onChange("covers")}>
+                  <LayoutGrid size={18} aria-hidden="true" />
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
         {filteredResources.length === 0 ? (
@@ -282,6 +302,8 @@ export function TeachingMaterialBrowser({ resources, renderActions, children, li
             <strong>Nenhum material encontrado</strong>
             <p>Tente outro termo ou retire alguma tag de filtro.</p>
           </div>
+        ) : view?.mode === "covers" ? (
+          <MaterialCoverGrid resources={filteredResources.map((item) => item.resource)} getDetailLinkProps={getDetailLinkProps} />
         ) : (
           <div className={styles.resultList} aria-label="Resultados da busca">
             {filteredResources.map((item) => {
@@ -292,11 +314,11 @@ export function TeachingMaterialBrowser({ resources, renderActions, children, li
                   {actionsPlacement === "inline" ? (
                     <div className={styles.resourcePreview}>
                       <TeachingResourcePreview resource={resource} teaching={teaching}
-                        detailLinkProps={linkToDetails ? { to: `/app/materiais/${resource.slug}`, state: { from: "/app/trilha-de-ensino", searchEntryKey }, onClick: onOpenDetails } : undefined}
+                        detailLinkProps={linkToDetails ? getDetailLinkProps(resource) : undefined}
                         actions={<div className={styles.inlineActions}>{renderActions(item)}</div>} />
                     </div>
                   ) : linkToDetails ? (
-                    <Link className={styles.resourcePreview} to={`/app/materiais/${resource.slug}`} state={{ from: "/app/trilha-de-ensino", searchEntryKey }} onClick={onOpenDetails} aria-label={`Abrir detalhes de ${resource.title}`}>
+                    <Link className={styles.resourcePreview} {...getDetailLinkProps(resource)} aria-label={`Abrir detalhes de ${resource.title}`}>
                       <TeachingResourcePreview resource={resource} teaching={teaching} />
                     </Link>
                   ) : (

@@ -24,6 +24,7 @@ const HERO_IMAGE_URL = publicAsset("images/hero-ufsm-campus-santa-maria.jpg");
 const RESOURCE_PLACEHOLDER_URL = publicAsset("branding/resource-placeholder-explora.svg");
 const SEARCH_MATERIALS_PREVIEW_URL = publicAsset("images/interface/buscar-materiais.png");
 const READY_TRAILS_PREVIEW_URL = publicAsset("images/interface/trilhas-prontas.png");
+const CLASSROOMS_PREVIEW_URL = publicAsset("images/interface/minhas-turmas.png");
 
 function handleImageError(event: SyntheticEvent<HTMLImageElement>) {
   const image = event.currentTarget;
@@ -31,6 +32,35 @@ function handleImageError(event: SyntheticEvent<HTMLImageElement>) {
   image.onerror = null;
   image.alt = "";
   image.src = RESOURCE_PLACEHOLDER_URL;
+}
+
+interface InterfacePreviewProps {
+  className: string;
+  title: string;
+  src: string;
+  alt: string;
+}
+
+function InterfacePreview({ className, title, src, alt }: InterfacePreviewProps) {
+  return (
+    <figure className={className}>
+      <div className={styles.previewToolbar} aria-hidden="true">
+        <span />
+        <span />
+        <span />
+        <strong>{title}</strong>
+      </div>
+      <img
+        className={styles.interfaceScreenshot}
+        src={src}
+        alt={alt}
+        width="1440"
+        height="960"
+        loading="lazy"
+        onError={handleImageError}
+      />
+    </figure>
+  );
 }
 
 export function LandingPage() {
@@ -90,6 +120,7 @@ export function LandingPage() {
             >
               Trilhas de ensino
             </a>
+            <a href="#turmas" onClick={handleSectionLink("turmas")}>Turmas</a>
           </nav>
 
           <div className={styles.accessActions}>
@@ -137,6 +168,7 @@ export function LandingPage() {
               >
                 Trilhas de ensino
               </a>
+              <a href="#turmas" onClick={handleSectionLink("turmas", true)}>Turmas</a>
             </nav>
           ) : null}
         </div>
@@ -158,8 +190,9 @@ export function LandingPage() {
           <div className={`${styles.container} ${styles.heroContent}`}>
             <h1 id="titulo-principal">Explore. Planeje. Ensine.</h1>
             <p className={styles.heroDescription}>
-              O Explora Computação organiza recursos e apoia a criação de trilhas de ensino
-              fundamentadas na BNCC Computação e em materiais selecionados.
+              Um espaço para encontrar ideias e preparar aulas de Computação do 4º ao
+              9º ano. Explore os materiais e reúna atividades em uma sequência pensada
+              para a sua turma.
             </p>
             <a
               className={styles.heroCta}
@@ -179,59 +212,40 @@ export function LandingPage() {
         >
           <div className={`${styles.container} ${styles.problemContent}`}>
             <p className={styles.sectionKicker}>Por que o Explora Computação?</p>
-            <h2 id="titulo-problema">Direcionamento e praticidade</h2>
+            <h2 id="titulo-problema">Materiais e trilhas para o seu planejamento</h2>
             <p>
-              Recursos para o ensino de Computação estão espalhados por diferentes sites e
-              descritos de formas pouco consistentes. Existem plataformas que buscam agrupar esses
-              conteúdos, contudo nem sempre é fácil saber para qual contexto um material é adequado
-              e como utilizá-lo em sala de aula. O Explora Computação propõe uma forma de buscar
-              recursos e combiná-los em trilhas de ensino contextualizadas, apoiando a decisão do
-              docente sem substituí-la.
+              Encontrar um material é apenas uma parte do planejamento. Também é preciso
+              conhecer o que ele ensina, como pode ser usado e o que a escola precisa para
+              realizar a atividade. O Explora Computação reúne essas informações e relaciona
+              os materiais às habilidades da BNCC Computação, facilitando a escolha e a
+              organização de sequências de ensino.
             </p>
           </div>
         </section>
 
         <section className={styles.catalogSection} id="materiais" aria-labelledby="titulo-materiais">
           <div className={`${styles.container} ${styles.splitLayout}`}>
-            <figure className={styles.catalogMockup}>
-              <div className={styles.previewToolbar} aria-hidden="true">
-                <span />
-                <span />
-                <span />
-                <strong>Buscar Materiais</strong>
-              </div>
-              <img
-                className={styles.interfaceScreenshot}
-                src={SEARCH_MATERIALS_PREVIEW_URL}
-                alt="Prévia da tela Buscar Materiais, com busca, filtros e materiais disponíveis."
-                width="1440"
-                height="960"
-                onError={handleImageError}
-              />
-            </figure>
+            <InterfacePreview
+              className={styles.catalogMockup}
+              title="Buscar Materiais"
+              src={SEARCH_MATERIALS_PREVIEW_URL}
+              alt="Prévia da tela Buscar Materiais, com busca, filtros e materiais disponíveis."
+            />
 
             <div className={styles.catalogCopy}>
-              <h2 id="titulo-materiais">Recursos em um só lugar, com contexto para usar</h2>
+              <h2 id="titulo-materiais">Encontre materiais e conheça suas possibilidades</h2>
               <p>
-                Mais do que reunir referências, a plataforma organiza informações que ajudam o
-                docente a avaliar quando e como cada recurso pode contribuir com a aula.
+                Cada ficha reúne várias informações para você conhecer o material e
+                entender como ele pode contribuir com suas aulas.
               </p>
               <ul className={styles.featureList}>
                 <li>
                   <CheckCircle2 aria-hidden="true" />
-                  Referências externas e materiais autorizados centralizados.
+                  Filtros por ano escolar, assunto, habilidade da BNCC, tipo e formato.
                 </li>
                 <li>
                   <CheckCircle2 aria-hidden="true" />
-                  Busca por ano e assunto, com habilidades da BNCC identificadas nos materiais.
-                </li>
-                <li>
-                  <CheckCircle2 aria-hidden="true" />
-                  Direcionamento para abordagem de aula de forma contextualizada.
-                </li>
-                <li>
-                  <CheckCircle2 aria-hidden="true" />
-                  Trilhas prontas e sequências personalizadas construídas com os materiais.
+                  Jogos, atividades, vídeos, textos e guias para diferentes abordagens.
                 </li>
               </ul>
             </div>
@@ -239,37 +253,53 @@ export function LandingPage() {
         </section>
 
         <section
-          className={styles.futureSection}
+          className={`${styles.showcaseSection} ${styles.trailsSection}`}
           id="trilhas-de-ensino"
           aria-labelledby="titulo-trilhas"
         >
-          <div className={`${styles.container} ${styles.futureLayout}`}>
-            <figure className={styles.futureVisual}>
-              <div className={styles.previewToolbar} aria-hidden="true">
-                <span />
-                <span />
-                <span />
-                <strong>Trilhas Prontas</strong>
-              </div>
-              <img
-                className={styles.interfaceScreenshot}
-                src={READY_TRAILS_PREVIEW_URL}
-                alt="Prévia da tela Trilhas Prontas, com o percurso Algoritmos: decisões, blocos e desafios."
-                width="1440"
-                height="960"
-                onError={handleImageError}
-              />
-            </figure>
+          <div className={`${styles.container} ${styles.showcaseLayout}`}>
+            <InterfacePreview
+              className={styles.showcaseVisual}
+              title="Trilhas Prontas"
+              src={READY_TRAILS_PREVIEW_URL}
+              alt="Prévia da tela Trilhas Prontas, com filtros por eixo e percursos disponíveis."
+            />
 
-            <div className={styles.futureCopy}>
-              <h2 id="titulo-trilhas">Trilhas construídas a partir de materiais selecionados</h2>
+            <div className={styles.showcaseCopy}>
+              <h2 id="titulo-trilhas">Trilhas de ensino</h2>
               <p>
-                O docente informa o ano e o que deseja ensinar, conhece o objetivo de cada
-                recurso, o que os estudantes efetivamente farão e os materiais necessários.
-                Depois, seleciona os recursos que contribuam para o objetivo e acompanha a
-                trilha em criação, preservando sua decisão pedagógica.
+                As Trilhas Prontas reúnem atividades em torno de um tema e mostram como
+                diferentes materiais podem se complementar ao longo das aulas. Elas
+                oferecem um ponto de partida para o planejamento.
+              </p>
+              <p>
+                Em Minhas Trilhas, você pode adaptar uma proposta pronta ou criar sua
+                própria sequência. Escolha os materiais, organize as etapas e ajuste a
+                duração de acordo com o que quer ensinar e o tempo disponível.
               </p>
             </div>
+          </div>
+        </section>
+
+        <section
+          className={`${styles.showcaseSection} ${styles.classroomsSection}`}
+          id="turmas"
+          aria-labelledby="titulo-turmas"
+        >
+          <div className={`${styles.container} ${styles.showcaseLayout}`}>
+            <div className={styles.showcaseCopy}>
+              <h2 id="titulo-turmas">Turmas</h2>
+              <p>
+                Em Minhas Turmas, reúna os materiais de cada turma, acrescente
+                orientações e escolha o que os alunos podem ver.
+              </p>
+            </div>
+            <InterfacePreview
+              className={styles.showcaseVisual}
+              title="Minhas Turmas"
+              src={CLASSROOMS_PREVIEW_URL}
+              alt="Prévia de uma turma de demonstração, com código de acesso e materiais da aula."
+            />
           </div>
         </section>
       </main>
@@ -286,19 +316,16 @@ export function LandingPage() {
               />
               <strong>Explora Computação</strong>
             </div>
-            <p>Recursos e planejamento contextualizado para o ensino de Computação.</p>
+            <p>Materiais, trilhas de ensino e turmas para explorar a Computação na escola.</p>
           </div>
 
           <nav className={styles.footerNav} aria-label="Navegação do rodapé">
-            <a href="#projeto" onClick={handleSectionLink("projeto")}>O projeto</a>
-            <a href="#materiais" onClick={handleSectionLink("materiais")}>Materiais</a>
             <Link to="/alunos">Acessar turma</Link>
             <Link to={isOnlineMode ? "/entrar" : "/app/trilha-de-ensino"} onClick={isOnlineMode ? undefined : signIn}>Área do professor</Link>
             <Link to="/privacidade">Privacidade e preferências</Link>
           </nav>
 
           <div className={styles.footerMeta}>
-            <p>Protótipo desenvolvido como Trabalho de Conclusão de Curso.</p>
             <p className={styles.photoCredit}>
               Foto do campus da UFSM por{" "}
               <a
